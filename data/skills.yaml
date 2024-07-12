@@ -1,0 +1,21 @@
+- name: Insert
+  params:
+    xy_location: (0.5, 0.5)
+    distance: 0.02  # meter
+    angle: 50  # degree
+- name: Pullout
+  params:
+    distance: 0.02  # meter
+- name: Push forward
+  params:
+    distance: 0.02  # meter
+- name: Gather
+  params:
+    xyz_location: (0.5, 0.5, 0.05)
+    distance: 0.02  # meter
+    angle: 50  # degree
+- name: Press
+  params:
+    xy_location: (0.5, 0.5)
+    distance: 0.02  # meter
+    angle: 50  # degree
