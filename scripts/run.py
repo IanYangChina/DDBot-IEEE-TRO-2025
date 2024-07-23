@@ -43,7 +43,7 @@ def get_skill_params(params=None):
 
 def main(args):
     log_dir = os.path.join(script_path, '..', 'log-diff_skill')
-    os.makedirs(log_p_dir, exist_ok=True)
+    os.makedirs(log_dir, exist_ok=True)
     log_file_name = os.path.join(log_dir, 'optimisation.log')
     if os.path.isfile(log_file_name):
         filemode = "a"
