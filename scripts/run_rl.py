@@ -1,5 +1,5 @@
 import os
-import yaml
+import open3d as o3d
 import gym
 import json
 import logging
@@ -7,12 +7,12 @@ import argparse
 import numpy as np
 import taichi as ti
 from drl_implementation.agent.continuous_action.sac_parameterised_action_goal_conditioned import GPASAC
-from torch.utils.tensorboard import SummaryWriter
 from gym.spaces import Box, Discrete
 script_path = os.path.dirname(os.path.realpath(__file__))
 
 from doma.envs.planting_env import make_env
 from doma.engine.configs.macros import DTYPE_NP
+from doma.engine.loss_function.emd_loss_external import compute_emd_loss_external
 cam_cfg = {  # same camera pose as the real-world setup
     'pos': (0.2, 1.2, 0.9),
     'lookat': (0.2, 0.2, 0.03),
@@ -124,13 +124,14 @@ class HybridActionEnv(gym.Env):
         self.skill_generation_func = gym_env_config['skill_generation_func']
 
         self.logger = logger
+        self.goal_conditioned_reward_function = self.mpm_env.loss.compute_emd_loss_external_func
+        self.distance_threshold = 0.01
 
     def seed(self, seed=None):
         super(HybridActionEnv, self).seed(seed)
 
     def step(self, action):
-        assert isinstance(action, np.ndarray)
-        discrete_action = action[0]
+        discrete_action = int(action[0])
         continuous_action = action[1:]
         skill_trajectory = self.skill_generation_func(discrete_action, continuous_action,
                                                       dt=self.mpm_env.simulator.dt_global)
@@ -155,13 +156,77 @@ class HybridActionEnv(gym.Env):
     def reset(self):
         self.mpm_env.set_state(self.mpm_env_init_state, grad_enabled=False)
         self.step_count = 0
+        obs = self.render(mode=self.obs_mode)
+        agent_state = self.mpm_env.simulator.agent.get_state(self.mpm_env.simulator.cur_substep_local)
+        return {
+            'observation': obs.copy(),
+            'agent_state': agent_state,
+            'desired_goal': self.mpm_env.loss.target_pcd_points_np,
+            'achieved_goal': obs.copy()
+        }
 
     def render(self, mode='human'):
         return self.mpm_env.render(mode=mode)
 
 
-def main(args):
-    log_dir = os.path.join(script_path, '..', 'log-diff_skill')
+class FakeEnv(gym.Env):
+    def __init__(self, gym_env_config, seed=None, logger=None):
+        if seed is not None:
+            self.seed(seed)
+        self.pcd_file_path = gym_env_config['pcd_file_path']
+        self.pcd_np = np.asarray(o3d.io.read_point_cloud(self.pcd_file_path).voxel_down_sample(voxel_size=0.005).points,
+                                 dtype=DTYPE_NP)
+
+        self.step_count = 0
+        self.horizon = gym_env_config['horizon']
+        self.obs_mode = gym_env_config['obs_mode']
+        self.reward_scale = gym_env_config['reward_scale']
+        self.discrete_action_space = Discrete(n=gym_env_config['n_discrete_action'])
+        self.continuous_action_space = Box(low=gym_env_config['continuous_action_min'],
+                                           high=gym_env_config['continuous_action_max'],
+                                           shape=(gym_env_config['dim_continuous_action'],),
+                                           dtype=DTYPE_NP)
+        self.skill_generation_func = gym_env_config['skill_generation_func']
+
+        self.logger = logger
+        self.goal_conditioned_reward_function = compute_emd_loss_external
+        self.distance_threshold = 0.01
+
+    def seed(self, seed=None):
+        super(FakeEnv, self).seed(seed)
+
+    def step(self, action):
+        self.step_count += 1
+        done = self.step_count >= self.horizon
+        reward = self.goal_conditioned_reward_function(self.pcd_np, self.pcd_np)
+        return {
+            'observation': self.pcd_np.copy(),
+            'agent_state': np.ones(shape=(6,), dtype=np.float32),
+            'desired_goal': self.pcd_np.copy(),
+            'achieved_goal': self.pcd_np.copy()
+        }, reward, done, {}
+
+    def reset(self):
+        self.step_count = 0
+        return {
+            'observation': self.pcd_np.copy(),
+            'agent_state': np.ones(shape=(6,), dtype=np.float32),
+            'desired_goal': self.pcd_np.copy(),
+            'achieved_goal': self.pcd_np.copy()
+        }
+
+    def render(self, mode='human'):
+        pass
+
+
+def main(arguments):
+    seed = arguments['seed']
+    if arguments['demonstrate_skills']:
+        log_dir = os.path.join(script_path, '..', 'log-gpasac-ds', f'seed-{seed}')
+    elif arguments['planned_skills']:
+        log_dir = os.path.join(script_path, '..', 'log-gpasac-ps', f'seed-{seed}')
+    else:
+        log_dir = os.path.join(script_path, '..', 'log-gpasac', f'seed-{seed}')
     os.makedirs(log_dir, exist_ok=True)
     log_file_name = os.path.join(log_dir, 'optimisation.log')
     if os.path.isfile(log_file_name):
@@ -171,38 +236,40 @@ def main(args):
     logging.basicConfig(level=logging.NOTSET, filemode=filemode,
                         filename=log_file_name,
                         format="%(asctime)s %(levelname)s %(message)s")
-    logger = SummaryWriter(log_dir=log_dir)
 
-    if args['backend'] == 'opengl':
+    if arguments['backend'] == 'opengl':
         backend = ti.opengl
-    elif args['backend'] == 'cuda':
+    elif arguments['backend'] == 'cuda':
         backend = ti.cuda
-    elif args['backend'] == 'vulkan':
+    elif arguments['backend'] == 'vulkan':
         backend = ti.vulkan
     else:
         backend = ti.cpu
 
     env_cfg = {
         'p_density': arguments['ptcl_density'],
-        'horizon': 2000,
+        'horizon': 500,
         'dt_global': 0.01,
         'n_substeps': 50,
         'agent_init_pos': (0.4, 0.2, 0.2),
         'agent_init_euler': (0, 180, 90),
     }
     loss_cfg = {
-        'target_pcd_path': os.path.join(script_path, '..', 'data', 'target_pcds', 'test_file.ply'),
+        'target_pcd_path': os.path.join(script_path, '..', 'data', 'target_pcds', 'pcd_2_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0, 0, 0],
-        'down_sample_voxel_size': arguments['down_sample_voxel_size'],
+        'down_sample_voxel_size': 0.005,
     }
 
     ti.reset()
-    ti.init(arch=backend, device_memory_GB=15, default_fp=ti.f32, fast_math=True, random_seed=arguments['seed'])
-    env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
+    ti.init(arch=backend,
+            # device_memory_GB=4,
+            default_fp=ti.f32, fast_math=True, random_seed=seed)
+    # env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
     gym_env_config = {
-        'mpm_env_init_state': init_state,
+        # 'mpm_env_init_state': init_state['state'],
+        'pcd_file_path': os.path.join(script_path, '..', 'data', 'target_pcds', 'pcd_2_cropped_norm_z_aligned.ply'),
         'render_skill': False,
-        'horizon': args['n_skills'],
+        'horizon': arguments['n_skills'],
         'obs_mode': 'point_cloud',
         'reward_scale': -1.0,
         'n_discrete_action': 3,
@@ -211,19 +278,35 @@ def main(args):
         'continuous_action_min': -1.0,
         'skill_generation_func': skill_generation_func,
     }
-    gym_env = HybridActionEnv(mpm_env, gym_env_config, seed=arguments['seed'], logger=logging)
-
-    n_epoch = arguments['n_epoch']
-    losses = []
+    # gym_env = HybridActionEnv(mpm_env, gym_env_config, seed=arguments['seed'], logger=logging)
+    gym_env = FakeEnv(gym_env_config, seed=seed, logger=logging)
 
     with open(os.path.join(script_path, '..', 'data', 'rl_agent_config.json'), 'rb') as f_ac:
         rl_agent_config = json.load(f_ac)
+    rl_agent_config['cuda_device_id'] = arguments['torch_cuda_device_id']
+    rl_agent_config['batch_size'] = 8
+    rl_agent_config['optimization_steps'] = arguments['n_skills']
+    rl_agent_config['demonstrate_skills'] = arguments['demonstrate_skills']
+    rl_agent_config['demonstrate_percentage'] = arguments['demonstrate_percentage']
+    rl_agent_config['planned_skills'] = arguments['planned_skills']
+    rl_agent_config['skill_plan'] = [0, 1, 0, 2]  # move, insert, move, pullout
+    assert len(rl_agent_config['skill_plan']) == arguments['n_skills'], 'The length of skill plan should be equal to n_skills'
+    with open(os.path.join(log_dir, 'rl_agent_config.json'), 'w') as f_ac:
+        json.dump(rl_agent_config, f_ac)
 
-    gpasac_agent = GPASAC(rl_agent_config, gym_env)
+    gpasac_agent = GPASAC(rl_agent_config, gym_env, path=log_dir, seed=seed)
+    gpasac_agent.run()
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--skill', type=str, default='insert', help='Skill to be executed')
-    arguments = vars(parser.parse_args())
-    main(arguments)
+    parser.add_argument('--seed', dest='seed', type=int, default=0, help='seed')
+    parser.add_argument('--backend', dest='backend', type=str, default='cuda', help='backend')
+    parser.add_argument('--ptcl-d', dest='ptcl_density', type=float, default=3e6, help='particle density')
+    parser.add_argument('--n-skills', dest='n_skills', type=int, default=4, help='number of skills')
+    parser.add_argument('--demo-skills', dest='demonstrate_skills', action='store_true', default=False, help='demonstrate the order of skills')
+    parser.add_argument('--demo-frequency', dest='demonstrate_percentage', type=float, default=0.5, help='percentage of demonstration episodes')
+    parser.add_argument('--planned-skills', dest='planned_skills', action='store_true', default=True, help='always ues planed order of skills')
+    parser.add_argument('--t-cuda-id', dest='torch_cuda_device_id', type=int, default=0, help='cuda device id')
+    args = vars(parser.parse_args())
+    main(args)
