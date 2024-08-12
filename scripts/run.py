@@ -12,14 +12,17 @@ script_path = os.path.dirname(os.path.realpath(__file__))
 from doma.optimiser.adam import Adam, GD
 from doma.envs.planting_env import make_env
 cam_cfg = {
-    'pos': (-0.2, -0.2, 0.7),
+    'pos': (0.2, 1.2, 0.9),
     'lookat': (0.2, 0.2, 0.03),
+    'euler': (180+np.rad2deg(np.arctan(1.0/(0.9-0.03))), 0, 180),
+    'focal_length': 0.3,
     'fov': 30,
-    'lights': [{'pos': (-1.2, 0.25, 0.2), 'color': (0.6, 0.6, 0.6)},
-               {'pos': (-1.2, 0.5, 1.0), 'color': (0.6, 0.6, 0.6)},
-               {'pos': (-1.2, 0.0, 1.0), 'color': (0.8, 0.8, 0.8)}],
+    'lights': [{'pos': (1.2, 0.25, 0.2), 'color': (0.6, 0.6, 0.6)},
+               {'pos': (1.2, 0.5, 1.0), 'color': (0.6, 0.6, 0.6)},
+               {'pos': (1.2, 0.0, 1.0), 'color': (0.8, 0.8, 0.8)}],
     'particle_radius': 0.001,
-    'res': (640, 640)
+    'res': (800, 800),
+    'pcd_gen_res': 150
 }
 SOIL_HEIGHT = 0.095
 LINEAR_VELOCITY = 0.1  # m/s

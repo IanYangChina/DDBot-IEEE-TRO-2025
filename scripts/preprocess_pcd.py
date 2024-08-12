@@ -22,17 +22,21 @@ with open(os.path.join(data_path, 'zivid_cam_extrinsics_fine_tuned.yml'), 'r') a
 transform_world_to_cam = cam_extrinsics['matrix']
 transform_cam_to_world = np.linalg.inv(transform_world_to_cam)
 
-pcd_id = 2
-pcd_path = os.path.join(data_path, 'target_pcds', f'pcd_{pcd_id}.ply')
-pcd_in_cam_frame = o3d.io.read_point_cloud(pcd_path)
-pcd_in_world_frame = pcd_in_cam_frame.transform(transform_world_to_cam)
-crop_pcd_in_world_frame = pcd_in_world_frame.crop(workspace_bounding_box)
-points = np.asarray(crop_pcd_in_world_frame.points)
-centre = np.mean([points.min(0), points.max(0)], axis=0)
-points[:, :2] -= centre[:2]
-points[:, 2] += 0.11312
-crop_pcd_norm_z_aligned = o3d.geometry.PointCloud()
-crop_pcd_norm_z_aligned.points = o3d.utility.Vector3dVector(points)
+pcd_id = 1
+test = False
+if not test:
+    pcd_path = os.path.join(data_path, 'target_pcds', f'pcd_{pcd_id}.ply')
+    pcd_in_cam_frame = o3d.io.read_point_cloud(pcd_path)
+    pcd_in_world_frame = pcd_in_cam_frame.transform(transform_world_to_cam)
+    crop_pcd_in_world_frame = pcd_in_world_frame.crop(workspace_bounding_box)
+    points = np.asarray(crop_pcd_in_world_frame.points)
+    centre = np.mean([points.min(0), points.max(0)], axis=0)
+    points[:, :2] -= centre[:2]
+    points[:, 2] += 0.11312
+    crop_pcd_norm_z_aligned = o3d.geometry.PointCloud()
+    crop_pcd_norm_z_aligned.points = o3d.utility.Vector3dVector(points)
+else:
+    crop_pcd_norm_z_aligned = o3d.io.read_point_cloud(os.path.join(data_path, 'target_pcds', f'pcd_{pcd_id}_cropped_norm_z_aligned.ply'))
 
 frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
 cam_frame_in_world = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
@@ -45,6 +49,5 @@ o3d.visualization.draw_geometries([
 ], width=800, height=600)
 
 # Save the cropped point cloud
-crop_pcd_norm_z_aligned_path = os.path.join(data_path, 'target_pcds',
-                                            f'pcd_{pcd_id}_cropped_norm_z_aligned.ply')
+crop_pcd_norm_z_aligned_path = os.path.join(data_path, 'target_pcds', f'pcd_{pcd_id}_cropped_norm_z_aligned.ply')
 o3d.io.write_point_cloud(crop_pcd_norm_z_aligned_path, crop_pcd_norm_z_aligned)
