@@ -11,7 +11,7 @@ script_path = os.path.dirname(os.path.realpath(__file__))
 
 from doma.envs.planting_env import make_env
 from doma.engine.utils.misc import set_parameters
-from doma.engine.configs.macros import DTYPE_NP, DTYPE_TI, SAND, NUM_MATERIAL
+from doma.engine.configs.macros import DTYPE_NP, DTYPE_TI, SAND, NUM_MATERIAL, CLAY
 cam_cfg = {
     'pos': (0.2, 1.2, 0.9),
     'lookat': (0.2, 0.2, 0.03),
@@ -46,16 +46,17 @@ def main(args):
     if args['debug']:
         print('[Warning] Debug mode on, printing gradients.')
 
-    trajectory = np.zeros(shape=(110, 6), dtype=DTYPE_NP)
-    trajectory[:30, 2] = -0.1
-    trajectory[30:80, 0] = -0.3
-    trajectory[80:110, 2] = 0.1
+    trajectory = np.zeros(shape=(160, 6), dtype=DTYPE_NP)
+    trajectory[:30, 2] = -0.2
+    trajectory[30:130, 0] = -0.3
+    trajectory[130:160, 2] = 0.2
 
     env_cfg = {
         'p_density': arguments['ptcl_density'],
+        'material_id': CLAY,
         'horizon': trajectory.shape[0],
-        'dt_global': 0.01,
-        'n_substeps': 20,
+        'dt_global': 0.005,
+        'n_substeps': 10,
         'agent_init_pos': (0.4, 0.2, 0.2),
         'agent_init_euler': (0, 180, 90),
     }
@@ -120,16 +121,28 @@ def main(args):
             print(f"Min epsilon: {mpm_env.simulator.debug_info[None].min_epsilon}")
             print(f"Max delta gamma: {mpm_env.simulator.debug_info[None].max_delta_gamma}")
             print(f"Min delta gamma: {mpm_env.simulator.debug_info[None].min_delta_gamma}")
-            print(f"Max dSigma_ddeltagamma: {mpm_env.simulator.debug_info[None].max_dSigma_ddeltagamma}")
-            print(f"Min dSigma_ddeltagamma: {mpm_env.simulator.debug_info[None].min_dSigma_ddeltagamma}")
-            print(f"Max dCentre_dSigma: {mpm_env.simulator.debug_info[None].max_dCentre_dSigma}")
-            print(f"Min dCentre_dSigma: {mpm_env.simulator.debug_info[None].min_dCentre_dSigma}")
-            print(f"Max dStress_dSigma: {mpm_env.simulator.debug_info[None].max_dStress_dSigma}")
-            print(f"Min dStress_dSigma: {mpm_env.simulator.debug_info[None].min_dStress_dSigma}")
             print(f"Max stress: {mpm_env.simulator.debug_info[None].max_stress}")
             print(f"Min stress: {mpm_env.simulator.debug_info[None].min_stress}")
             print(f"Max Sigma: {mpm_env.simulator.debug_info[None].max_Sigma}")
             print(f"Min Sigma: {mpm_env.simulator.debug_info[None].min_Sigma}")
+            print(f"Max dStress_dF: {mpm_env.simulator.debug_info[None].max_dStress_dF}")
+            print(f"Min dStress_dF: {mpm_env.simulator.debug_info[None].min_dStress_dF}")
+            print(f"Max dF_dSigma: {mpm_env.simulator.debug_info[None].max_dF_dSigma}")
+            print(f"Min dF_dSigma: {mpm_env.simulator.debug_info[None].min_dF_dSigma}")
+            print(f"Max dStress_dmu: {mpm_env.simulator.debug_info[None].max_dStress_dmu}")
+            print(f"Min dStress_dmu: {mpm_env.simulator.debug_info[None].min_dStress_dmu}")
+            print(f"Max dStress_dlam: {mpm_env.simulator.debug_info[None].max_dStress_dlam}")
+            print(f"Min dStress_dlam: {mpm_env.simulator.debug_info[None].min_dStress_dlam}")
+            print(f"Max dStress_dSigma: {mpm_env.simulator.debug_info[None].max_dStress_dSigma}")
+            print(f"Min dStress_dSigma: {mpm_env.simulator.debug_info[None].min_dStress_dSigma}")
+            print(f"Max dCentre_dSigma: {mpm_env.simulator.debug_info[None].max_dCentre_dSigma}")
+            print(f"Min dCentre_dSigma: {mpm_env.simulator.debug_info[None].min_dCentre_dSigma}")
+            print(f"Max dSigma_dmu: {mpm_env.simulator.debug_info[None].max_dSigma_dmu}")
+            print(f"Min dSigma_dmu: {mpm_env.simulator.debug_info[None].min_dSigma_dmu}")
+            print(f"Max dSigma_dlam: {mpm_env.simulator.debug_info[None].max_dSigma_dlam}")
+            print(f"Min dSigma_dlam: {mpm_env.simulator.debug_info[None].min_dSigma_dlam}")
+            print(f"Max dSigma_ddeltagamma: {mpm_env.simulator.debug_info[None].max_dSigma_ddeltagamma}")
+            print(f"Min dSigma_ddeltagamma: {mpm_env.simulator.debug_info[None].min_dSigma_ddeltagamma}")
             input('Press any key to continue...')
 
         """forward pass"""
