@@ -2,9 +2,10 @@ import os
 import yaml
 import logging
 import argparse
+import open3d as o3d
 import numpy as np
 import taichi as ti
-from time import time
+import matplotlib.pyplot as plt
 from doma.engine.utils.misc import get_gpu_memory
 import psutil
 script_path = os.path.dirname(os.path.realpath(__file__))
@@ -47,15 +48,15 @@ def main(args):
         print('[Warning] Debug mode on, printing gradients.')
 
     trajectory = np.zeros(shape=(160, 6), dtype=DTYPE_NP)
-    trajectory[:30, 2] = -0.2
-    trajectory[30:130, 0] = -0.3
-    trajectory[130:160, 2] = 0.2
+    trajectory[:30, 2] = -0.1
+    trajectory[30:130, 0] = -0.15
+    trajectory[130:160, 2] = 0.1
 
     env_cfg = {
         'p_density': arguments['ptcl_density'],
-        'material_id': CLAY,
+        'material_id': SAND,
         'horizon': trajectory.shape[0],
-        'dt_global': 0.005,
+        'dt_global': 0.01,
         'n_substeps': 10,
         'agent_init_pos': (0.4, 0.2, 0.2),
         'agent_init_euler': (0, 180, 90),
@@ -65,7 +66,7 @@ def main(args):
                                                    'pcd_2_cropped_norm_z_aligned_height_map.npy'),
         'target_pcd_path': os.path.join(script_path, '..', 'data', 'target_pcds', 'pcd_0_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
-        'down_sample_voxel_size': 0.01,
+        'down_sample_voxel_size': 0.006,
     }
 
     E_range = (2.5e5, 4e5)
@@ -103,7 +104,7 @@ def main(args):
         ti.reset()
         ti.init(arch=backend, device_memory_GB=5, default_fp=ti.f32, fast_math=True, random_seed=1)
         env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=args['print_substep_grad'], logger=logging)
-        set_parameters(mpm_env, material_id=SAND, E=E.copy(), nu=nu.copy(), rho=rho.copy(),
+        set_parameters(mpm_env, material_id=SAND, e=E.copy(), nu=nu.copy(), rho=rho.copy(),
                        manipulator_friction=manipulator_friction.copy(),
                        sand_friction_angle=sand_angle.copy())
         print(f'===> Created Env with {mpm_env.simulator.n_particles} particles, {mpm_env.loss.n_target_pcd_points} target pcd points.')
@@ -115,16 +116,24 @@ def main(args):
                 print(f"Mat {j} Gradient of E: {mpm_env.simulator.particle_param.grad[j].E}")
                 print(f"Mat {j} Gradient of nu: {mpm_env.simulator.particle_param.grad[j].nu}")
                 print(f"Mat {j} Gradient of rho: {mpm_env.simulator.particle_param.grad[j].rho}")
-            print(f"Gradient of sand angle: {mpm_env.simulator.system_param.grad[None].sand_friction_angle}")
+                print(f"Mat {j} Gradient of mu_temp: {mpm_env.simulator.particle_param.grad[j].mu_temp}")
+                print(f"Mat {j} Gradient of lam_temp: {mpm_env.simulator.particle_param.grad[j].lam_temp}")
+                print(f"Mat {j} Gradient of mu_temp 2: {mpm_env.simulator.particle_param.grad[j].mu_temp_2}")
+                print(f"Mat {j} Gradient of lam_temp 2: {mpm_env.simulator.particle_param.grad[j].lam_temp_2}")
+            print(f"Gradient of sand friction: {mpm_env.simulator.system_param.grad[None].sand_friction_angle}")
+            print(f"Gradient of yield stress: {mpm_env.simulator.system_param.grad[None].yield_stress}")
             print(f"Gradient of manipulator friction: {mpm_env.simulator.system_param.grad[None].manipulator_friction}")
+            print(f"Gradient of ground friction: {mpm_env.simulator.system_param.grad[None].ground_friction}")
             print(f"Max epsilon: {mpm_env.simulator.debug_info[None].max_epsilon}")
             print(f"Min epsilon: {mpm_env.simulator.debug_info[None].min_epsilon}")
             print(f"Max delta gamma: {mpm_env.simulator.debug_info[None].max_delta_gamma}")
             print(f"Min delta gamma: {mpm_env.simulator.debug_info[None].min_delta_gamma}")
-            print(f"Max stress: {mpm_env.simulator.debug_info[None].max_stress}")
-            print(f"Min stress: {mpm_env.simulator.debug_info[None].min_stress}")
             print(f"Max Sigma: {mpm_env.simulator.debug_info[None].max_Sigma}")
             print(f"Min Sigma: {mpm_env.simulator.debug_info[None].min_Sigma}")
+            print(f"Max F: {mpm_env.simulator.debug_info[None].max_F}")
+            print(f"Min F: {mpm_env.simulator.debug_info[None].min_F}")
+            print(f"Max stress: {mpm_env.simulator.debug_info[None].max_stress}")
+            print(f"Min stress: {mpm_env.simulator.debug_info[None].min_stress}")
             print(f"Max dStress_dF: {mpm_env.simulator.debug_info[None].max_dStress_dF}")
             print(f"Min dStress_dF: {mpm_env.simulator.debug_info[None].min_dStress_dF}")
             print(f"Max dF_dSigma: {mpm_env.simulator.debug_info[None].max_dF_dSigma}")
@@ -137,12 +146,20 @@ def main(args):
             print(f"Min dStress_dSigma: {mpm_env.simulator.debug_info[None].min_dStress_dSigma}")
             print(f"Max dCentre_dSigma: {mpm_env.simulator.debug_info[None].max_dCentre_dSigma}")
             print(f"Min dCentre_dSigma: {mpm_env.simulator.debug_info[None].min_dCentre_dSigma}")
+            print(f"Min dDelta_gamma_dmu: {mpm_env.simulator.debug_info[None].min_dDelta_gamma_dmu}")
+            print(f"Max dDelta_gamma_dmu: {mpm_env.simulator.debug_info[None].max_dDelta_gamma_dmu}")
+            print(f"Min dDelta_gamma_dlam: {mpm_env.simulator.debug_info[None].min_dDelta_gamma_dlam}")
+            print(f"Max dDelta_gamma_dlam: {mpm_env.simulator.debug_info[None].max_dDelta_gamma_dlam}")
+            print(f"Max dDelta_gamma_dSand_alpha: {mpm_env.simulator.debug_info[None].max_dDelta_gamma_dSand_alpha}")
+            print(f"Min dDelta_gamma_dSand_alpha: {mpm_env.simulator.debug_info[None].min_dDelta_gamma_dSand_alpha}")
+            print(f"Max dSigma_ddeltagamma: {mpm_env.simulator.debug_info[None].max_dSigma_ddeltagamma}")
+            print(f"Min dSigma_ddeltagamma: {mpm_env.simulator.debug_info[None].min_dSigma_ddeltagamma}")
             print(f"Max dSigma_dmu: {mpm_env.simulator.debug_info[None].max_dSigma_dmu}")
             print(f"Min dSigma_dmu: {mpm_env.simulator.debug_info[None].min_dSigma_dmu}")
             print(f"Max dSigma_dlam: {mpm_env.simulator.debug_info[None].max_dSigma_dlam}")
             print(f"Min dSigma_dlam: {mpm_env.simulator.debug_info[None].min_dSigma_dlam}")
-            print(f"Max dSigma_ddeltagamma: {mpm_env.simulator.debug_info[None].max_dSigma_ddeltagamma}")
-            print(f"Min dSigma_ddeltagamma: {mpm_env.simulator.debug_info[None].min_dSigma_ddeltagamma}")
+            print(f"Max dSigma_dSand_alpha: {mpm_env.simulator.debug_info[None].max_dSigma_dSand_alpha}")
+            print(f"Min dSigma_dSand_alpha: {mpm_env.simulator.debug_info[None].min_dSigma_dSand_alpha}")
             input('Press any key to continue...')
 
         """forward pass"""
@@ -157,6 +174,10 @@ def main(args):
         print('===> Loss info:', loss_info)
         print(f'===> CPU memory occupied after forward: {process.memory_percent()} %')
         print(f'===> GPU memory after forward: {get_gpu_memory()}')
+        plt.imshow(loss_info['height_map'])
+        plt.show()
+        plt.imshow(loss_info['height_map_target'])
+        plt.show()
 
         """backward pass"""
         mpm_env.reset_grad()
@@ -269,7 +290,7 @@ if __name__ == '__main__':
     description = 'Compute the means and standard deviations of the gradients for material parameters with randomly sampled parameter values.'
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('--r_human', dest='r_human', default=False, action='store_true', help='Render human view')
-    parser.add_argument('--ptcl_d', dest='ptcl_density', type=float, default=7e6, help='Particle density')
+    parser.add_argument('--ptcl_d', dest='ptcl_density', type=float, default=5e6, help='Particle density')
     parser.add_argument('--debug', dest='debug', default=True, action='store_true', help='Debug mode, print gradients for every global step.')
     parser.add_argument('--debug_substep', dest='print_substep_grad', default=False, action='store_true', help='Debug mode, print gradients for every substep.')
     parser.add_argument('--backend', dest='backend', default='cuda', type=str, help='Computation backend: cuda, opengl, or cpu')
