@@ -103,64 +103,13 @@ def main(args):
 
         ti.reset()
         ti.init(arch=backend, device_memory_GB=5, default_fp=ti.f32, fast_math=True, random_seed=1)
-        env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=args['print_substep_grad'], logger=logging)
+        env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=args['debug'], logger=logging)
         set_parameters(mpm_env, material_id=SAND, e=E.copy(), nu=nu.copy(), rho=rho.copy(),
                        manipulator_friction=manipulator_friction.copy(),
                        sand_friction_angle=sand_angle.copy())
         print(f'===> Created Env with {mpm_env.simulator.n_particles} particles, {mpm_env.loss.n_target_pcd_points} target pcd points.')
         print(f'===> CPU memory occupied after init: {process.memory_percent()} %')
         print(f'===> GPU memory after init: {get_gpu_memory()}')
-
-        def print_grads():
-            for j in range(NUM_MATERIAL):
-                print(f"Mat {j} Gradient of E: {mpm_env.simulator.particle_param.grad[j].E}")
-                print(f"Mat {j} Gradient of nu: {mpm_env.simulator.particle_param.grad[j].nu}")
-                print(f"Mat {j} Gradient of rho: {mpm_env.simulator.particle_param.grad[j].rho}")
-                print(f"Mat {j} Gradient of mu_temp: {mpm_env.simulator.particle_param.grad[j].mu_temp}")
-                print(f"Mat {j} Gradient of lam_temp: {mpm_env.simulator.particle_param.grad[j].lam_temp}")
-                print(f"Mat {j} Gradient of mu_temp 2: {mpm_env.simulator.particle_param.grad[j].mu_temp_2}")
-                print(f"Mat {j} Gradient of lam_temp 2: {mpm_env.simulator.particle_param.grad[j].lam_temp_2}")
-            print(f"Gradient of sand friction: {mpm_env.simulator.system_param.grad[None].sand_friction_angle}")
-            print(f"Gradient of yield stress: {mpm_env.simulator.system_param.grad[None].yield_stress}")
-            print(f"Gradient of manipulator friction: {mpm_env.simulator.system_param.grad[None].manipulator_friction}")
-            print(f"Gradient of ground friction: {mpm_env.simulator.system_param.grad[None].ground_friction}")
-            print(f"Max epsilon: {mpm_env.simulator.debug_info[None].max_epsilon}")
-            print(f"Min epsilon: {mpm_env.simulator.debug_info[None].min_epsilon}")
-            print(f"Max delta gamma: {mpm_env.simulator.debug_info[None].max_delta_gamma}")
-            print(f"Min delta gamma: {mpm_env.simulator.debug_info[None].min_delta_gamma}")
-            print(f"Max Sigma: {mpm_env.simulator.debug_info[None].max_Sigma}")
-            print(f"Min Sigma: {mpm_env.simulator.debug_info[None].min_Sigma}")
-            print(f"Max F: {mpm_env.simulator.debug_info[None].max_F}")
-            print(f"Min F: {mpm_env.simulator.debug_info[None].min_F}")
-            print(f"Max stress: {mpm_env.simulator.debug_info[None].max_stress}")
-            print(f"Min stress: {mpm_env.simulator.debug_info[None].min_stress}")
-            print(f"Max dStress_dF: {mpm_env.simulator.debug_info[None].max_dStress_dF}")
-            print(f"Min dStress_dF: {mpm_env.simulator.debug_info[None].min_dStress_dF}")
-            print(f"Max dF_dSigma: {mpm_env.simulator.debug_info[None].max_dF_dSigma}")
-            print(f"Min dF_dSigma: {mpm_env.simulator.debug_info[None].min_dF_dSigma}")
-            print(f"Max dStress_dmu: {mpm_env.simulator.debug_info[None].max_dStress_dmu}")
-            print(f"Min dStress_dmu: {mpm_env.simulator.debug_info[None].min_dStress_dmu}")
-            print(f"Max dStress_dlam: {mpm_env.simulator.debug_info[None].max_dStress_dlam}")
-            print(f"Min dStress_dlam: {mpm_env.simulator.debug_info[None].min_dStress_dlam}")
-            print(f"Max dStress_dSigma: {mpm_env.simulator.debug_info[None].max_dStress_dSigma}")
-            print(f"Min dStress_dSigma: {mpm_env.simulator.debug_info[None].min_dStress_dSigma}")
-            print(f"Max dCentre_dSigma: {mpm_env.simulator.debug_info[None].max_dCentre_dSigma}")
-            print(f"Min dCentre_dSigma: {mpm_env.simulator.debug_info[None].min_dCentre_dSigma}")
-            print(f"Min dDelta_gamma_dmu: {mpm_env.simulator.debug_info[None].min_dDelta_gamma_dmu}")
-            print(f"Max dDelta_gamma_dmu: {mpm_env.simulator.debug_info[None].max_dDelta_gamma_dmu}")
-            print(f"Min dDelta_gamma_dlam: {mpm_env.simulator.debug_info[None].min_dDelta_gamma_dlam}")
-            print(f"Max dDelta_gamma_dlam: {mpm_env.simulator.debug_info[None].max_dDelta_gamma_dlam}")
-            print(f"Max dDelta_gamma_dSand_alpha: {mpm_env.simulator.debug_info[None].max_dDelta_gamma_dSand_alpha}")
-            print(f"Min dDelta_gamma_dSand_alpha: {mpm_env.simulator.debug_info[None].min_dDelta_gamma_dSand_alpha}")
-            print(f"Max dSigma_ddeltagamma: {mpm_env.simulator.debug_info[None].max_dSigma_ddeltagamma}")
-            print(f"Min dSigma_ddeltagamma: {mpm_env.simulator.debug_info[None].min_dSigma_ddeltagamma}")
-            print(f"Max dSigma_dmu: {mpm_env.simulator.debug_info[None].max_dSigma_dmu}")
-            print(f"Min dSigma_dmu: {mpm_env.simulator.debug_info[None].min_dSigma_dmu}")
-            print(f"Max dSigma_dlam: {mpm_env.simulator.debug_info[None].max_dSigma_dlam}")
-            print(f"Min dSigma_dlam: {mpm_env.simulator.debug_info[None].min_dSigma_dlam}")
-            print(f"Max dSigma_dSand_alpha: {mpm_env.simulator.debug_info[None].max_dSigma_dSand_alpha}")
-            print(f"Min dSigma_dSand_alpha: {mpm_env.simulator.debug_info[None].min_dSigma_dSand_alpha}")
-            input('Press any key to continue...')
 
         """forward pass"""
         mpm_env.set_state(init_state['state'], grad_enabled=True)
@@ -174,26 +123,17 @@ def main(args):
         print('===> Loss info:', loss_info)
         print(f'===> CPU memory occupied after forward: {process.memory_percent()} %')
         print(f'===> GPU memory after forward: {get_gpu_memory()}')
-        plt.imshow(loss_info['height_map'])
-        plt.show()
-        plt.imshow(loss_info['height_map_target'])
-        plt.show()
+        # plt.imshow(loss_info['height_map'])
+        # plt.show()
+        # plt.imshow(loss_info['height_map_target'])
+        # plt.show()
 
         """backward pass"""
         mpm_env.reset_grad()
-        if args['debug']:
-            print('******Initial grads:')
-            print_grads()
         mpm_env.get_final_loss_grad()
-        if args['debug']:
-            print('******Grads after get_final_loss_grad()')
-            print_grads()
         for i in range(mpm_env.horizon - 1, -1, -1):
             action = trajectory[i]
             mpm_env.step_grad(action=action)
-            if args['debug']:
-                print(f'******Grads after step_grad({action})')
-                print_grads()
 
             # This is a trick that prevents faulty gradient computation
             # It works for unknown reasons
@@ -201,8 +141,6 @@ def main(args):
 
         print(f'===> CPU memory occupied after forward-backward: {process.memory_percent()} %')
         print(f'===> GPU memory after forward-backward: {get_gpu_memory()}')
-        print('===> Gradients:')
-        print_grads()
 
         logging.info(f'===> CPU memory occupied after forward-backward: {process.memory_percent()} %')
         logging.info(f'===> GPU memory after forward-backward: {get_gpu_memory()}')
@@ -292,7 +230,6 @@ if __name__ == '__main__':
     parser.add_argument('--r_human', dest='r_human', default=False, action='store_true', help='Render human view')
     parser.add_argument('--ptcl_d', dest='ptcl_density', type=float, default=5e6, help='Particle density')
     parser.add_argument('--debug', dest='debug', default=True, action='store_true', help='Debug mode, print gradients for every global step.')
-    parser.add_argument('--debug_substep', dest='print_substep_grad', default=False, action='store_true', help='Debug mode, print gradients for every substep.')
     parser.add_argument('--backend', dest='backend', default='cuda', type=str, help='Computation backend: cuda, opengl, or cpu')
     arguments = vars(parser.parse_args())
     main(arguments)
