@@ -100,6 +100,20 @@ def skill_generation_func(skill_index, skill_params, dt):
             trajectory[i][0] = delta_x * x_sign
             trajectory[i][2] = delta_z
         return trajectory[:n_step]
+    elif skill_index == 3:
+        # rotate about y and z axes
+        rotate_angle_y = skill_params[0]
+        rotate_angle_y = (np.pi / 2) * (rotate_angle_y + 1) / 2  # map [-1, 1] to [0, pi/2]
+        rotate_angle_z = skill_params[1]
+        rotate_angle_z = (np.pi / 2) * (rotate_angle_z + 1) / 2
+        n_step_y = int(rotate_angle_y / (ANGULAR_VELOCITY * dt))
+        n_step_z = int(rotate_angle_z / (ANGULAR_VELOCITY * dt))
+        n_step = max(n_step_y, n_step_z)
+        delta_y = rotate_angle_y / n_step
+        delta_z = rotate_angle_z / n_step
+        for i in range(n_step):
+            trajectory[i][4] = delta_y
+            trajectory[i][5] = delta_z
     else:
         raise ValueError('Invalid skill index')
 
