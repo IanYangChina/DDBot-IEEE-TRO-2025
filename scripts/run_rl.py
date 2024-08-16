@@ -67,7 +67,7 @@ def skill_generation_func(skill_index, skill_params, dt):
         insert_angle = skill_params[0]  # angle between the x-axis and the insertion direction
         insert_angle = np.pi * (insert_angle + 1) / 2  # map [-1, 1] to [0, pi]
         insert_distance = skill_params[1]
-        insert_distance = 0.07 * (insert_distance + 1) / 2  # map [-1, 1] to [0, 0.07]
+        insert_distance = 0.05 * (insert_distance + 1) / 2  # map [-1, 1] to [0, 0.05]
         n_step = int(insert_distance / (LINEAR_VELOCITY * dt))
         insert_distance_x = insert_distance * ti.cos(insert_angle)
         delta_x = insert_distance_x / n_step
@@ -86,7 +86,7 @@ def skill_generation_func(skill_index, skill_params, dt):
         pullout_angle = skill_params[0]
         pullout_angle = np.pi * (pullout_angle + 1) / 2  # map [-1, 1] to [0, pi]
         pullout_distance = skill_params[1]
-        pullout_distance = 0.1 * (pullout_distance + 1) / 2
+        pullout_distance = 0.1 * (pullout_distance + 1) / 2  # map [-1, 1] to [0, 0.1]
         n_step = int(pullout_distance / (LINEAR_VELOCITY * dt))
         pullout_distance_x = pullout_distance * ti.cos(pullout_angle)
         delta_x = pullout_distance_x / n_step
@@ -103,9 +103,9 @@ def skill_generation_func(skill_index, skill_params, dt):
     elif skill_index == 3:
         # rotate about y and z axes
         rotate_angle_y = skill_params[0]
-        rotate_angle_y = (np.pi / 2) * (rotate_angle_y + 1) / 2  # map [-1, 1] to [0, pi/2]
+        rotate_angle_y = (np.pi / 2) * rotate_angle_y  # map [-1, 1] to [-pi/2, pi/2]
         rotate_angle_z = skill_params[1]
-        rotate_angle_z = (np.pi / 2) * (rotate_angle_z + 1) / 2
+        rotate_angle_z = (np.pi / 2) * rotate_angle_z  # map [-1, 1] to [-pi/2, pi/2]
         n_step_y = int(rotate_angle_y / (ANGULAR_VELOCITY * dt))
         n_step_z = int(rotate_angle_z / (ANGULAR_VELOCITY * dt))
         n_step = max(n_step_y, n_step_z)

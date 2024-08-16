@@ -45,7 +45,7 @@ transform_cam_to_world = np.linalg.inv(transform_world_to_cam)
 
 # Create a plane
 mesh_box = o3d.geometry.TriangleMesh.create_box(width=0.5, height=0.5, depth=0.001)
-mesh_box.translate([-0.25, 0.35, -0.11312])
+mesh_box.translate([-0.25, 0.35, -0.0011884])
 
 # Create frames
 world_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
@@ -53,7 +53,7 @@ cam_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[
 cam_frame.transform(transform_world_to_cam)
 
 # Load PCD
-pcd = o3d.io.read_point_cloud(os.path.join(data_path, 'pcd_0.ply'))
+pcd = o3d.io.read_point_cloud(os.path.join(data_path, 'target_pcds', 'pcd_0.ply'))
 pcd_in_world_frame = pcd.transform(transform_world_to_cam)
 
 # Visualize
@@ -88,5 +88,8 @@ while not done:
     ], width=800, height=600)
     done = input("Done? (y/n): ") == 'y'
 
-print(new_transform_world_to_cam)
+print(f"  - {new_transform_world_to_cam[0]}")
+print(f"  - {new_transform_world_to_cam[1]}")
+print(f"  - {new_transform_world_to_cam[2]}")
+print(f"  - {new_transform_world_to_cam[3]}")
 np.save(os.path.join(data_path, 'cam_extrinsics_fine_tuned.npy'), new_transform_world_to_cam)
