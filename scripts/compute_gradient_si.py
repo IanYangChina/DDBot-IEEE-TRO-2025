@@ -62,9 +62,10 @@ def main(args):
         'agent_init_euler': (0, 180, 90),
     }
     loss_cfg = {
-        'target_pcd_height_map_path': os.path.join(script_path, '..', 'data', 'target_pcds',
+        'target_pcd_height_map_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
                                                    'pcd_2_cropped_norm_z_aligned_height_map.npy'),
-        'target_pcd_path': os.path.join(script_path, '..', 'data', 'target_pcds', 'pcd_0_cropped_norm_z_aligned.ply'),
+        'target_pcd_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
+                                        'pcd_0_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
         'down_sample_voxel_size': 0.006,
     }

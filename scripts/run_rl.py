@@ -11,23 +11,23 @@ from gym.spaces import Box, Discrete
 script_path = os.path.dirname(os.path.realpath(__file__))
 
 from doma.envs.planting_env import make_env
-from doma.engine.configs.macros import DTYPE_NP
+from doma.engine.configs.macros import DTYPE_NP, SAND
 from doma.engine.loss_function.emd_loss_external import compute_emd_loss_external
 cam_cfg = {  # same camera pose as the real-world setup
-    'pos': (0.2, 1.2, 0.9),
+    'pos': (0.2, 0.57, 0.6),
     'lookat': (0.2, 0.2, 0.03),
     'euler': (180+np.rad2deg(np.arctan(1.0/(0.9-0.03))), 0, 180),
     'focal_length': 0.3,
-    'fov': 30,
+    'fov': 60,
     'lights': [{'pos': (1.2, 0.25, 0.2), 'color': (0.6, 0.6, 0.6)},
                {'pos': (1.2, 0.5, 1.0), 'color': (0.6, 0.6, 0.6)},
                {'pos': (1.2, 0.0, 1.0), 'color': (0.8, 0.8, 0.8)}],
     'particle_radius': 0.001,
     'res': (800, 800),
-    'pcd_gen_res': 150
+    'pcd_gen_res': 60
 }
 LINEAR_VELOCITY = 0.1  # m/s
-ANGULAR_VELOCITY = 0.5  # rad/s
+ANGULAR_VELOCITY = np.pi / 4  # rad/s
 
 
 def skill_generation_func(skill_index, skill_params, dt):
@@ -40,27 +40,15 @@ def skill_generation_func(skill_index, skill_params, dt):
         move_angle = skill_params[0]  # angle between the x-axis and the movement direction
         move_angle = np.pi * (move_angle + 1)  # map [-1, 1] to [0, 2pi]
         move_distance = skill_params[1]
-        move_distance *= 0.05  # map [-1, 1] to [-0.05, 0.05]
+        move_distance = 0.1 * (move_distance + 1)  # map [-1, 1] to [0, 0.2]
         n_step = int(move_distance / (LINEAR_VELOCITY * dt))
         move_distance_x = move_distance * ti.cos(move_angle)
         delta_x = move_distance_x / n_step
         move_distance_y = move_distance * ti.sin(move_angle)
         delta_y = move_distance_y / n_step
-        if 0 <= move_angle < np.pi / 2:
-            x_sign = 1
-            y_sign = 1
-        elif np.pi / 2 <= move_angle < np.pi:
-            x_sign = -1
-            y_sign = 1
-        elif np.pi <= move_angle < 3 * np.pi / 2:
-            x_sign = -1
-            y_sign = -1
-        else:
-            x_sign = 1
-            y_sign = -1
         for i in range(n_step):
-            trajectory[i][0] = delta_x * x_sign
-            trajectory[i][1] = delta_y * y_sign
+            trajectory[i][0] = delta_x
+            trajectory[i][1] = delta_y
         return trajectory[:n_step]
     elif skill_index == 1:
         # insertion
@@ -73,12 +61,8 @@ def skill_generation_func(skill_index, skill_params, dt):
         delta_x = insert_distance_x / n_step
         insert_distance_z = insert_distance * ti.sin(insert_angle)
         delta_z = insert_distance_z / n_step
-        if insert_angle < np.pi / 2:
-            x_sign = 1
-        else:
-            x_sign = -1
         for i in range(n_step):
-            trajectory[i][0] = delta_x * x_sign
+            trajectory[i][0] = delta_x
             trajectory[i][2] = delta_z * -1
         return trajectory[:n_step]
     elif skill_index == 2:
@@ -92,28 +76,25 @@ def skill_generation_func(skill_index, skill_params, dt):
         delta_x = pullout_distance_x / n_step
         pullout_distance_z = pullout_distance * ti.sin(pullout_angle)
         delta_z = pullout_distance_z / n_step
-        if pullout_angle < np.pi / 2:
-            x_sign = 1
-        else:
-            x_sign = -1
         for i in range(n_step):
-            trajectory[i][0] = delta_x * x_sign
+            trajectory[i][0] = delta_x
             trajectory[i][2] = delta_z
         return trajectory[:n_step]
     elif skill_index == 3:
         # rotate about y and z axes
-        rotate_angle_y = skill_params[0]
-        rotate_angle_y = (np.pi / 2) * rotate_angle_y  # map [-1, 1] to [-pi/2, pi/2]
+        rotate_angle_x = skill_params[0]
+        rotate_angle_x = (np.pi / 2) * rotate_angle_x  # map [-1, 1] to [-pi/2, pi/2]
         rotate_angle_z = skill_params[1]
         rotate_angle_z = (np.pi / 2) * rotate_angle_z  # map [-1, 1] to [-pi/2, pi/2]
-        n_step_y = int(rotate_angle_y / (ANGULAR_VELOCITY * dt))
-        n_step_z = int(rotate_angle_z / (ANGULAR_VELOCITY * dt))
-        n_step = max(n_step_y, n_step_z)
-        delta_y = rotate_angle_y / n_step
+        n_step_x = np.abs(int(rotate_angle_x / (ANGULAR_VELOCITY * dt)))
+        n_step_z = np.abs(int(rotate_angle_z / (ANGULAR_VELOCITY * dt)))
+        n_step = max(n_step_x, n_step_z)
+        delta_x = rotate_angle_x / n_step
         delta_z = rotate_angle_z / n_step
         for i in range(n_step):
-            trajectory[i][4] = delta_y
+            trajectory[i][3] = delta_x
             trajectory[i][5] = delta_z
+        return trajectory[:n_step]
     else:
         raise ValueError('Invalid skill index')
 
@@ -146,9 +127,11 @@ class HybridActionEnv(gym.Env):
 
     def step(self, action):
         discrete_action = int(action[0])
-        continuous_action = action[1:]
-        skill_trajectory = self.skill_generation_func(discrete_action, continuous_action,
+        continuous_action = np.asarray(action[1:])
+        skill_trajectory = self.skill_generation_func(discrete_action,
+                                                      continuous_action,
                                                       dt=self.mpm_env.simulator.dt_global)
+        print(skill_trajectory.shape)
         for i in range(len(skill_trajectory)):
             self.mpm_env.step(skill_trajectory[i])
             if self.render_skill:
@@ -157,13 +140,13 @@ class HybridActionEnv(gym.Env):
         obs = self.render(mode=self.obs_mode)
         agent_state = self.mpm_env.simulator.agent.get_state(self.mpm_env.simulator.cur_substep_local)
         loss_info = self.mpm_env.get_final_loss()
-        reward = loss_info['emd_loss'].to_numpy() * self.reward_scale
+        reward = loss_info['emd_loss'] * self.reward_scale
         self.step_count += 1
         done = self.step_count >= self.horizon
         return {
             'observation': obs.copy(),
-            'agent_state': agent_state,
-            'desired_goal': self.mpm_env.loss.target_pcd_points_np,
+            'agent_state': agent_state.copy(),
+            'desired_goal': self.mpm_env.loss.target_pcd_points_np.copy(),
             'achieved_goal': obs.copy()
         }, reward, done, loss_info
 
@@ -174,8 +157,8 @@ class HybridActionEnv(gym.Env):
         agent_state = self.mpm_env.simulator.agent.get_state(self.mpm_env.simulator.cur_substep_local)
         return {
             'observation': obs.copy(),
-            'agent_state': agent_state,
-            'desired_goal': self.mpm_env.loss.target_pcd_points_np,
+            'agent_state': agent_state.copy(),
+            'desired_goal': self.mpm_env.loss.target_pcd_points_np.copy(),
             'achieved_goal': obs.copy()
         }
 
@@ -261,28 +244,30 @@ def main(arguments):
         backend = ti.cpu
 
     env_cfg = {
+        'material_id': SAND,
         'p_density': arguments['ptcl_density'],
-        'horizon': 500,
+        'horizon': 10000,
         'dt_global': 0.01,
-        'n_substeps': 50,
-        'agent_init_pos': (0.4, 0.2, 0.2),
+        'n_substeps': 20,
+        'agent_init_pos': (0.2, 0.2, 0.2),
         'agent_init_euler': (0, 180, 90),
     }
     loss_cfg = {
-        'target_pcd_path': os.path.join(script_path, '..', 'data', 'target_pcds', 'pcd_2_cropped_norm_z_aligned.ply'),
-        'target_pcd_offset': [0, 0, 0],
-        'down_sample_voxel_size': 0.005,
+        'target_pcd_path': os.path.join(script_path, '..', 'data', 'task_target_pcds',
+                                        'pcd_1_cropped_norm_z_aligned.ply'),
+        'target_pcd_offset': [0.2, 0.2, 0],
+        'down_sample_voxel_size': 0.01,
     }
 
     ti.reset()
-    ti.init(arch=backend,
-            # device_memory_GB=4,
+    ti.init(arch=backend, device_memory_GB=5,
             default_fp=ti.f32, fast_math=True, random_seed=seed)
-    # env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
+    env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
     gym_env_config = {
-        # 'mpm_env_init_state': init_state['state'],
-        'pcd_file_path': os.path.join(script_path, '..', 'data', 'target_pcds', 'pcd_2_cropped_norm_z_aligned.ply'),
-        'render_skill': False,
+        'mpm_env_init_state': init_state['state'],
+        'pcd_file_path': os.path.join(script_path, '..', 'data', 'task_target_pcds',
+                                      'pcd_1_cropped_norm_z_aligned.ply'),
+        'render_skill': arguments['env_test'],
         'horizon': arguments['n_skills'],
         'obs_mode': 'point_cloud',
         'reward_scale': -1.0,
@@ -292,31 +277,54 @@ def main(arguments):
         'continuous_action_min': -1.0,
         'skill_generation_func': skill_generation_func,
     }
-    # gym_env = HybridActionEnv(mpm_env, gym_env_config, seed=arguments['seed'], logger=logging)
-    gym_env = FakeEnv(gym_env_config, seed=seed, logger=logging)
+    gym_env = HybridActionEnv(mpm_env, gym_env_config, seed=arguments['seed'], logger=logging)
+    if arguments['env_test']:
+        frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
+        gym_env.reset()
+        gym_env.render(mode='human')
+        done = False
+        while not done:
+            a0 = input("Enter action 0: ")
+            a1 = input("Enter action 1: ")
+            a2 = input("Enter action 2: ")
+            obs, reward, done, info = gym_env.step([int(a0), float(a1), float(a2)])
+            print(reward)
+            cloud_array = obs['observation']
+            obj_vec = o3d.utility.Vector3dVector(cloud_array)
+            obj_pcd = o3d.geometry.PointCloud(obj_vec)
+            cloud_array_2 = obs['desired_goal']
+            cloud_array_2[:, 0] += 0.3
+            obj_vec_2 = o3d.utility.Vector3dVector(cloud_array_2)
+            obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2)
+            o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2], width=800, height=600)
 
-    with open(os.path.join(script_path, '..', 'data', 'rl_agent_config.json'), 'rb') as f_ac:
-        rl_agent_config = json.load(f_ac)
-    rl_agent_config['cuda_device_id'] = arguments['torch_cuda_device_id']
-    rl_agent_config['batch_size'] = 8
-    rl_agent_config['optimization_steps'] = arguments['n_skills']
-    rl_agent_config['demonstrate_skills'] = arguments['demonstrate_skills']
-    rl_agent_config['demonstrate_percentage'] = arguments['demonstrate_percentage']
-    rl_agent_config['planned_skills'] = arguments['planned_skills']
-    rl_agent_config['skill_plan'] = [0, 1, 0, 2]  # move, insert, move, pullout
-    assert len(rl_agent_config['skill_plan']) == arguments['n_skills'], 'The length of skill plan should be equal to n_skills'
-    with open(os.path.join(log_dir, 'rl_agent_config.json'), 'w') as f_ac:
-        json.dump(rl_agent_config, f_ac)
+            gym_env.render(mode='human')
+    else:
+        # gym_env = FakeEnv(gym_env_config, seed=seed, logger=logging)
 
-    gpasac_agent = GPASAC(rl_agent_config, gym_env, path=log_dir, seed=seed)
-    gpasac_agent.run()
+        with open(os.path.join(script_path, '..', 'data', 'rl_agent_config.json'), 'rb') as f_ac:
+            rl_agent_config = json.load(f_ac)
+        rl_agent_config['cuda_device_id'] = arguments['torch_cuda_device_id']
+        rl_agent_config['batch_size'] = 8
+        rl_agent_config['optimization_steps'] = arguments['n_skills']
+        rl_agent_config['demonstrate_skills'] = arguments['demonstrate_skills']
+        rl_agent_config['demonstrate_percentage'] = arguments['demonstrate_percentage']
+        rl_agent_config['planned_skills'] = arguments['planned_skills']
+        rl_agent_config['skill_plan'] = [0, 1, 0, 2]  # move, insert, move, pullout
+        assert len(rl_agent_config['skill_plan']) == arguments['n_skills'], 'The length of skill plan should be equal to n_skills'
+        with open(os.path.join(log_dir, 'rl_agent_config.json'), 'w') as f_ac:
+            json.dump(rl_agent_config, f_ac)
+
+        gpasac_agent = GPASAC(rl_agent_config, gym_env, path=log_dir, seed=seed)
+        gpasac_agent.run()
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--seed', dest='seed', type=int, default=0, help='seed')
     parser.add_argument('--backend', dest='backend', type=str, default='cuda', help='backend')
-    parser.add_argument('--ptcl-d', dest='ptcl_density', type=float, default=3e6, help='particle density')
+    parser.add_argument('--e-test', dest='env_test', action='store_true', default=True, help='testing gym env')
+    parser.add_argument('--ptcl-d', dest='ptcl_density', type=float, default=2e7, help='particle density')
     parser.add_argument('--n-skills', dest='n_skills', type=int, default=4, help='number of skills')
     parser.add_argument('--demo-skills', dest='demonstrate_skills', action='store_true', default=False, help='demonstrate the order of skills')
     parser.add_argument('--demo-frequency', dest='demonstrate_percentage', type=float, default=0.5, help='percentage of demonstration episodes')

@@ -125,8 +125,8 @@ def main(args):
             ti.reset()
             ti.init(arch=backend, device_memory_GB=15, default_fp=ti.f32, fast_math=True, random_seed=arguments['seed'])
             env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
-            set_parameters(mpm_env, material_id=SAND, E=E.copy(), nu=nu.copy(), rho=rho.copy(),
-                           manipulator_friction=manipulator_friction.copy(), sand_angle=sand_angle.copy())
+            set_parameters(mpm_env, material_id=SAND, e=E.copy(), nu=nu.copy(), rho=rho.copy(),
+                           manipulator_friction=manipulator_friction.copy(), sand_friction_angle=sand_angle.copy())
 
             """forward pass"""
             mpm_env.set_state(init_state['state'], grad_enabled=True)
