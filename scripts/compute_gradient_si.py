@@ -47,10 +47,9 @@ def main(args):
     if args['debug']:
         print('[Warning] Debug mode on, printing gradients.')
 
-    trajectory = np.zeros(shape=(160, 6), dtype=DTYPE_NP)
-    trajectory[:30, 2] = -0.1
-    trajectory[30:130, 0] = -0.15
-    trajectory[130:160, 2] = 0.1
+    task_id = 0
+    trajectory = np.load(os.path.join(script_path, '..', 'data',
+                                      'moveit_trajectories', f'sys_id_sim_{task_id}_pos.npy'))
 
     env_cfg = {
         'p_density': arguments['ptcl_density'],
@@ -58,14 +57,14 @@ def main(args):
         'horizon': trajectory.shape[0],
         'dt_global': 0.01,
         'n_substeps': 10,
-        'agent_init_pos': (0.4, 0.2, 0.2),
+        'agent_init_pos': (0.2, 0.2, 0.2),
         'agent_init_euler': (0, 180, 90),
     }
     loss_cfg = {
         'target_pcd_height_map_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
-                                                   'pcd_2_cropped_norm_z_aligned_height_map.npy'),
+                                                   f'pcd_{task_id}_cropped_norm_z_aligned_height_map-res60-vdsize0.001.npy'),
         'target_pcd_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
-                                        'pcd_0_cropped_norm_z_aligned.ply'),
+                                        f'pcd_{task_id}_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
         'down_sample_voxel_size': 0.006,
     }
@@ -99,14 +98,15 @@ def main(args):
         rho = np.asarray(np.random.uniform(rho_range[0], rho_range[1]), dtype=DTYPE_NP).reshape((1,))  # Density
         sand_angle = np.asarray(np.random.uniform(sand_angle_range[0], sand_angle_range[1]),
                                 dtype=DTYPE_NP).reshape((1,))  # Sand friction angle
-        manipulator_friction = np.asarray(np.random.uniform(mf_range[0], mf_range[1]), dtype=DTYPE_NP).reshape(
-            (1,))  # Manipulator friction
+        manipulator_friction = np.asarray(np.random.uniform(mf_range[0], mf_range[1]), dtype=DTYPE_NP).reshape((1,))  # Manipulator friction
+        container_friction = np.asarray(np.random.uniform(mf_range[0], mf_range[1]), dtype=DTYPE_NP).reshape((1,))  # Container friction
 
         ti.reset()
-        ti.init(arch=backend, device_memory_GB=5, default_fp=ti.f32, fast_math=True, random_seed=1)
+        ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True, random_seed=1)
         env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=args['debug'], logger=logging)
         set_parameters(mpm_env, material_id=SAND, e=E.copy(), nu=nu.copy(), rho=rho.copy(),
                        manipulator_friction=manipulator_friction.copy(),
+                       container_friction=container_friction.copy(),
                        sand_friction_angle=sand_angle.copy())
         print(f'===> Created Env with {mpm_env.simulator.n_particles} particles, {mpm_env.loss.n_target_pcd_points} target pcd points.')
         print(f'===> CPU memory occupied after init: {process.memory_percent()} %')
@@ -124,10 +124,13 @@ def main(args):
         print('===> Loss info:', loss_info)
         print(f'===> CPU memory occupied after forward: {process.memory_percent()} %')
         print(f'===> GPU memory after forward: {get_gpu_memory()}')
-        # plt.imshow(loss_info['height_map'])
+        # fig, ax = plt.subplots(1, 2, figsize=(12, 6))
+        # ax[0].imshow(loss_info['height_map'])
+        # ax[0].set_title('Height map')
+        # ax[1].imshow(loss_info['height_map_target'])
+        # ax[1].set_title('Target height map')
         # plt.show()
-        # plt.imshow(loss_info['height_map_target'])
-        # plt.show()
+        # exit()
 
         """backward pass"""
         mpm_env.reset_grad()
@@ -156,7 +159,8 @@ def main(args):
                          mpm_env.simulator.particle_param.grad[SAND].nu,
                          mpm_env.simulator.particle_param.grad[SAND].rho,
                          mpm_env.simulator.system_param.grad[None].sand_friction_angle,
-                         mpm_env.simulator.system_param.grad[None].manipulator_friction], dtype=DTYPE_NP)
+                         mpm_env.simulator.system_param.grad[None].manipulator_friction,
+                         mpm_env.simulator.system_param.grad[None].container_friction], dtype=DTYPE_NP)
 
         """Checking for nan, inf, and strange values"""
         abort = False
@@ -212,6 +216,7 @@ def main(args):
     print(f"Avg. gradient of rho: {grad_mean[2]}, std: {grad_std[2]}")
     print(f"Avg. gradient of sand angle: {grad_mean[3]}, std: {grad_std[3]}")
     print(f"Avg. gradient of manipulator friction: {grad_mean[4]}, std: {grad_std[4]}")
+    print(f"Avg. gradient of container friction: {grad_mean[5]}, std: {grad_std[5]}")
 
     logging.info('===> Avg. Gradients:')
     logging.info(f"Avg. gradient of E: {grad_mean[0]}, std: {grad_std[0]}")
@@ -219,6 +224,7 @@ def main(args):
     logging.info(f"Avg. gradient of rho: {grad_mean[2]}, std: {grad_std[2]}")
     logging.info(f"Avg. gradient of sand angle: {grad_mean[3]}, std: {grad_std[3]}")
     logging.info(f"Avg. gradient of manipulator friction: {grad_mean[4]}, std: {grad_std[4]}")
+    logging.info(f"Avg. gradient of container friction: {grad_mean[5]}, std: {grad_std[5]}")
 
     if not args['debug']:
         np.save(grad_mean_file_name, grad_mean)
@@ -230,7 +236,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('--r_human', dest='r_human', default=False, action='store_true', help='Render human view')
     parser.add_argument('--ptcl_d', dest='ptcl_density', type=float, default=5e6, help='Particle density')
-    parser.add_argument('--debug', dest='debug', default=True, action='store_true', help='Debug mode, print gradients for every global step.')
+    parser.add_argument('--debug', dest='debug', default=False, action='store_true', help='Debug mode, print gradients for every global step.')
     parser.add_argument('--backend', dest='backend', default='cuda', type=str, help='Computation backend: cuda, opengl, or cpu')
+    parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
     arguments = vars(parser.parse_args())
     main(arguments)
