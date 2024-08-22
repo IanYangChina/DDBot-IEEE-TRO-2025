@@ -6,17 +6,21 @@ import open3d as o3d
 import numpy as np
 import taichi as ti
 import matplotlib.pyplot as plt
+import datetime as dt
+from time import time
 from doma.engine.utils.misc import get_gpu_memory
 import psutil
+
 script_path = os.path.dirname(os.path.realpath(__file__))
 
 from doma.envs.planting_env import make_env
 from doma.engine.utils.misc import set_parameters
 from doma.engine.configs.macros import DTYPE_NP, DTYPE_TI, SAND, NUM_MATERIAL, CLAY
+
 cam_cfg = {
     'pos': (0.2, 1.2, 0.9),
     'lookat': (0.2, 0.2, 0.03),
-    'euler': (180+np.rad2deg(np.arctan(1.0/(0.9-0.03))), 0, 180),
+    'euler': (180 + np.rad2deg(np.arctan(1.0 / (0.9 - 0.03))), 0, 180),
     'focal_length': 0.3,
     'fov': 30,
     'lights': [{'pos': (1.2, 0.25, 0.2), 'color': (0.6, 0.6, 0.6)},
@@ -47,12 +51,27 @@ def main(args):
     if args['debug']:
         print('[Warning] Debug mode on, printing gradients.')
 
+    os.makedirs(result_path, exist_ok=True)
+    log_file_name = os.path.join(result_path, 'gradients.log')
+    if os.path.isfile(log_file_name):
+        filemode = "a"
+    else:
+        filemode = "w"
+    logging.basicConfig(level=logging.NOTSET, filemode=filemode,
+                        filename=log_file_name,
+                        format="%(asctime)s %(levelname)s %(message)s")
+
+    d_str = args['ptcl_density']
+    ns = args['n_substep']
+    grad_mean_file_name = os.path.join(result_path, f'grads-mean-d{d_str}-ns{ns}.npy')
+    grad_std_file_name = os.path.join(result_path, f'grads-std-d{d_str}-ns{ns}.npy')
+
     task_id = 0
     trajectory = np.load(os.path.join(script_path, '..', 'data',
                                       'moveit_trajectories', f'sys_id_sim_{task_id}_pos.npy'))
 
     env_cfg = {
-        'p_density': arguments['ptcl_density'],
+        'p_density': float(args['ptcl_density']),
         'material_id': SAND,
         'horizon': trajectory.shape[0],
         'dt_global': 0.01,
@@ -76,27 +95,15 @@ def main(args):
     mf_range = (0.01, 2.0)
     n_epoch = 100
 
-    os.makedirs(result_path, exist_ok=True)
-    log_file_name = os.path.join(result_path, 'gradients.log')
-    if os.path.isfile(log_file_name):
-        filemode = "a"
-    else:
-        filemode = "w"
-    logging.basicConfig(level=logging.NOTSET, filemode=filemode,
-                        filename=log_file_name,
-                        format="%(asctime)s %(levelname)s %(message)s")
-    n = 0
-    done = False
-    while not done:
-        grad_mean_file_name = os.path.join(result_path, f'grads-mean-{n}.npy')
-        grad_std_file_name = os.path.join(result_path, f'grads-std-{n}.npy')
-        if os.path.isfile(grad_mean_file_name):
-            n += 1
-        else:
-            done = True
-
     grads = []
     n_aborted_data = 0
+
+    start_time = dt.datetime.now()
+    print(f"===> Start grad computation at:, {start_time.year}-{start_time.month}-{start_time.day} "
+          f"{start_time.hour}:{start_time.minute}:{start_time.second}")
+    logging.info(f"===> Start grad computation at:, {start_time.year}-{start_time.month}-{start_time.day} "
+                 f"{start_time.hour}:{start_time.minute}:{start_time.second}")
+    start_time_sec = time()
     for n in range(n_epoch):
         # Initialising parameters
         E = np.asarray(np.random.uniform(E_range[0], E_range[1]), dtype=DTYPE_NP).reshape((1,))  # Young's modulus
@@ -105,17 +112,21 @@ def main(args):
         rho = np.asarray(np.random.uniform(rho_range[0], rho_range[1]), dtype=DTYPE_NP).reshape((1,))  # Density
         sand_angle = np.asarray(np.random.uniform(sand_angle_range[0], sand_angle_range[1]),
                                 dtype=DTYPE_NP).reshape((1,))  # Sand friction angle
-        manipulator_friction = np.asarray(np.random.uniform(mf_range[0], mf_range[1]), dtype=DTYPE_NP).reshape((1,))  # Manipulator friction
-        container_friction = np.asarray(np.random.uniform(mf_range[0], mf_range[1]), dtype=DTYPE_NP).reshape((1,))  # Container friction
+        manipulator_friction = np.asarray(np.random.uniform(mf_range[0], mf_range[1]), dtype=DTYPE_NP).reshape(
+            (1,))  # Manipulator friction
+        container_friction = np.asarray(np.random.uniform(mf_range[0], mf_range[1]), dtype=DTYPE_NP).reshape(
+            (1,))  # Container friction
 
         ti.reset()
         ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True, random_seed=1)
-        env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=args['debug'], logger=logging)
+        env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=args['debug'],
+                                            logger=logging)
         set_parameters(mpm_env, material_id=SAND, e=E.copy(), nu=nu.copy(), rho=rho.copy(),
                        manipulator_friction=manipulator_friction.copy(),
                        container_friction=container_friction.copy(),
                        sand_friction_angle=sand_angle.copy())
-        print(f'===> Created Env with {mpm_env.simulator.n_particles} particles, {mpm_env.loss.n_target_pcd_points} target pcd points.')
+        print(
+            f'===> Created Env with {mpm_env.simulator.n_particles} particles, {mpm_env.loss.n_target_pcd_points} target pcd points.')
         print(f'===> CPU memory occupied after init: {process.memory_percent()} %')
         print(f'===> GPU memory after init: {get_gpu_memory()}')
 
@@ -160,7 +171,8 @@ def main(args):
         logging.info(f"Gradient of nu: {mpm_env.simulator.particle_param.grad[SAND].nu}")
         logging.info(f"Gradient of rho: {mpm_env.simulator.particle_param.grad[SAND].rho}")
         logging.info(f"Gradient of sand angle: {mpm_env.simulator.system_param.grad[None].sand_friction_angle}")
-        logging.info(f"Gradient of manipulator friction: {mpm_env.simulator.system_param.grad[None].manipulator_friction}")
+        logging.info(
+            f"Gradient of manipulator friction: {mpm_env.simulator.system_param.grad[None].manipulator_friction}")
         logging.info(f"Gradient of container friction: {mpm_env.simulator.system_param.grad[None].container_friction}")
 
         grad = np.array([mpm_env.simulator.particle_param.grad[SAND].E,
@@ -201,13 +213,15 @@ def main(args):
             print(f'===> [Warning] Aborting epoch {n}......')
             print(f'===> [Warning] Particle has nan or inf: {particle_has_naninf}')
             print(f'===> [Warning] Strange loss or gradient.')
-            print(f'===> [Warning] E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}, manipulator_friction: {manipulator_friction}')
+            print(
+                f'===> [Warning] E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}, manipulator_friction: {manipulator_friction}')
             print(f'===> [Warning] Grad: {grad}')
             print(f'===> [Warning] Loss info: {loss_info}')
             logging.error(f'===> [Warning] Aborting epoch: {n}')
             logging.error(f'===> [Warning] Particle has nan or inf: {particle_has_naninf}')
             logging.error(f'===> [Warning] Strange loss or gradient.')
-            logging.error(f'===> [Warning] E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}, manipulator_friction: {manipulator_friction}')
+            logging.error(
+                f'===> [Warning] E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}, manipulator_friction: {manipulator_friction}')
             logging.error(f'===> [Warning] Grad: {grad}')
             logging.error(f'===> [Warning] Loss info: {loss_info}')
             n_aborted_data += 1
@@ -240,14 +254,27 @@ def main(args):
         np.save(grad_mean_file_name, grad_mean)
         np.save(grad_std_file_name, grad_std)
 
+    end_time = dt.datetime.now()
+    print(f"===> End grad computation at:, {end_time.year}-{end_time.month}-{end_time.day} "
+          f"{end_time.hour}:{end_time.minute}:{end_time.second}")
+    print(f"===> Total time taken: {time() - start_time_sec} seconds")
+    print(f"===> Number of aborted data: {n_aborted_data}")
+    logging.info(f"===> End grad computation at:, {end_time.year}-{end_time.month}-{end_time.day} "
+                 f"{end_time.hour}:{end_time.minute}:{end_time.second}")
+    logging.info(f"===> Total time taken: {time() - start_time_sec} seconds")
+    logging.info(f"===> Number of aborted data: {n_aborted_data}")
+
 
 if __name__ == '__main__':
     description = 'Compute the means and standard deviations of the gradients for material parameters with randomly sampled parameter values.'
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('--r_human', dest='r_human', default=False, action='store_true', help='Render human view')
-    parser.add_argument('--ptcl_d', dest='ptcl_density', type=float, default=5e6, help='Particle density')
-    parser.add_argument('--debug', dest='debug', default=False, action='store_true', help='Debug mode, print gradients for every global step.')
-    parser.add_argument('--backend', dest='backend', default='cuda', type=str, help='Computation backend: cuda, opengl, or cpu')
+    parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default=5e6,
+                        help='Particle density, use scientific notation like \'5e6\'.')
+    parser.add_argument('--debug', dest='debug', default=False, action='store_true',
+                        help='Debug mode, print gradients for every global step.')
+    parser.add_argument('--backend', dest='backend', default='cuda', type=str,
+                        help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
     parser.add_argument('--n_substep', dest='n_substep', default='20', type=int, help='number of simulation substeps')
     arguments = vars(parser.parse_args())
