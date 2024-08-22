@@ -56,7 +56,7 @@ def main(args):
         'material_id': SAND,
         'horizon': trajectory.shape[0],
         'dt_global': 0.01,
-        'n_substeps': 10,
+        'n_substeps': args['n_substep'],
         'agent_init_pos': (0.2, 0.2, 0.2),
         'agent_init_euler': (0, 180, 90),
     }
@@ -66,7 +66,7 @@ def main(args):
         'target_pcd_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
                                         f'pcd_{task_id}_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
-        'down_sample_voxel_size': 0.006,
+        'down_sample_voxel_size': 0.007,
     }
 
     E_range = (2.5e5, 4e5)
@@ -77,7 +77,7 @@ def main(args):
     n_epoch = 100
 
     os.makedirs(result_path, exist_ok=True)
-    log_file_name = os.path.join(result_path, 'gradient.log')
+    log_file_name = os.path.join(result_path, 'gradients.log')
     if os.path.isfile(log_file_name):
         filemode = "a"
     else:
@@ -85,8 +85,15 @@ def main(args):
     logging.basicConfig(level=logging.NOTSET, filemode=filemode,
                         filename=log_file_name,
                         format="%(asctime)s %(levelname)s %(message)s")
-    grad_mean_file_name = os.path.join(result_path, f'grads-mean.npy')
-    grad_std_file_name = os.path.join(result_path, f'grads-std.npy')
+    n = 0
+    done = False
+    while not done:
+        grad_mean_file_name = os.path.join(result_path, f'grads-mean-{n}.npy')
+        grad_std_file_name = os.path.join(result_path, f'grads-std-{n}.npy')
+        if os.path.isfile(grad_mean_file_name):
+            n += 1
+        else:
+            done = True
 
     grads = []
     n_aborted_data = 0
@@ -154,6 +161,7 @@ def main(args):
         logging.info(f"Gradient of rho: {mpm_env.simulator.particle_param.grad[SAND].rho}")
         logging.info(f"Gradient of sand angle: {mpm_env.simulator.system_param.grad[None].sand_friction_angle}")
         logging.info(f"Gradient of manipulator friction: {mpm_env.simulator.system_param.grad[None].manipulator_friction}")
+        logging.info(f"Gradient of container friction: {mpm_env.simulator.system_param.grad[None].container_friction}")
 
         grad = np.array([mpm_env.simulator.particle_param.grad[SAND].E,
                          mpm_env.simulator.particle_param.grad[SAND].nu,
@@ -178,7 +186,7 @@ def main(args):
                         break
 
         if not abort:
-            if np.any(np.isnan(grad)) or np.any(np.isinf(grad)) or np.any(np.abs(grad) > 1e6):
+            if np.any(np.isnan(grad)) or np.any(np.isinf(grad)) or np.any(np.abs(grad) > 1e10):
                 abort = True
 
         if not abort:
@@ -205,6 +213,8 @@ def main(args):
             n_aborted_data += 1
         else:
             grads.append(grad.copy())
+            print(f'===> Epoch {n}, grad: {grad}')
+            logging.info(f'===> Epoch {n}, grad: {grad}')
 
         mpm_env.simulator.clear_ckpt()
 
@@ -239,5 +249,6 @@ if __name__ == '__main__':
     parser.add_argument('--debug', dest='debug', default=False, action='store_true', help='Debug mode, print gradients for every global step.')
     parser.add_argument('--backend', dest='backend', default='cuda', type=str, help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
+    parser.add_argument('--n_substep', dest='n_substep', default='20', type=int, help='number of simulation substeps')
     arguments = vars(parser.parse_args())
     main(arguments)
