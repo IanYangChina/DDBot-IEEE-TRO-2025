@@ -46,7 +46,7 @@ def main(args):
     trajectory = np.load(os.path.join(script_path, '..', 'data',
                                       'moveit_trajectories', f'sys_id_sim_{motion_id}_pos.npy'))
     env_cfg = {
-        'p_density': float(arguments['ptcl_density']),
+        'p_density': float(args['ptcl_density']),
         'horizon': trajectory.shape[0],
         'dt_global': 0.01,
         'n_substeps': args['n_substep'],
@@ -68,8 +68,8 @@ def main(args):
     sand_angle_range = (30, 45)
     mf_range = (0.01, 2.0)
     n_epoch = 100
-    if arguments['seed'] != -1:
-        seeds = [arguments['seed']]
+    if args['seed'] != -1:
+        seeds = [args['seed']]
     else:
         seeds = [0, 1, 2, 4, 5]
     training_config = {
@@ -130,7 +130,7 @@ def main(args):
         loss_info = {}
         for n in range(n_epoch):
             ti.reset()
-            ti.init(arch=backend, device_memory_GB=15, default_fp=ti.f32, fast_math=True, random_seed=arguments['seed'])
+            ti.init(arch=backend, device_memory_GB=15, default_fp=ti.f32, fast_math=True, random_seed=args['seed'])
             env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
             set_parameters(mpm_env, material_id=SAND, e=E.copy(), nu=nu.copy(), rho=rho.copy(),
                            manipulator_friction=manipulator_friction.copy(),
@@ -273,6 +273,7 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="System identification for soil")
+    parser.add_argument('--seed', dest='seed', type=int, default=-1, help='Random seed')
     parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default=5e6,
                         help='Particle density, use scientific notation like \'5e6\'.')
     parser.add_argument('--backend', dest='backend', default='cuda', type=str,
