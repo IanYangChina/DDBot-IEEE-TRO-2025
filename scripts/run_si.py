@@ -47,6 +47,7 @@ def main(args):
                                       'moveit_trajectories', f'sys_id_sim_{motion_id}_pos.npy'))
     env_cfg = {
         'p_density': float(args['ptcl_density']),
+        'material_id': SAND,
         'horizon': trajectory.shape[0],
         'dt_global': 0.01,
         'n_substeps': args['n_substep'],
@@ -97,7 +98,7 @@ def main(args):
                             format="%(asctime)s %(levelname)s %(message)s")
         logger = SummaryWriter(log_dir=log_dir)
         start_time = dt.datetime.now()
-        print(f"===> Start grad computation at:, {start_time.year}-{start_time.month}-{start_time.day} "
+        print(f"===> Start system identification optimisation at:, {start_time.year}-{start_time.month}-{start_time.day} "
               f"{start_time.hour}:{start_time.minute}:{start_time.second}")
         logging.info(f"===> Start grad computation at:, {start_time.year}-{start_time.month}-{start_time.day} "
                      f"{start_time.hour}:{start_time.minute}:{start_time.second}")
@@ -108,15 +109,15 @@ def main(args):
         nu = np.asarray(np.random.uniform(nu_range[0], nu_range[1]), dtype=DTYPE_NP).reshape((1,))  # Poisson's ratio
         rho = np.asarray(np.random.uniform(rho_range[0], rho_range[1]), dtype=DTYPE_NP).reshape((1,))  # Density
         sand_angle = np.asarray(np.random.uniform(sand_angle_range[0], sand_angle_range[1]), dtype=DTYPE_NP).reshape((1,))  # Sand friction angle
-        manipulator_friction = np.asarray(mf_range[0], mf_range[1], dtype=DTYPE_NP).reshape((1,))  # Manipulator friction
-        container_friction = np.asarray(mf_range[0], mf_range[1], dtype=DTYPE_NP).reshape((1,))  # Container friction
+        manipulator_friction = np.asarray(np.random.uniform(mf_range[0], mf_range[1]), dtype=DTYPE_NP).reshape((1,))  # Manipulator friction
+        container_friction = np.asarray(np.random.uniform(mf_range[0], mf_range[1]), dtype=DTYPE_NP).reshape((1,))  # Container friction
         # Optimisers
         optim_E = Adam(parameters_shape=E.shape,
                        cfg={'lr': training_config['lr_E'], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
         optim_nu = Adam(parameters_shape=nu.shape,
                         cfg={'lr': training_config['lr_nu'], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
         optim_rho = Adam(parameters_shape=rho.shape,
-                         cfg={'lr': training_config['lr_yield_stress'], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+                         cfg={'lr': training_config['lr_rho'], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
         optim_sand_angle = Adam(parameters_shape=sand_angle.shape,
                                 cfg={'lr': training_config['lr_sand_angle'], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
         optim_manipulator_friction = Adam(parameters_shape=manipulator_friction.shape,
@@ -253,7 +254,7 @@ def main(args):
               f'manipulator_friction {manipulator_friction},'
               f'container_friction {container_friction}')
         end_time = dt.datetime.now()
-        print(f"===> End grad computation at:, {end_time.year}-{end_time.month}-{end_time.day} "
+        print(f"===> End system identification optimisation at:, {end_time.year}-{end_time.month}-{end_time.day} "
               f"{end_time.hour}:{end_time.minute}:{end_time.second}")
         print(f"===> Total time taken: {time() - start_time_sec} seconds")
         print(f"===> Number of aborted data: {n_aborted_data}")

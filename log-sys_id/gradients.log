@@ -2637,3 +2637,1176 @@
 2024-08-22 00:57:45,772 INFO Avg. gradient of sand angle: -64.5671157836914, std: 1065.70068359375
 2024-08-22 00:57:45,772 INFO Avg. gradient of manipulator friction: 74992312.0, std: 530093280.0
 2024-08-22 00:57:45,772 INFO Avg. gradient of container friction: 8573.2822265625, std: 70976.28125
+2024-08-22 09:42:27,475 INFO ===> Start grad computation at:, 2024-8-22 9:42:27
+2024-08-22 09:42:27,737 INFO ===> New TaichiEnv created.
+2024-08-22 09:42:27,737 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 09:43:50,005 INFO ===> CPU memory occupied after forward-backward: 0.8735575088546782 %
+2024-08-22 09:43:50,059 INFO ===> GPU memory after forward-backward: [2088, 24188]
+2024-08-22 09:43:50,060 INFO ===> Gradients:
+2024-08-22 09:43:50,061 INFO Gradient of E: -0.0710996612906456
+2024-08-22 09:43:50,115 INFO Gradient of nu: -24398.3046875
+2024-08-22 09:43:50,162 INFO Gradient of rho: -2.528395652770996
+2024-08-22 09:43:50,208 INFO Gradient of sand angle: -1268.5626220703125
+2024-08-22 09:43:50,254 INFO Gradient of manipulator friction: 4520.513671875
+2024-08-22 09:43:50,299 INFO Gradient of container friction: 2755.818603515625
+2024-08-22 09:43:50,300 INFO ===> Epoch 0, grad: [-7.1099661e-02 -2.4398305e+04 -2.5283957e+00 -1.2685626e+03
+  4.5205137e+03  2.7558186e+03]
+2024-08-22 09:43:50,734 INFO ===> New TaichiEnv created.
+2024-08-22 09:43:50,734 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 09:44:39,999 INFO ===> CPU memory occupied after forward-backward: 0.8631193835000814 %
+2024-08-22 09:44:40,082 INFO ===> GPU memory after forward-backward: [2086, 24188]
+2024-08-22 09:44:40,082 INFO ===> Gradients:
+2024-08-22 09:44:40,083 INFO Gradient of E: -0.0013314142124727368
+2024-08-22 09:44:40,094 INFO Gradient of nu: 19435.568359375
+2024-08-22 09:44:40,102 INFO Gradient of rho: -2.774691343307495
+2024-08-22 09:44:40,110 INFO Gradient of sand angle: -491.61737060546875
+2024-08-22 09:44:40,118 INFO Gradient of manipulator friction: 1238.2825927734375
+2024-08-22 09:44:40,126 INFO Gradient of container friction: 17054.96484375
+2024-08-22 09:44:40,127 INFO ===> Epoch 1, grad: [-1.3314142e-03  1.9435568e+04 -2.7746913e+00 -4.9161737e+02
+  1.2382826e+03  1.7054965e+04]
+2024-08-22 09:44:40,528 INFO ===> New TaichiEnv created.
+2024-08-22 09:44:40,528 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 09:45:48,052 INFO ===> CPU memory occupied after forward-backward: 0.8920330211021874 %
+2024-08-22 09:45:48,133 INFO ===> GPU memory after forward-backward: [2086, 24188]
+2024-08-22 09:45:48,134 INFO ===> Gradients:
+2024-08-22 09:45:48,135 INFO Gradient of E: 0.012381731532514095
+2024-08-22 09:45:48,149 INFO Gradient of nu: -52183.8828125
+2024-08-22 09:45:48,158 INFO Gradient of rho: -82.6242904663086
+2024-08-22 09:45:48,165 INFO Gradient of sand angle: -1110.25732421875
+2024-08-22 09:45:48,173 INFO Gradient of manipulator friction: 704.6492309570312
+2024-08-22 09:45:48,181 INFO Gradient of container friction: -16797.28515625
+2024-08-22 09:45:48,182 INFO ===> Epoch 2, grad: [ 1.23817315e-02 -5.21838828e+04 -8.26242905e+01 -1.11025732e+03
+  7.04649231e+02 -1.67972852e+04]
+2024-08-22 09:45:48,583 INFO ===> New TaichiEnv created.
+2024-08-22 09:45:48,583 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 09:46:38,360 INFO ===> CPU memory occupied after forward-backward: 0.8746705647006076 %
+2024-08-22 09:46:38,421 INFO ===> GPU memory after forward-backward: [2084, 24188]
+2024-08-22 09:46:38,421 INFO ===> Gradients:
+2024-08-22 09:46:38,422 INFO Gradient of E: -0.003807223401963711
+2024-08-22 09:46:38,433 INFO Gradient of nu: -16686.3125
+2024-08-22 09:46:38,442 INFO Gradient of rho: -35.22000503540039
+2024-08-22 09:46:38,451 INFO Gradient of sand angle: -1127.3624267578125
+2024-08-22 09:46:38,459 INFO Gradient of manipulator friction: 2985.63232421875
+2024-08-22 09:46:38,467 INFO Gradient of container friction: 5772.82470703125
+2024-08-22 09:46:38,468 INFO ===> Epoch 3, grad: [-3.8072234e-03 -1.6686312e+04 -3.5220005e+01 -1.1273624e+03
+  2.9856323e+03  5.7728247e+03]
+2024-08-22 09:46:38,868 INFO ===> New TaichiEnv created.
+2024-08-22 09:46:38,869 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 09:47:28,743 INFO ===> CPU memory occupied after forward-backward: 0.8747009345736207 %
+2024-08-22 09:47:28,821 INFO ===> GPU memory after forward-backward: [2082, 24188]
+2024-08-22 09:47:28,821 INFO ===> Gradients:
+2024-08-22 09:47:28,823 INFO Gradient of E: 0.043546438217163086
+2024-08-22 09:47:28,833 INFO Gradient of nu: 51422.88671875
+2024-08-22 09:47:28,841 INFO Gradient of rho: 5.837479114532471
+2024-08-22 09:47:28,849 INFO Gradient of sand angle: 1620.92236328125
+2024-08-22 09:47:28,857 INFO Gradient of manipulator friction: -3383.458740234375
+2024-08-22 09:47:28,864 INFO Gradient of container friction: -7242.82958984375
+2024-08-22 09:47:28,865 INFO ===> Epoch 4, grad: [ 4.3546438e-02  5.1422887e+04  5.8374791e+00  1.6209224e+03
+ -3.3834587e+03 -7.2428296e+03]
+2024-08-22 09:47:29,268 INFO ===> New TaichiEnv created.
+2024-08-22 09:47:29,268 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 09:48:18,984 INFO ===> CPU memory occupied after forward-backward: 0.8773081881717939 %
+2024-08-22 09:48:19,041 INFO ===> GPU memory after forward-backward: [2082, 24188]
+2024-08-22 09:48:19,042 INFO ===> Gradients:
+2024-08-22 09:48:19,043 INFO Gradient of E: -0.025068823248147964
+2024-08-22 09:48:19,055 INFO Gradient of nu: -12264.662109375
+2024-08-22 09:48:19,063 INFO Gradient of rho: -30.28074073791504
+2024-08-22 09:48:19,073 INFO Gradient of sand angle: -766.8164672851562
+2024-08-22 09:48:19,081 INFO Gradient of manipulator friction: -1136.7247314453125
+2024-08-22 09:48:19,088 INFO Gradient of container friction: 79992.09375
+2024-08-22 09:48:19,090 INFO ===> Epoch 5, grad: [-2.5068823e-02 -1.2264662e+04 -3.0280741e+01 -7.6681647e+02
+ -1.1367247e+03  7.9992094e+04]
+2024-08-22 09:48:19,488 INFO ===> New TaichiEnv created.
+2024-08-22 09:48:19,488 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 09:49:09,247 INFO ===> CPU memory occupied after forward-backward: 0.8706268161089156 %
+2024-08-22 09:49:09,342 INFO ===> GPU memory after forward-backward: [2080, 24188]
+2024-08-22 09:49:09,343 INFO ===> Gradients:
+2024-08-22 09:49:09,344 INFO Gradient of E: -0.02410212717950344
+2024-08-22 09:49:09,356 INFO Gradient of nu: -46751.21484375
+2024-08-22 09:49:09,364 INFO Gradient of rho: 10.61398696899414
+2024-08-22 09:49:09,372 INFO Gradient of sand angle: 221.28704833984375
+2024-08-22 09:49:09,380 INFO Gradient of manipulator friction: -5376.38720703125
+2024-08-22 09:49:09,387 INFO Gradient of container friction: 12366.5126953125
+2024-08-22 09:49:09,388 INFO ===> Epoch 6, grad: [-2.4102127e-02 -4.6751215e+04  1.0613987e+01  2.2128705e+02
+ -5.3763872e+03  1.2366513e+04]
+2024-08-22 09:49:09,795 INFO ===> New TaichiEnv created.
+2024-08-22 09:49:09,795 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 09:49:59,649 INFO ===> CPU memory occupied after forward-backward: 0.8750000778227996 %
+2024-08-22 09:49:59,706 INFO ===> GPU memory after forward-backward: [2078, 24188]
+2024-08-22 09:49:59,706 INFO ===> Gradients:
+2024-08-22 09:49:59,708 INFO Gradient of E: -0.022244559600949287
+2024-08-22 09:49:59,718 INFO Gradient of nu: -56135.55859375
+2024-08-22 09:49:59,727 INFO Gradient of rho: 7.297636032104492
+2024-08-22 09:49:59,735 INFO Gradient of sand angle: -1044.455078125
+2024-08-22 09:49:59,742 INFO Gradient of manipulator friction: -4309.81787109375
+2024-08-22 09:49:59,750 INFO Gradient of container friction: 16404.41015625
+2024-08-22 09:49:59,751 INFO ===> Epoch 7, grad: [-2.2244560e-02 -5.6135559e+04  7.2976360e+00 -1.0444551e+03
+ -4.3098179e+03  1.6404410e+04]
+2024-08-22 09:50:00,211 INFO ===> New TaichiEnv created.
+2024-08-22 09:50:00,211 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 09:50:50,020 INFO ===> CPU memory occupied after forward-backward: 0.877747032836833 %
+2024-08-22 09:50:50,100 INFO ===> GPU memory after forward-backward: [2078, 24188]
+2024-08-22 09:50:50,101 INFO ===> Gradients:
+2024-08-22 09:50:50,102 INFO Gradient of E: 0.01138628926128149
+2024-08-22 09:50:50,113 INFO Gradient of nu: -5078.57568359375
+2024-08-22 09:50:50,121 INFO Gradient of rho: 10.667466163635254
+2024-08-22 09:50:50,129 INFO Gradient of sand angle: 875.3320922851562
+2024-08-22 09:50:50,137 INFO Gradient of manipulator friction: 1677.0924072265625
+2024-08-22 09:50:50,144 INFO Gradient of container friction: 59978.39453125
+2024-08-22 09:50:50,146 INFO ===> Epoch 8, grad: [ 1.1386289e-02 -5.0785757e+03  1.0667466e+01  8.7533209e+02
+  1.6770924e+03  5.9978395e+04]
+2024-08-22 09:50:50,548 INFO ===> New TaichiEnv created.
+2024-08-22 09:50:50,548 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 09:51:39,872 INFO ===> CPU memory occupied after forward-backward: 0.8815144155841059 %
+2024-08-22 09:51:39,949 INFO ===> GPU memory after forward-backward: [2076, 24188]
+2024-08-22 09:51:39,949 INFO ===> Gradients:
+2024-08-22 09:51:39,951 INFO Gradient of E: 0.01756160520017147
+2024-08-22 09:51:39,962 INFO Gradient of nu: 22581.505859375
+2024-08-22 09:51:39,970 INFO Gradient of rho: 21.724449157714844
+2024-08-22 09:51:39,978 INFO Gradient of sand angle: 2301.24609375
+2024-08-22 09:51:39,986 INFO Gradient of manipulator friction: -1488.287841796875
+2024-08-22 09:51:39,993 INFO Gradient of container friction: 6381.73876953125
+2024-08-22 09:51:39,994 INFO ===> Epoch 9, grad: [ 1.7561605e-02  2.2581506e+04  2.1724449e+01  2.3012461e+03
+ -1.4882878e+03  6.3817388e+03]
+2024-08-22 09:51:40,395 INFO ===> New TaichiEnv created.
+2024-08-22 09:51:40,395 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 09:52:30,297 INFO ===> CPU memory occupied after forward-backward: 0.8735347314499183 %
+2024-08-22 09:52:30,349 INFO ===> GPU memory after forward-backward: [2076, 24188]
+2024-08-22 09:52:30,350 INFO ===> Gradients:
+2024-08-22 09:52:30,351 INFO Gradient of E: -0.0028994926251471043
+2024-08-22 09:52:30,362 INFO Gradient of nu: -68360.75
+2024-08-22 09:52:30,371 INFO Gradient of rho: -2.8001692295074463
+2024-08-22 09:52:30,379 INFO Gradient of sand angle: -1795.2176513671875
+2024-08-22 09:52:30,387 INFO Gradient of manipulator friction: 143.38406372070312
+2024-08-22 09:52:30,394 INFO Gradient of container friction: 18449.603515625
+2024-08-22 09:52:30,395 INFO ===> Epoch 10, grad: [-2.8994926e-03 -6.8360750e+04 -2.8001692e+00 -1.7952177e+03
+  1.4338406e+02  1.8449604e+04]
+2024-08-22 09:52:30,795 INFO ===> New TaichiEnv created.
+2024-08-22 09:52:30,795 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 09:53:40,111 INFO ===> CPU memory occupied after forward-backward: 0.9430817406498793 %
+2024-08-22 09:53:40,167 INFO ===> GPU memory after forward-backward: [2074, 24188]
+2024-08-22 09:53:40,167 INFO ===> Gradients:
+2024-08-22 09:53:40,169 INFO Gradient of E: 0.003313943976536393
+2024-08-22 09:53:40,180 INFO Gradient of nu: 10839.056640625
+2024-08-22 09:53:40,194 INFO Gradient of rho: -8.569696426391602
+2024-08-22 09:53:40,202 INFO Gradient of sand angle: 451.678466796875
+2024-08-22 09:53:40,210 INFO Gradient of manipulator friction: 4166.390625
+2024-08-22 09:53:40,217 INFO Gradient of container friction: 33697.171875
+2024-08-22 09:53:40,219 INFO ===> Epoch 11, grad: [ 3.3139440e-03  1.0839057e+04 -8.5696964e+00  4.5167847e+02
+  4.1663906e+03  3.3697172e+04]
+2024-08-22 09:53:40,618 INFO ===> New TaichiEnv created.
+2024-08-22 09:53:40,618 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 09:54:49,350 INFO ===> CPU memory occupied after forward-backward: 0.9374132038519871 %
+2024-08-22 09:54:49,405 INFO ===> GPU memory after forward-backward: [2072, 24188]
+2024-08-22 09:54:49,405 INFO ===> Gradients:
+2024-08-22 09:54:49,407 INFO Gradient of E: -0.008123008534312248
+2024-08-22 09:54:49,418 INFO Gradient of nu: 26017.677734375
+2024-08-22 09:54:49,427 INFO Gradient of rho: -15.217912673950195
+2024-08-22 09:54:49,435 INFO Gradient of sand angle: -1328.138427734375
+2024-08-22 09:54:49,442 INFO Gradient of manipulator friction: 1748.802490234375
+2024-08-22 09:54:49,450 INFO Gradient of container friction: -1708.5296630859375
+2024-08-22 09:54:49,451 INFO ===> Epoch 12, grad: [-8.1230085e-03  2.6017678e+04 -1.5217913e+01 -1.3281384e+03
+  1.7488025e+03 -1.7085297e+03]
+2024-08-22 09:54:49,851 INFO ===> New TaichiEnv created.
+2024-08-22 09:54:49,851 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 09:55:39,777 INFO ===> CPU memory occupied after forward-backward: 0.9268444880434341 %
+2024-08-22 09:55:39,857 INFO ===> GPU memory after forward-backward: [2072, 24188]
+2024-08-22 09:55:39,857 INFO ===> Gradients:
+2024-08-22 09:55:39,859 INFO Gradient of E: -0.02010212652385235
+2024-08-22 09:55:39,870 INFO Gradient of nu: -60724.98046875
+2024-08-22 09:55:39,878 INFO Gradient of rho: -16.60913848876953
+2024-08-22 09:55:39,886 INFO Gradient of sand angle: 1235.6807861328125
+2024-08-22 09:55:39,893 INFO Gradient of manipulator friction: -2066.89208984375
+2024-08-22 09:55:39,901 INFO Gradient of container friction: -30994.955078125
+2024-08-22 09:55:39,902 INFO ===> Epoch 13, grad: [-2.0102127e-02 -6.0724980e+04 -1.6609138e+01  1.2356808e+03
+ -2.0668921e+03 -3.0994955e+04]
+2024-08-22 09:55:40,307 INFO ===> New TaichiEnv created.
+2024-08-22 09:55:40,307 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 09:56:49,145 INFO ===> CPU memory occupied after forward-backward: 0.9607797841482534 %
+2024-08-22 09:56:49,202 INFO ===> GPU memory after forward-backward: [2070, 24188]
+2024-08-22 09:56:49,202 INFO ===> Gradients:
+2024-08-22 09:56:49,204 INFO Gradient of E: 0.017786365002393723
+2024-08-22 09:56:49,215 INFO Gradient of nu: -1844.4039306640625
+2024-08-22 09:56:49,224 INFO Gradient of rho: -11.90078353881836
+2024-08-22 09:56:49,232 INFO Gradient of sand angle: -459.5590515136719
+2024-08-22 09:56:49,239 INFO Gradient of manipulator friction: -4222.09716796875
+2024-08-22 09:56:49,247 INFO Gradient of container friction: -20437.86328125
+2024-08-22 09:56:49,248 INFO ===> Epoch 14, grad: [ 1.7786365e-02 -1.8444039e+03 -1.1900784e+01 -4.5955905e+02
+ -4.2220972e+03 -2.0437863e+04]
+2024-08-22 09:56:49,652 INFO ===> New TaichiEnv created.
+2024-08-22 09:56:49,652 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 09:57:38,725 INFO ===> CPU memory occupied after forward-backward: 0.9430938885990843 %
+2024-08-22 09:57:38,806 INFO ===> GPU memory after forward-backward: [2068, 24188]
+2024-08-22 09:57:38,806 INFO ===> Gradients:
+2024-08-22 09:57:38,808 INFO Gradient of E: 0.03185708448290825
+2024-08-22 09:57:38,819 INFO Gradient of nu: 16471.82421875
+2024-08-22 09:57:38,827 INFO Gradient of rho: 42.07941818237305
+2024-08-22 09:57:38,835 INFO Gradient of sand angle: 595.0040283203125
+2024-08-22 09:57:38,842 INFO Gradient of manipulator friction: -5073.21142578125
+2024-08-22 09:57:38,850 INFO Gradient of container friction: -26465.8046875
+2024-08-22 09:57:38,851 INFO ===> Epoch 15, grad: [ 3.1857084e-02  1.6471824e+04  4.2079418e+01  5.9500403e+02
+ -5.0732114e+03 -2.6465805e+04]
+2024-08-22 09:57:39,255 INFO ===> New TaichiEnv created.
+2024-08-22 09:57:39,255 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 09:58:29,986 INFO ===> CPU memory occupied after forward-backward: 0.9430908516117831 %
+2024-08-22 09:58:30,039 INFO ===> GPU memory after forward-backward: [2068, 24188]
+2024-08-22 09:58:30,040 INFO ===> Gradients:
+2024-08-22 09:58:30,041 INFO Gradient of E: -0.006866505369544029
+2024-08-22 09:58:30,052 INFO Gradient of nu: 12914.00390625
+2024-08-22 09:58:30,061 INFO Gradient of rho: -11.022518157958984
+2024-08-22 09:58:30,069 INFO Gradient of sand angle: 840.267578125
+2024-08-22 09:58:30,076 INFO Gradient of manipulator friction: 2412.87353515625
+2024-08-22 09:58:30,084 INFO Gradient of container friction: 56298.59375
+2024-08-22 09:58:30,085 INFO ===> Epoch 16, grad: [-6.8665054e-03  1.2914004e+04 -1.1022518e+01  8.4026758e+02
+  2.4128735e+03  5.6298594e+04]
+2024-08-22 09:58:30,483 INFO ===> New TaichiEnv created.
+2024-08-22 09:58:30,483 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 09:59:20,137 INFO ===> CPU memory occupied after forward-backward: 0.9430908516117831 %
+2024-08-22 09:59:20,195 INFO ===> GPU memory after forward-backward: [2066, 24188]
+2024-08-22 09:59:20,195 INFO ===> Gradients:
+2024-08-22 09:59:20,197 INFO Gradient of E: -0.012574401684105396
+2024-08-22 09:59:20,208 INFO Gradient of nu: -33654.57421875
+2024-08-22 09:59:20,216 INFO Gradient of rho: -3.3994550704956055
+2024-08-22 09:59:20,224 INFO Gradient of sand angle: -97.14290618896484
+2024-08-22 09:59:20,232 INFO Gradient of manipulator friction: -1894.7530517578125
+2024-08-22 09:59:20,239 INFO Gradient of container friction: -14009.08203125
+2024-08-22 09:59:20,240 INFO ===> Epoch 17, grad: [-1.2574402e-02 -3.3654574e+04 -3.3994551e+00 -9.7142906e+01
+ -1.8947531e+03 -1.4009082e+04]
+2024-08-22 09:59:20,640 INFO ===> New TaichiEnv created.
+2024-08-22 09:59:20,640 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:00:10,505 INFO ===> CPU memory occupied after forward-backward: 0.9460230628511963 %
+2024-08-22 10:00:10,558 INFO ===> GPU memory after forward-backward: [2066, 24188]
+2024-08-22 10:00:10,559 INFO ===> Gradients:
+2024-08-22 10:00:10,560 INFO Gradient of E: -0.0017213940154761076
+2024-08-22 10:00:10,571 INFO Gradient of nu: -35770.9375
+2024-08-22 10:00:10,580 INFO Gradient of rho: -39.987186431884766
+2024-08-22 10:00:10,587 INFO Gradient of sand angle: 363.7186279296875
+2024-08-22 10:00:10,595 INFO Gradient of manipulator friction: -6409.7529296875
+2024-08-22 10:00:10,602 INFO Gradient of container friction: -520.093017578125
+2024-08-22 10:00:10,603 INFO ===> Epoch 18, grad: [-1.7213940e-03 -3.5770938e+04 -3.9987186e+01  3.6371863e+02
+ -6.4097529e+03 -5.2009302e+02]
+2024-08-22 10:00:11,004 INFO ===> New TaichiEnv created.
+2024-08-22 10:00:11,004 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:00:59,691 INFO ===> CPU memory occupied after forward-backward: 0.9397866094279596 %
+2024-08-22 10:00:59,743 INFO ===> GPU memory after forward-backward: [2064, 24188]
+2024-08-22 10:00:59,744 INFO ===> Gradients:
+2024-08-22 10:00:59,746 INFO Gradient of E: -0.01298137754201889
+2024-08-22 10:00:59,757 INFO Gradient of nu: -1276.6141357421875
+2024-08-22 10:00:59,765 INFO Gradient of rho: 6.3722124099731445
+2024-08-22 10:00:59,773 INFO Gradient of sand angle: -354.880615234375
+2024-08-22 10:00:59,781 INFO Gradient of manipulator friction: -516.3063354492188
+2024-08-22 10:00:59,789 INFO Gradient of container friction: -1172.935302734375
+2024-08-22 10:00:59,790 INFO ===> Epoch 19, grad: [-1.2981378e-02 -1.2766141e+03  6.3722124e+00 -3.5488062e+02
+ -5.1630634e+02 -1.1729353e+03]
+2024-08-22 10:01:00,195 INFO ===> New TaichiEnv created.
+2024-08-22 10:01:00,195 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:01:49,817 INFO ===> CPU memory occupied after forward-backward: 0.9429131878546566 %
+2024-08-22 10:01:49,897 INFO ===> GPU memory after forward-backward: [2062, 24188]
+2024-08-22 10:01:49,897 INFO ===> Gradients:
+2024-08-22 10:01:49,899 INFO Gradient of E: 0.007287957239896059
+2024-08-22 10:01:49,910 INFO Gradient of nu: 2199.804931640625
+2024-08-22 10:01:49,919 INFO Gradient of rho: 11.834386825561523
+2024-08-22 10:01:49,927 INFO Gradient of sand angle: -643.6082153320312
+2024-08-22 10:01:49,934 INFO Gradient of manipulator friction: 8278.2802734375
+2024-08-22 10:01:49,942 INFO Gradient of container friction: -4344.412109375
+2024-08-22 10:01:49,943 INFO ===> Epoch 20, grad: [ 7.2879572e-03  2.1998049e+03  1.1834387e+01 -6.4360822e+02
+  8.2782803e+03 -4.3444121e+03]
+2024-08-22 10:01:50,351 INFO ===> New TaichiEnv created.
+2024-08-22 10:01:50,351 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:02:39,354 INFO ===> CPU memory occupied after forward-backward: 0.9469706028892044 %
+2024-08-22 10:02:39,408 INFO ===> GPU memory after forward-backward: [2062, 24188]
+2024-08-22 10:02:39,409 INFO ===> Gradients:
+2024-08-22 10:02:39,410 INFO Gradient of E: 0.004340406507253647
+2024-08-22 10:02:39,421 INFO Gradient of nu: -89574.0234375
+2024-08-22 10:02:39,429 INFO Gradient of rho: -28.170909881591797
+2024-08-22 10:02:39,436 INFO Gradient of sand angle: 670.6060791015625
+2024-08-22 10:02:39,443 INFO Gradient of manipulator friction: -4434.31689453125
+2024-08-22 10:02:39,451 INFO Gradient of container friction: -19349.341796875
+2024-08-22 10:02:39,452 INFO ===> Epoch 21, grad: [ 4.3404065e-03 -8.9574023e+04 -2.8170910e+01  6.7060608e+02
+ -4.4343169e+03 -1.9349342e+04]
+2024-08-22 10:02:39,851 INFO ===> New TaichiEnv created.
+2024-08-22 10:02:39,851 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:03:29,558 INFO ===> CPU memory occupied after forward-backward: 0.951196570718975 %
+2024-08-22 10:03:29,610 INFO ===> GPU memory after forward-backward: [2060, 24188]
+2024-08-22 10:03:29,611 INFO ===> Gradients:
+2024-08-22 10:03:29,612 INFO Gradient of E: 0.013033432886004448
+2024-08-22 10:03:29,624 INFO Gradient of nu: 945.3165283203125
+2024-08-22 10:03:29,632 INFO Gradient of rho: -5.105864524841309
+2024-08-22 10:03:29,640 INFO Gradient of sand angle: 1274.7960205078125
+2024-08-22 10:03:29,647 INFO Gradient of manipulator friction: -3611.290771484375
+2024-08-22 10:03:29,655 INFO Gradient of container friction: 1965.3809814453125
+2024-08-22 10:03:29,656 INFO ===> Epoch 22, grad: [ 1.3033433e-02  9.4531653e+02 -5.1058645e+00  1.2747960e+03
+ -3.6112908e+03  1.9653810e+03]
+2024-08-22 10:03:30,063 INFO ===> New TaichiEnv created.
+2024-08-22 10:03:30,064 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:04:19,193 INFO ===> CPU memory occupied after forward-backward: 0.9546222923948509 %
+2024-08-22 10:04:19,327 INFO ===> GPU memory after forward-backward: [2058, 24188]
+2024-08-22 10:04:19,328 INFO ===> Gradients:
+2024-08-22 10:04:19,328 INFO Gradient of E: 0.008721773512661457
+2024-08-22 10:04:19,339 INFO Gradient of nu: -27675.337890625
+2024-08-22 10:04:19,347 INFO Gradient of rho: 34.218074798583984
+2024-08-22 10:04:19,355 INFO Gradient of sand angle: 1985.29443359375
+2024-08-22 10:04:19,363 INFO Gradient of manipulator friction: -2829.978271484375
+2024-08-22 10:04:19,370 INFO Gradient of container friction: -17952.705078125
+2024-08-22 10:04:19,371 INFO ===> Epoch 23, grad: [ 8.7217735e-03 -2.7675338e+04  3.4218075e+01  1.9852944e+03
+ -2.8299783e+03 -1.7952705e+04]
+2024-08-22 10:04:19,772 INFO ===> New TaichiEnv created.
+2024-08-22 10:04:19,773 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:05:09,395 INFO ===> CPU memory occupied after forward-backward: 0.9588027054151018 %
+2024-08-22 10:05:09,477 INFO ===> GPU memory after forward-backward: [2058, 24188]
+2024-08-22 10:05:09,478 INFO ===> Gradients:
+2024-08-22 10:05:09,480 INFO Gradient of E: -0.026659177616238594
+2024-08-22 10:05:09,490 INFO Gradient of nu: -28666.068359375
+2024-08-22 10:05:09,498 INFO Gradient of rho: 9.942549705505371
+2024-08-22 10:05:09,506 INFO Gradient of sand angle: -1069.048583984375
+2024-08-22 10:05:09,513 INFO Gradient of manipulator friction: 2663.802001953125
+2024-08-22 10:05:09,521 INFO Gradient of container friction: 67003.8125
+2024-08-22 10:05:09,522 INFO ===> Epoch 24, grad: [-2.6659178e-02 -2.8666068e+04  9.9425497e+00 -1.0690486e+03
+  2.6638020e+03  6.7003812e+04]
+2024-08-22 10:05:09,926 INFO ===> New TaichiEnv created.
+2024-08-22 10:05:09,926 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:06:19,581 INFO ===> CPU memory occupied after forward-backward: 1.005077280925137 %
+2024-08-22 10:06:19,642 INFO ===> GPU memory after forward-backward: [2056, 24188]
+2024-08-22 10:06:19,642 INFO ===> Gradients:
+2024-08-22 10:06:19,643 INFO Gradient of E: -0.015800347551703453
+2024-08-22 10:06:19,655 INFO Gradient of nu: -23700.712890625
+2024-08-22 10:06:19,663 INFO Gradient of rho: 8.7644681930542
+2024-08-22 10:06:19,671 INFO Gradient of sand angle: 837.5162353515625
+2024-08-22 10:06:19,679 INFO Gradient of manipulator friction: -587.6793823242188
+2024-08-22 10:06:19,687 INFO Gradient of container friction: -2043.3280029296875
+2024-08-22 10:06:19,688 INFO ===> Epoch 25, grad: [-1.5800348e-02 -2.3700713e+04  8.7644682e+00  8.3751624e+02
+ -5.8767938e+02 -2.0433280e+03]
+2024-08-22 10:06:20,100 INFO ===> New TaichiEnv created.
+2024-08-22 10:06:20,101 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:07:28,709 INFO ===> CPU memory occupied after forward-backward: 0.9975819962655077 %
+2024-08-22 10:07:28,769 INFO ===> GPU memory after forward-backward: [2056, 24188]
+2024-08-22 10:07:28,769 INFO ===> Gradients:
+2024-08-22 10:07:28,770 INFO Gradient of E: 0.031032288447022438
+2024-08-22 10:07:28,781 INFO Gradient of nu: 56984.34375
+2024-08-22 10:07:28,790 INFO Gradient of rho: -29.730789184570312
+2024-08-22 10:07:28,798 INFO Gradient of sand angle: -16.146392822265625
+2024-08-22 10:07:28,805 INFO Gradient of manipulator friction: -977.4961547851562
+2024-08-22 10:07:28,812 INFO Gradient of container friction: -20375.587890625
+2024-08-22 10:07:28,814 INFO ===> Epoch 26, grad: [ 3.1032288e-02  5.6984344e+04 -2.9730789e+01 -1.6146393e+01
+ -9.7749615e+02 -2.0375588e+04]
+2024-08-22 10:07:29,211 INFO ===> New TaichiEnv created.
+2024-08-22 10:07:29,211 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:08:19,345 INFO ===> CPU memory occupied after forward-backward: 0.9948380782387757 %
+2024-08-22 10:08:19,402 INFO ===> GPU memory after forward-backward: [2054, 24188]
+2024-08-22 10:08:19,402 INFO ===> Gradients:
+2024-08-22 10:08:19,404 INFO Gradient of E: 0.032141827046871185
+2024-08-22 10:08:19,414 INFO Gradient of nu: 36774.54296875
+2024-08-22 10:08:19,423 INFO Gradient of rho: 26.847551345825195
+2024-08-22 10:08:19,431 INFO Gradient of sand angle: 2084.2822265625
+2024-08-22 10:08:19,439 INFO Gradient of manipulator friction: 2979.525634765625
+2024-08-22 10:08:19,446 INFO Gradient of container friction: -5770.626953125
+2024-08-22 10:08:19,447 INFO ===> Epoch 27, grad: [ 3.2141827e-02  3.6774543e+04  2.6847551e+01  2.0842822e+03
+  2.9795256e+03 -5.7706270e+03]
+2024-08-22 10:08:19,850 INFO ===> New TaichiEnv created.
+2024-08-22 10:08:19,851 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:09:09,781 INFO ===> CPU memory occupied after forward-backward: 0.9881232993155831 %
+2024-08-22 10:09:09,838 INFO ===> GPU memory after forward-backward: [2052, 24188]
+2024-08-22 10:09:09,838 INFO ===> Gradients:
+2024-08-22 10:09:09,839 INFO Gradient of E: 0.016326038166880608
+2024-08-22 10:09:09,850 INFO Gradient of nu: 22868.55078125
+2024-08-22 10:09:09,859 INFO Gradient of rho: -15.551369667053223
+2024-08-22 10:09:09,867 INFO Gradient of sand angle: -1263.6475830078125
+2024-08-22 10:09:09,876 INFO Gradient of manipulator friction: -4376.2861328125
+2024-08-22 10:09:09,884 INFO Gradient of container friction: -8147.06640625
+2024-08-22 10:09:09,885 INFO ===> Epoch 28, grad: [ 1.6326038e-02  2.2868551e+04 -1.5551370e+01 -1.2636476e+03
+ -4.3762861e+03 -8.1470664e+03]
+2024-08-22 10:09:10,287 INFO ===> New TaichiEnv created.
+2024-08-22 10:09:10,287 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:09:59,780 INFO ===> CPU memory occupied after forward-backward: 0.9918648676707948 %
+2024-08-22 10:09:59,839 INFO ===> GPU memory after forward-backward: [2052, 24188]
+2024-08-22 10:09:59,839 INFO ===> Gradients:
+2024-08-22 10:09:59,841 INFO Gradient of E: 0.0025805372279137373
+2024-08-22 10:09:59,851 INFO Gradient of nu: 8721.11328125
+2024-08-22 10:09:59,860 INFO Gradient of rho: 41.957542419433594
+2024-08-22 10:09:59,867 INFO Gradient of sand angle: 936.6428833007812
+2024-08-22 10:09:59,875 INFO Gradient of manipulator friction: 11423.8564453125
+2024-08-22 10:09:59,883 INFO Gradient of container friction: 25342.068359375
+2024-08-22 10:09:59,884 INFO ===> Epoch 29, grad: [2.5805372e-03 8.7211133e+03 4.1957542e+01 9.3664288e+02 1.1423856e+04
+ 2.5342068e+04]
+2024-08-22 10:10:00,288 INFO ===> New TaichiEnv created.
+2024-08-22 10:10:00,288 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:10:49,580 INFO ===> CPU memory occupied after forward-backward: 0.9848205756254101 %
+2024-08-22 10:10:49,665 INFO ===> GPU memory after forward-backward: [2050, 24188]
+2024-08-22 10:10:49,665 INFO ===> Gradients:
+2024-08-22 10:10:49,667 INFO Gradient of E: -0.022969085723161697
+2024-08-22 10:10:49,679 INFO Gradient of nu: -20710.88671875
+2024-08-22 10:10:49,687 INFO Gradient of rho: 4.349212646484375
+2024-08-22 10:10:49,695 INFO Gradient of sand angle: 1243.4990234375
+2024-08-22 10:10:49,703 INFO Gradient of manipulator friction: -3636.005859375
+2024-08-22 10:10:49,710 INFO Gradient of container friction: 4239.83740234375
+2024-08-22 10:10:49,711 INFO ===> Epoch 30, grad: [-2.2969086e-02 -2.0710887e+04  4.3492126e+00  1.2434990e+03
+ -3.6360059e+03  4.2398374e+03]
+2024-08-22 10:10:50,115 INFO ===> New TaichiEnv created.
+2024-08-22 10:10:50,115 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:11:58,392 INFO ===> CPU memory occupied after forward-backward: 1.0219173755108915 %
+2024-08-22 10:11:58,451 INFO ===> GPU memory after forward-backward: [2050, 24188]
+2024-08-22 10:11:58,451 INFO ===> Gradients:
+2024-08-22 10:11:58,454 INFO Gradient of E: 0.052086733281612396
+2024-08-22 10:11:58,464 INFO Gradient of nu: 173866.1875
+2024-08-22 10:11:58,473 INFO Gradient of rho: 38.42904281616211
+2024-08-22 10:11:58,481 INFO Gradient of sand angle: 4229.15673828125
+2024-08-22 10:11:58,488 INFO Gradient of manipulator friction: 194.8194122314453
+2024-08-22 10:11:58,496 INFO Gradient of container friction: -6835.90869140625
+2024-08-22 10:11:58,497 INFO ===> Epoch 31, grad: [ 5.2086733e-02  1.7386619e+05  3.8429043e+01  4.2291567e+03
+  1.9481941e+02 -6.8359087e+03]
+2024-08-22 10:11:58,900 INFO ===> New TaichiEnv created.
+2024-08-22 10:11:58,900 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:12:48,514 INFO ===> CPU memory occupied after forward-backward: 1.0131055568561453 %
+2024-08-22 10:12:48,571 INFO ===> GPU memory after forward-backward: [2048, 24188]
+2024-08-22 10:12:48,572 INFO ===> Gradients:
+2024-08-22 10:12:48,573 INFO Gradient of E: -0.007335829082876444
+2024-08-22 10:12:48,584 INFO Gradient of nu: 22280.828125
+2024-08-22 10:12:48,592 INFO Gradient of rho: 40.444515228271484
+2024-08-22 10:12:48,600 INFO Gradient of sand angle: 895.4126586914062
+2024-08-22 10:12:48,608 INFO Gradient of manipulator friction: 5708.17626953125
+2024-08-22 10:12:48,616 INFO Gradient of container friction: -4406.140625
+2024-08-22 10:12:48,617 INFO ===> Epoch 32, grad: [-7.3358291e-03  2.2280828e+04  4.0444515e+01  8.9541266e+02
+  5.7081763e+03 -4.4061406e+03]
+2024-08-22 10:12:49,019 INFO ===> New TaichiEnv created.
+2024-08-22 10:12:49,020 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:13:39,313 INFO ===> CPU memory occupied after forward-backward: 1.0131055568561453 %
+2024-08-22 10:13:39,378 INFO ===> GPU memory after forward-backward: [2046, 24188]
+2024-08-22 10:13:39,379 INFO ===> Gradients:
+2024-08-22 10:13:39,380 INFO Gradient of E: -0.000338624493451789
+2024-08-22 10:13:39,392 INFO Gradient of nu: 24305.578125
+2024-08-22 10:13:39,400 INFO Gradient of rho: 15.871602058410645
+2024-08-22 10:13:39,408 INFO Gradient of sand angle: 1647.1898193359375
+2024-08-22 10:13:39,416 INFO Gradient of manipulator friction: -9505.6591796875
+2024-08-22 10:13:39,425 INFO Gradient of container friction: -4945.595703125
+2024-08-22 10:13:39,427 INFO ===> Epoch 33, grad: [-3.3862449e-04  2.4305578e+04  1.5871602e+01  1.6471898e+03
+ -9.5056592e+03 -4.9455957e+03]
+2024-08-22 10:13:39,827 INFO ===> New TaichiEnv created.
+2024-08-22 10:13:39,827 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:14:28,883 INFO ===> CPU memory occupied after forward-backward: 1.0037425250062117 %
+2024-08-22 10:14:28,968 INFO ===> GPU memory after forward-backward: [2046, 24188]
+2024-08-22 10:14:28,969 INFO ===> Gradients:
+2024-08-22 10:14:28,970 INFO Gradient of E: -0.02196504920721054
+2024-08-22 10:14:28,982 INFO Gradient of nu: -58143.1640625
+2024-08-22 10:14:28,990 INFO Gradient of rho: -41.5984001159668
+2024-08-22 10:14:28,998 INFO Gradient of sand angle: -1958.777587890625
+2024-08-22 10:14:29,006 INFO Gradient of manipulator friction: -1921.95166015625
+2024-08-22 10:14:29,013 INFO Gradient of container friction: -84304.328125
+2024-08-22 10:14:29,014 INFO ===> Epoch 34, grad: [-2.1965049e-02 -5.8143164e+04 -4.1598400e+01 -1.9587776e+03
+ -1.9219517e+03 -8.4304328e+04]
+2024-08-22 10:14:29,420 INFO ===> New TaichiEnv created.
+2024-08-22 10:14:29,420 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:15:19,135 INFO ===> CPU memory occupied after forward-backward: 1.007143950783677 %
+2024-08-22 10:15:19,305 INFO ===> GPU memory after forward-backward: [2044, 24188]
+2024-08-22 10:15:19,305 INFO ===> Gradients:
+2024-08-22 10:15:19,306 INFO Gradient of E: 0.010695604607462883
+2024-08-22 10:15:19,318 INFO Gradient of nu: -3241.062744140625
+2024-08-22 10:15:19,326 INFO Gradient of rho: -26.010211944580078
+2024-08-22 10:15:19,337 INFO Gradient of sand angle: -557.3843383789062
+2024-08-22 10:15:19,347 INFO Gradient of manipulator friction: -3.5491909980773926
+2024-08-22 10:15:19,355 INFO Gradient of container friction: -453.7237854003906
+2024-08-22 10:15:19,356 INFO ===> Epoch 35, grad: [ 1.0695605e-02 -3.2410627e+03 -2.6010212e+01 -5.5738434e+02
+ -3.5491910e+00 -4.5372379e+02]
+2024-08-22 10:15:19,755 INFO ===> New TaichiEnv created.
+2024-08-22 10:15:19,755 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:16:08,936 INFO ===> CPU memory occupied after forward-backward: 1.0105939683579634 %
+2024-08-22 10:16:08,995 INFO ===> GPU memory after forward-backward: [2042, 24188]
+2024-08-22 10:16:08,995 INFO ===> Gradients:
+2024-08-22 10:16:08,997 INFO Gradient of E: -0.0039419750683009624
+2024-08-22 10:16:09,009 INFO Gradient of nu: 10313.88671875
+2024-08-22 10:16:09,017 INFO Gradient of rho: 13.56722354888916
+2024-08-22 10:16:09,025 INFO Gradient of sand angle: -1372.75390625
+2024-08-22 10:16:09,033 INFO Gradient of manipulator friction: -1008.58837890625
+2024-08-22 10:16:09,040 INFO Gradient of container friction: -2138.13623046875
+2024-08-22 10:16:09,041 INFO ===> Epoch 36, grad: [-3.9419751e-03  1.0313887e+04  1.3567224e+01 -1.3727539e+03
+ -1.0085884e+03 -2.1381362e+03]
+2024-08-22 10:16:09,444 INFO ===> New TaichiEnv created.
+2024-08-22 10:16:09,444 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:16:58,598 INFO ===> CPU memory occupied after forward-backward: 1.00364534141257 %
+2024-08-22 10:16:58,656 INFO ===> GPU memory after forward-backward: [2042, 24188]
+2024-08-22 10:16:58,656 INFO ===> Gradients:
+2024-08-22 10:16:58,658 INFO Gradient of E: 0.011714349500834942
+2024-08-22 10:16:58,669 INFO Gradient of nu: -18147.72265625
+2024-08-22 10:16:58,678 INFO Gradient of rho: -6.063511371612549
+2024-08-22 10:16:58,685 INFO Gradient of sand angle: -5.349209785461426
+2024-08-22 10:16:58,693 INFO Gradient of manipulator friction: -9550.6181640625
+2024-08-22 10:16:58,701 INFO Gradient of container friction: 3008.23681640625
+2024-08-22 10:16:58,702 INFO ===> Epoch 37, grad: [ 1.17143495e-02 -1.81477227e+04 -6.06351137e+00 -5.34920979e+00
+ -9.55061816e+03  3.00823682e+03]
+2024-08-22 10:16:59,109 INFO ===> New TaichiEnv created.
+2024-08-22 10:16:59,109 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:17:48,969 INFO ===> CPU memory occupied after forward-backward: 1.017907033779514 %
+2024-08-22 10:17:49,025 INFO ===> GPU memory after forward-backward: [2040, 24188]
+2024-08-22 10:17:49,025 INFO ===> Gradients:
+2024-08-22 10:17:49,026 INFO Gradient of E: -0.01583116129040718
+2024-08-22 10:17:49,038 INFO Gradient of nu: -8416.1552734375
+2024-08-22 10:17:49,046 INFO Gradient of rho: 17.037988662719727
+2024-08-22 10:17:49,054 INFO Gradient of sand angle: -1101.069091796875
+2024-08-22 10:17:49,061 INFO Gradient of manipulator friction: 2739.67333984375
+2024-08-22 10:17:49,069 INFO Gradient of container friction: 2405.48974609375
+2024-08-22 10:17:49,070 INFO ===> Epoch 38, grad: [-1.5831161e-02 -8.4161553e+03  1.7037989e+01 -1.1010691e+03
+  2.7396733e+03  2.4054897e+03]
+2024-08-22 10:17:49,470 INFO ===> New TaichiEnv created.
+2024-08-22 10:17:49,470 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:18:39,332 INFO ===> CPU memory occupied after forward-backward: 1.0230683936980873 %
+2024-08-22 10:18:39,388 INFO ===> GPU memory after forward-backward: [2040, 24188]
+2024-08-22 10:18:39,388 INFO ===> Gradients:
+2024-08-22 10:18:39,391 INFO Gradient of E: 0.006844040006399155
+2024-08-22 10:18:39,401 INFO Gradient of nu: 7079.85205078125
+2024-08-22 10:18:39,410 INFO Gradient of rho: 2.0282514095306396
+2024-08-22 10:18:39,417 INFO Gradient of sand angle: 2589.641845703125
+2024-08-22 10:18:39,425 INFO Gradient of manipulator friction: -773.8974609375
+2024-08-22 10:18:39,432 INFO Gradient of container friction: -19552.220703125
+2024-08-22 10:18:39,433 INFO ===> Epoch 39, grad: [ 6.8440400e-03  7.0798521e+03  2.0282514e+00  2.5896418e+03
+ -7.7389746e+02 -1.9552221e+04]
+2024-08-22 10:18:39,828 INFO ===> New TaichiEnv created.
+2024-08-22 10:18:39,829 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:19:30,290 INFO ===> CPU memory occupied after forward-backward: 1.0264212276787317 %
+2024-08-22 10:19:30,350 INFO ===> GPU memory after forward-backward: [2038, 24188]
+2024-08-22 10:19:30,350 INFO ===> Gradients:
+2024-08-22 10:19:30,351 INFO Gradient of E: 0.011418012902140617
+2024-08-22 10:19:30,365 INFO Gradient of nu: -873.34765625
+2024-08-22 10:19:30,374 INFO Gradient of rho: 36.61234664916992
+2024-08-22 10:19:30,385 INFO Gradient of sand angle: 689.634033203125
+2024-08-22 10:19:30,393 INFO Gradient of manipulator friction: -10320.591796875
+2024-08-22 10:19:30,401 INFO Gradient of container friction: -415.64813232421875
+2024-08-22 10:19:30,402 INFO ===> Epoch 40, grad: [ 1.1418013e-02 -8.7334766e+02  3.6612347e+01  6.8963403e+02
+ -1.0320592e+04 -4.1564813e+02]
+2024-08-22 10:19:30,807 INFO ===> New TaichiEnv created.
+2024-08-22 10:19:30,807 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:20:20,689 INFO ===> CPU memory occupied after forward-backward: 1.030258461133935 %
+2024-08-22 10:20:20,750 INFO ===> GPU memory after forward-backward: [2036, 24188]
+2024-08-22 10:20:20,750 INFO ===> Gradients:
+2024-08-22 10:20:20,752 INFO Gradient of E: 0.026756389066576958
+2024-08-22 10:20:20,762 INFO Gradient of nu: 25478.0546875
+2024-08-22 10:20:20,771 INFO Gradient of rho: 22.11187171936035
+2024-08-22 10:20:20,778 INFO Gradient of sand angle: 1820.6566162109375
+2024-08-22 10:20:20,786 INFO Gradient of manipulator friction: -7386.50146484375
+2024-08-22 10:20:20,793 INFO Gradient of container friction: -1937.76513671875
+2024-08-22 10:20:20,794 INFO ===> Epoch 41, grad: [ 2.6756389e-02  2.5478055e+04  2.2111872e+01  1.8206566e+03
+ -7.3865015e+03 -1.9377651e+03]
+2024-08-22 10:20:21,200 INFO ===> New TaichiEnv created.
+2024-08-22 10:20:21,200 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:21:10,943 INFO ===> CPU memory occupied after forward-backward: 1.044098012265997 %
+2024-08-22 10:21:11,064 INFO ===> GPU memory after forward-backward: [2036, 24188]
+2024-08-22 10:21:11,064 INFO ===> Gradients:
+2024-08-22 10:21:11,066 INFO Gradient of E: -0.0010075439931824803
+2024-08-22 10:21:11,081 INFO Gradient of nu: -853.76416015625
+2024-08-22 10:21:11,090 INFO Gradient of rho: -0.29464343190193176
+2024-08-22 10:21:11,098 INFO Gradient of sand angle: 408.434814453125
+2024-08-22 10:21:11,106 INFO Gradient of manipulator friction: -1260.440185546875
+2024-08-22 10:21:11,115 INFO Gradient of container friction: 4679.6494140625
+2024-08-22 10:21:11,116 INFO ===> Epoch 42, grad: [-1.0075440e-03 -8.5376416e+02 -2.9464343e-01  4.0843481e+02
+ -1.2604402e+03  4.6796494e+03]
+2024-08-22 10:21:11,519 INFO ===> New TaichiEnv created.
+2024-08-22 10:21:11,519 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:22:01,466 INFO ===> CPU memory occupied after forward-backward: 1.0484986068655926 %
+2024-08-22 10:22:01,526 INFO ===> GPU memory after forward-backward: [2034, 24188]
+2024-08-22 10:22:01,526 INFO ===> Gradients:
+2024-08-22 10:22:01,528 INFO Gradient of E: 0.015344947576522827
+2024-08-22 10:22:01,539 INFO Gradient of nu: 4340.9814453125
+2024-08-22 10:22:01,547 INFO Gradient of rho: 8.579117774963379
+2024-08-22 10:22:01,555 INFO Gradient of sand angle: 1660.11083984375
+2024-08-22 10:22:01,563 INFO Gradient of manipulator friction: 1084.8626708984375
+2024-08-22 10:22:01,570 INFO Gradient of container friction: -13187.6455078125
+2024-08-22 10:22:01,571 INFO ===> Epoch 43, grad: [ 1.53449476e-02  4.34098145e+03  8.57911777e+00  1.66011084e+03
+  1.08486267e+03 -1.31876455e+04]
+2024-08-22 10:22:01,971 INFO ===> New TaichiEnv created.
+2024-08-22 10:22:01,972 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:22:51,592 INFO ===> CPU memory occupied after forward-backward: 1.0417185327154217 %
+2024-08-22 10:22:51,674 INFO ===> GPU memory after forward-backward: [2032, 24188]
+2024-08-22 10:22:51,675 INFO ===> Gradients:
+2024-08-22 10:22:51,676 INFO Gradient of E: -0.011556790210306644
+2024-08-22 10:22:51,688 INFO Gradient of nu: -11630.16796875
+2024-08-22 10:22:51,696 INFO Gradient of rho: -13.07985782623291
+2024-08-22 10:22:51,704 INFO Gradient of sand angle: -2013.872802734375
+2024-08-22 10:22:51,712 INFO Gradient of manipulator friction: -2322.76416015625
+2024-08-22 10:22:51,719 INFO Gradient of container friction: 44053.515625
+2024-08-22 10:22:51,720 INFO ===> Epoch 44, grad: [-1.1556790e-02 -1.1630168e+04 -1.3079858e+01 -2.0138728e+03
+ -2.3227642e+03  4.4053516e+04]
+2024-08-22 10:22:52,122 INFO ===> New TaichiEnv created.
+2024-08-22 10:22:52,122 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:23:40,998 INFO ===> CPU memory occupied after forward-backward: 1.0452626968960486 %
+2024-08-22 10:23:41,109 INFO ===> GPU memory after forward-backward: [2032, 24188]
+2024-08-22 10:23:41,109 INFO ===> Gradients:
+2024-08-22 10:23:41,111 INFO Gradient of E: -0.03546268865466118
+2024-08-22 10:23:41,121 INFO Gradient of nu: -23373.419921875
+2024-08-22 10:23:41,129 INFO Gradient of rho: -3.289060354232788
+2024-08-22 10:23:41,137 INFO Gradient of sand angle: 52.10143280029297
+2024-08-22 10:23:41,144 INFO Gradient of manipulator friction: 15435.1787109375
+2024-08-22 10:23:41,152 INFO Gradient of container friction: -283.6524963378906
+2024-08-22 10:23:41,153 INFO ===> Epoch 45, grad: [-3.5462689e-02 -2.3373420e+04 -3.2890604e+00  5.2101433e+01
+  1.5435179e+04 -2.8365250e+02]
+2024-08-22 10:23:41,555 INFO ===> New TaichiEnv created.
+2024-08-22 10:23:41,556 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:24:51,813 INFO ===> CPU memory occupied after forward-backward: 1.0989718173196865 %
+2024-08-22 10:24:51,879 INFO ===> GPU memory after forward-backward: [2030, 24188]
+2024-08-22 10:24:51,879 INFO ===> Gradients:
+2024-08-22 10:24:51,881 INFO Gradient of E: -0.02285120263695717
+2024-08-22 10:24:51,892 INFO Gradient of nu: 18099.1328125
+2024-08-22 10:24:51,901 INFO Gradient of rho: -38.580665588378906
+2024-08-22 10:24:51,909 INFO Gradient of sand angle: -1834.15185546875
+2024-08-22 10:24:51,916 INFO Gradient of manipulator friction: 9537.8427734375
+2024-08-22 10:24:51,924 INFO Gradient of container friction: 101570.5078125
+2024-08-22 10:24:51,925 INFO ===> Epoch 46, grad: [-2.2851203e-02  1.8099133e+04 -3.8580666e+01 -1.8341519e+03
+  9.5378428e+03  1.0157051e+05]
+2024-08-22 10:24:52,441 INFO ===> New TaichiEnv created.
+2024-08-22 10:24:52,441 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:25:41,845 INFO ===> CPU memory occupied after forward-backward: 1.0817946171434867 %
+2024-08-22 10:25:41,929 INFO ===> GPU memory after forward-backward: [2030, 24188]
+2024-08-22 10:25:41,929 INFO ===> Gradients:
+2024-08-22 10:25:41,931 INFO Gradient of E: 0.0014056327054277062
+2024-08-22 10:25:41,942 INFO Gradient of nu: 3757.329833984375
+2024-08-22 10:25:41,950 INFO Gradient of rho: 41.102996826171875
+2024-08-22 10:25:41,958 INFO Gradient of sand angle: 176.93524169921875
+2024-08-22 10:25:41,966 INFO Gradient of manipulator friction: -1567.2042236328125
+2024-08-22 10:25:41,973 INFO Gradient of container friction: 25661.125
+2024-08-22 10:25:41,974 INFO ===> Epoch 47, grad: [ 1.4056327e-03  3.7573298e+03  4.1102997e+01  1.7693524e+02
+ -1.5672042e+03  2.5661125e+04]
+2024-08-22 10:25:42,376 INFO ===> New TaichiEnv created.
+2024-08-22 10:25:42,376 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:26:31,873 INFO ===> CPU memory occupied after forward-backward: 1.0817915801561853 %
+2024-08-22 10:26:31,976 INFO ===> GPU memory after forward-backward: [2028, 24188]
+2024-08-22 10:26:31,976 INFO ===> Gradients:
+2024-08-22 10:26:31,978 INFO Gradient of E: 0.039515022188425064
+2024-08-22 10:26:31,989 INFO Gradient of nu: 21836.5078125
+2024-08-22 10:26:31,998 INFO Gradient of rho: 12.298604011535645
+2024-08-22 10:26:32,005 INFO Gradient of sand angle: 2831.819580078125
+2024-08-22 10:26:32,013 INFO Gradient of manipulator friction: -566.9776000976562
+2024-08-22 10:26:32,020 INFO Gradient of container friction: -8603.5283203125
+2024-08-22 10:26:32,021 INFO ===> Epoch 48, grad: [ 3.9515022e-02  2.1836508e+04  1.2298604e+01  2.8318196e+03
+ -5.6697760e+02 -8.6035283e+03]
+2024-08-22 10:26:32,427 INFO ===> New TaichiEnv created.
+2024-08-22 10:26:32,427 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:27:22,268 INFO ===> CPU memory occupied after forward-backward: 1.0817915801561853 %
+2024-08-22 10:27:22,333 INFO ===> GPU memory after forward-backward: [2026, 24188]
+2024-08-22 10:27:22,333 INFO ===> Gradients:
+2024-08-22 10:27:22,335 INFO Gradient of E: 0.0032753434497863054
+2024-08-22 10:27:22,346 INFO Gradient of nu: 45781.359375
+2024-08-22 10:27:22,355 INFO Gradient of rho: 34.96786117553711
+2024-08-22 10:27:22,363 INFO Gradient of sand angle: -561.0914306640625
+2024-08-22 10:27:22,370 INFO Gradient of manipulator friction: -1469.5985107421875
+2024-08-22 10:27:22,378 INFO Gradient of container friction: 46841.7265625
+2024-08-22 10:27:22,379 INFO ===> Epoch 49, grad: [ 3.2753434e-03  4.5781359e+04  3.4967861e+01 -5.6109143e+02
+ -1.4695985e+03  4.6841727e+04]
+2024-08-22 10:27:22,783 INFO ===> New TaichiEnv created.
+2024-08-22 10:27:22,783 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:28:13,797 INFO ===> CPU memory occupied after forward-backward: 1.0845430906511706 %
+2024-08-22 10:28:13,858 INFO ===> GPU memory after forward-backward: [2026, 24188]
+2024-08-22 10:28:13,858 INFO ===> Gradients:
+2024-08-22 10:28:13,860 INFO Gradient of E: 0.00040071099647320807
+2024-08-22 10:28:13,872 INFO Gradient of nu: -1426.5618896484375
+2024-08-22 10:28:13,880 INFO Gradient of rho: 25.433507919311523
+2024-08-22 10:28:13,888 INFO Gradient of sand angle: 760.9169921875
+2024-08-22 10:28:13,896 INFO Gradient of manipulator friction: -2030.61474609375
+2024-08-22 10:28:13,904 INFO Gradient of container friction: -71720.2734375
+2024-08-22 10:28:13,905 INFO ===> Epoch 50, grad: [ 4.0071100e-04 -1.4265619e+03  2.5433508e+01  7.6091699e+02
+ -2.0306147e+03 -7.1720273e+04]
+2024-08-22 10:28:14,354 INFO ===> New TaichiEnv created.
+2024-08-22 10:28:14,355 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:29:04,319 INFO ===> CPU memory occupied after forward-backward: 1.0776673514010084 %
+2024-08-22 10:29:04,480 INFO ===> GPU memory after forward-backward: [2024, 24188]
+2024-08-22 10:29:04,481 INFO ===> Gradients:
+2024-08-22 10:29:04,483 INFO Gradient of E: 0.050871651619672775
+2024-08-22 10:29:04,494 INFO Gradient of nu: 65800.421875
+2024-08-22 10:29:04,505 INFO Gradient of rho: 35.13916778564453
+2024-08-22 10:29:04,513 INFO Gradient of sand angle: 1772.7181396484375
+2024-08-22 10:29:04,523 INFO Gradient of manipulator friction: 400.13543701171875
+2024-08-22 10:29:04,531 INFO Gradient of container friction: -66136.0390625
+2024-08-22 10:29:04,532 INFO ===> Epoch 51, grad: [ 5.0871652e-02  6.5800422e+04  3.5139168e+01  1.7727181e+03
+  4.0013544e+02 -6.6136039e+04]
+2024-08-22 10:29:04,935 INFO ===> New TaichiEnv created.
+2024-08-22 10:29:04,935 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:29:54,792 INFO ===> CPU memory occupied after forward-backward: 1.0811659607721158 %
+2024-08-22 10:29:54,907 INFO ===> GPU memory after forward-backward: [2024, 24188]
+2024-08-22 10:29:54,908 INFO ===> Gradients:
+2024-08-22 10:29:54,908 INFO Gradient of E: 0.0007870557601563632
+2024-08-22 10:29:54,920 INFO Gradient of nu: -13565.82421875
+2024-08-22 10:29:54,928 INFO Gradient of rho: -9.067658424377441
+2024-08-22 10:29:54,936 INFO Gradient of sand angle: -1755.666015625
+2024-08-22 10:29:54,943 INFO Gradient of manipulator friction: -5309.37451171875
+2024-08-22 10:29:54,951 INFO Gradient of container friction: -34693.36328125
+2024-08-22 10:29:54,952 INFO ===> Epoch 52, grad: [ 7.8705576e-04 -1.3565824e+04 -9.0676584e+00 -1.7556660e+03
+ -5.3093745e+03 -3.4693363e+04]
+2024-08-22 10:29:55,355 INFO ===> New TaichiEnv created.
+2024-08-22 10:29:55,355 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:31:03,069 INFO ===> CPU memory occupied after forward-backward: 1.1140383113214771 %
+2024-08-22 10:31:03,130 INFO ===> GPU memory after forward-backward: [2022, 24188]
+2024-08-22 10:31:03,130 INFO ===> Gradients:
+2024-08-22 10:31:03,131 INFO Gradient of E: 0.01889917068183422
+2024-08-22 10:31:03,142 INFO Gradient of nu: 55231.97265625
+2024-08-22 10:31:03,151 INFO Gradient of rho: 8.533061981201172
+2024-08-22 10:31:03,159 INFO Gradient of sand angle: 987.5711669921875
+2024-08-22 10:31:03,166 INFO Gradient of manipulator friction: 3469.75439453125
+2024-08-22 10:31:03,174 INFO Gradient of container friction: -3233.37939453125
+2024-08-22 10:31:03,175 INFO ===> Epoch 53, grad: [ 1.8899171e-02  5.5231973e+04  8.5330620e+00  9.8757117e+02
+  3.4697544e+03 -3.2333794e+03]
+2024-08-22 10:31:03,630 INFO ===> New TaichiEnv created.
+2024-08-22 10:31:03,631 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:31:53,455 INFO ===> CPU memory occupied after forward-backward: 1.1060555901999882 %
+2024-08-22 10:31:53,542 INFO ===> GPU memory after forward-backward: [2020, 24188]
+2024-08-22 10:31:53,542 INFO ===> Gradients:
+2024-08-22 10:31:53,544 INFO Gradient of E: -0.0291056539863348
+2024-08-22 10:31:53,555 INFO Gradient of nu: -252967.28125
+2024-08-22 10:31:53,564 INFO Gradient of rho: -0.23923897743225098
+2024-08-22 10:31:53,571 INFO Gradient of sand angle: -61.085262298583984
+2024-08-22 10:31:53,579 INFO Gradient of manipulator friction: -6469.2119140625
+2024-08-22 10:31:53,586 INFO Gradient of container friction: 22285.0625
+2024-08-22 10:31:53,587 INFO ===> Epoch 54, grad: [-2.9105654e-02 -2.5296728e+05 -2.3923898e-01 -6.1085262e+01
+ -6.4692119e+03  2.2285062e+04]
+2024-08-22 10:31:53,988 INFO ===> New TaichiEnv created.
+2024-08-22 10:31:53,988 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:32:43,735 INFO ===> CPU memory occupied after forward-backward: 1.1060555901999882 %
+2024-08-22 10:32:43,822 INFO ===> GPU memory after forward-backward: [2020, 24188]
+2024-08-22 10:32:43,822 INFO ===> Gradients:
+2024-08-22 10:32:43,824 INFO Gradient of E: -0.020229049026966095
+2024-08-22 10:32:43,835 INFO Gradient of nu: 25161.21875
+2024-08-22 10:32:43,843 INFO Gradient of rho: -2.5454580783843994
+2024-08-22 10:32:43,851 INFO Gradient of sand angle: -2198.37353515625
+2024-08-22 10:32:43,859 INFO Gradient of manipulator friction: 8531.009765625
+2024-08-22 10:32:43,866 INFO Gradient of container friction: -1336.5189208984375
+2024-08-22 10:32:43,867 INFO ===> Epoch 55, grad: [-2.0229049e-02  2.5161219e+04 -2.5454581e+00 -2.1983735e+03
+  8.5310098e+03 -1.3365189e+03]
+2024-08-22 10:32:44,271 INFO ===> New TaichiEnv created.
+2024-08-22 10:32:44,271 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:33:33,713 INFO ===> CPU memory occupied after forward-backward: 1.096577152832605 %
+2024-08-22 10:33:33,851 INFO ===> GPU memory after forward-backward: [2018, 24188]
+2024-08-22 10:33:33,851 INFO ===> Gradients:
+2024-08-22 10:33:33,852 INFO Gradient of E: -0.04632344841957092
+2024-08-22 10:33:33,863 INFO Gradient of nu: -13350.1875
+2024-08-22 10:33:33,871 INFO Gradient of rho: -4.018567085266113
+2024-08-22 10:33:33,879 INFO Gradient of sand angle: 533.7487182617188
+2024-08-22 10:33:33,887 INFO Gradient of manipulator friction: 21988.158203125
+2024-08-22 10:33:33,894 INFO Gradient of container friction: -2189.519287109375
+2024-08-22 10:33:33,896 INFO ===> Epoch 56, grad: [-4.63234484e-02 -1.33501875e+04 -4.01856709e+00  5.33748718e+02
+  2.19881582e+04 -2.18951929e+03]
+2024-08-22 10:33:34,295 INFO ===> New TaichiEnv created.
+2024-08-22 10:33:34,295 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:34:24,005 INFO ===> CPU memory occupied after forward-backward: 1.1000772806973627 %
+2024-08-22 10:34:24,105 INFO ===> GPU memory after forward-backward: [2016, 24188]
+2024-08-22 10:34:24,105 INFO ===> Gradients:
+2024-08-22 10:34:24,107 INFO Gradient of E: -0.03187212347984314
+2024-08-22 10:34:24,118 INFO Gradient of nu: -24599.513671875
+2024-08-22 10:34:24,127 INFO Gradient of rho: -78.54432678222656
+2024-08-22 10:34:24,135 INFO Gradient of sand angle: -1062.135009765625
+2024-08-22 10:34:24,142 INFO Gradient of manipulator friction: -2933.184814453125
+2024-08-22 10:34:24,150 INFO Gradient of container friction: 4550.75634765625
+2024-08-22 10:34:24,151 INFO ===> Epoch 57, grad: [-3.1872123e-02 -2.4599514e+04 -7.8544327e+01 -1.0621350e+03
+ -2.9331848e+03  4.5507563e+03]
+2024-08-22 10:34:24,612 INFO ===> New TaichiEnv created.
+2024-08-22 10:34:24,612 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:35:14,374 INFO ===> CPU memory occupied after forward-backward: 1.1035257797779985 %
+2024-08-22 10:35:14,432 INFO ===> GPU memory after forward-backward: [2016, 24188]
+2024-08-22 10:35:14,433 INFO ===> Gradients:
+2024-08-22 10:35:14,434 INFO Gradient of E: 0.004042265936732292
+2024-08-22 10:35:14,445 INFO Gradient of nu: -19476.888671875
+2024-08-22 10:35:14,454 INFO Gradient of rho: 49.750343322753906
+2024-08-22 10:35:14,461 INFO Gradient of sand angle: 1934.7947998046875
+2024-08-22 10:35:14,469 INFO Gradient of manipulator friction: -3251.777587890625
+2024-08-22 10:35:14,477 INFO Gradient of container friction: 2027.37158203125
+2024-08-22 10:35:14,478 INFO ===> Epoch 58, grad: [ 4.0422659e-03 -1.9476889e+04  4.9750343e+01  1.9347948e+03
+ -3.2517776e+03  2.0273716e+03]
+2024-08-22 10:35:14,883 INFO ===> New TaichiEnv created.
+2024-08-22 10:35:14,883 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:36:04,832 INFO ===> CPU memory occupied after forward-backward: 1.1083363676632707 %
+2024-08-22 10:36:04,913 INFO ===> GPU memory after forward-backward: [2014, 24188]
+2024-08-22 10:36:04,913 INFO ===> Gradients:
+2024-08-22 10:36:04,915 INFO Gradient of E: 0.020767373964190483
+2024-08-22 10:36:04,926 INFO Gradient of nu: 15631.5546875
+2024-08-22 10:36:04,935 INFO Gradient of rho: 12.508926391601562
+2024-08-22 10:36:04,943 INFO Gradient of sand angle: -240.3826141357422
+2024-08-22 10:36:04,950 INFO Gradient of manipulator friction: -4529.9794921875
+2024-08-22 10:36:04,958 INFO Gradient of container friction: -41738.30078125
+2024-08-22 10:36:04,959 INFO ===> Epoch 59, grad: [ 2.0767374e-02  1.5631555e+04  1.2508926e+01 -2.4038261e+02
+ -4.5299795e+03 -4.1738301e+04]
+2024-08-22 10:36:05,358 INFO ===> New TaichiEnv created.
+2024-08-22 10:36:05,358 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:36:54,536 INFO ===> CPU memory occupied after forward-backward: 1.1108904739836711 %
+2024-08-22 10:36:54,614 INFO ===> GPU memory after forward-backward: [2014, 24188]
+2024-08-22 10:36:54,615 INFO ===> Gradients:
+2024-08-22 10:36:54,616 INFO Gradient of E: -0.024996550753712654
+2024-08-22 10:36:54,628 INFO Gradient of nu: -43151.42578125
+2024-08-22 10:36:54,636 INFO Gradient of rho: -17.24862289428711
+2024-08-22 10:36:54,644 INFO Gradient of sand angle: -336.2909240722656
+2024-08-22 10:36:54,652 INFO Gradient of manipulator friction: -6115.90185546875
+2024-08-22 10:36:54,659 INFO Gradient of container friction: 1029.3509521484375
+2024-08-22 10:36:54,660 INFO ===> Epoch 60, grad: [-2.4996551e-02 -4.3151426e+04 -1.7248623e+01 -3.3629092e+02
+ -6.1159019e+03  1.0293510e+03]
+2024-08-22 10:36:55,063 INFO ===> New TaichiEnv created.
+2024-08-22 10:36:55,063 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:37:45,227 INFO ===> CPU memory occupied after forward-backward: 1.1150678500166207 %
+2024-08-22 10:37:45,293 INFO ===> GPU memory after forward-backward: [2012, 24188]
+2024-08-22 10:37:45,294 INFO ===> Gradients:
+2024-08-22 10:37:45,295 INFO Gradient of E: 0.033668067306280136
+2024-08-22 10:37:45,306 INFO Gradient of nu: 45689.33203125
+2024-08-22 10:37:45,315 INFO Gradient of rho: 16.82423973083496
+2024-08-22 10:37:45,323 INFO Gradient of sand angle: 1571.3538818359375
+2024-08-22 10:37:45,330 INFO Gradient of manipulator friction: -3705.169189453125
+2024-08-22 10:37:45,338 INFO Gradient of container friction: -1386.7567138671875
+2024-08-22 10:37:45,339 INFO ===> Epoch 61, grad: [ 3.3668067e-02  4.5689332e+04  1.6824240e+01  1.5713539e+03
+ -3.7051692e+03 -1.3867567e+03]
+2024-08-22 10:37:45,743 INFO ===> New TaichiEnv created.
+2024-08-22 10:37:45,743 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:38:35,691 INFO ===> CPU memory occupied after forward-backward: 1.1065870629777173 %
+2024-08-22 10:38:35,749 INFO ===> GPU memory after forward-backward: [2010, 24188]
+2024-08-22 10:38:35,749 INFO ===> Gradients:
+2024-08-22 10:38:35,750 INFO Gradient of E: 0.0029547903686761856
+2024-08-22 10:38:35,761 INFO Gradient of nu: -23201.642578125
+2024-08-22 10:38:35,769 INFO Gradient of rho: -29.16687774658203
+2024-08-22 10:38:35,777 INFO Gradient of sand angle: 252.222900390625
+2024-08-22 10:38:35,785 INFO Gradient of manipulator friction: 249.45486450195312
+2024-08-22 10:38:35,792 INFO Gradient of container friction: -2174.26708984375
+2024-08-22 10:38:35,793 INFO ===> Epoch 62, grad: [ 2.9547904e-03 -2.3201643e+04 -2.9166878e+01  2.5222290e+02
+  2.4945486e+02 -2.1742671e+03]
+2024-08-22 10:38:36,194 INFO ===> New TaichiEnv created.
+2024-08-22 10:38:36,194 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:39:24,849 INFO ===> CPU memory occupied after forward-backward: 1.1224568401207038 %
+2024-08-22 10:39:24,933 INFO ===> GPU memory after forward-backward: [2010, 24188]
+2024-08-22 10:39:24,934 INFO ===> Gradients:
+2024-08-22 10:39:24,935 INFO Gradient of E: 0.0063813673332333565
+2024-08-22 10:39:24,946 INFO Gradient of nu: 26309.7265625
+2024-08-22 10:39:24,955 INFO Gradient of rho: -4.5554423332214355
+2024-08-22 10:39:24,962 INFO Gradient of sand angle: 189.7112579345703
+2024-08-22 10:39:24,970 INFO Gradient of manipulator friction: 541.2421264648438
+2024-08-22 10:39:24,977 INFO Gradient of container friction: -1489.4229736328125
+2024-08-22 10:39:24,978 INFO ===> Epoch 63, grad: [ 6.3813673e-03  2.6309727e+04 -4.5554423e+00  1.8971126e+02
+  5.4124213e+02 -1.4894230e+03]
+2024-08-22 10:39:25,380 INFO ===> New TaichiEnv created.
+2024-08-22 10:39:25,380 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:40:15,682 INFO ===> CPU memory occupied after forward-backward: 1.1262955920695574 %
+2024-08-22 10:40:15,741 INFO ===> GPU memory after forward-backward: [2008, 24188]
+2024-08-22 10:40:15,741 INFO ===> Gradients:
+2024-08-22 10:40:15,743 INFO Gradient of E: -0.0023661714512854815
+2024-08-22 10:40:15,753 INFO Gradient of nu: 13358.8369140625
+2024-08-22 10:40:15,762 INFO Gradient of rho: 33.750572204589844
+2024-08-22 10:40:15,770 INFO Gradient of sand angle: 615.586669921875
+2024-08-22 10:40:15,778 INFO Gradient of manipulator friction: 4076.9453125
+2024-08-22 10:40:15,785 INFO Gradient of container friction: -5810.109375
+2024-08-22 10:40:15,786 INFO ===> Epoch 64, grad: [-2.3661715e-03  1.3358837e+04  3.3750572e+01  6.1558667e+02
+  4.0769453e+03 -5.8101094e+03]
+2024-08-22 10:40:16,186 INFO ===> New TaichiEnv created.
+2024-08-22 10:40:16,186 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:41:05,668 INFO ===> CPU memory occupied after forward-backward: 1.1301343440184113 %
+2024-08-22 10:41:05,727 INFO ===> GPU memory after forward-backward: [2006, 24188]
+2024-08-22 10:41:05,727 INFO ===> Gradients:
+2024-08-22 10:41:05,729 INFO Gradient of E: -0.03676696494221687
+2024-08-22 10:41:05,740 INFO Gradient of nu: -71396.0703125
+2024-08-22 10:41:05,748 INFO Gradient of rho: -11.540046691894531
+2024-08-22 10:41:05,756 INFO Gradient of sand angle: -636.428955078125
+2024-08-22 10:41:05,763 INFO Gradient of manipulator friction: 740.9483032226562
+2024-08-22 10:41:05,771 INFO Gradient of container friction: -5721.9013671875
+2024-08-22 10:41:05,772 INFO ===> Epoch 65, grad: [-3.6766965e-02 -7.1396070e+04 -1.1540047e+01 -6.3642896e+02
+  7.4094830e+02 -5.7219014e+03]
+2024-08-22 10:41:06,175 INFO ===> New TaichiEnv created.
+2024-08-22 10:41:06,175 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:41:56,527 INFO ===> CPU memory occupied after forward-backward: 1.1339958733720248 %
+2024-08-22 10:41:56,588 INFO ===> GPU memory after forward-backward: [2006, 24188]
+2024-08-22 10:41:56,588 INFO ===> Gradients:
+2024-08-22 10:41:56,589 INFO Gradient of E: -0.007842527702450752
+2024-08-22 10:41:56,600 INFO Gradient of nu: -29400.666015625
+2024-08-22 10:41:56,609 INFO Gradient of rho: 19.109664916992188
+2024-08-22 10:41:56,617 INFO Gradient of sand angle: -1427.58984375
+2024-08-22 10:41:56,624 INFO Gradient of manipulator friction: 528.73095703125
+2024-08-22 10:41:56,632 INFO Gradient of container friction: 20774.337890625
+2024-08-22 10:41:56,633 INFO ===> Epoch 66, grad: [-7.8425277e-03 -2.9400666e+04  1.9109665e+01 -1.4275898e+03
+  5.2873096e+02  2.0774338e+04]
+2024-08-22 10:41:57,102 INFO ===> New TaichiEnv created.
+2024-08-22 10:41:57,102 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:42:46,921 INFO ===> CPU memory occupied after forward-backward: 1.138320543289088 %
+2024-08-22 10:42:47,029 INFO ===> GPU memory after forward-backward: [2004, 24188]
+2024-08-22 10:42:47,029 INFO ===> Gradients:
+2024-08-22 10:42:47,031 INFO Gradient of E: 0.020124992355704308
+2024-08-22 10:42:47,042 INFO Gradient of nu: 15532.8984375
+2024-08-22 10:42:47,051 INFO Gradient of rho: -3.324521064758301
+2024-08-22 10:42:47,059 INFO Gradient of sand angle: 425.9681091308594
+2024-08-22 10:42:47,066 INFO Gradient of manipulator friction: -885.7960205078125
+2024-08-22 10:42:47,074 INFO Gradient of container friction: -1287.8121337890625
+2024-08-22 10:42:47,075 INFO ===> Epoch 67, grad: [ 2.0124992e-02  1.5532898e+04 -3.3245211e+00  4.2596811e+02
+ -8.8579602e+02 -1.2878121e+03]
+2024-08-22 10:42:47,517 INFO ===> New TaichiEnv created.
+2024-08-22 10:42:47,517 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:43:37,587 INFO ===> CPU memory occupied after forward-backward: 1.1299612357422366 %
+2024-08-22 10:43:37,677 INFO ===> GPU memory after forward-backward: [2004, 24188]
+2024-08-22 10:43:37,677 INFO ===> Gradients:
+2024-08-22 10:43:37,678 INFO Gradient of E: -0.013644060119986534
+2024-08-22 10:43:37,689 INFO Gradient of nu: -3998.171875
+2024-08-22 10:43:37,697 INFO Gradient of rho: -6.141536712646484
+2024-08-22 10:43:37,705 INFO Gradient of sand angle: -352.1003723144531
+2024-08-22 10:43:37,713 INFO Gradient of manipulator friction: 1150.6143798828125
+2024-08-22 10:43:37,720 INFO Gradient of container friction: -42855.4609375
+2024-08-22 10:43:37,721 INFO ===> Epoch 68, grad: [-1.3644060e-02 -3.9981719e+03 -6.1415367e+00 -3.5210037e+02
+  1.1506144e+03 -4.2855461e+04]
+2024-08-22 10:43:38,124 INFO ===> New TaichiEnv created.
+2024-08-22 10:43:38,124 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:44:28,177 INFO ===> CPU memory occupied after forward-backward: 1.1454027976757388 %
+2024-08-22 10:44:28,240 INFO ===> GPU memory after forward-backward: [2002, 24188]
+2024-08-22 10:44:28,240 INFO ===> Gradients:
+2024-08-22 10:44:28,242 INFO Gradient of E: -0.022801660001277924
+2024-08-22 10:44:28,254 INFO Gradient of nu: 25219.56640625
+2024-08-22 10:44:28,262 INFO Gradient of rho: -11.28500747680664
+2024-08-22 10:44:28,270 INFO Gradient of sand angle: 317.9163513183594
+2024-08-22 10:44:28,278 INFO Gradient of manipulator friction: -3525.125732421875
+2024-08-22 10:44:28,285 INFO Gradient of container friction: 21745.130859375
+2024-08-22 10:44:28,286 INFO ===> Epoch 69, grad: [-2.2801660e-02  2.5219566e+04 -1.1285007e+01  3.1791635e+02
+ -3.5251257e+03  2.1745131e+04]
+2024-08-22 10:44:28,691 INFO ===> New TaichiEnv created.
+2024-08-22 10:44:28,692 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:45:18,330 INFO ===> CPU memory occupied after forward-backward: 1.1491580324738067 %
+2024-08-22 10:45:18,408 INFO ===> GPU memory after forward-backward: [2000, 24188]
+2024-08-22 10:45:18,408 INFO ===> Gradients:
+2024-08-22 10:45:18,410 INFO Gradient of E: -0.0020875788759440184
+2024-08-22 10:45:18,421 INFO Gradient of nu: 44452.08984375
+2024-08-22 10:45:18,429 INFO Gradient of rho: 16.390695571899414
+2024-08-22 10:45:18,437 INFO Gradient of sand angle: 1133.435546875
+2024-08-22 10:45:18,445 INFO Gradient of manipulator friction: 3406.214599609375
+2024-08-22 10:45:18,453 INFO Gradient of container friction: 992.8623657226562
+2024-08-22 10:45:18,454 INFO ===> Epoch 70, grad: [-2.0875789e-03  4.4452090e+04  1.6390696e+01  1.1334355e+03
+  3.4062146e+03  9.9286237e+02]
+2024-08-22 10:45:18,859 INFO ===> New TaichiEnv created.
+2024-08-22 10:45:18,859 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:46:07,824 INFO ===> CPU memory occupied after forward-backward: 1.1529967844226603 %
+2024-08-22 10:46:07,910 INFO ===> GPU memory after forward-backward: [2000, 24188]
+2024-08-22 10:46:07,911 INFO ===> Gradients:
+2024-08-22 10:46:07,912 INFO Gradient of E: 0.0032774885185062885
+2024-08-22 10:46:07,924 INFO Gradient of nu: 10856.0244140625
+2024-08-22 10:46:07,932 INFO Gradient of rho: -7.2768120765686035
+2024-08-22 10:46:07,940 INFO Gradient of sand angle: 1338.081298828125
+2024-08-22 10:46:07,947 INFO Gradient of manipulator friction: -764.272705078125
+2024-08-22 10:46:07,955 INFO Gradient of container friction: -32332.591796875
+2024-08-22 10:46:07,956 INFO ===> Epoch 71, grad: [ 3.2774885e-03  1.0856024e+04 -7.2768121e+00  1.3380813e+03
+ -7.6427271e+02 -3.2332592e+04]
+2024-08-22 10:46:08,424 INFO ===> New TaichiEnv created.
+2024-08-22 10:46:08,425 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:46:59,003 INFO ===> CPU memory occupied after forward-backward: 1.1564468019969467 %
+2024-08-22 10:46:59,090 INFO ===> GPU memory after forward-backward: [1998, 24188]
+2024-08-22 10:46:59,090 INFO ===> Gradients:
+2024-08-22 10:46:59,092 INFO Gradient of E: 0.005630496423691511
+2024-08-22 10:46:59,103 INFO Gradient of nu: 13849.6982421875
+2024-08-22 10:46:59,111 INFO Gradient of rho: 0.7516463994979858
+2024-08-22 10:46:59,119 INFO Gradient of sand angle: 1752.5648193359375
+2024-08-22 10:46:59,127 INFO Gradient of manipulator friction: -1732.05078125
+2024-08-22 10:46:59,134 INFO Gradient of container friction: 13527.732421875
+2024-08-22 10:46:59,136 INFO ===> Epoch 72, grad: [ 5.6304964e-03  1.3849698e+04  7.5164640e-01  1.7525648e+03
+ -1.7320508e+03  1.3527732e+04]
+2024-08-22 10:46:59,534 INFO ===> New TaichiEnv created.
+2024-08-22 10:46:59,534 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:47:48,736 INFO ===> CPU memory occupied after forward-backward: 1.1602642950346913 %
+2024-08-22 10:47:48,796 INFO ===> GPU memory after forward-backward: [1998, 24188]
+2024-08-22 10:47:48,796 INFO ===> Gradients:
+2024-08-22 10:47:48,798 INFO Gradient of E: 0.03916947543621063
+2024-08-22 10:47:48,809 INFO Gradient of nu: 106283.6171875
+2024-08-22 10:47:48,818 INFO Gradient of rho: 54.84379196166992
+2024-08-22 10:47:48,826 INFO Gradient of sand angle: 2555.18896484375
+2024-08-22 10:47:48,833 INFO Gradient of manipulator friction: -121.44435119628906
+2024-08-22 10:47:48,841 INFO Gradient of container friction: -9991.7880859375
+2024-08-22 10:47:48,842 INFO ===> Epoch 73, grad: [ 3.9169475e-02  1.0628362e+05  5.4843792e+01  2.5551890e+03
+ -1.2144435e+02 -9.9917881e+03]
+2024-08-22 10:47:49,244 INFO ===> New TaichiEnv created.
+2024-08-22 10:47:49,244 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:48:39,294 INFO ===> CPU memory occupied after forward-backward: 1.1648516643533176 %
+2024-08-22 10:48:39,356 INFO ===> GPU memory after forward-backward: [1996, 24188]
+2024-08-22 10:48:39,356 INFO ===> Gradients:
+2024-08-22 10:48:39,357 INFO Gradient of E: -0.002494196640327573
+2024-08-22 10:48:39,369 INFO Gradient of nu: -17609.201171875
+2024-08-22 10:48:39,377 INFO Gradient of rho: 20.66582679748535
+2024-08-22 10:48:39,385 INFO Gradient of sand angle: 443.6022033691406
+2024-08-22 10:48:39,392 INFO Gradient of manipulator friction: -953.56396484375
+2024-08-22 10:48:39,400 INFO Gradient of container friction: 15371.076171875
+2024-08-22 10:48:39,401 INFO ===> Epoch 74, grad: [-2.4941966e-03 -1.7609201e+04  2.0665827e+01  4.4360220e+02
+ -9.5356396e+02  1.5371076e+04]
+2024-08-22 10:48:39,796 INFO ===> New TaichiEnv created.
+2024-08-22 10:48:39,796 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:49:30,204 INFO ===> CPU memory occupied after forward-backward: 1.156370877314414 %
+2024-08-22 10:49:30,265 INFO ===> GPU memory after forward-backward: [1994, 24188]
+2024-08-22 10:49:30,265 INFO ===> Gradients:
+2024-08-22 10:49:30,267 INFO Gradient of E: -0.0220673605799675
+2024-08-22 10:49:30,278 INFO Gradient of nu: 6175.6923828125
+2024-08-22 10:49:30,286 INFO Gradient of rho: -2.4850847721099854
+2024-08-22 10:49:30,294 INFO Gradient of sand angle: -147.29977416992188
+2024-08-22 10:49:30,301 INFO Gradient of manipulator friction: 4196.98193359375
+2024-08-22 10:49:30,309 INFO Gradient of container friction: 37007.640625
+2024-08-22 10:49:30,310 INFO ===> Epoch 75, grad: [-2.2067361e-02  6.1756924e+03 -2.4850848e+00 -1.4729977e+02
+  4.1969819e+03  3.7007641e+04]
+2024-08-22 10:49:30,710 INFO ===> New TaichiEnv created.
+2024-08-22 10:49:30,710 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:50:21,085 INFO ===> CPU memory occupied after forward-backward: 1.1722360989764486 %
+2024-08-22 10:50:21,147 INFO ===> GPU memory after forward-backward: [1994, 24188]
+2024-08-22 10:50:21,148 INFO ===> Gradients:
+2024-08-22 10:50:21,149 INFO Gradient of E: 0.02504960633814335
+2024-08-22 10:50:21,161 INFO Gradient of nu: 50926.44140625
+2024-08-22 10:50:21,169 INFO Gradient of rho: -44.614871978759766
+2024-08-22 10:50:21,177 INFO Gradient of sand angle: -1727.40966796875
+2024-08-22 10:50:21,185 INFO Gradient of manipulator friction: 5639.6240234375
+2024-08-22 10:50:21,193 INFO Gradient of container friction: 17519.9375
+2024-08-22 10:50:21,194 INFO ===> Epoch 76, grad: [ 2.5049606e-02  5.0926441e+04 -4.4614872e+01 -1.7274097e+03
+  5.6396240e+03  1.7519938e+04]
+2024-08-22 10:50:21,604 INFO ===> New TaichiEnv created.
+2024-08-22 10:50:21,604 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:51:11,553 INFO ===> CPU memory occupied after forward-backward: 1.1756861165507348 %
+2024-08-22 10:51:11,641 INFO ===> GPU memory after forward-backward: [1992, 24188]
+2024-08-22 10:51:11,641 INFO ===> Gradients:
+2024-08-22 10:51:11,642 INFO Gradient of E: 0.034944985061883926
+2024-08-22 10:51:11,654 INFO Gradient of nu: 25660.923828125
+2024-08-22 10:51:11,662 INFO Gradient of rho: 5.672443389892578
+2024-08-22 10:51:11,670 INFO Gradient of sand angle: -972.6485595703125
+2024-08-22 10:51:11,678 INFO Gradient of manipulator friction: 1779.0205078125
+2024-08-22 10:51:11,685 INFO Gradient of container friction: 252.54739379882812
+2024-08-22 10:51:11,686 INFO ===> Epoch 77, grad: [ 3.4944985e-02  2.5660924e+04  5.6724434e+00 -9.7264856e+02
+  1.7790205e+03  2.5254739e+02]
+2024-08-22 10:51:12,084 INFO ===> New TaichiEnv created.
+2024-08-22 10:51:12,084 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:52:01,774 INFO ===> CPU memory occupied after forward-backward: 1.1795476459043486 %
+2024-08-22 10:52:01,840 INFO ===> GPU memory after forward-backward: [1990, 24188]
+2024-08-22 10:52:01,841 INFO ===> Gradients:
+2024-08-22 10:52:01,842 INFO Gradient of E: 0.02441604807972908
+2024-08-22 10:52:01,853 INFO Gradient of nu: -43469.48828125
+2024-08-22 10:52:01,862 INFO Gradient of rho: -37.62590026855469
+2024-08-22 10:52:01,870 INFO Gradient of sand angle: 306.542724609375
+2024-08-22 10:52:01,877 INFO Gradient of manipulator friction: -2868.874267578125
+2024-08-22 10:52:01,885 INFO Gradient of container friction: -52550.58984375
+2024-08-22 10:52:01,886 INFO ===> Epoch 78, grad: [ 2.4416048e-02 -4.3469488e+04 -3.7625900e+01  3.0654272e+02
+ -2.8688743e+03 -5.2550590e+04]
+2024-08-22 10:52:02,292 INFO ===> New TaichiEnv created.
+2024-08-22 10:52:02,292 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:52:51,621 INFO ===> CPU memory occupied after forward-backward: 1.1711427835479777 %
+2024-08-22 10:52:51,683 INFO ===> GPU memory after forward-backward: [1990, 24188]
+2024-08-22 10:52:51,684 INFO ===> Gradients:
+2024-08-22 10:52:51,685 INFO Gradient of E: 0.0007228475296869874
+2024-08-22 10:52:51,696 INFO Gradient of nu: -19001.40234375
+2024-08-22 10:52:51,705 INFO Gradient of rho: -44.96629333496094
+2024-08-22 10:52:51,713 INFO Gradient of sand angle: -863.5623779296875
+2024-08-22 10:52:51,721 INFO Gradient of manipulator friction: -617.9256591796875
+2024-08-22 10:52:51,728 INFO Gradient of container friction: 3516.0703125
+2024-08-22 10:52:51,729 INFO ===> Epoch 79, grad: [ 7.2284753e-04 -1.9001402e+04 -4.4966293e+01 -8.6356238e+02
+ -6.1792566e+02  3.5160703e+03]
+2024-08-22 10:52:52,129 INFO ===> New TaichiEnv created.
+2024-08-22 10:52:52,129 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:53:41,886 INFO ===> CPU memory occupied after forward-backward: 1.1865706790386241 %
+2024-08-22 10:53:41,949 INFO ===> GPU memory after forward-backward: [1988, 24188]
+2024-08-22 10:53:41,949 INFO ===> Gradients:
+2024-08-22 10:53:41,951 INFO Gradient of E: 0.013309403322637081
+2024-08-22 10:53:41,962 INFO Gradient of nu: -28763.564453125
+2024-08-22 10:53:41,971 INFO Gradient of rho: 4.732332706451416
+2024-08-22 10:53:41,979 INFO Gradient of sand angle: -919.913330078125
+2024-08-22 10:53:41,987 INFO Gradient of manipulator friction: -903.6815795898438
+2024-08-22 10:53:41,994 INFO Gradient of container friction: 3437.840576171875
+2024-08-22 10:53:41,995 INFO ===> Epoch 80, grad: [ 1.3309403e-02 -2.8763564e+04  4.7323327e+00 -9.1991333e+02
+ -9.0368158e+02  3.4378406e+03]
+2024-08-22 10:53:42,398 INFO ===> New TaichiEnv created.
+2024-08-22 10:53:42,399 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:54:32,988 INFO ===> CPU memory occupied after forward-backward: 1.1903927275573207 %
+2024-08-22 10:54:33,051 INFO ===> GPU memory after forward-backward: [1988, 24188]
+2024-08-22 10:54:33,052 INFO ===> Gradients:
+2024-08-22 10:54:33,053 INFO Gradient of E: 0.003998946398496628
+2024-08-22 10:54:33,064 INFO Gradient of nu: -3844.399169921875
+2024-08-22 10:54:33,073 INFO Gradient of rho: 47.39772415161133
+2024-08-22 10:54:33,081 INFO Gradient of sand angle: 1861.45556640625
+2024-08-22 10:54:33,088 INFO Gradient of manipulator friction: -1261.5390625
+2024-08-22 10:54:33,096 INFO Gradient of container friction: 8500.1533203125
+2024-08-22 10:54:33,097 INFO ===> Epoch 81, grad: [ 3.9989464e-03 -3.8443992e+03  4.7397724e+01  1.8614556e+03
+ -1.2615391e+03  8.5001533e+03]
+2024-08-22 10:54:33,492 INFO ===> New TaichiEnv created.
+2024-08-22 10:54:33,493 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:55:24,258 INFO ===> CPU memory occupied after forward-backward: 1.1942314795061744 %
+2024-08-22 10:55:24,340 INFO ===> GPU memory after forward-backward: [1986, 24188]
+2024-08-22 10:55:24,340 INFO ===> Gradients:
+2024-08-22 10:55:24,342 INFO Gradient of E: 0.012739897705614567
+2024-08-22 10:55:24,353 INFO Gradient of nu: 19183.392578125
+2024-08-22 10:55:24,362 INFO Gradient of rho: 12.008963584899902
+2024-08-22 10:55:24,369 INFO Gradient of sand angle: 1327.53369140625
+2024-08-22 10:55:24,380 INFO Gradient of manipulator friction: -1068.239013671875
+2024-08-22 10:55:24,388 INFO Gradient of container friction: -6048.2685546875
+2024-08-22 10:55:24,389 INFO ===> Epoch 82, grad: [ 1.2739898e-02  1.9183393e+04  1.2008964e+01  1.3275337e+03
+ -1.0682390e+03 -6.0482686e+03]
+2024-08-22 10:55:24,785 INFO ===> New TaichiEnv created.
+2024-08-22 10:55:24,786 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:56:14,712 INFO ===> CPU memory occupied after forward-backward: 1.1981248972264515 %
+2024-08-22 10:56:14,777 INFO ===> GPU memory after forward-backward: [1984, 24188]
+2024-08-22 10:56:14,778 INFO ===> Gradients:
+2024-08-22 10:56:14,779 INFO Gradient of E: 0.026133082807064056
+2024-08-22 10:56:14,791 INFO Gradient of nu: -5033.17138671875
+2024-08-22 10:56:14,800 INFO Gradient of rho: -2.1997151374816895
+2024-08-22 10:56:14,808 INFO Gradient of sand angle: 963.4389038085938
+2024-08-22 10:56:14,816 INFO Gradient of manipulator friction: -2563.625
+2024-08-22 10:56:14,824 INFO Gradient of container friction: -20045.921875
+2024-08-22 10:56:14,826 INFO ===> Epoch 83, grad: [ 2.6133083e-02 -5.0331714e+03 -2.1997151e+00  9.6343890e+02
+ -2.5636250e+03 -2.0045922e+04]
+2024-08-22 10:56:15,229 INFO ===> New TaichiEnv created.
+2024-08-22 10:56:15,229 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:57:04,846 INFO ===> CPU memory occupied after forward-backward: 1.2015976922054976 %
+2024-08-22 10:57:04,908 INFO ===> GPU memory after forward-backward: [1984, 24188]
+2024-08-22 10:57:04,908 INFO ===> Gradients:
+2024-08-22 10:57:04,910 INFO Gradient of E: 0.05073849484324455
+2024-08-22 10:57:04,920 INFO Gradient of nu: 100769.3046875
+2024-08-22 10:57:04,929 INFO Gradient of rho: -29.344789505004883
+2024-08-22 10:57:04,936 INFO Gradient of sand angle: -1778.518310546875
+2024-08-22 10:57:04,944 INFO Gradient of manipulator friction: 4534.1875
+2024-08-22 10:57:04,952 INFO Gradient of container friction: -6861.5302734375
+2024-08-22 10:57:04,953 INFO ===> Epoch 84, grad: [ 5.07384948e-02  1.00769305e+05 -2.93447895e+01 -1.77851831e+03
+  4.53418750e+03 -6.86153027e+03]
+2024-08-22 10:57:05,351 INFO ===> New TaichiEnv created.
+2024-08-22 10:57:05,351 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:57:54,995 INFO ===> CPU memory occupied after forward-backward: 1.2057158469860718 %
+2024-08-22 10:57:55,082 INFO ===> GPU memory after forward-backward: [1982, 24188]
+2024-08-22 10:57:55,082 INFO ===> Gradients:
+2024-08-22 10:57:55,083 INFO Gradient of E: -0.010925703682005405
+2024-08-22 10:57:55,095 INFO Gradient of nu: -5216.462890625
+2024-08-22 10:57:55,104 INFO Gradient of rho: -12.620207786560059
+2024-08-22 10:57:55,112 INFO Gradient of sand angle: -1589.72705078125
+2024-08-22 10:57:55,119 INFO Gradient of manipulator friction: 7912.68017578125
+2024-08-22 10:57:55,127 INFO Gradient of container friction: -5944.9892578125
+2024-08-22 10:57:55,128 INFO ===> Epoch 85, grad: [-1.0925704e-02 -5.2164629e+03 -1.2620208e+01 -1.5897271e+03
+  7.9126802e+03 -5.9449893e+03]
+2024-08-22 10:57:55,532 INFO ===> New TaichiEnv created.
+2024-08-22 10:57:55,532 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:58:44,688 INFO ===> CPU memory occupied after forward-backward: 1.2099433333094929 %
+2024-08-22 10:58:44,768 INFO ===> GPU memory after forward-backward: [1980, 8346]
+2024-08-22 10:58:44,768 INFO ===> Gradients:
+2024-08-22 10:58:44,770 INFO Gradient of E: 0.029670050367712975
+2024-08-22 10:58:44,781 INFO Gradient of nu: 20646.294921875
+2024-08-22 10:58:44,791 INFO Gradient of rho: 43.04850387573242
+2024-08-22 10:58:44,799 INFO Gradient of sand angle: 3007.850830078125
+2024-08-22 10:58:44,807 INFO Gradient of manipulator friction: -2257.00244140625
+2024-08-22 10:58:44,815 INFO Gradient of container friction: -3058.65234375
+2024-08-22 10:58:44,816 INFO ===> Epoch 86, grad: [ 2.9670050e-02  2.0646295e+04  4.3048504e+01  3.0078508e+03
+ -2.2570024e+03 -3.0586523e+03]
+2024-08-22 10:58:45,267 INFO ===> New TaichiEnv created.
+2024-08-22 10:58:45,267 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 10:59:36,750 INFO ===> CPU memory occupied after forward-backward: 1.2135452002488447 %
+2024-08-22 10:59:36,814 INFO ===> GPU memory after forward-backward: [1980, 7710]
+2024-08-22 10:59:36,814 INFO ===> Gradients:
+2024-08-22 10:59:36,816 INFO Gradient of E: 0.029612483456730843
+2024-08-22 10:59:36,827 INFO Gradient of nu: 26619.017578125
+2024-08-22 10:59:36,835 INFO Gradient of rho: 30.004138946533203
+2024-08-22 10:59:36,843 INFO Gradient of sand angle: -82.21654510498047
+2024-08-22 10:59:36,856 INFO Gradient of manipulator friction: 10835.7880859375
+2024-08-22 10:59:36,864 INFO Gradient of container friction: 11720.6142578125
+2024-08-22 10:59:36,865 INFO ===> Epoch 87, grad: [ 2.9612483e-02  2.6619018e+04  3.0004139e+01 -8.2216545e+01
+  1.0835788e+04  1.1720614e+04]
+2024-08-22 10:59:37,269 INFO ===> New TaichiEnv created.
+2024-08-22 10:59:37,270 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 11:00:29,562 INFO ===> CPU memory occupied after forward-backward: 1.204485867129042 %
+2024-08-22 11:00:29,647 INFO ===> GPU memory after forward-backward: [1978, 7568]
+2024-08-22 11:00:29,647 INFO ===> Gradients:
+2024-08-22 11:00:29,649 INFO Gradient of E: -0.013618167489767075
+2024-08-22 11:00:29,660 INFO Gradient of nu: -17862.62890625
+2024-08-22 11:00:29,670 INFO Gradient of rho: 5.105475902557373
+2024-08-22 11:00:29,678 INFO Gradient of sand angle: -691.203125
+2024-08-22 11:00:29,685 INFO Gradient of manipulator friction: 2649.08447265625
+2024-08-22 11:00:29,693 INFO Gradient of container friction: 4867.77197265625
+2024-08-22 11:00:29,694 INFO ===> Epoch 88, grad: [-1.36181675e-02 -1.78626289e+04  5.10547590e+00 -6.91203125e+02
+  2.64908447e+03  4.86777197e+03]
+2024-08-22 11:00:30,090 INFO ===> New TaichiEnv created.
+2024-08-22 11:00:30,090 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-22 11:01:20,353 INFO ===> CPU memory occupied after forward-backward: 1.2205150861053473 %
+2024-08-22 11:01:20,415 INFO ===> GPU memory after forward-backward: [1978, 7566]
+2024-08-22 11:01:20,415 INFO ===> Gradients:
+2024-08-22 11:01:20,417 INFO Gradient of E: -0.014483509585261345
+2024-08-22 11:01:20,428 INFO Gradient of nu: 36139.41015625
+2024-08-22 11:01:20,437 INFO Gradient of rho: 38.70738220214844
+2024-08-22 11:01:20,445 INFO Gradient of sand angle: -200.95498657226562
+2024-08-22 11:01:20,453 INFO Gradient of manipulator friction: -649.7376098632812
+2024-08-22 11:01:20,460 INFO Gradient of container friction: -3690.362548828125
+2024-08-22 11:01:20,462 INFO ===> Epoch 89, grad: [-1.4483510e-02  3.6139410e+04  3.8707382e+01 -2.0095499e+02
+ -6.4973761e+02 -3.6903625e+03]
+2024-08-22 11:01:20,858 INFO ===> New TaichiEnv created.
+2024-08-22 11:01:20,858 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
