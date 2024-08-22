@@ -32,22 +32,22 @@ with open(os.path.join(data_path, 'zivid_cam_extrinsics_fine_tuned.yml'), 'r') a
 transform_world_to_cam = cam_extrinsics['matrix']
 transform_cam_to_world = np.linalg.inv(transform_world_to_cam)
 
-task = 'task'
-pcd_id = 0
+task = 'sys_id'
+pcd_id = 1
 test = True
 frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
 pcd_path = os.path.join(data_path, f'{task}_target_pcds', f'pcd_{pcd_id}.ply')
 pcd_in_cam_frame = o3d.io.read_point_cloud(pcd_path)
-o3d.visualization.draw_geometries([
-    frame, pcd_in_cam_frame,
-], width=800, height=600)
-
+# o3d.visualization.draw_geometries([
+#     frame, pcd_in_cam_frame,
+# ], width=800, height=600)
+#
 pcd_in_world_frame = pcd_in_cam_frame.transform(transform_world_to_cam)
-o3d.visualization.draw_geometries([
-    frame, table_surface, soil_box_frame_in_world,
-    workspace_bounding_box,
-    pcd_in_world_frame,
-], width=800, height=600)
+# o3d.visualization.draw_geometries([
+#     frame, table_surface, soil_box_frame_in_world,
+#     workspace_bounding_box,
+#     pcd_in_world_frame,
+# ], width=800, height=600)
 if not test:
     crop_pcd_in_world_frame = pcd_in_world_frame.crop(workspace_bounding_box)
     points = np.asarray(crop_pcd_in_world_frame.points)
@@ -62,6 +62,8 @@ else:
 cam_frame_in_world = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
 cam_frame_in_world.transform(transform_world_to_cam)
 
+crop_pcd_norm_z_aligned = crop_pcd_norm_z_aligned.voxel_down_sample(0.007)
+print(crop_pcd_norm_z_aligned)
 o3d.visualization.draw_geometries([
     frame, cam_frame_in_world,
     crop_pcd_norm_z_aligned,

@@ -30,11 +30,6 @@ cam_cfg = {
     'res': (800, 800),
     'pcd_gen_res': 150
 }
-SOIL_HEIGHT = 0.095
-LINEAR_VELOCITY = 0.1  # m/s
-ANGULAR_VELOCITY = 0.5  # rad/s
-DT_GLOBAL = 0.01  # sec
-
 
 def main(args):
     result_path = os.path.join(script_path, '..', 'log-sys_id')
@@ -76,7 +71,7 @@ def main(args):
         'horizon': trajectory.shape[0],
         'dt_global': 0.01,
         'n_substeps': args['n_substep'],
-        'agent_init_pos': (0.2, 0.2, 0.2),
+        'agent_init_pos': (0.2, 0.2, 0.205),
         'agent_init_euler': (0, 180, 90),
     }
     loss_cfg = {
