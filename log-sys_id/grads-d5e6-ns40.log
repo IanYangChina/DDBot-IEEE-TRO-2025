@@ -1,0 +1,36 @@
+2024-08-23 10:25:52,601 INFO ===> Start grad computation at:, 2024-8-23 10:25:52
+2024-08-23 10:25:52,601 INFO ===> Particle density: 5e6, n_substep: 40
+2024-08-23 10:25:52,845 INFO ===> New TaichiEnv created.
+2024-08-23 10:25:52,845 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 40, dt_sub = 0.00025
+2024-08-23 10:25:52,979 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-23 10:25:53,125 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-23 10:27:35,485 INFO ===> CPU memory occupied after forward-backward: 0.8703975235676669 %
+2024-08-23 10:27:35,543 INFO ===> GPU memory after forward-backward: [14376, 7554]
+2024-08-23 10:27:35,543 INFO ===> Gradients:
+2024-08-23 10:27:35,545 INFO Gradient of E: 0.02807430736720562
+2024-08-23 10:27:35,557 INFO Gradient of nu: 49465.7890625
+2024-08-23 10:27:35,565 INFO Gradient of rho: 52.840576171875
+2024-08-23 10:27:35,573 INFO Gradient of sand angle: 205.99444580078125
+2024-08-23 10:27:35,581 INFO Gradient of manipulator friction: -2012.796630859375
+2024-08-23 10:27:35,591 INFO Gradient of container friction: 872.0853881835938
+2024-08-23 10:27:35,592 INFO ===> Epoch 0, grad: [ 2.8074307e-02  4.9465789e+04  5.2840576e+01  2.0599445e+02
+ -2.0127966e+03  8.7208539e+02]
+2024-08-23 10:27:36,033 INFO ===> New TaichiEnv created.
+2024-08-23 10:27:36,033 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 40, dt_sub = 0.00025
+2024-08-23 10:27:36,056 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0034s
+2024-08-23 10:27:36,202 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0008s
+2024-08-23 10:28:57,442 INFO ===> CPU memory occupied after forward-backward: 0.8711081785961731 %
+2024-08-23 10:28:57,501 INFO ===> GPU memory after forward-backward: [14374, 7552]
+2024-08-23 10:28:57,501 INFO ===> Gradients:
+2024-08-23 10:28:57,502 INFO Gradient of E: -0.01735248789191246
+2024-08-23 10:28:57,512 INFO Gradient of nu: -3060.912353515625
+2024-08-23 10:28:57,521 INFO Gradient of rho: -1.4796394109725952
+2024-08-23 10:28:57,529 INFO Gradient of sand angle: -1366.46630859375
+2024-08-23 10:28:57,536 INFO Gradient of manipulator friction: 2251.83642578125
+2024-08-23 10:28:57,544 INFO Gradient of container friction: 10532.06640625
+2024-08-23 10:28:57,545 INFO ===> Epoch 1, grad: [-1.7352488e-02 -3.0609124e+03 -1.4796394e+00 -1.3664663e+03
+  2.2518364e+03  1.0532066e+04]
+2024-08-23 10:28:57,832 INFO ===> New TaichiEnv created.
+2024-08-23 10:28:57,832 INFO ===> Specifications: horizon = 347, dt = 0.01, n_substeps = 40, dt_sub = 0.00025
+2024-08-23 10:28:57,853 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0031s
+2024-08-23 10:28:57,994 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
