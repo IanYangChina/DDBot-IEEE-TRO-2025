@@ -11,7 +11,7 @@ script_path = os.path.dirname(os.path.realpath(__file__))
 
 from doma.optimiser.adam import Adam
 from doma.envs.planting_env import make_env
-from doma.engine.utils.misc import set_parameters
+from doma.engine.utils.misc import set_parameters, reset_logging
 from doma.engine.configs.macros import DTYPE_NP, DTYPE_TI, SAND
 cam_cfg = {
     'pos': (0.2, 1.2, 0.9),
@@ -74,12 +74,12 @@ def main(args):
     else:
         seeds = [0, 1, 2, 4, 5]
     training_config = {
-        'lr_E': 2e5,
-        'lr_nu': 0.1,
-        'lr_rho': 1e3,
-        'lr_sand_angle': 10,
-        'lr_manipulator_friction': 1,
-        'lr_container_friction': 0.5,
+        'lr_E': 5e4,
+        'lr_nu': 0.05,
+        'lr_rho': 1e2,
+        'lr_sand_angle': 5,
+        'lr_manipulator_friction': 0.5,
+        'lr_container_friction': 0.1,
         'n_epoch': n_epoch,
         'seeds': seeds,
     }
@@ -88,6 +88,7 @@ def main(args):
         log_dir = os.path.join(result_path, f'seed-{seed}')
         os.makedirs(log_dir, exist_ok=True)
 
+        reset_logging(logging)
         log_file_name = os.path.join(log_dir, 'optimisation.log')
         if os.path.isfile(log_file_name):
             filemode = "a"
@@ -109,8 +110,8 @@ def main(args):
         nu = np.asarray(np.random.uniform(nu_range[0], nu_range[1]), dtype=DTYPE_NP).reshape((1,))  # Poisson's ratio
         rho = np.asarray(np.random.uniform(rho_range[0], rho_range[1]), dtype=DTYPE_NP).reshape((1,))  # Density
         sand_angle = np.asarray(np.random.uniform(sand_angle_range[0], sand_angle_range[1]), dtype=DTYPE_NP).reshape((1,))  # Sand friction angle
-        # manipulator_friction = np.asarray(np.random.uniform(mf_range[0], mf_range[1]), dtype=DTYPE_NP).reshape((1,))  # Manipulator friction
-        # container_friction = np.asarray(np.random.uniform(mf_range[0], mf_range[1]), dtype=DTYPE_NP).reshape((1,))  # Container friction
+        manipulator_friction = np.asarray(np.random.uniform(mf_range[0], mf_range[1]), dtype=DTYPE_NP).reshape((1,))  # Manipulator friction
+        container_friction = np.asarray(np.random.uniform(mf_range[0], mf_range[1]), dtype=DTYPE_NP).reshape((1,))  # Container friction
         # Optimisers
         optim_E = Adam(parameters_shape=E.shape,
                        cfg={'lr': training_config['lr_E'], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
@@ -120,10 +121,10 @@ def main(args):
                          cfg={'lr': training_config['lr_rho'], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
         optim_sand_angle = Adam(parameters_shape=sand_angle.shape,
                                 cfg={'lr': training_config['lr_sand_angle'], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
-        # optim_manipulator_friction = Adam(parameters_shape=manipulator_friction.shape,
-        #                                   cfg={'lr': training_config['lr_manipulator_friction'], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
-        # optim_container_friction = Adam(parameters_shape=container_friction.shape,
-        #                                 cfg={'lr': training_config['lr_container_friction'], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+        optim_manipulator_friction = Adam(parameters_shape=manipulator_friction.shape,
+                                          cfg={'lr': training_config['lr_manipulator_friction'], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+        optim_container_friction = Adam(parameters_shape=container_friction.shape,
+                                        cfg={'lr': training_config['lr_container_friction'], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
 
         n_aborted_data = 0
         """===========Training==========="""
@@ -134,8 +135,8 @@ def main(args):
             ti.init(arch=backend, device_memory_GB=15, default_fp=ti.f32, fast_math=True, random_seed=args['seed'])
             env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
             set_parameters(mpm_env, material_id=SAND, e=E.copy(), nu=nu.copy(), rho=rho.copy(),
-                           manipulator_friction=0.5,
-                           container_friction=0.5,
+                           manipulator_friction=manipulator_friction.copy(),
+                           container_friction=container_friction.copy(),
                            sand_friction_angle=sand_angle.copy())
 
             """forward pass"""
@@ -158,9 +159,9 @@ def main(args):
             grad = np.array([mpm_env.simulator.particle_param.grad[SAND].E,
                              mpm_env.simulator.particle_param.grad[SAND].nu,
                              mpm_env.simulator.particle_param.grad[SAND].rho,
-                             mpm_env.simulator.system_param.grad[None].sand_friction_angle], dtype=DTYPE_NP)
-                             # mpm_env.simulator.system_param.grad[None].manipulator_friction,
-                             # mpm_env.simulator.system_param.grad[None].container_friction], dtype=DTYPE_NP)
+                             mpm_env.simulator.system_param.grad[None].sand_friction_angle,
+                             mpm_env.simulator.system_param.grad[None].manipulator_friction,
+                             mpm_env.simulator.system_param.grad[None].container_friction], dtype=DTYPE_NP)
 
             """Checking for nan, inf, and strange values"""
             abort = False
@@ -193,17 +194,17 @@ def main(args):
                 print(f'===> [Warning] Aborting epoch {n}......')
                 print(f'===> [Warning] Particle has nan or inf: {particle_has_naninf}')
                 print(f'===> [Warning] Strange loss or gradient.')
-                print(f'===> [Warning] E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}')
-                      # f'manipulator_friction: {manipulator_friction},'
-                      # f'container_friction: {container_friction}')
+                print(f'===> [Warning] E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}, '
+                      f'manipulator_friction: {manipulator_friction},'
+                      f'container_friction: {container_friction}')
                 print(f'===> [Warning] Grad: {grad}')
                 print(f'===> [Warning] Loss info: {loss_info}')
                 logging.error(f'===> [Warning] Aborting epoch: {n}')
                 logging.error(f'===> [Warning] Particle has nan or inf: {particle_has_naninf}')
                 logging.error(f'===> [Warning] Strange loss or gradient.')
-                logging.error(f'===> [Warning] E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}')
-                              # f'manipulator_friction: {manipulator_friction}'
-                              # f'container_friction: {container_friction}')
+                logging.error(f'===> [Warning] E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}, '
+                              f'manipulator_friction: {manipulator_friction}'
+                              f'container_friction: {container_friction}')
                 logging.error(f'===> [Warning] Grad: {grad}')
                 logging.error(f'===> [Warning] Loss info: {loss_info}')
                 n_aborted_data += 1
@@ -218,10 +219,10 @@ def main(args):
                 rho = np.clip(rho, rho_range[0], rho_range[1])
                 sand_angle = optim_sand_angle.step(sand_angle.copy(), grad[3])
                 sand_angle = np.clip(sand_angle, sand_angle_range[0], sand_angle_range[1])
-                # manipulator_friction = optim_manipulator_friction.step(manipulator_friction.copy(), grad[4])
-                # manipulator_friction = np.clip(manipulator_friction, mf_range[0], mf_range[1])
-                # container_friction = optim_container_friction.step(container_friction.copy(), grad[5])
-                # container_friction = np.clip(container_friction, mf_range[0], mf_range[1])
+                manipulator_friction = optim_manipulator_friction.step(manipulator_friction.copy(), grad[4])
+                manipulator_friction = np.clip(manipulator_friction, mf_range[0], mf_range[1])
+                container_friction = optim_container_friction.step(container_friction.copy(), grad[5])
+                container_friction = np.clip(container_friction, mf_range[0], mf_range[1])
 
                 print(f'=====> Epoch: {n}')
                 print(f'=====> Loss info: {loss_info}')
@@ -242,19 +243,19 @@ def main(args):
                 logger.add_scalar(tag='Grad/rho', scalar_value=grad[2], global_step=n)
                 logger.add_scalar(tag='Param/sand_angle', scalar_value=sand_angle, global_step=n)
                 logger.add_scalar(tag='Grad/sand_angle', scalar_value=grad[3], global_step=n)
-                # logger.add_scalar(tag='Param/manipulator_friction', scalar_value=manipulator_friction, global_step=n)
-                # logger.add_scalar(tag='Grad/manipulator_friction', scalar_value=grad[4], global_step=n)
-                # logger.add_scalar(tag='Param/container_friction', scalar_value=container_friction, global_step=n)
-                # logger.add_scalar(tag='Grad/container_friction', scalar_value=grad[5], global_step=n)
+                logger.add_scalar(tag='Param/manipulator_friction', scalar_value=manipulator_friction, global_step=n)
+                logger.add_scalar(tag='Grad/manipulator_friction', scalar_value=grad[4], global_step=n)
+                logger.add_scalar(tag='Param/container_friction', scalar_value=container_friction, global_step=n)
+                logger.add_scalar(tag='Grad/container_friction', scalar_value=grad[5], global_step=n)
 
                 mpm_env.simulator.clear_ckpt()
 
         logger.close()
         print('====> Finished training.')
         print('====> Final loss: ', loss_info)
-        print(f'====> Final params: E {E}, nu {nu}, rho {rho}, sand_angle {sand_angle}')
-              # f'manipulator_friction {manipulator_friction},'
-              # f'container_friction {container_friction}')
+        print(f'====> Final params: E {E}, nu {nu}, rho {rho}, sand_angle {sand_angle}, '
+              f'manipulator_friction {manipulator_friction},'
+              f'container_friction {container_friction}')
         end_time = dt.datetime.now()
         print(f"===> End system identification optimisation at:, {end_time.year}-{end_time.month}-{end_time.day} "
               f"{end_time.hour}:{end_time.minute}:{end_time.second}")
@@ -262,16 +263,16 @@ def main(args):
         print(f"===> Number of aborted data: {n_aborted_data}")
         logging.info('====> Finished training.')
         logging.info('====> Final loss: ', loss_info)
-        logging.info(f'====> Final params: E {E}, nu {nu}, rho {rho}, sand_angle {sand_angle}')
-                     # f'manipulator_friction {manipulator_friction},'
-                     # f'container_friction {container_friction}')
+        logging.info(f'====> Final params: E {E}, nu {nu}, rho {rho}, sand_angle {sand_angle}, '
+                     f'manipulator_friction {manipulator_friction},'
+                     f'container_friction {container_friction}')
         logging.info(f"===> End grad computation at:, {end_time.year}-{end_time.month}-{end_time.day} "
                      f"{end_time.hour}:{end_time.minute}:{end_time.second}")
         logging.info(f"===> Total time taken: {time() - start_time_sec} seconds")
         logging.info(f"===> Number of aborted data: {n_aborted_data}")
 
         np.save(os.path.join(log_dir, 'final_params.npy'),
-                np.array([E, nu, rho, sand_angle], dtype=DTYPE_NP))
+                np.array([E, nu, rho, sand_angle, manipulator_friction, container_friction], dtype=DTYPE_NP))
 
 
 if __name__ == '__main__':

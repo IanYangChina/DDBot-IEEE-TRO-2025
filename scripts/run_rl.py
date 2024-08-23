@@ -13,6 +13,7 @@ script_path = os.path.dirname(os.path.realpath(__file__))
 from doma.envs.planting_env import make_env
 from doma.engine.configs.macros import DTYPE_NP, SAND
 from doma.engine.loss_function.emd_loss_external import compute_emd_loss_external
+from doma.engine.utils.misc import set_parameters
 cam_cfg = {  # same camera pose as the real-world setup
     'pos': (0.2, 0.57, 0.6),
     'lookat': (0.2, 0.2, 0.03),
@@ -218,12 +219,13 @@ class FakeEnv(gym.Env):
 
 def main(arguments):
     seed = arguments['seed']
+    task_id = arguments['task_id']
     if arguments['demonstrate_skills']:
-        log_dir = os.path.join(script_path, '..', 'log-gpasac-ds', f'seed-{seed}')
+        log_dir = os.path.join(script_path, '..', 'log-gpasac-ds', f'task-{task_id}', f'seed-{seed}')
     elif arguments['planned_skills']:
-        log_dir = os.path.join(script_path, '..', 'log-gpasac-ps', f'seed-{seed}')
+        log_dir = os.path.join(script_path, '..', 'log-gpasac-ps', f'task-{task_id}', f'seed-{seed}')
     else:
-        log_dir = os.path.join(script_path, '..', 'log-gpasac', f'seed-{seed}')
+        log_dir = os.path.join(script_path, '..', 'log-gpasac', f'task-{task_id}', f'seed-{seed}')
     os.makedirs(log_dir, exist_ok=True)
     log_file_name = os.path.join(log_dir, 'optimisation.log')
     if os.path.isfile(log_file_name):
@@ -256,17 +258,19 @@ def main(arguments):
         'target_pcd_path': os.path.join(script_path, '..', 'data', 'task_target_pcds',
                                         'pcd_1_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
-        'down_sample_voxel_size': 0.01,
+        'down_sample_voxel_size': 0.007,
     }
 
     ti.reset()
     ti.init(arch=backend, device_memory_GB=5,
             default_fp=ti.f32, fast_math=True, random_seed=seed)
     env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
+    set_parameters(mpm_env, SAND, e=4e5, nu=0.4, rho=1600., sand_friction_angle=45.,
+                   manipulator_friction=0.5, container_friction=0.5)
     gym_env_config = {
         'mpm_env_init_state': init_state['state'],
         'pcd_file_path': os.path.join(script_path, '..', 'data', 'task_target_pcds',
-                                      'pcd_1_cropped_norm_z_aligned.ply'),
+                                      f'pcd_{task_id}_cropped_norm_z_aligned.ply'),
         'render_skill': arguments['env_test'],
         'horizon': arguments['n_skills'],
         'obs_mode': 'point_cloud',
@@ -279,26 +283,28 @@ def main(arguments):
     }
     gym_env = HybridActionEnv(mpm_env, gym_env_config, seed=arguments['seed'], logger=logging)
     if arguments['env_test']:
+        skill_plan = [0, 1, 0, 2]
         frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
-        gym_env.reset()
-        gym_env.render(mode='human')
-        done = False
-        while not done:
-            a0 = input("Enter action 0: ")
-            a1 = input("Enter action 1: ")
-            a2 = input("Enter action 2: ")
-            obs, reward, done, info = gym_env.step([int(a0), float(a1), float(a2)])
-            print(reward)
-            cloud_array = obs['observation']
-            obj_vec = o3d.utility.Vector3dVector(cloud_array)
-            obj_pcd = o3d.geometry.PointCloud(obj_vec)
-            cloud_array_2 = obs['desired_goal']
-            cloud_array_2[:, 0] += 0.3
-            obj_vec_2 = o3d.utility.Vector3dVector(cloud_array_2)
-            obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2)
-            o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2], width=800, height=600)
-
+        for n in range(3):
+            gym_env.reset()
             gym_env.render(mode='human')
+            done = False
+            while not done:
+                input('Press Enter to continue...')
+                a0 = skill_plan[gym_env.step_count]
+                a1 = gym_env.continuous_action_space.sample()
+                obs, reward, done, info = gym_env.step([a0, a1[0], a1[1]])
+                print(reward)
+                cloud_array = obs['observation']
+                obj_vec = o3d.utility.Vector3dVector(cloud_array)
+                obj_pcd = o3d.geometry.PointCloud(obj_vec)
+                cloud_array_2 = obs['desired_goal']
+                cloud_array_2[:, 0] += 0.3
+                obj_vec_2 = o3d.utility.Vector3dVector(cloud_array_2)
+                obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2)
+                o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2], width=800, height=600)
+
+                gym_env.render(mode='human')
     else:
         # gym_env = FakeEnv(gym_env_config, seed=seed, logger=logging)
 
@@ -323,6 +329,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--seed', dest='seed', type=int, default=0, help='seed')
     parser.add_argument('--backend', dest='backend', type=str, default='cuda', help='backend')
+    parser.add_argument('--task-id', dest='task_id', type=int, default=0, help='task id')
     parser.add_argument('--e-test', dest='env_test', action='store_true', default=True, help='testing gym env')
     parser.add_argument('--ptcl-d', dest='ptcl_density', type=float, default=2e7, help='particle density')
     parser.add_argument('--n-skills', dest='n_skills', type=int, default=4, help='number of skills')

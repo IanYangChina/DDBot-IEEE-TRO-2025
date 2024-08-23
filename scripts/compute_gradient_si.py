@@ -14,8 +14,8 @@ import psutil
 script_path = os.path.dirname(os.path.realpath(__file__))
 
 from doma.envs.planting_env import make_env
-from doma.engine.utils.misc import set_parameters
-from doma.engine.configs.macros import DTYPE_NP, DTYPE_TI, SAND, NUM_MATERIAL, CLAY
+from doma.engine.utils.misc import set_parameters, reset_logging
+from doma.engine.configs.macros import DTYPE_NP, SAND
 
 cam_cfg = {
     'pos': (0.2, 1.2, 0.9),
@@ -31,8 +31,10 @@ cam_cfg = {
     'pcd_gen_res': 150
 }
 
+
 def main(args):
     result_path = os.path.join(script_path, '..', 'log-sys_id')
+    os.makedirs(result_path, exist_ok=True)
     process = psutil.Process(os.getpid())
 
     if args['backend'] == 'opengl':
@@ -46,8 +48,11 @@ def main(args):
     if args['debug']:
         print('[Warning] Debug mode on, printing gradients.')
 
-    os.makedirs(result_path, exist_ok=True)
-    log_file_name = os.path.join(result_path, 'gradients.log')
+    d_str = args['ptcl_density']
+    ns = args['n_substep']
+
+    reset_logging(logging)
+    log_file_name = os.path.join(result_path, f'grads-d{d_str}-ns{ns}.log')
     if os.path.isfile(log_file_name):
         filemode = "a"
     else:
@@ -55,15 +60,12 @@ def main(args):
     logging.basicConfig(level=logging.NOTSET, filemode=filemode,
                         filename=log_file_name,
                         format="%(asctime)s %(levelname)s %(message)s")
-
-    d_str = args['ptcl_density']
-    ns = args['n_substep']
     grad_mean_file_name = os.path.join(result_path, f'grads-mean-d{d_str}-ns{ns}.npy')
     grad_std_file_name = os.path.join(result_path, f'grads-std-d{d_str}-ns{ns}.npy')
 
-    task_id = 0
+    sys_id_motion = 0
     trajectory = np.load(os.path.join(script_path, '..', 'data',
-                                      'moveit_trajectories', f'sys_id_sim_{task_id}_pos.npy'))
+                                      'moveit_trajectories', f'sys_id_sim_{sys_id_motion}_pos.npy'))
 
     env_cfg = {
         'p_density': float(args['ptcl_density']),
@@ -76,9 +78,9 @@ def main(args):
     }
     loss_cfg = {
         'target_pcd_height_map_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
-                                                   f'pcd_{task_id}_cropped_norm_z_aligned_height_map-res60-vdsize0.001.npy'),
+                                                   f'pcd_{sys_id_motion}_cropped_norm_z_aligned_height_map-res60-vdsize0.001.npy'),
         'target_pcd_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
-                                        f'pcd_{task_id}_cropped_norm_z_aligned.ply'),
+                                        f'pcd_{sys_id_motion}_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
         'down_sample_voxel_size': 0.007,
     }
@@ -87,7 +89,7 @@ def main(args):
     rho_range = (1600, 2300)
     nu_range = (0.2, 0.4)
     sand_angle_range = (30, 45)
-    mf_range = (0.01, 2.0)
+    mf_range = (0.05, 2.0)
     n_epoch = 100
 
     grads = []
@@ -96,8 +98,10 @@ def main(args):
     start_time = dt.datetime.now()
     print(f"===> Start grad computation at:, {start_time.year}-{start_time.month}-{start_time.day} "
           f"{start_time.hour}:{start_time.minute}:{start_time.second}")
+    print(f"===> Particle density: {d_str}, n_substep: {ns}")
     logging.info(f"===> Start grad computation at:, {start_time.year}-{start_time.month}-{start_time.day} "
                  f"{start_time.hour}:{start_time.minute}:{start_time.second}")
+    logging.info(f"===> Particle density: {d_str}, n_substep: {ns}")
     start_time_sec = time()
     for n in range(n_epoch):
         # Initialising parameters
@@ -120,6 +124,8 @@ def main(args):
                        manipulator_friction=manipulator_friction.copy(),
                        container_friction=container_friction.copy(),
                        sand_friction_angle=sand_angle.copy())
+        # set_parameters(mpm_env, SAND, e=4e5, nu=0.4, rho=1600., sand_friction_angle=45.,
+        #                manipulator_friction=0.5, container_friction=0.5)
         print(
             f'===> Created Env with {mpm_env.simulator.n_particles} particles, {mpm_env.loss.n_target_pcd_points} target pcd points.')
         print(f'===> CPU memory occupied after init: {process.memory_percent()} %')
@@ -252,11 +258,11 @@ def main(args):
     end_time = dt.datetime.now()
     print(f"===> End grad computation at:, {end_time.year}-{end_time.month}-{end_time.day} "
           f"{end_time.hour}:{end_time.minute}:{end_time.second}")
-    print(f"===> Total time taken: {time() - start_time_sec} seconds")
+    print(f"===> Total time taken: {(time() - start_time_sec) / 60} minutes")
     print(f"===> Number of aborted data: {n_aborted_data}")
     logging.info(f"===> End grad computation at:, {end_time.year}-{end_time.month}-{end_time.day} "
                  f"{end_time.hour}:{end_time.minute}:{end_time.second}")
-    logging.info(f"===> Total time taken: {time() - start_time_sec} seconds")
+    logging.info(f"===> Total time taken: {(time() - start_time_sec) / 60} minutes")
     logging.info(f"===> Number of aborted data: {n_aborted_data}")
 
 
