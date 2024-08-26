@@ -5,17 +5,17 @@ from doma.engine.configs.macros import DTYPE_NP
 
 script_path = os.path.dirname(os.path.realpath(__file__))
 
-# for d in ["5e6", "1e7", "2e7"]:
-#     for ns in [20, 40]:
-#         grad_mean = np.load(os.path.join(script_path, '..', 'log-sys_id', f"grads-mean-d{d}-ns{ns}.npy"))
-#         grad_std = np.load(os.path.join(script_path, '..', 'log-sys_id', f"grads-std-d{d}-ns{ns}.npy"))
-#         print(f"Found gradient stats for d={d}, ns={ns}:")
-#         print(grad_mean)
-#         print(grad_std)
-# exit()
+for d in ["5e6", "1e7", "2e7", "4e7"]:
+    for ns in [20, 40]:
+        grad_mean = np.load(os.path.join(script_path, '..', 'log-sys_id', f"grads-mean-d{d}-ns{ns}.npy"))
+        grad_std = np.load(os.path.join(script_path, '..', 'log-sys_id', f"grads-std-d{d}-ns{ns}.npy"))
+        print(f"Found gradient stats for d={d}, ns={ns}:")
+        print(grad_mean)
+        print(grad_std)
+exit()
 
-d = "2e7"
-ns = 40
+d = "4e7"
+ns = 20
 grad_mean = np.load(os.path.join(script_path, '..', 'log-sys_id', f"grads-mean-d{d}-ns{ns}.npy"))
 grad_std = np.load(os.path.join(script_path, '..', 'log-sys_id', f"grads-std-d{d}-ns{ns}.npy"))
 E_range = (2.5e5, 4e5)

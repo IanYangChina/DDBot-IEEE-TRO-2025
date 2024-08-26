@@ -5,17 +5,17 @@ import matplotlib.pyplot as plt
 script_path = os.path.dirname(os.path.realpath(__file__))
 data_path = os.path.join(script_path, '..', 'data', 'moveit_trajectories')
 
-n = 1
+n = 0
 
 print(f"==================== Task {n} ====================")
 timestamps = np.load(os.path.join(data_path, f'sys_id_{n}_timestamps.npy'))
 v = np.load(os.path.join(data_path, f'sys_id_{n}_v.npy'))
 
-for i in range(len(timestamps)):
-    print(f'index {i}, time: {timestamps[i]}, vx: {v[i, 0]}, vy: {v[i, 1]}, vz: {v[i, 2]}, vrz: {v[i, 5]}')
+# for i in range(len(timestamps)):
+#     print(f'index {i}, time: {timestamps[i]}, vx: {v[i, 0]}, vy: {v[i, 1]}, vz: {v[i, 2]}, vrz: {v[i, 5]}')
 
-dt_sim = 0.01
-trajectory_1 = np.zeros(shape=(1000, 6))
+dt_sim = 0.001
+trajectory_1 = np.zeros(shape=(5000, 6))
 tr1_dt_1 = timestamps[20]
 tr1_n_steps_1 = int(tr1_dt_1 / dt_sim)
 tr1_delta_x_1 = 0.09 / tr1_n_steps_1
@@ -35,7 +35,7 @@ trajectory_1[tr1_n_steps_1 + tr1_n_steps_2 + tr1_n_steps_3:tr1_n_steps_1 + tr1_n
 
 trajectory_1 = trajectory_1[:tr1_n_steps_1 + tr1_n_steps_2 + tr1_n_steps_3 + tr1_n_steps_4, :]
 print(dt_sim * (tr1_n_steps_1 + tr1_n_steps_2 + tr1_n_steps_3 + tr1_n_steps_4))
-np.save(os.path.join(data_path, 'sys_id_sim_1_pos.npy'), trajectory_1)
+np.save(os.path.join(data_path, f'sys_id_sim_0_pos-dt_{dt_sim}.npy'), trajectory_1)
 
 fig, ax = plt.subplots(1, 3, figsize=(18, 6))
 ax[0].plot(timestamps)
@@ -48,17 +48,16 @@ plt.tight_layout()
 plt.show()
 plt.close()
 
-n = 2
+n = 1
 
 print(f"==================== Task {n} ====================")
 timestamps = np.load(os.path.join(data_path, f'sys_id_{n}_timestamps.npy'))
 v = np.load(os.path.join(data_path, f'sys_id_{n}_v.npy'))
 
-for i in range(len(timestamps)):
-    print(f'index {i}, time: {timestamps[i]}, vx: {v[i, 0]}, vy: {v[i, 1]}, vz: {v[i, 2]}, vrz: {v[i, 5]}')
+# for i in range(len(timestamps)):
+#     print(f'index {i}, time: {timestamps[i]}, vx: {v[i, 0]}, vy: {v[i, 1]}, vz: {v[i, 2]}, vrz: {v[i, 5]}')
 
-dt_sim = 0.01
-trajectory_2 = np.zeros(shape=(1000, 6))
+trajectory_2 = np.zeros(shape=(5000, 6))
 tr2_dt_1 = timestamps[47]
 tr2_n_steps_1 = int(tr2_dt_1 / dt_sim)
 tr2_delta_x_1 = 0.09 / tr2_n_steps_1
@@ -84,7 +83,7 @@ trajectory_2[tr2_n_steps_1 + tr2_n_steps_2 + tr2_n_steps_3:tr2_n_steps_1 + tr2_n
 
 trajectory_2 = trajectory_2[:tr2_n_steps_1 + tr2_n_steps_2 + tr2_n_steps_3 + tr2_n_steps_4, :]
 print(dt_sim * (tr2_n_steps_1 + tr2_n_steps_2 + tr2_n_steps_3 + tr2_n_steps_4))
-np.save(os.path.join(data_path, 'sys_id_sim_2_pos.npy'), trajectory_2)
+np.save(os.path.join(data_path, f'sys_id_sim_1_pos-dt_{dt_sim}.npy'), trajectory_2)
 
 fig, ax = plt.subplots(1, 3, figsize=(18, 6))
 ax[0].plot(timestamps)

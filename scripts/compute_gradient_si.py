@@ -53,6 +53,8 @@ def main(args):
 
     reset_logging(logging)
     log_file_name = os.path.join(result_path, f'grads-d{d_str}-ns{ns}.log')
+    if args['debug']:
+        log_file_name = os.path.join(result_path, 'grads-debug.log')
     if os.path.isfile(log_file_name):
         filemode = "a"
     else:
@@ -64,14 +66,16 @@ def main(args):
     grad_std_file_name = os.path.join(result_path, f'grads-std-d{d_str}-ns{ns}.npy')
 
     sys_id_motion = 0
+    dt_sim = 0.01
     trajectory = np.load(os.path.join(script_path, '..', 'data',
-                                      'moveit_trajectories', f'sys_id_sim_{sys_id_motion}_pos.npy'))
+                                      'moveit_trajectories', f'sys_id_sim_{sys_id_motion}_pos-dt_{dt_sim}.npy'))
 
     env_cfg = {
         'p_density': float(args['ptcl_density']),
         'material_id': SAND,
+        'grid_scale': 1,
         'horizon': trajectory.shape[0],
-        'dt_global': 0.01,
+        'dt_global': dt_sim,
         'n_substeps': args['n_substep'],
         'agent_init_pos': (0.2, 0.2, 0.205),
         'agent_init_euler': (0, 180, 90),
@@ -111,21 +115,18 @@ def main(args):
         rho = np.asarray(np.random.uniform(rho_range[0], rho_range[1]), dtype=DTYPE_NP).reshape((1,))  # Density
         sand_angle = np.asarray(np.random.uniform(sand_angle_range[0], sand_angle_range[1]),
                                 dtype=DTYPE_NP).reshape((1,))  # Sand friction angle
-        manipulator_friction = np.asarray(np.random.uniform(mf_range[0], mf_range[1]), dtype=DTYPE_NP).reshape(
-            (1,))  # Manipulator friction
-        container_friction = np.asarray(np.random.uniform(mf_range[0], mf_range[1]), dtype=DTYPE_NP).reshape(
-            (1,))  # Container friction
 
         ti.reset()
         ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True, random_seed=1)
         env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=args['debug'],
                                             logger=logging)
         set_parameters(mpm_env, material_id=SAND, e=E.copy(), nu=nu.copy(), rho=rho.copy(),
-                       manipulator_friction=manipulator_friction.copy(),
-                       container_friction=container_friction.copy(),
+                       manipulator_friction=0.5,
+                       container_friction=0.5,
                        sand_friction_angle=sand_angle.copy())
-        # set_parameters(mpm_env, SAND, e=4e5, nu=0.4, rho=1600., sand_friction_angle=45.,
-        #                manipulator_friction=0.5, container_friction=0.5)
+        if args['debug']:
+            set_parameters(mpm_env, SAND, e=5e6, nu=0.3, rho=2000., sand_friction_angle=60.,
+                           manipulator_friction=0.5, container_friction=0.5)
         print(
             f'===> Created Env with {mpm_env.simulator.n_particles} particles, {mpm_env.loss.n_target_pcd_points} target pcd points.')
         print(f'===> CPU memory occupied after init: {process.memory_percent()} %')
@@ -133,23 +134,16 @@ def main(args):
 
         """forward pass"""
         mpm_env.set_state(init_state['state'], grad_enabled=True)
-        if args['r_human']:
+        if args['render']:
             mpm_env.render(mode='human')
         for i in range(mpm_env.horizon):
             mpm_env.step(trajectory[i])
-            if args['r_human']:
+            if args['render']:
                 mpm_env.render(mode='human')
         loss_info = mpm_env.get_final_loss()
         print('===> Loss info:', loss_info)
         print(f'===> CPU memory occupied after forward: {process.memory_percent()} %')
         print(f'===> GPU memory after forward: {get_gpu_memory()}')
-        # fig, ax = plt.subplots(1, 2, figsize=(12, 6))
-        # ax[0].imshow(loss_info['height_map'])
-        # ax[0].set_title('Height map')
-        # ax[1].imshow(loss_info['height_map_target'])
-        # ax[1].set_title('Target height map')
-        # plt.show()
-        # exit()
 
         """backward pass"""
         mpm_env.reset_grad()
@@ -172,16 +166,11 @@ def main(args):
         logging.info(f"Gradient of nu: {mpm_env.simulator.particle_param.grad[SAND].nu}")
         logging.info(f"Gradient of rho: {mpm_env.simulator.particle_param.grad[SAND].rho}")
         logging.info(f"Gradient of sand angle: {mpm_env.simulator.system_param.grad[None].sand_friction_angle}")
-        logging.info(
-            f"Gradient of manipulator friction: {mpm_env.simulator.system_param.grad[None].manipulator_friction}")
-        logging.info(f"Gradient of container friction: {mpm_env.simulator.system_param.grad[None].container_friction}")
 
         grad = np.array([mpm_env.simulator.particle_param.grad[SAND].E,
                          mpm_env.simulator.particle_param.grad[SAND].nu,
                          mpm_env.simulator.particle_param.grad[SAND].rho,
-                         mpm_env.simulator.system_param.grad[None].sand_friction_angle,
-                         mpm_env.simulator.system_param.grad[None].manipulator_friction,
-                         mpm_env.simulator.system_param.grad[None].container_friction], dtype=DTYPE_NP)
+                         mpm_env.simulator.system_param.grad[None].sand_friction_angle], dtype=DTYPE_NP)
 
         """Checking for nan, inf, and strange values"""
         abort = False
@@ -214,15 +203,13 @@ def main(args):
             print(f'===> [Warning] Aborting epoch {n}......')
             print(f'===> [Warning] Particle has nan or inf: {particle_has_naninf}')
             print(f'===> [Warning] Strange loss or gradient.')
-            print(
-                f'===> [Warning] E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}, manipulator_friction: {manipulator_friction}')
+            print(f'===> [Warning] E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}')
             print(f'===> [Warning] Grad: {grad}')
             print(f'===> [Warning] Loss info: {loss_info}')
             logging.error(f'===> [Warning] Aborting epoch: {n}')
             logging.error(f'===> [Warning] Particle has nan or inf: {particle_has_naninf}')
             logging.error(f'===> [Warning] Strange loss or gradient.')
-            logging.error(
-                f'===> [Warning] E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}, manipulator_friction: {manipulator_friction}')
+            logging.error(f'===> [Warning] E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}')
             logging.error(f'===> [Warning] Grad: {grad}')
             logging.error(f'===> [Warning] Loss info: {loss_info}')
             n_aborted_data += 1
@@ -240,16 +227,12 @@ def main(args):
     print(f"Avg. gradient of nu: {grad_mean[1]}, std: {grad_std[1]}")
     print(f"Avg. gradient of rho: {grad_mean[2]}, std: {grad_std[2]}")
     print(f"Avg. gradient of sand angle: {grad_mean[3]}, std: {grad_std[3]}")
-    print(f"Avg. gradient of manipulator friction: {grad_mean[4]}, std: {grad_std[4]}")
-    print(f"Avg. gradient of container friction: {grad_mean[5]}, std: {grad_std[5]}")
 
     logging.info('===> Avg. Gradients:')
     logging.info(f"Avg. gradient of E: {grad_mean[0]}, std: {grad_std[0]}")
     logging.info(f"Avg. gradient of nu: {grad_mean[1]}, std: {grad_std[1]}")
     logging.info(f"Avg. gradient of rho: {grad_mean[2]}, std: {grad_std[2]}")
     logging.info(f"Avg. gradient of sand angle: {grad_mean[3]}, std: {grad_std[3]}")
-    logging.info(f"Avg. gradient of manipulator friction: {grad_mean[4]}, std: {grad_std[4]}")
-    logging.info(f"Avg. gradient of container friction: {grad_mean[5]}, std: {grad_std[5]}")
 
     if not args['debug']:
         np.save(grad_mean_file_name, grad_mean)
@@ -269,7 +252,7 @@ def main(args):
 if __name__ == '__main__':
     description = 'Compute the means and standard deviations of the gradients for material parameters with randomly sampled parameter values.'
     parser = argparse.ArgumentParser(description=description)
-    parser.add_argument('--r_human', dest='r_human', default=False, action='store_true', help='Render human view')
+    parser.add_argument('--r', dest='render', default=False, action='store_true', help='Render human view')
     parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default=5e6,
                         help='Particle density, use scientific notation like \'5e6\'.')
     parser.add_argument('--debug', dest='debug', default=False, action='store_true',
