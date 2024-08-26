@@ -1,19 +1,17 @@
 import os
 import open3d as o3d
-import gym
 import json
 import logging
 import argparse
 import numpy as np
 import taichi as ti
 from drl_implementation.agent.continuous_action.sac_parameterised_action_goal_conditioned import GPASAC
-from gym.spaces import Box, Discrete
 script_path = os.path.dirname(os.path.realpath(__file__))
 
 from doma.envs.planting_env import make_env
 from doma.engine.configs.macros import DTYPE_NP, SAND
-from doma.engine.loss_function.emd_loss_external import compute_emd_loss_external
 from doma.engine.utils.misc import set_parameters
+from doma.envs.wrappers import SingleSkillEnv, HybridActionEnv, FakeEnv
 cam_cfg = {  # same camera pose as the real-world setup
     'pos': (0.2, 0.57, 0.6),
     'lookat': (0.2, 0.2, 0.03),
@@ -27,15 +25,70 @@ cam_cfg = {  # same camera pose as the real-world setup
     'res': (800, 800),
     'pcd_gen_res': 60
 }
-LINEAR_VELOCITY = 0.1  # m/s
+LINEAR_VELOCITY = 0.2  # m/s
 ANGULAR_VELOCITY = np.pi / 4  # rad/s
 
 
-def skill_generation_func(skill_index, skill_params, dt):
+def abstraction_two_skill(skill_params, dt):
+    assert np.all(skill_params >= -1.0) and np.all(skill_params <= 1.0), 'RL skill params should be in [-1, 1]'
+    trajectory = np.zeros(shape=(1000, 6), dtype=np.float32)
+    move_distance = skill_params[0] * 0.12  # map [-1, 1] to [-0.12, 0.12]
+    rotate_x = skill_params[1] * (np.pi / 2)  # map [-1, 1] to [-pi/2, pi/2]
+
+    n_step_move = np.abs(int(move_distance / (LINEAR_VELOCITY * dt)))
+    n_step_rotate = np.abs((int(rotate_x / (ANGULAR_VELOCITY * dt))))
+    n_step = max(n_step_move, n_step_rotate)
+    if n_step > 0:
+        move_delta_x = move_distance / n_step
+        for i in range(n_step):
+            trajectory[i][0] = move_delta_x
+        rotate_delta_x = rotate_x / n_step
+        for i in range(n_step):
+            trajectory[i][3] = rotate_delta_x
+
+    insert_angle = rotate_x + np.pi / 2
+    insert_distance = (skill_params[2] + 1) / 2 * 0.05  # map [-1, 1] to [0, 0.05]
+    n_step_insert = int(insert_distance / (LINEAR_VELOCITY * dt))
+    insert_distance_x = insert_distance * np.cos(insert_angle)
+    insert_distance_z = insert_distance * np.sin(insert_angle)
+    insert_delta_x = insert_distance_x / n_step_insert
+    insert_delta_z = insert_distance_z / n_step_insert
+    if n_step_insert > 0:
+        for i in range(n_step, n_step + n_step_insert):
+            trajectory[i][0] = insert_delta_x
+            trajectory[i][2] = -insert_delta_z
+
+    push_angle = (skill_params[3] + 1) * np.pi / 2  # map [-1, 1] to [0, pi]
+    push_distance = (skill_params[4] + 1) * 0.1  # map [-1, 1] to [0, 0.2]
+    n_step_push = int(push_distance / (LINEAR_VELOCITY * dt))
+    push_distance_x = push_distance * np.cos(push_angle)
+    push_distance_z = push_distance * np.sin(push_angle)
+    push_delta_x = push_distance_x / n_step_push
+    push_delta_z = push_distance_z / n_step_push
+    if n_step_push > 0:
+        for i in range(n_step + n_step_insert, n_step + n_step_insert + n_step_push):
+            trajectory[i][0] = push_delta_x
+            trajectory[i][2] = push_delta_z
+
+    rotate_x_back = -rotate_x
+    n_step_rotate_back = n_step_rotate
+    move_up_distance = 0.1
+    n_step_move_up = int(move_up_distance / (LINEAR_VELOCITY * dt))
+    n_step_return = max(n_step_rotate_back, n_step_move_up)
+    rotate_delta_x_back = rotate_x_back / n_step_return
+    move_up_delta_z = move_up_distance / n_step_return
+    if n_step_return > 0:
+        for i in range(n_step + n_step_insert + n_step_push, n_step + n_step_insert + n_step_push + n_step_return):
+            trajectory[i][3] = rotate_delta_x_back
+            trajectory[i][5] = move_up_delta_z
+
+    return trajectory[:n_step + n_step_insert + n_step_push + n_step_return, :]
+
+
+def abstraction_one_skills(skill_index, skill_params, dt):
     assert np.all(skill_params >= -1.0) and np.all(skill_params <= 1.0), 'RL skill params should be in [-1, 1]'
     # set the initial pose of the end effector
     trajectory = np.zeros(shape=(1000, 6), dtype=np.float32)
-    finish_generation = False
     if skill_index == 0:
         # planar movement
         move_angle = skill_params[0]  # angle between the x-axis and the movement direction
@@ -100,123 +153,6 @@ def skill_generation_func(skill_index, skill_params, dt):
         raise ValueError('Invalid skill index')
 
 
-class HybridActionEnv(gym.Env):
-    def __init__(self, mem_env, gym_env_config, seed=None, logger=None):
-        if seed is not None:
-            self.seed(seed)
-        self.mpm_env = mem_env
-        self.mpm_env_init_state = gym_env_config['mpm_env_init_state']
-
-        self.step_count = 0
-        self.render_skill = gym_env_config['render_skill']
-        self.horizon = gym_env_config['horizon']
-        self.obs_mode = gym_env_config['obs_mode']
-        self.reward_scale = gym_env_config['reward_scale']
-        self.discrete_action_space = Discrete(n=gym_env_config['n_discrete_action'])
-        self.continuous_action_space = Box(low=gym_env_config['continuous_action_min'],
-                                           high=gym_env_config['continuous_action_max'],
-                                           shape=(gym_env_config['dim_continuous_action'],),
-                                           dtype=DTYPE_NP)
-        self.skill_generation_func = gym_env_config['skill_generation_func']
-
-        self.logger = logger
-        self.goal_conditioned_reward_function = self.mpm_env.loss.compute_emd_loss_external_func
-        self.distance_threshold = 0.01
-
-    def seed(self, seed=None):
-        super(HybridActionEnv, self).seed(seed)
-
-    def step(self, action):
-        discrete_action = int(action[0])
-        continuous_action = np.asarray(action[1:])
-        skill_trajectory = self.skill_generation_func(discrete_action,
-                                                      continuous_action,
-                                                      dt=self.mpm_env.simulator.dt_global)
-        print(skill_trajectory.shape)
-        for i in range(len(skill_trajectory)):
-            self.mpm_env.step(skill_trajectory[i])
-            if self.render_skill:
-                self.render(mode='human')
-
-        obs = self.render(mode=self.obs_mode)
-        agent_state = self.mpm_env.simulator.agent.get_state(self.mpm_env.simulator.cur_substep_local)
-        loss_info = self.mpm_env.get_final_loss()
-        reward = loss_info['emd_loss'] * self.reward_scale
-        self.step_count += 1
-        done = self.step_count >= self.horizon
-        return {
-            'observation': obs.copy(),
-            'agent_state': agent_state.copy(),
-            'desired_goal': self.mpm_env.loss.target_pcd_points_np.copy(),
-            'achieved_goal': obs.copy()
-        }, reward, done, loss_info
-
-    def reset(self):
-        self.mpm_env.set_state(self.mpm_env_init_state, grad_enabled=False)
-        self.step_count = 0
-        obs = self.render(mode=self.obs_mode)
-        agent_state = self.mpm_env.simulator.agent.get_state(self.mpm_env.simulator.cur_substep_local)
-        return {
-            'observation': obs.copy(),
-            'agent_state': agent_state.copy(),
-            'desired_goal': self.mpm_env.loss.target_pcd_points_np.copy(),
-            'achieved_goal': obs.copy()
-        }
-
-    def render(self, mode='human'):
-        return self.mpm_env.render(mode=mode)
-
-
-class FakeEnv(gym.Env):
-    def __init__(self, gym_env_config, seed=None, logger=None):
-        if seed is not None:
-            self.seed(seed)
-        self.pcd_file_path = gym_env_config['pcd_file_path']
-        self.pcd_np = np.asarray(o3d.io.read_point_cloud(self.pcd_file_path).voxel_down_sample(voxel_size=0.005).points,
-                                 dtype=DTYPE_NP)
-
-        self.step_count = 0
-        self.horizon = gym_env_config['horizon']
-        self.obs_mode = gym_env_config['obs_mode']
-        self.reward_scale = gym_env_config['reward_scale']
-        self.discrete_action_space = Discrete(n=gym_env_config['n_discrete_action'])
-        self.continuous_action_space = Box(low=gym_env_config['continuous_action_min'],
-                                           high=gym_env_config['continuous_action_max'],
-                                           shape=(gym_env_config['dim_continuous_action'],),
-                                           dtype=DTYPE_NP)
-        self.skill_generation_func = gym_env_config['skill_generation_func']
-
-        self.logger = logger
-        self.goal_conditioned_reward_function = compute_emd_loss_external
-        self.distance_threshold = 0.01
-
-    def seed(self, seed=None):
-        super(FakeEnv, self).seed(seed)
-
-    def step(self, action):
-        self.step_count += 1
-        done = self.step_count >= self.horizon
-        reward = self.goal_conditioned_reward_function(self.pcd_np, self.pcd_np)
-        return {
-            'observation': self.pcd_np.copy(),
-            'agent_state': np.ones(shape=(6,), dtype=np.float32),
-            'desired_goal': self.pcd_np.copy(),
-            'achieved_goal': self.pcd_np.copy()
-        }, reward, done, {}
-
-    def reset(self):
-        self.step_count = 0
-        return {
-            'observation': self.pcd_np.copy(),
-            'agent_state': np.ones(shape=(6,), dtype=np.float32),
-            'desired_goal': self.pcd_np.copy(),
-            'achieved_goal': self.pcd_np.copy()
-        }
-
-    def render(self, mode='human'):
-        pass
-
-
 def main(arguments):
     seed = arguments['seed']
     task_id = arguments['task_id']
@@ -251,12 +187,13 @@ def main(arguments):
         'horizon': 10000,
         'dt_global': 0.01,
         'n_substeps': 20,
+        'grid_scale': 1.0,
         'agent_init_pos': (0.2, 0.2, 0.2),
         'agent_init_euler': (0, 180, 90),
     }
     loss_cfg = {
         'target_pcd_path': os.path.join(script_path, '..', 'data', 'task_target_pcds',
-                                        'pcd_1_cropped_norm_z_aligned.ply'),
+                                        f'pcd_{task_id}_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
         'down_sample_voxel_size': 0.007,
     }
@@ -265,8 +202,8 @@ def main(arguments):
     ti.init(arch=backend, device_memory_GB=5,
             default_fp=ti.f32, fast_math=True, random_seed=seed)
     env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
-    set_parameters(mpm_env, SAND, e=4e5, nu=0.4, rho=1600., sand_friction_angle=45.,
-                   manipulator_friction=0.5, container_friction=0.5)
+    set_parameters(mpm_env, SAND, e=4e5, nu=0.2, rho=1800., sand_friction_angle=45.,
+                   manipulator_friction=0.05, container_friction=0.5)
     gym_env_config = {
         'mpm_env_init_state': init_state['state'],
         'pcd_file_path': os.path.join(script_path, '..', 'data', 'task_target_pcds',
@@ -279,9 +216,18 @@ def main(arguments):
         'dim_continuous_action': 6,
         'continuous_action_max': 1.0,
         'continuous_action_min': -1.0,
-        'skill_generation_func': skill_generation_func,
+        'skill_generation_func': None
     }
-    gym_env = HybridActionEnv(mpm_env, gym_env_config, seed=arguments['seed'], logger=logging)
+    if arguments['abstraction_level'] == 1:
+        gym_env_config['skill_generation_func'] = abstraction_one_skills
+        gym_env = HybridActionEnv(mpm_env, gym_env_config, seed=arguments['seed'], logger=logging)
+    elif arguments['abstraction_level'] == 2:
+        gym_env_config['skill_generation_func'] = abstraction_two_skill
+        gym_env_config['dim_continuous_action'] = 5
+        gym_env = SingleSkillEnv(mpm_env, gym_env_config, seed=arguments['seed'], logger=logging)
+    else:
+        raise ValueError('Invalid abstraction level')
+
     if arguments['env_test']:
         skill_plan = [0, 1, 0, 2]
         frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
@@ -291,9 +237,20 @@ def main(arguments):
             done = False
             while not done:
                 input('Press Enter to continue...')
-                a0 = skill_plan[gym_env.step_count]
-                a1 = gym_env.continuous_action_space.sample()
-                obs, reward, done, info = gym_env.step([a0, a1[0], a1[1]])
+                if arguments['abstraction_level'] == 1:
+                    a0 = skill_plan[gym_env.step_count]
+                    a1 = gym_env.continuous_action_space.sample()
+                    obs, reward, done, info = gym_env.step([a0, a1[0], a1[1]])
+                else:
+                    a1 = float(input('Enter the skill param 1: '))
+                    a2 = float(input('Enter the skill param 2: '))
+                    a3 = float(input('Enter the skill param 3: '))
+                    a4 = float(input('Enter the skill param 4: '))
+                    a5 = float(input('Enter the skill param 5: '))
+                    # a = gym_env.continuous_action_space.sample()
+                    a = np.asarray([a1, a2, a3, a4, a5], dtype=DTYPE_NP)
+                    obs, reward, done, info = gym_env.step(a)
+
                 print(reward)
                 cloud_array = obs['observation']
                 obj_vec = o3d.utility.Vector3dVector(cloud_array)
@@ -330,8 +287,9 @@ if __name__ == '__main__':
     parser.add_argument('--seed', dest='seed', type=int, default=0, help='seed')
     parser.add_argument('--backend', dest='backend', type=str, default='cuda', help='backend')
     parser.add_argument('--task-id', dest='task_id', type=int, default=0, help='task id')
+    parser.add_argument('--abs_lv', dest='abstraction_level', type=int, default=2, help='abstraction level')
     parser.add_argument('--e-test', dest='env_test', action='store_true', default=True, help='testing gym env')
-    parser.add_argument('--ptcl-d', dest='ptcl_density', type=float, default=2e7, help='particle density')
+    parser.add_argument('--ptcl-d', dest='ptcl_density', type=float, default=1e7, help='particle density')
     parser.add_argument('--n-skills', dest='n_skills', type=int, default=4, help='number of skills')
     parser.add_argument('--demo-skills', dest='demonstrate_skills', action='store_true', default=False, help='demonstrate the order of skills')
     parser.add_argument('--demo-frequency', dest='demonstrate_percentage', type=float, default=0.5, help='percentage of demonstration episodes')
