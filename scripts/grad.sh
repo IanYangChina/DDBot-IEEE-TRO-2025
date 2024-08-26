@@ -6,5 +6,5 @@
 #python compute_gradient_si.py --ptcl_d 1e7 --n_substep 40 --cuda_GB 8
 #python compute_gradient_si.py --ptcl_d 2e7 --n_substep 40 --cuda_GB 8
 
-python compute_gradient_si.py --ptcl_d 4e7 --n_substep 40 --cuda_GB 12
-python compute_gradient_si.py --ptcl_d 4e7 --n_substep 20 --cuda_GB 12
+python compute_gradient_si.py --ptcl_d 4e7 --n_substep 40 --cuda_GB 16
+python compute_gradient_si.py --ptcl_d 4e7 --n_substep 20 --cuda_GB 16
