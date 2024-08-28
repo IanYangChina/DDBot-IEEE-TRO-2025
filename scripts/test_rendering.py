@@ -54,7 +54,7 @@ def main(args):
     ti.reset()
     ti.init(arch=ti.cuda, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True, random_seed=1)
     env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg)
-    set_parameters(mpm_env, SAND, e=6e5, nu=0.3, rho=1500., sand_friction_angle=35.)
+    set_parameters(mpm_env, SAND, e=1e6, nu=0.3, rho=2300., sand_friction_angle=15.)
     mpm_env.set_state(init_state['state'], grad_enabled=True)
     mpm_env.render(mode='human')
     for i in range(mpm_env.horizon):
@@ -76,8 +76,8 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run system identification simulation')
     parser.add_argument('--ptcl_d', dest='ptcl_density', type=float, default=5e6, help='Particle density')
-    parser.add_argument('--ns', dest='n_substep', type=int, default=10, help='Number of substeps')
+    parser.add_argument('--ns', dest='n_substep', type=int, default=20, help='Number of substeps')
     parser.add_argument('--cuda_GB', dest='cuda_GB', type=float, default=5, help='CUDA memory in GB')
-    parser.add_argument('--r', dest='render', action='store_true', help='Render the simulation')
+    parser.add_argument('--r', dest='render', default=False, action='store_true', help='Render the simulation')
     args = vars(parser.parse_args())
     main(args)

@@ -65,10 +65,10 @@ def main(args):
         'down_sample_voxel_size': 0.007,
     }
 
-    E_range = (2.5e5, 4e5)
-    rho_range = (1600, 2300)
-    nu_range = (0.2, 0.4)
-    sand_angle_range = (30, 45)
+    E_range = (2.5e5, 1e6)
+    rho_range = (1200, 2200)
+    nu_range = (0.1, 0.4)
+    sand_angle_range = (10, 40)
     n_epoch = 150
     if args['seed'] != -1:
         seeds = [args['seed']]
