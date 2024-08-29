@@ -1,0 +1,1357 @@
+2024-08-28 11:31:18,402 INFO ===> Start grad computation at:, 2024-8-28 11:31:18
+2024-08-28 11:31:18,669 INFO ===> New TaichiEnv created.
+2024-08-28 11:31:18,669 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:31:18,868 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0038s
+2024-08-28 11:31:19,358 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0010s
+2024-08-28 11:32:25,136 INFO =====> Epoch: 0
+2024-08-28 11:32:25,136 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.410850524902344, 'emd_loss': 37.57990264892578, 'total_loss': 37.57990264892578}
+2024-08-28 11:32:25,136 INFO =====> Param: E: [366796.44], nu: [0.30229118], rho: [1668.6642], sand_angle: [30.452026]
+2024-08-28 11:32:25,136 INFO =====> Grad: [-1.6563712e-02 -1.8857703e+04 -3.4092850e+01 -4.7872742e+02]
+2024-08-28 11:32:25,136 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:32:25,850 INFO ===> New TaichiEnv created.
+2024-08-28 11:32:25,851 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:32:25,931 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:32:26,437 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0008s
+2024-08-28 11:33:33,927 INFO =====> Epoch: 1
+2024-08-28 11:33:33,927 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.645469665527344, 'emd_loss': 37.95573806762695, 'total_loss': 37.95573806762695}
+2024-08-28 11:33:33,927 INFO =====> Param: E: [362152.], nu: [0.30500802], rho: [1723.6385], sand_angle: [30.497692]
+2024-08-28 11:33:33,927 INFO =====> Grad: [1.7956045e-02 1.5203696e+04 5.2162285e+00 4.2301611e+02]
+2024-08-28 11:33:33,927 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:33:34,330 INFO ===> New TaichiEnv created.
+2024-08-28 11:33:34,330 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:33:34,351 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 11:33:34,491 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:34:13,247 INFO =====> Epoch: 2
+2024-08-28 11:34:13,247 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.682350158691406, 'emd_loss': 38.0544319152832, 'total_loss': 38.0544319152832}
+2024-08-28 11:34:13,247 INFO =====> Param: E: [333519.66], nu: [0.27757818], rho: [1742.8029], sand_angle: [28.542671]
+2024-08-28 11:34:13,247 INFO =====> Grad: [3.6968753e-02 4.6963902e+04 1.1977274e+01 5.0541055e+02]
+2024-08-28 11:34:13,247 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:34:13,552 INFO ===> New TaichiEnv created.
+2024-08-28 11:34:13,552 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:34:13,573 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:34:13,711 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:35:03,706 INFO =====> Epoch: 3
+2024-08-28 11:35:03,706 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.29772186279297, 'emd_loss': 37.96564865112305, 'total_loss': 37.96564865112305}
+2024-08-28 11:35:03,706 INFO =====> Param: E: [309188.22], nu: [0.25231564], rho: [1747.8682], sand_angle: [26.147934]
+2024-08-28 11:35:03,706 INFO =====> Grad: [1.3546615e-03 5.3087070e+03 6.6191230e+00 2.5412410e+02]
+2024-08-28 11:35:03,706 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:35:04,033 INFO ===> New TaichiEnv created.
+2024-08-28 11:35:04,033 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:35:04,054 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:35:04,194 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:35:45,736 INFO =====> Epoch: 4
+2024-08-28 11:35:45,736 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.707698822021484, 'emd_loss': 37.82362747192383, 'total_loss': 37.82362747192383}
+2024-08-28 11:35:45,736 INFO =====> Param: E: [293841.9], nu: [0.23750514], rho: [1789.6152], sand_angle: [25.975159]
+2024-08-28 11:35:45,736 INFO =====> Grad: [-8.0633089e-03 -1.1996577e+04 -3.7347187e+01 -5.6752405e+02]
+2024-08-28 11:35:45,736 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:35:46,068 INFO ===> New TaichiEnv created.
+2024-08-28 11:35:46,068 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:35:46,090 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 11:35:46,229 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:36:25,259 INFO =====> Epoch: 5
+2024-08-28 11:36:25,259 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.727840423583984, 'emd_loss': 38.010623931884766, 'total_loss': 38.010623931884766}
+2024-08-28 11:36:25,259 INFO =====> Param: E: [275288.12], nu: [0.21955456], rho: [1821.7776], sand_angle: [25.840496]
+2024-08-28 11:36:25,259 INFO =====> Grad: [ 9.9525861e-03  1.1646605e+04  3.7618043e+00 -5.5840845e+00]
+2024-08-28 11:36:25,259 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:36:25,559 INFO ===> New TaichiEnv created.
+2024-08-28 11:36:25,559 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:36:25,580 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:36:25,718 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:37:04,977 INFO =====> Epoch: 6
+2024-08-28 11:37:04,977 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.81610870361328, 'emd_loss': 38.30006408691406, 'total_loss': 38.30006408691406}
+2024-08-28 11:37:04,977 INFO =====> Param: E: [257932.81], nu: [0.20646575], rho: [1844.5194], sand_angle: [25.324593]
+2024-08-28 11:37:04,977 INFO =====> Grad: [ 2.1292784e-03 -5.5363657e+03  5.4356275e+00  1.6354974e+02]
+2024-08-28 11:37:04,977 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:37:05,344 INFO ===> New TaichiEnv created.
+2024-08-28 11:37:05,345 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:37:05,367 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 11:37:05,514 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0008s
+2024-08-28 11:37:54,983 INFO =====> Epoch: 7
+2024-08-28 11:37:54,983 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.84896469116211, 'emd_loss': 38.30594253540039, 'total_loss': 38.30594253540039}
+2024-08-28 11:37:54,984 INFO =====> Param: E: [255436.84], nu: [0.19946735], rho: [1891.797], sand_angle: [26.06564]
+2024-08-28 11:37:54,984 INFO =====> Grad: [-2.3242202e-02 -9.9731602e+03 -4.4608212e+01 -5.3887390e+02]
+2024-08-28 11:37:54,984 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:37:55,317 INFO ===> New TaichiEnv created.
+2024-08-28 11:37:55,317 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:37:55,339 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 11:37:55,483 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:38:33,995 INFO =====> Epoch: 8
+2024-08-28 11:38:33,995 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.17517852783203, 'emd_loss': 38.55839538574219, 'total_loss': 38.55839538574219}
+2024-08-28 11:38:33,995 INFO =====> Param: E: [250000.], nu: [0.18458351], rho: [1923.7311], sand_angle: [26.696474]
+2024-08-28 11:38:33,995 INFO =====> Grad: [3.2257732e-02 2.2794932e+04 1.3370541e+01 1.2879779e+01]
+2024-08-28 11:38:33,995 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:38:34,301 INFO ===> New TaichiEnv created.
+2024-08-28 11:38:34,301 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:38:34,323 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 11:38:34,465 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0008s
+2024-08-28 11:39:24,715 INFO =====> Epoch: 9
+2024-08-28 11:39:24,716 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.38575744628906, 'emd_loss': 38.74677276611328, 'total_loss': 38.74677276611328}
+2024-08-28 11:39:24,716 INFO =====> Param: E: [250000.], nu: [0.16084464], rho: [1933.5961], sand_angle: [25.391169]
+2024-08-28 11:39:24,717 INFO =====> Grad: [4.7882423e-02 3.5962691e+04 2.6139101e+01 1.1558228e+03]
+2024-08-28 11:39:24,717 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:39:25,056 INFO ===> New TaichiEnv created.
+2024-08-28 11:39:25,056 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:39:25,078 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:39:25,216 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:40:04,458 INFO =====> Epoch: 10
+2024-08-28 11:40:04,458 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.14226150512695, 'emd_loss': 38.7370719909668, 'total_loss': 38.7370719909668}
+2024-08-28 11:40:04,458 INFO =====> Param: E: [250000.], nu: [0.1361607], rho: [1937.3276], sand_angle: [24.034048]
+2024-08-28 11:40:04,458 INFO =====> Grad: [4.5636860e-03 1.0864588e+04 7.9251361e+00 1.3042787e+02]
+2024-08-28 11:40:04,458 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:40:04,758 INFO ===> New TaichiEnv created.
+2024-08-28 11:40:04,758 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:40:04,780 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:40:04,919 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:40:44,364 INFO =====> Epoch: 11
+2024-08-28 11:40:44,364 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.85271453857422, 'emd_loss': 38.68260955810547, 'total_loss': 38.68260955810547}
+2024-08-28 11:40:44,364 INFO =====> Param: E: [250000.], nu: [0.11987689], rho: [1944.6938], sand_angle: [24.224325]
+2024-08-28 11:40:44,364 INFO =====> Grad: [-1.9640537e-02 -1.6338603e+04 -6.3281498e+00 -9.8567426e+02]
+2024-08-28 11:40:44,364 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:40:44,667 INFO ===> New TaichiEnv created.
+2024-08-28 11:40:44,667 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:40:44,689 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 11:40:44,828 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:41:23,910 INFO =====> Epoch: 12
+2024-08-28 11:41:23,910 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.02619934082031, 'emd_loss': 38.9722900390625, 'total_loss': 38.9722900390625}
+2024-08-28 11:41:23,910 INFO =====> Param: E: [250000.], nu: [0.1094626], rho: [1972.6], sand_angle: [24.697462]
+2024-08-28 11:41:23,910 INFO =====> Grad: [-2.4291633e-02 -1.2535455e+04 -3.8825710e+01 -2.4292416e+02]
+2024-08-28 11:41:23,910 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:41:24,219 INFO ===> New TaichiEnv created.
+2024-08-28 11:41:24,219 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:41:24,241 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 11:41:24,390 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:42:03,402 INFO =====> Epoch: 13
+2024-08-28 11:42:03,402 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.2050666809082, 'emd_loss': 39.035423278808594, 'total_loss': 39.035423278808594}
+2024-08-28 11:42:03,402 INFO =====> Param: E: [250558.17], nu: [0.107602], rho: [2000.8877], sand_angle: [25.184467]
+2024-08-28 11:42:03,402 INFO =====> Grad: [-2.0765515e-02 -2.2971494e+04 -5.5146308e+00 -4.7698788e+01]
+2024-08-28 11:42:03,402 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:42:03,768 INFO ===> New TaichiEnv created.
+2024-08-28 11:42:03,768 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:42:03,799 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0040s
+2024-08-28 11:42:03,950 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:42:42,592 INFO =====> Epoch: 14
+2024-08-28 11:42:42,593 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.39667892456055, 'emd_loss': 39.11663818359375, 'total_loss': 39.11663818359375}
+2024-08-28 11:42:42,593 INFO =====> Param: E: [251447.5], nu: [0.10710204], rho: [2031.4929], sand_angle: [25.296604]
+2024-08-28 11:42:42,593 INFO =====> Grad: [-1.3590523e-03 -3.7914841e+03 -9.0749121e+00  2.6030713e+02]
+2024-08-28 11:42:42,593 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:42:42,894 INFO ===> New TaichiEnv created.
+2024-08-28 11:42:42,894 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:42:42,916 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:42:43,063 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:43:23,615 INFO =====> Epoch: 15
+2024-08-28 11:43:23,616 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.4661750793457, 'emd_loss': 39.142295837402344, 'total_loss': 39.142295837402344}
+2024-08-28 11:43:23,616 INFO =====> Param: E: [252359.39], nu: [0.10590372], rho: [2040.7467], sand_angle: [25.282524]
+2024-08-28 11:43:23,616 INFO =====> Grad: [-3.7212536e-04  2.3760061e+03  3.1297392e+01  9.2147499e+01]
+2024-08-28 11:43:23,616 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:43:23,921 INFO ===> New TaichiEnv created.
+2024-08-28 11:43:23,922 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:43:23,943 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:43:24,091 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:44:03,183 INFO =====> Epoch: 16
+2024-08-28 11:44:03,183 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.456199645996094, 'emd_loss': 39.131080627441406, 'total_loss': 39.131080627441406}
+2024-08-28 11:44:03,184 INFO =====> Param: E: [251813.25], nu: [0.10615803], rho: [2050.6506], sand_angle: [24.28969]
+2024-08-28 11:44:03,184 INFO =====> Grad: [ 4.7885389e-03 -4.2428364e+03 -2.7958436e+00  8.4576672e+02]
+2024-08-28 11:44:03,184 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:44:03,491 INFO ===> New TaichiEnv created.
+2024-08-28 11:44:03,491 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:44:03,513 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:44:03,657 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:44:42,381 INFO =====> Epoch: 17
+2024-08-28 11:44:42,381 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.19087219238281, 'emd_loss': 39.17304229736328, 'total_loss': 39.17304229736328}
+2024-08-28 11:44:42,381 INFO =====> Param: E: [250000.], nu: [0.10074693], rho: [2067.6145], sand_angle: [22.705004]
+2024-08-28 11:44:42,381 INFO =====> Grad: [ 2.4004504e-02  1.8159373e+04 -1.5025975e+01  6.4453326e+02]
+2024-08-28 11:44:42,381 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:44:42,695 INFO ===> New TaichiEnv created.
+2024-08-28 11:44:42,695 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:44:42,717 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 11:44:42,864 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:45:22,288 INFO =====> Epoch: 18
+2024-08-28 11:45:22,288 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.92783737182617, 'emd_loss': 39.061676025390625, 'total_loss': 39.061676025390625}
+2024-08-28 11:45:22,289 INFO =====> Param: E: [250775.77], nu: [0.1], rho: [2087.4685], sand_angle: [20.658361]
+2024-08-28 11:45:22,289 INFO =====> Grad: [-2.6021179e-02 -9.5874648e+03 -8.3081026e+00  6.0150409e+02]
+2024-08-28 11:45:22,289 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:45:22,632 INFO ===> New TaichiEnv created.
+2024-08-28 11:45:22,632 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:45:22,654 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:45:22,801 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:46:02,903 INFO =====> Epoch: 19
+2024-08-28 11:46:02,903 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.429725646972656, 'emd_loss': 38.842037200927734, 'total_loss': 38.842037200927734}
+2024-08-28 11:46:02,903 INFO =====> Param: E: [255608.2], nu: [0.1014211], rho: [2102.6255], sand_angle: [19.233732]
+2024-08-28 11:46:02,903 INFO =====> Grad: [-1.5368744e-02 -1.0047742e+04  5.2526484e+00 -3.7840573e+02]
+2024-08-28 11:46:02,903 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:46:03,210 INFO ===> New TaichiEnv created.
+2024-08-28 11:46:03,210 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:46:03,232 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:46:03,380 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:46:42,347 INFO =====> Epoch: 20
+2024-08-28 11:46:42,347 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.29035949707031, 'emd_loss': 38.47100067138672, 'total_loss': 38.47100067138672}
+2024-08-28 11:46:42,347 INFO =====> Param: E: [271739.44], nu: [0.11362467], rho: [2125.6265], sand_angle: [19.178692]
+2024-08-28 11:46:42,347 INFO =====> Grad: [-5.1395040e-02 -3.8777266e+04 -1.7405022e+01 -1.1225122e+03]
+2024-08-28 11:46:42,347 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:46:42,659 INFO ===> New TaichiEnv created.
+2024-08-28 11:46:42,659 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:46:42,684 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:46:42,840 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:47:21,797 INFO =====> Epoch: 21
+2024-08-28 11:47:21,797 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.07062530517578, 'emd_loss': 38.184661865234375, 'total_loss': 38.184661865234375}
+2024-08-28 11:47:21,798 INFO =====> Param: E: [288899.8], nu: [0.12824701], rho: [2158.4258], sand_angle: [20.210224]
+2024-08-28 11:47:21,798 INFO =====> Grad: [-1.0604891e-02 -1.2713977e+04 -2.3428589e+01 -1.1819019e+03]
+2024-08-28 11:47:21,798 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:47:22,126 INFO ===> New TaichiEnv created.
+2024-08-28 11:47:22,126 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:47:22,148 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 11:47:22,298 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:48:00,889 INFO =====> Epoch: 22
+2024-08-28 11:48:00,890 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 33.932579040527344, 'emd_loss': 38.141780853271484, 'total_loss': 38.141780853271484}
+2024-08-28 11:48:00,890 INFO =====> Param: E: [299352.5], nu: [0.13946156], rho: [2186.3274], sand_angle: [20.482546]
+2024-08-28 11:48:00,890 INFO =====> Grad: [2.0499345e-02 7.1593784e+03 3.6057107e+00 7.1414545e+02]
+2024-08-28 11:48:00,890 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:48:01,203 INFO ===> New TaichiEnv created.
+2024-08-28 11:48:01,203 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:48:01,225 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:48:01,368 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:48:40,516 INFO =====> Epoch: 23
+2024-08-28 11:48:40,516 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 33.916629791259766, 'emd_loss': 37.9619026184082, 'total_loss': 37.9619026184082}
+2024-08-28 11:48:40,517 INFO =====> Param: E: [297888.22], nu: [0.13954929], rho: [2200.], sand_angle: [19.772303]
+2024-08-28 11:48:40,517 INFO =====> Grad: [4.5958169e-02 3.4788793e+04 6.0052066e+00 1.1141462e+03]
+2024-08-28 11:48:40,517 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:48:40,827 INFO ===> New TaichiEnv created.
+2024-08-28 11:48:40,828 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:48:40,850 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:48:40,998 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:49:21,593 INFO =====> Epoch: 24
+2024-08-28 11:49:21,593 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 33.79241180419922, 'emd_loss': 37.927330017089844, 'total_loss': 37.927330017089844}
+2024-08-28 11:49:21,594 INFO =====> Param: E: [300516.47], nu: [0.14319174], rho: [2200.], sand_angle: [20.075315]
+2024-08-28 11:49:21,594 INFO =====> Grad: [-1.7694535e-02 -1.3074159e+04 -4.9477711e+01 -1.1326094e+03]
+2024-08-28 11:49:21,594 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:49:21,917 INFO ===> New TaichiEnv created.
+2024-08-28 11:49:21,917 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:49:21,939 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 11:49:22,089 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:50:00,726 INFO =====> Epoch: 25
+2024-08-28 11:50:00,726 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 33.718048095703125, 'emd_loss': 37.895355224609375, 'total_loss': 37.895355224609375}
+2024-08-28 11:50:00,727 INFO =====> Param: E: [302929.7], nu: [0.14606711], rho: [2200.], sand_angle: [20.858337]
+2024-08-28 11:50:00,727 INFO =====> Grad: [-8.3581392e-05  1.6041586e+03 -2.5952240e+01 -6.4010162e+02]
+2024-08-28 11:50:00,727 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:50:01,065 INFO ===> New TaichiEnv created.
+2024-08-28 11:50:01,066 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:50:01,089 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:50:01,247 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:50:39,903 INFO =====> Epoch: 26
+2024-08-28 11:50:39,903 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 33.8776969909668, 'emd_loss': 38.13093185424805, 'total_loss': 38.13093185424805}
+2024-08-28 11:50:39,904 INFO =====> Param: E: [299604.2], nu: [0.14266388], rho: [2200.], sand_angle: [21.155489]
+2024-08-28 11:50:39,904 INFO =====> Grad: [2.4465065e-02 2.1868195e+04 4.0269184e+00 5.0996771e+02]
+2024-08-28 11:50:39,904 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:50:40,227 INFO ===> New TaichiEnv created.
+2024-08-28 11:50:40,227 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:50:40,249 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 11:50:40,398 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:51:19,787 INFO =====> Epoch: 27
+2024-08-28 11:51:19,787 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.010337829589844, 'emd_loss': 38.10127639770508, 'total_loss': 38.10127639770508}
+2024-08-28 11:51:19,787 INFO =====> Param: E: [295988.53], nu: [0.14253344], rho: [2200.], sand_angle: [21.741253]
+2024-08-28 11:51:19,787 INFO =====> Grad: [ 2.5866420e-03 -1.0762407e+04 -2.7542612e+01 -3.9344083e+02]
+2024-08-28 11:51:19,787 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:51:20,108 INFO ===> New TaichiEnv created.
+2024-08-28 11:51:20,108 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:51:20,130 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:51:20,270 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:51:59,970 INFO =====> Epoch: 28
+2024-08-28 11:51:59,970 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.2366828918457, 'emd_loss': 38.2653694152832, 'total_loss': 38.2653694152832}
+2024-08-28 11:51:59,970 INFO =====> Param: E: [291797.62], nu: [0.14057915], rho: [2200.], sand_angle: [21.81727]
+2024-08-28 11:51:59,970 INFO =====> Grad: [ 3.9159660e-03  6.6234863e+03 -3.3982216e+01  5.6025226e+02]
+2024-08-28 11:51:59,970 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:52:00,290 INFO ===> New TaichiEnv created.
+2024-08-28 11:52:00,291 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:52:00,312 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:52:00,460 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:52:40,008 INFO =====> Epoch: 29
+2024-08-28 11:52:40,009 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.2685432434082, 'emd_loss': 38.26459503173828, 'total_loss': 38.26459503173828}
+2024-08-28 11:52:40,009 INFO =====> Param: E: [285238.03], nu: [0.13718235], rho: [2200.], sand_angle: [21.5372]
+2024-08-28 11:52:40,009 INFO =====> Grad: [ 1.1938818e-02  5.7801865e+03 -5.0356302e+00  4.3151428e+02]
+2024-08-28 11:52:40,009 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:52:40,369 INFO ===> New TaichiEnv created.
+2024-08-28 11:52:40,369 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:52:40,391 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:52:40,538 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:53:19,322 INFO =====> Epoch: 30
+2024-08-28 11:53:19,322 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.25898742675781, 'emd_loss': 38.28426742553711, 'total_loss': 38.28426742553711}
+2024-08-28 11:53:19,322 INFO =====> Param: E: [275922.38], nu: [0.12944849], rho: [2200.], sand_angle: [20.70179]
+2024-08-28 11:53:19,322 INFO =====> Grad: [1.4551954e-02 1.6729617e+04 1.5434713e+01 7.3101013e+02]
+2024-08-28 11:53:19,322 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:53:19,653 INFO ===> New TaichiEnv created.
+2024-08-28 11:53:19,653 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:53:19,675 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 11:53:19,826 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0008s
+2024-08-28 11:53:58,731 INFO =====> Epoch: 31
+2024-08-28 11:53:58,731 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.179866790771484, 'emd_loss': 38.554813385009766, 'total_loss': 38.554813385009766}
+2024-08-28 11:53:58,731 INFO =====> Param: E: [263543.28], nu: [0.12042219], rho: [2200.], sand_angle: [20.048798]
+2024-08-28 11:53:58,731 INFO =====> Grad: [ 1.7049031e-02  7.0692842e+03 -1.7030251e+01 -1.3273480e+02]
+2024-08-28 11:53:58,731 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:53:59,069 INFO ===> New TaichiEnv created.
+2024-08-28 11:53:59,069 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:53:59,092 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 11:53:59,247 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:54:38,427 INFO =====> Epoch: 32
+2024-08-28 11:54:38,427 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.27124786376953, 'emd_loss': 38.513526916503906, 'total_loss': 38.513526916503906}
+2024-08-28 11:54:38,427 INFO =====> Param: E: [256359.16], nu: [0.11491127], rho: [2200.], sand_angle: [19.50778]
+2024-08-28 11:54:38,427 INFO =====> Grad: [-1.7071281e-02 -9.4017285e+03  1.4756537e+01 -6.5511230e+01]
+2024-08-28 11:54:38,427 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:54:38,758 INFO ===> New TaichiEnv created.
+2024-08-28 11:54:38,758 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:54:38,780 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 11:54:38,925 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:55:19,286 INFO =====> Epoch: 33
+2024-08-28 11:55:19,286 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.28558349609375, 'emd_loss': 38.549461364746094, 'total_loss': 38.549461364746094}
+2024-08-28 11:55:19,286 INFO =====> Param: E: [250000.], nu: [0.10169774], rho: [2200.], sand_angle: [18.51537]
+2024-08-28 11:55:19,286 INFO =====> Grad: [ 4.5808766e-02  3.0374662e+04 -2.5218393e+01  6.1973071e+02]
+2024-08-28 11:55:19,286 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:55:19,609 INFO ===> New TaichiEnv created.
+2024-08-28 11:55:19,609 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:55:19,631 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:55:19,778 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:55:59,105 INFO =====> Epoch: 34
+2024-08-28 11:55:59,105 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.47323989868164, 'emd_loss': 38.89759826660156, 'total_loss': 38.89759826660156}
+2024-08-28 11:55:59,105 INFO =====> Param: E: [250000.], nu: [0.1], rho: [2200.], sand_angle: [16.87089]
+2024-08-28 11:55:59,105 INFO =====> Grad: [6.6132084e-02 3.4528836e+04 1.0006154e+01 9.6353448e+02]
+2024-08-28 11:55:59,105 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:55:59,438 INFO ===> New TaichiEnv created.
+2024-08-28 11:55:59,438 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:55:59,460 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 11:55:59,610 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:56:38,777 INFO =====> Epoch: 35
+2024-08-28 11:56:38,777 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.382225036621094, 'emd_loss': 39.02313995361328, 'total_loss': 39.02313995361328}
+2024-08-28 11:56:38,777 INFO =====> Param: E: [250000.], nu: [0.1], rho: [2200.], sand_angle: [16.561813]
+2024-08-28 11:56:38,777 INFO =====> Grad: [-3.4914844e-02 -2.4968770e+04  2.8575797e+00 -1.4411637e+03]
+2024-08-28 11:56:38,777 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:56:39,239 INFO ===> New TaichiEnv created.
+2024-08-28 11:56:39,239 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:56:39,268 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0039s
+2024-08-28 11:56:39,468 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0009s
+2024-08-28 11:57:18,944 INFO =====> Epoch: 36
+2024-08-28 11:57:18,945 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.3940315246582, 'emd_loss': 39.016422271728516, 'total_loss': 39.016422271728516}
+2024-08-28 11:57:18,945 INFO =====> Param: E: [250000.], nu: [0.1], rho: [2200.], sand_angle: [15.248507]
+2024-08-28 11:57:18,945 INFO =====> Grad: [ 3.9381538e-02  2.6071688e+04 -1.9588848e+00  1.4588975e+03]
+2024-08-28 11:57:18,945 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:57:19,279 INFO ===> New TaichiEnv created.
+2024-08-28 11:57:19,280 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:57:19,302 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:57:19,448 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:57:59,036 INFO =====> Epoch: 37
+2024-08-28 11:57:59,036 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.67424774169922, 'emd_loss': 39.40284729003906, 'total_loss': 39.40284729003906}
+2024-08-28 11:57:59,036 INFO =====> Param: E: [250000.], nu: [0.1], rho: [2200.], sand_angle: [15.130879]
+2024-08-28 11:57:59,036 INFO =====> Grad: [-5.7365790e-02 -3.0680250e+04  1.2831389e+00 -1.4731689e+03]
+2024-08-28 11:57:59,036 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:57:59,359 INFO ===> New TaichiEnv created.
+2024-08-28 11:57:59,359 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:57:59,381 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:57:59,527 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:58:40,451 INFO =====> Epoch: 38
+2024-08-28 11:58:40,451 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.738887786865234, 'emd_loss': 39.3620719909668, 'total_loss': 39.3620719909668}
+2024-08-28 11:58:40,451 INFO =====> Param: E: [250000.], nu: [0.1], rho: [2200.], sand_angle: [15.828508]
+2024-08-28 11:58:40,451 INFO =====> Grad: [-2.8675299e-02 -1.1232380e+04 -8.2347751e-01 -1.1913785e+03]
+2024-08-28 11:58:40,452 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:58:40,774 INFO ===> New TaichiEnv created.
+2024-08-28 11:58:40,774 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:58:40,796 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 11:58:40,945 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 11:59:20,281 INFO =====> Epoch: 39
+2024-08-28 11:59:20,281 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.59170913696289, 'emd_loss': 39.29112243652344, 'total_loss': 39.29112243652344}
+2024-08-28 11:59:20,281 INFO =====> Param: E: [250000.], nu: [0.1], rho: [2200.], sand_angle: [16.561136]
+2024-08-28 11:59:20,281 INFO =====> Grad: [ 3.0014362e-02  3.2847285e+04  1.7855240e+01 -1.4411751e+02]
+2024-08-28 11:59:20,281 INFO =====> Num. aborted data so far: 0
+2024-08-28 11:59:20,616 INFO ===> New TaichiEnv created.
+2024-08-28 11:59:20,616 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 11:59:20,638 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 11:59:20,792 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:00:10,749 INFO =====> Epoch: 40
+2024-08-28 12:00:10,749 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.389530181884766, 'emd_loss': 39.035621643066406, 'total_loss': 39.035621643066406}
+2024-08-28 12:00:10,749 INFO =====> Param: E: [250000.], nu: [0.1], rho: [2200.], sand_angle: [17.22329]
+2024-08-28 12:00:10,749 INFO =====> Grad: [7.1884990e-03 9.8155244e+03 6.7683687e+00 6.6505113e+00]
+2024-08-28 12:00:10,749 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:00:11,143 INFO ===> New TaichiEnv created.
+2024-08-28 12:00:11,144 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:00:11,167 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:00:11,317 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:00:50,192 INFO =====> Epoch: 41
+2024-08-28 12:00:50,192 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.38916015625, 'emd_loss': 38.87482833862305, 'total_loss': 38.87482833862305}
+2024-08-28 12:00:50,192 INFO =====> Param: E: [250000.], nu: [0.1], rho: [2200.], sand_angle: [18.320738]
+2024-08-28 12:00:50,192 INFO =====> Grad: [ 1.1171043e-03  1.4492763e+04  6.2419000e+00 -7.3149042e+02]
+2024-08-28 12:00:50,192 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:00:50,526 INFO ===> New TaichiEnv created.
+2024-08-28 12:00:50,526 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:00:50,549 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:00:50,705 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:01:30,468 INFO =====> Epoch: 42
+2024-08-28 12:01:30,468 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.42254638671875, 'emd_loss': 38.87892532348633, 'total_loss': 38.87892532348633}
+2024-08-28 12:01:30,469 INFO =====> Param: E: [250000.], nu: [0.1], rho: [2199.919], sand_angle: [19.510096]
+2024-08-28 12:01:30,469 INFO =====> Grad: [-9.9002458e-03 -1.0238767e+04  8.0203648e+00 -2.7806647e+02]
+2024-08-28 12:01:30,469 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:01:30,791 INFO ===> New TaichiEnv created.
+2024-08-28 12:01:30,792 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:01:30,814 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:01:30,955 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:02:10,381 INFO =====> Epoch: 43
+2024-08-28 12:02:10,381 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.48186111450195, 'emd_loss': 38.69786071777344, 'total_loss': 38.69786071777344}
+2024-08-28 12:02:10,381 INFO =====> Param: E: [250000.], nu: [0.1], rho: [2193.9265], sand_angle: [20.132477]
+2024-08-28 12:02:10,381 INFO =====> Grad: [1.9609177e-02 9.7284873e+03 1.1419967e+01 6.4793268e+02]
+2024-08-28 12:02:10,381 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:02:10,706 INFO ===> New TaichiEnv created.
+2024-08-28 12:02:10,707 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:02:10,728 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:02:10,876 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:02:50,316 INFO =====> Epoch: 44
+2024-08-28 12:02:50,316 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.499786376953125, 'emd_loss': 38.812862396240234, 'total_loss': 38.812862396240234}
+2024-08-28 12:02:50,316 INFO =====> Param: E: [250000.], nu: [0.1], rho: [2195.1677], sand_angle: [21.015415]
+2024-08-28 12:02:50,316 INFO =====> Grad: [-1.8164394e-02 -1.8627697e+04 -1.2786988e+01 -4.5775784e+02]
+2024-08-28 12:02:50,316 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:02:50,661 INFO ===> New TaichiEnv created.
+2024-08-28 12:02:50,661 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:02:50,684 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:02:50,842 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0008s
+2024-08-28 12:03:29,462 INFO =====> Epoch: 45
+2024-08-28 12:03:29,462 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.61656951904297, 'emd_loss': 38.893333435058594, 'total_loss': 38.893333435058594}
+2024-08-28 12:03:29,462 INFO =====> Param: E: [250000.], nu: [0.1], rho: [2195.187], sand_angle: [22.277054]
+2024-08-28 12:03:29,462 INFO =====> Grad: [-1.0446174e-02  2.5962295e+03  2.1069961e+00 -6.6780304e+02]
+2024-08-28 12:03:29,462 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:03:29,873 INFO ===> New TaichiEnv created.
+2024-08-28 12:03:29,873 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:03:29,903 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0039s
+2024-08-28 12:03:30,088 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:04:09,628 INFO =====> Epoch: 46
+2024-08-28 12:04:09,628 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.93058395385742, 'emd_loss': 39.15966033935547, 'total_loss': 39.15966033935547}
+2024-08-28 12:04:09,628 INFO =====> Param: E: [256306.36], nu: [0.10320014], rho: [2200.], sand_angle: [23.706488]
+2024-08-28 12:04:09,628 INFO =====> Grad: [-4.1346688e-02 -3.6186086e+04 -1.2669447e+01 -4.0727087e+02]
+2024-08-28 12:04:09,628 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:04:09,964 INFO ===> New TaichiEnv created.
+2024-08-28 12:04:09,964 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:04:09,986 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:04:10,130 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:04:49,458 INFO =====> Epoch: 47
+2024-08-28 12:04:49,458 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.183074951171875, 'emd_loss': 39.29140090942383, 'total_loss': 39.29140090942383}
+2024-08-28 12:04:49,459 INFO =====> Param: E: [257450.33], nu: [0.10201158], rho: [2200.], sand_angle: [25.331339]
+2024-08-28 12:04:49,459 INFO =====> Grad: [ 2.3911057e-02  1.6062618e+04 -2.2405603e+01 -4.6875232e+02]
+2024-08-28 12:04:49,459 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:04:49,791 INFO ===> New TaichiEnv created.
+2024-08-28 12:04:49,791 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:04:49,818 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0061s
+2024-08-28 12:04:49,963 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:05:28,493 INFO =====> Epoch: 48
+2024-08-28 12:05:28,493 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.62583541870117, 'emd_loss': 39.30839538574219, 'total_loss': 39.30839538574219}
+2024-08-28 12:05:28,494 INFO =====> Param: E: [261303.22], nu: [0.10362214], rho: [2200.], sand_angle: [26.869164]
+2024-08-28 12:05:28,494 INFO =====> Grad: [-1.4738133e-02 -1.0514938e+04 -3.5357700e+01 -8.5600639e+01]
+2024-08-28 12:05:28,494 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:05:28,830 INFO ===> New TaichiEnv created.
+2024-08-28 12:05:28,830 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:05:28,852 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:05:29,004 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:06:07,362 INFO =====> Epoch: 49
+2024-08-28 12:06:07,362 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.88966369628906, 'emd_loss': 39.434730529785156, 'total_loss': 39.434730529785156}
+2024-08-28 12:06:07,362 INFO =====> Param: E: [271820.7], nu: [0.10963618], rho: [2200.], sand_angle: [28.999155]
+2024-08-28 12:06:07,362 INFO =====> Grad: [-3.7501320e-02 -1.7828012e+04 -2.8403202e+01 -1.0888849e+03]
+2024-08-28 12:06:07,362 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:06:07,703 INFO ===> New TaichiEnv created.
+2024-08-28 12:06:07,703 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:06:07,725 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:06:07,881 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:06:47,150 INFO =====> Epoch: 50
+2024-08-28 12:06:47,150 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 36.339988708496094, 'emd_loss': 39.52379608154297, 'total_loss': 39.52379608154297}
+2024-08-28 12:06:47,150 INFO =====> Param: E: [280196.8], nu: [0.11244433], rho: [2200.], sand_angle: [30.69228]
+2024-08-28 12:06:47,150 INFO =====> Grad: [ 6.1658127e-03  1.0251464e+04 -2.5467447e+01  3.3590182e+02]
+2024-08-28 12:06:47,150 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:06:47,483 INFO ===> New TaichiEnv created.
+2024-08-28 12:06:47,483 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:06:47,506 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:06:47,658 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:07:27,653 INFO =====> Epoch: 51
+2024-08-28 12:07:27,653 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 36.602027893066406, 'emd_loss': 39.776611328125, 'total_loss': 39.776611328125}
+2024-08-28 12:07:27,653 INFO =====> Param: E: [291934.53], nu: [0.11163121], rho: [2200.], sand_angle: [32.14682]
+2024-08-28 12:07:27,653 INFO =====> Grad: [-2.1855872e-02  1.2947224e+04  1.1866237e+01  1.1658635e+02]
+2024-08-28 12:07:27,653 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:07:27,987 INFO ===> New TaichiEnv created.
+2024-08-28 12:07:27,987 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:07:28,009 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:07:28,154 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:08:07,559 INFO =====> Epoch: 52
+2024-08-28 12:08:07,559 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 36.783016204833984, 'emd_loss': 39.90848922729492, 'total_loss': 39.90848922729492}
+2024-08-28 12:08:07,559 INFO =====> Param: E: [298149.34], nu: [0.11055225], rho: [2200.], sand_angle: [32.241188]
+2024-08-28 12:08:07,559 INFO =====> Grad: [2.2806814e-02 1.3017068e+03 2.4243076e+01 1.6922058e+03]
+2024-08-28 12:08:07,559 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:08:07,896 INFO ===> New TaichiEnv created.
+2024-08-28 12:08:07,897 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:08:07,918 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:08:08,060 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:08:47,240 INFO =====> Epoch: 53
+2024-08-28 12:08:47,240 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 36.844505310058594, 'emd_loss': 39.8746452331543, 'total_loss': 39.8746452331543}
+2024-08-28 12:08:47,241 INFO =====> Param: E: [303673.88], nu: [0.10971243], rho: [2200.], sand_angle: [32.958847]
+2024-08-28 12:08:47,241 INFO =====> Grad: [ 6.2351627e-04 -5.3147583e+02 -3.6122074e+01 -9.3175958e+02]
+2024-08-28 12:08:47,241 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:08:47,600 INFO ===> New TaichiEnv created.
+2024-08-28 12:08:47,600 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:08:47,623 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 12:08:47,784 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0008s
+2024-08-28 12:09:26,616 INFO =====> Epoch: 54
+2024-08-28 12:09:26,616 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 37.06437683105469, 'emd_loss': 39.913509368896484, 'total_loss': 39.913509368896484}
+2024-08-28 12:09:26,616 INFO =====> Param: E: [304692.53], nu: [0.10598694], rho: [2200.], sand_angle: [33.529057]
+2024-08-28 12:09:26,616 INFO =====> Grad: [2.04608608e-02 1.11735557e+04 3.38904691e+00 1.18742775e+02]
+2024-08-28 12:09:26,616 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:09:27,031 INFO ===> New TaichiEnv created.
+2024-08-28 12:09:27,031 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:09:27,054 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:09:27,205 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:10:06,553 INFO =====> Epoch: 55
+2024-08-28 12:10:06,553 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 37.2393798828125, 'emd_loss': 40.08740997314453, 'total_loss': 40.08740997314453}
+2024-08-28 12:10:06,553 INFO =====> Param: E: [300065.78], nu: [0.1], rho: [2200.], sand_angle: [33.356907]
+2024-08-28 12:10:06,553 INFO =====> Grad: [ 2.8631968e-02  1.6915396e+04 -5.7229233e-01  1.0016128e+03]
+2024-08-28 12:10:06,553 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:10:06,891 INFO ===> New TaichiEnv created.
+2024-08-28 12:10:06,891 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:10:06,913 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:10:07,061 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:10:46,580 INFO =====> Epoch: 56
+2024-08-28 12:10:46,580 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 37.27349090576172, 'emd_loss': 40.159767150878906, 'total_loss': 40.159767150878906}
+2024-08-28 12:10:46,580 INFO =====> Param: E: [293628.44], nu: [0.1], rho: [2200.], sand_angle: [33.05263]
+2024-08-28 12:10:46,580 INFO =====> Grad: [ 1.1513271e-02 -3.6533945e+03 -5.3541293e+00  2.1603069e+02]
+2024-08-28 12:10:46,580 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:10:46,919 INFO ===> New TaichiEnv created.
+2024-08-28 12:10:46,919 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:10:46,942 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:10:47,094 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:11:26,511 INFO =====> Epoch: 57
+2024-08-28 12:11:26,511 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 37.14434814453125, 'emd_loss': 40.06298065185547, 'total_loss': 40.06298065185547}
+2024-08-28 12:11:26,511 INFO =====> Param: E: [295944.38], nu: [0.10155592], rho: [2200.], sand_angle: [33.146725]
+2024-08-28 12:11:26,511 INFO =====> Grad: [-4.1783128e-02 -2.6505100e+04 -1.7661652e+01 -5.3621332e+02]
+2024-08-28 12:11:26,511 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:11:26,842 INFO ===> New TaichiEnv created.
+2024-08-28 12:11:26,842 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:11:26,864 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:11:27,011 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:12:05,893 INFO =====> Epoch: 58
+2024-08-28 12:12:05,893 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 37.19502258300781, 'emd_loss': 40.113731384277344, 'total_loss': 40.113731384277344}
+2024-08-28 12:12:05,893 INFO =====> Param: E: [299686.5], nu: [0.10356072], rho: [2200.], sand_angle: [33.44601]
+2024-08-28 12:12:05,893 INFO =====> Grad: [-8.4824320e-03 -2.2121772e+03  3.1410823e+00 -3.0882364e+02]
+2024-08-28 12:12:05,893 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:12:06,245 INFO ===> New TaichiEnv created.
+2024-08-28 12:12:06,245 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:12:06,269 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:12:06,422 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0008s
+2024-08-28 12:12:45,721 INFO =====> Epoch: 59
+2024-08-28 12:12:45,721 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 37.31026077270508, 'emd_loss': 40.14411163330078, 'total_loss': 40.14411163330078}
+2024-08-28 12:12:45,721 INFO =====> Param: E: [298482.1], nu: [0.1], rho: [2200.], sand_angle: [33.247086]
+2024-08-28 12:12:45,721 INFO =====> Grad: [ 2.3615481e-02  2.1578824e+04 -2.9389973e+01  6.7549634e+02]
+2024-08-28 12:12:45,721 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:12:46,140 INFO ===> New TaichiEnv created.
+2024-08-28 12:12:46,140 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:12:46,169 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0039s
+2024-08-28 12:12:46,368 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0009s
+2024-08-28 12:13:25,839 INFO =====> Epoch: 60
+2024-08-28 12:13:25,839 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 37.248104095458984, 'emd_loss': 40.11577606201172, 'total_loss': 40.11577606201172}
+2024-08-28 12:13:25,839 INFO =====> Param: E: [290194.6], nu: [0.1], rho: [2200.], sand_angle: [32.311134]
+2024-08-28 12:13:25,839 INFO =====> Grad: [ 3.7579473e-02  1.9931256e+03 -1.2179600e+01  1.1068185e+03]
+2024-08-28 12:13:25,839 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:13:26,172 INFO ===> New TaichiEnv created.
+2024-08-28 12:13:26,172 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:13:26,194 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:13:26,343 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:14:06,138 INFO =====> Epoch: 61
+2024-08-28 12:14:06,138 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 36.86875534057617, 'emd_loss': 39.9880256652832, 'total_loss': 39.9880256652832}
+2024-08-28 12:14:06,139 INFO =====> Param: E: [272594.22], nu: [0.1], rho: [2200.], sand_angle: [30.088793]
+2024-08-28 12:14:06,139 INFO =====> Grad: [5.5495661e-02 2.7222883e+04 3.0079170e+01 2.2300366e+03]
+2024-08-28 12:14:06,139 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:14:06,479 INFO ===> New TaichiEnv created.
+2024-08-28 12:14:06,480 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:14:06,502 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:14:06,651 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:14:46,002 INFO =====> Epoch: 62
+2024-08-28 12:14:46,002 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 36.59710693359375, 'emd_loss': 39.96017837524414, 'total_loss': 39.96017837524414}
+2024-08-28 12:14:46,002 INFO =====> Param: E: [271181.38], nu: [0.10818329], rho: [2200.], sand_angle: [28.283798]
+2024-08-28 12:14:46,002 INFO =====> Grad: [-7.6906629e-02 -7.0779336e+04 -9.2369108e+00 -3.2235803e+02]
+2024-08-28 12:14:46,002 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:14:46,368 INFO ===> New TaichiEnv created.
+2024-08-28 12:14:46,369 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:14:46,391 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:14:46,532 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:15:25,159 INFO =====> Epoch: 63
+2024-08-28 12:15:25,159 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 36.11896514892578, 'emd_loss': 39.683773040771484, 'total_loss': 39.683773040771484}
+2024-08-28 12:15:25,159 INFO =====> Param: E: [274487.97], nu: [0.11823919], rho: [2200.], sand_angle: [27.016596]
+2024-08-28 12:15:25,159 INFO =====> Grad: [-2.5931288e-02 -1.0891207e+04 -1.8218758e+01 -5.5961835e+02]
+2024-08-28 12:15:25,159 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:15:25,511 INFO ===> New TaichiEnv created.
+2024-08-28 12:15:25,511 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:15:25,534 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 12:15:25,680 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:16:04,750 INFO =====> Epoch: 64
+2024-08-28 12:16:04,750 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.70769500732422, 'emd_loss': 39.32498550415039, 'total_loss': 39.32498550415039}
+2024-08-28 12:16:04,750 INFO =====> Param: E: [276904.47], nu: [0.12683351], rho: [2200.], sand_angle: [26.836962]
+2024-08-28 12:16:04,750 INFO =====> Grad: [ 3.2735909e-03  2.1496658e+03 -1.6280884e+01 -1.4740062e+03]
+2024-08-28 12:16:04,750 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:16:05,170 INFO ===> New TaichiEnv created.
+2024-08-28 12:16:05,170 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:16:05,199 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0040s
+2024-08-28 12:16:05,395 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0009s
+2024-08-28 12:16:45,182 INFO =====> Epoch: 65
+2024-08-28 12:16:45,182 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.618064880371094, 'emd_loss': 39.137847900390625, 'total_loss': 39.137847900390625}
+2024-08-28 12:16:45,182 INFO =====> Param: E: [278903.2], nu: [0.13421772], rho: [2200.], sand_angle: [26.831432]
+2024-08-28 12:16:45,182 INFO =====> Grad: [ 1.0764585e-03  1.6627047e+03 -2.0551796e+01 -2.4558261e+02]
+2024-08-28 12:16:45,182 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:16:45,520 INFO ===> New TaichiEnv created.
+2024-08-28 12:16:45,521 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:16:45,543 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:16:45,692 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:17:25,855 INFO =====> Epoch: 66
+2024-08-28 12:17:25,856 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.61905288696289, 'emd_loss': 39.14221954345703, 'total_loss': 39.14221954345703}
+2024-08-28 12:17:25,856 INFO =====> Param: E: [280918.9], nu: [0.13928778], rho: [2200.], sand_angle: [26.288633]
+2024-08-28 12:17:25,856 INFO =====> Grad: [-1.1231665e-03  6.5201533e+03  2.5117438e+00  8.4089984e+02]
+2024-08-28 12:17:25,856 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:17:26,198 INFO ===> New TaichiEnv created.
+2024-08-28 12:17:26,198 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:17:26,221 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:17:26,371 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:18:05,134 INFO =====> Epoch: 67
+2024-08-28 12:18:05,134 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.50281524658203, 'emd_loss': 38.89384078979492, 'total_loss': 38.89384078979492}
+2024-08-28 12:18:05,134 INFO =====> Param: E: [280613.62], nu: [0.14478555], rho: [2200.], sand_angle: [25.4398]
+2024-08-28 12:18:05,135 INFO =====> Grad: [ 1.1714857e-02 -3.5971367e+03  3.6462955e+01  5.5850946e+02]
+2024-08-28 12:18:05,135 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:18:05,481 INFO ===> New TaichiEnv created.
+2024-08-28 12:18:05,481 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:18:05,503 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:18:05,655 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:18:43,967 INFO =====> Epoch: 68
+2024-08-28 12:18:43,967 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.2402458190918, 'emd_loss': 38.87841796875, 'total_loss': 38.87841796875}
+2024-08-28 12:18:43,968 INFO =====> Param: E: [274302.06], nu: [0.13844237], rho: [2200.], sand_angle: [24.557367]
+2024-08-28 12:18:43,968 INFO =====> Grad: [3.3315305e-02 4.5871082e+04 2.8624470e+01 1.7485776e+02]
+2024-08-28 12:18:43,968 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:18:44,358 INFO ===> New TaichiEnv created.
+2024-08-28 12:18:44,358 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:18:44,380 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 12:18:44,528 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:19:23,563 INFO =====> Epoch: 69
+2024-08-28 12:19:23,563 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.03886413574219, 'emd_loss': 38.92223358154297, 'total_loss': 38.92223358154297}
+2024-08-28 12:19:23,563 INFO =====> Param: E: [267330.66], nu: [0.1312261], rho: [2194.274], sand_angle: [23.378319]
+2024-08-28 12:19:23,563 INFO =====> Grad: [6.8582613e-03 6.0076602e+03 1.3297774e+01 5.8975995e+02]
+2024-08-28 12:19:23,563 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:19:23,914 INFO ===> New TaichiEnv created.
+2024-08-28 12:19:23,914 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:19:23,937 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:19:24,081 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:20:03,624 INFO =====> Epoch: 70
+2024-08-28 12:20:03,624 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.78217697143555, 'emd_loss': 38.85391616821289, 'total_loss': 38.85391616821289}
+2024-08-28 12:20:03,625 INFO =====> Param: E: [263145.53], nu: [0.12719549], rho: [2183.4258], sand_angle: [22.464933]
+2024-08-28 12:20:03,625 INFO =====> Grad: [-1.1584290e-02 -1.0168198e+04  1.1279556e+01 -2.3710043e+02]
+2024-08-28 12:20:03,625 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:20:03,968 INFO ===> New TaichiEnv created.
+2024-08-28 12:20:03,968 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:20:03,990 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:20:04,140 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:20:44,307 INFO =====> Epoch: 71
+2024-08-28 12:20:44,308 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.74357986450195, 'emd_loss': 38.9362907409668, 'total_loss': 38.9362907409668}
+2024-08-28 12:20:44,308 INFO =====> Param: E: [258862.17], nu: [0.12031428], rho: [2176.3196], sand_angle: [21.820988]
+2024-08-28 12:20:44,308 INFO =====> Grad: [ 2.6492910e-03  1.3119393e+04 -5.3804593e+00 -2.7896799e+02]
+2024-08-28 12:20:44,308 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:20:44,647 INFO ===> New TaichiEnv created.
+2024-08-28 12:20:44,648 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:20:44,671 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 12:20:44,817 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:21:23,560 INFO =====> Epoch: 72
+2024-08-28 12:21:23,560 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.68635559082031, 'emd_loss': 38.695953369140625, 'total_loss': 38.695953369140625}
+2024-08-28 12:21:23,560 INFO =====> Param: E: [250000.], nu: [0.11051516], rho: [2160.447], sand_angle: [21.360939]
+2024-08-28 12:21:23,560 INFO =====> Grad: [ 2.9965209e-02  1.4471784e+04  1.8708927e+01 -1.8659283e+02]
+2024-08-28 12:21:23,560 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:21:23,926 INFO ===> New TaichiEnv created.
+2024-08-28 12:21:23,927 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:21:23,951 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:21:24,104 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:22:03,041 INFO =====> Epoch: 73
+2024-08-28 12:22:03,041 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.62620162963867, 'emd_loss': 38.860591888427734, 'total_loss': 38.860591888427734}
+2024-08-28 12:22:03,041 INFO =====> Param: E: [250000.], nu: [0.1], rho: [2146.0217], sand_angle: [20.935076]
+2024-08-28 12:22:03,041 INFO =====> Grad: [2.3769215e-02 9.1377949e+03 7.7406622e-02 1.3378775e+01]
+2024-08-28 12:22:03,041 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:22:03,388 INFO ===> New TaichiEnv created.
+2024-08-28 12:22:03,389 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:22:03,411 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:22:03,560 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:22:42,779 INFO =====> Epoch: 74
+2024-08-28 12:22:42,780 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.550655364990234, 'emd_loss': 38.93089294433594, 'total_loss': 38.93089294433594}
+2024-08-28 12:22:42,780 INFO =====> Param: E: [250000.], nu: [0.1], rho: [2136.4282], sand_angle: [20.540222]
+2024-08-28 12:22:42,780 INFO =====> Grad: [ 2.8597450e-04 -1.0220915e+04 -6.7614532e+00  1.3293842e+01]
+2024-08-28 12:22:42,780 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:22:43,119 INFO ===> New TaichiEnv created.
+2024-08-28 12:22:43,119 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:22:43,141 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:22:43,286 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:23:22,998 INFO =====> Epoch: 75
+2024-08-28 12:23:22,998 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.44990539550781, 'emd_loss': 38.955135345458984, 'total_loss': 38.955135345458984}
+2024-08-28 12:23:22,998 INFO =====> Param: E: [253368.72], nu: [0.10383591], rho: [2142.2559], sand_angle: [21.086025]
+2024-08-28 12:23:22,998 INFO =====> Grad: [-7.5483672e-02 -4.2734039e+04 -2.8277224e+01 -1.3567949e+03]
+2024-08-28 12:23:22,998 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:23:23,340 INFO ===> New TaichiEnv created.
+2024-08-28 12:23:23,341 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:23:23,363 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:23:23,512 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:24:02,706 INFO =====> Epoch: 76
+2024-08-28 12:24:02,706 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.48967742919922, 'emd_loss': 38.81195831298828, 'total_loss': 38.81195831298828}
+2024-08-28 12:24:02,706 INFO =====> Param: E: [254206.27], nu: [0.10370732], rho: [2144.0464], sand_angle: [21.130665]
+2024-08-28 12:24:02,706 INFO =====> Grad: [1.2355362e-02 1.4647017e+04 6.8055491e+00 6.7657831e+02]
+2024-08-28 12:24:02,706 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:24:03,050 INFO ===> New TaichiEnv created.
+2024-08-28 12:24:03,050 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:24:03,072 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:24:03,222 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:24:42,461 INFO =====> Epoch: 77
+2024-08-28 12:24:42,461 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.58039855957031, 'emd_loss': 38.84543228149414, 'total_loss': 38.84543228149414}
+2024-08-28 12:24:42,461 INFO =====> Param: E: [250923.97], nu: [0.10341282], rho: [2149.6172], sand_angle: [20.996311]
+2024-08-28 12:24:42,461 INFO =====> Grad: [ 2.2513466e-02  7.2094696e+02 -7.6692777e+00  2.6283862e+02]
+2024-08-28 12:24:42,461 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:24:42,821 INFO ===> New TaichiEnv created.
+2024-08-28 12:24:42,821 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:24:42,845 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:24:43,009 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0008s
+2024-08-28 12:25:21,913 INFO =====> Epoch: 78
+2024-08-28 12:25:21,913 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.46458435058594, 'emd_loss': 38.83332824707031, 'total_loss': 38.83332824707031}
+2024-08-28 12:25:21,913 INFO =====> Param: E: [250000.], nu: [0.10108713], rho: [2149.5276], sand_angle: [20.634392]
+2024-08-28 12:25:21,913 INFO =====> Grad: [1.5097418e-02 8.2948447e+03 9.9071350e+00 3.5969949e+02]
+2024-08-28 12:25:21,913 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:25:22,258 INFO ===> New TaichiEnv created.
+2024-08-28 12:25:22,258 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:25:22,281 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:25:22,430 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:26:01,503 INFO =====> Epoch: 79
+2024-08-28 12:26:01,503 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.477294921875, 'emd_loss': 38.93722915649414, 'total_loss': 38.93722915649414}
+2024-08-28 12:26:01,503 INFO =====> Param: E: [250000.], nu: [0.10058486], rho: [2161.4653], sand_angle: [20.270527]
+2024-08-28 12:26:01,503 INFO =====> Grad: [ 1.2553293e-02 -6.4201040e+03 -2.3288406e+01  5.3547260e+01]
+2024-08-28 12:26:01,503 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:26:01,881 INFO ===> New TaichiEnv created.
+2024-08-28 12:26:01,881 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:26:01,904 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:26:02,049 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:26:41,326 INFO =====> Epoch: 80
+2024-08-28 12:26:41,326 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.50534439086914, 'emd_loss': 38.9376220703125, 'total_loss': 38.9376220703125}
+2024-08-28 12:26:41,327 INFO =====> Param: E: [250000.], nu: [0.10250164], rho: [2185.8113], sand_angle: [20.387465]
+2024-08-28 12:26:41,327 INFO =====> Grad: [-5.8615529e-03 -9.4482422e+03 -2.6626057e+01 -6.6046643e+02]
+2024-08-28 12:26:41,327 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:26:41,674 INFO ===> New TaichiEnv created.
+2024-08-28 12:26:41,674 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:26:41,697 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:26:41,853 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:27:21,636 INFO =====> Epoch: 81
+2024-08-28 12:27:21,636 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.52980041503906, 'emd_loss': 38.9743766784668, 'total_loss': 38.9743766784668}
+2024-08-28 12:27:21,636 INFO =====> Param: E: [250000.], nu: [0.10675422], rho: [2200.], sand_angle: [20.322945]
+2024-08-28 12:27:21,637 INFO =====> Grad: [-7.2494624e-03 -9.9910225e+03  4.9291687e+00  2.5150661e+02]
+2024-08-28 12:27:21,637 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:27:21,981 INFO ===> New TaichiEnv created.
+2024-08-28 12:27:21,981 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:27:22,004 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:27:22,151 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:28:01,320 INFO =====> Epoch: 82
+2024-08-28 12:28:01,320 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.55141067504883, 'emd_loss': 38.94586181640625, 'total_loss': 38.94586181640625}
+2024-08-28 12:28:01,320 INFO =====> Param: E: [252379.1], nu: [0.11609338], rho: [2200.], sand_angle: [20.927013]
+2024-08-28 12:28:01,320 INFO =====> Grad: [-3.1596638e-02 -2.1911055e+04 -1.7705069e+01 -9.8185065e+02]
+2024-08-28 12:28:01,320 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:28:01,681 INFO ===> New TaichiEnv created.
+2024-08-28 12:28:01,681 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:28:01,705 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:28:01,864 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:28:41,249 INFO =====> Epoch: 83
+2024-08-28 12:28:41,249 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.517860412597656, 'emd_loss': 38.85390853881836, 'total_loss': 38.85390853881836}
+2024-08-28 12:28:41,249 INFO =====> Param: E: [250031.08], nu: [0.11727964], rho: [2200.], sand_angle: [21.557156]
+2024-08-28 12:28:41,249 INFO =====> Grad: [ 2.45257523e-02  2.86380801e+04 -5.29079819e+00 -1.22649666e+02]
+2024-08-28 12:28:41,249 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:28:41,604 INFO ===> New TaichiEnv created.
+2024-08-28 12:28:41,605 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:28:41,628 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 12:28:41,786 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:29:21,605 INFO =====> Epoch: 84
+2024-08-28 12:29:21,605 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.616546630859375, 'emd_loss': 38.81399154663086, 'total_loss': 38.81399154663086}
+2024-08-28 12:29:21,607 INFO =====> Param: E: [250553.23], nu: [0.11835526], rho: [2200.], sand_angle: [21.652603]
+2024-08-28 12:29:21,607 INFO =====> Grad: [-1.4376972e-02 -5.5251484e+00  2.7713083e+01  6.9559680e+02]
+2024-08-28 12:29:21,607 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:29:21,956 INFO ===> New TaichiEnv created.
+2024-08-28 12:29:21,956 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:29:21,979 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 12:29:22,130 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:30:01,538 INFO =====> Epoch: 85
+2024-08-28 12:30:01,538 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.64374923706055, 'emd_loss': 38.843631744384766, 'total_loss': 38.843631744384766}
+2024-08-28 12:30:01,539 INFO =====> Param: E: [250000.], nu: [0.1176312], rho: [2200.], sand_angle: [21.753971]
+2024-08-28 12:30:01,539 INFO =====> Grad: [ 1.6772745e-02  6.7080791e+03 -1.2560335e+01 -2.1881659e+01]
+2024-08-28 12:30:01,539 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:30:01,898 INFO ===> New TaichiEnv created.
+2024-08-28 12:30:01,898 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:30:01,921 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:30:02,073 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:30:41,220 INFO =====> Epoch: 86
+2024-08-28 12:30:41,220 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.723297119140625, 'emd_loss': 38.821746826171875, 'total_loss': 38.821746826171875}
+2024-08-28 12:30:41,220 INFO =====> Param: E: [250000.], nu: [0.11673546], rho: [2200.], sand_angle: [22.144106]
+2024-08-28 12:30:41,220 INFO =====> Grad: [-5.6672036e-03  9.4341089e+02 -2.7845900e+00 -4.3556497e+02]
+2024-08-28 12:30:41,220 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:30:41,567 INFO ===> New TaichiEnv created.
+2024-08-28 12:30:41,567 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:30:41,591 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:30:41,746 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:31:20,719 INFO =====> Epoch: 87
+2024-08-28 12:31:20,719 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.79154968261719, 'emd_loss': 39.05195999145508, 'total_loss': 39.05195999145508}
+2024-08-28 12:31:20,719 INFO =====> Param: E: [252248.12], nu: [0.12083871], rho: [2200.], sand_angle: [22.429285]
+2024-08-28 12:31:20,719 INFO =====> Grad: [-1.8483380e-02 -1.9282881e+04  1.7527468e+01  9.8632591e+01]
+2024-08-28 12:31:20,719 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:31:21,143 INFO ===> New TaichiEnv created.
+2024-08-28 12:31:21,143 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:31:21,178 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0044s
+2024-08-28 12:31:21,411 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0009s
+2024-08-28 12:32:00,655 INFO =====> Epoch: 88
+2024-08-28 12:32:00,655 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.84013748168945, 'emd_loss': 39.04709243774414, 'total_loss': 39.04709243774414}
+2024-08-28 12:32:00,655 INFO =====> Param: E: [258488.3], nu: [0.12716934], rho: [2200.], sand_angle: [23.324919]
+2024-08-28 12:32:00,655 INFO =====> Grad: [-2.2577381e-02 -1.0253699e+04 -1.3905446e+01 -9.3174969e+02]
+2024-08-28 12:32:00,655 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:32:01,005 INFO ===> New TaichiEnv created.
+2024-08-28 12:32:01,005 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:32:01,028 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:32:01,187 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:32:40,508 INFO =====> Epoch: 89
+2024-08-28 12:32:40,508 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 34.94125747680664, 'emd_loss': 39.06990051269531, 'total_loss': 39.06990051269531}
+2024-08-28 12:32:40,508 INFO =====> Param: E: [269232.1], nu: [0.1369422], rho: [2200.], sand_angle: [24.34635]
+2024-08-28 12:32:40,508 INFO =====> Grad: [-2.7494602e-02 -1.5862128e+04 -2.3252594e+01 -3.0644861e+02]
+2024-08-28 12:32:40,508 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:32:40,861 INFO ===> New TaichiEnv created.
+2024-08-28 12:32:40,861 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:32:40,883 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:32:41,029 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:33:20,350 INFO =====> Epoch: 90
+2024-08-28 12:33:20,350 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.06126022338867, 'emd_loss': 38.91350555419922, 'total_loss': 38.91350555419922}
+2024-08-28 12:33:20,351 INFO =====> Param: E: [276011.53], nu: [0.14027776], rho: [2200.], sand_angle: [25.176699]
+2024-08-28 12:33:20,351 INFO =====> Grad: [1.5628703e-02 2.1296570e+04 1.0004996e+01 1.3555330e+02]
+2024-08-28 12:33:20,351 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:33:20,697 INFO ===> New TaichiEnv created.
+2024-08-28 12:33:20,697 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:33:20,720 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:33:20,874 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:33:59,385 INFO =====> Epoch: 91
+2024-08-28 12:33:59,385 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.268924713134766, 'emd_loss': 38.94695281982422, 'total_loss': 38.94695281982422}
+2024-08-28 12:33:59,385 INFO =====> Param: E: [286131.16], nu: [0.14908685], rho: [2200.], sand_angle: [26.50754]
+2024-08-28 12:33:59,385 INFO =====> Grad: [-2.1345591e-02 -2.2760605e+04 -5.2088303e+01 -8.4493970e+02]
+2024-08-28 12:33:59,386 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:33:59,746 INFO ===> New TaichiEnv created.
+2024-08-28 12:33:59,746 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:33:59,773 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 12:33:59,940 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0008s
+2024-08-28 12:34:38,720 INFO =====> Epoch: 92
+2024-08-28 12:34:38,720 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.45345687866211, 'emd_loss': 38.95710372924805, 'total_loss': 38.95710372924805}
+2024-08-28 12:34:38,720 INFO =====> Param: E: [290546.9], nu: [0.15535057], rho: [2200.], sand_angle: [27.836031]
+2024-08-28 12:34:38,720 INFO =====> Grad: [ 2.5018269e-02  6.6392271e+03  1.2118075e+01 -1.7863684e+02]
+2024-08-28 12:34:38,720 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:34:39,152 INFO ===> New TaichiEnv created.
+2024-08-28 12:34:39,153 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:34:39,183 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0039s
+2024-08-28 12:34:39,380 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0009s
+2024-08-28 12:35:19,987 INFO =====> Epoch: 93
+2024-08-28 12:35:19,987 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 35.541282653808594, 'emd_loss': 39.05696105957031, 'total_loss': 39.05696105957031}
+2024-08-28 12:35:19,987 INFO =====> Param: E: [290213.88], nu: [0.15704207], rho: [2200.], sand_angle: [28.863249]
+2024-08-28 12:35:19,987 INFO =====> Grad: [2.2935089e-02 1.5386064e+04 2.4949825e+01 2.4916510e+02]
+2024-08-28 12:35:19,987 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:35:20,332 INFO ===> New TaichiEnv created.
+2024-08-28 12:35:20,332 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:35:20,354 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:35:20,501 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:36:00,506 INFO =====> Epoch: 94
+2024-08-28 12:36:00,506 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 36.07942199707031, 'emd_loss': 39.2303466796875, 'total_loss': 39.2303466796875}
+2024-08-28 12:36:00,506 INFO =====> Param: E: [289060.7], nu: [0.16369471], rho: [2197.1602], sand_angle: [29.657038]
+2024-08-28 12:36:00,506 INFO =====> Grad: [ 4.5056087e-03 -1.9952592e+04  3.0194529e+01  1.9263914e+02]
+2024-08-28 12:36:00,506 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:36:00,851 INFO ===> New TaichiEnv created.
+2024-08-28 12:36:00,851 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:36:00,875 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 12:36:01,029 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:36:39,912 INFO =====> Epoch: 95
+2024-08-28 12:36:39,912 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 36.17710876464844, 'emd_loss': 39.45868682861328, 'total_loss': 39.45868682861328}
+2024-08-28 12:36:39,913 INFO =====> Param: E: [295009.56], nu: [0.18047854], rho: [2200.], sand_angle: [31.278185]
+2024-08-28 12:36:39,913 INFO =====> Grad: [-3.7120853e-02 -4.3388836e+04 -2.3761345e+01 -1.3200122e+03]
+2024-08-28 12:36:39,913 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:36:40,271 INFO ===> New TaichiEnv created.
+2024-08-28 12:36:40,271 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:36:40,294 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:36:40,445 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:37:19,072 INFO =====> Epoch: 96
+2024-08-28 12:37:19,072 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 36.4250373840332, 'emd_loss': 39.36953353881836, 'total_loss': 39.36953353881836}
+2024-08-28 12:37:19,072 INFO =====> Param: E: [297776.66], nu: [0.19643639], rho: [2200.], sand_angle: [32.509174]
+2024-08-28 12:37:19,072 INFO =====> Grad: [ 1.3813146e-02 -3.0508301e+03 -7.3344784e+00  3.3610168e+02]
+2024-08-28 12:37:19,072 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:37:19,426 INFO ===> New TaichiEnv created.
+2024-08-28 12:37:19,426 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:37:19,448 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 12:37:19,606 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:37:58,202 INFO =====> Epoch: 97
+2024-08-28 12:37:58,202 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 36.72891616821289, 'emd_loss': 39.341548919677734, 'total_loss': 39.341548919677734}
+2024-08-28 12:37:58,203 INFO =====> Param: E: [294201.3], nu: [0.20791171], rho: [2200.], sand_angle: [33.547024]
+2024-08-28 12:37:58,203 INFO =====> Grad: [3.2173429e-02 1.1566394e+04 2.7463620e+00 1.0830027e+02]
+2024-08-28 12:37:58,203 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:37:58,546 INFO ===> New TaichiEnv created.
+2024-08-28 12:37:58,546 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:37:58,569 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:37:58,718 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:38:38,171 INFO =====> Epoch: 98
+2024-08-28 12:38:38,171 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 36.992218017578125, 'emd_loss': 39.55844497680664, 'total_loss': 39.55844497680664}
+2024-08-28 12:38:38,172 INFO =====> Param: E: [296220.], nu: [0.2213347], rho: [2200.], sand_angle: [35.340008]
+2024-08-28 12:38:38,172 INFO =====> Grad: [-2.7809596e-02 -1.2011269e+04  4.6488843e+00 -1.2541075e+03]
+2024-08-28 12:38:38,172 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:38:38,519 INFO ===> New TaichiEnv created.
+2024-08-28 12:38:38,519 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:38:38,541 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:38:38,689 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:39:17,570 INFO =====> Epoch: 99
+2024-08-28 12:39:17,570 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 37.27934265136719, 'emd_loss': 39.83542251586914, 'total_loss': 39.83542251586914}
+2024-08-28 12:39:17,571 INFO =====> Param: E: [290615.4], nu: [0.22405307], rho: [2200.], sand_angle: [36.36774]
+2024-08-28 12:39:17,571 INFO =====> Grad: [ 3.9616618e-02  3.6603344e+04 -1.0242930e+01  8.4269238e+02]
+2024-08-28 12:39:17,571 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:39:17,915 INFO ===> New TaichiEnv created.
+2024-08-28 12:39:17,915 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:39:17,937 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:39:18,086 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:39:57,095 INFO =====> Epoch: 100
+2024-08-28 12:39:57,096 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 37.5369758605957, 'emd_loss': 40.22603988647461, 'total_loss': 40.22603988647461}
+2024-08-28 12:39:57,096 INFO =====> Param: E: [285115.2], nu: [0.22623178], rho: [2200.], sand_angle: [37.02907]
+2024-08-28 12:39:57,096 INFO =====> Grad: [2.2862672e-03 1.1096666e+03 2.1406262e+00 3.8471759e+02]
+2024-08-28 12:39:57,096 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:39:57,493 INFO ===> New TaichiEnv created.
+2024-08-28 12:39:57,493 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:39:57,517 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:39:57,675 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:40:36,528 INFO =====> Epoch: 101
+2024-08-28 12:40:36,528 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 37.702659606933594, 'emd_loss': 40.366554260253906, 'total_loss': 40.366554260253906}
+2024-08-28 12:40:36,528 INFO =====> Param: E: [276764.2], nu: [0.22770114], rho: [2193.557], sand_angle: [37.325623]
+2024-08-28 12:40:36,528 INFO =====> Grad: [1.7963711e-02 1.9733098e+03 2.8058924e+01 4.3157501e+02]
+2024-08-28 12:40:36,528 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:40:36,960 INFO ===> New TaichiEnv created.
+2024-08-28 12:40:36,960 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:40:36,990 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0040s
+2024-08-28 12:40:37,192 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0009s
+2024-08-28 12:41:17,380 INFO =====> Epoch: 102
+2024-08-28 12:41:17,380 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 37.80851745605469, 'emd_loss': 40.392539978027344, 'total_loss': 40.392539978027344}
+2024-08-28 12:41:17,381 INFO =====> Param: E: [272003.44], nu: [0.23286134], rho: [2195.6523], sand_angle: [38.30578]
+2024-08-28 12:41:17,381 INFO =====> Grad: [-1.4702361e-02 -1.5056080e+04 -1.5462365e+01 -1.0315981e+03]
+2024-08-28 12:41:17,381 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:41:17,725 INFO ===> New TaichiEnv created.
+2024-08-28 12:41:17,725 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:41:17,749 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:41:17,900 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:41:59,601 INFO =====> Epoch: 103
+2024-08-28 12:41:59,601 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.24635696411133, 'emd_loss': 40.5298957824707, 'total_loss': 40.5298957824707}
+2024-08-28 12:41:59,601 INFO =====> Param: E: [271393.2], nu: [0.2387506], rho: [2185.121], sand_angle: [39.25359]
+2024-08-28 12:41:59,601 INFO =====> Grad: [-1.9427484e-02 -4.7779204e+03  2.4344255e+01 -8.7959175e+01]
+2024-08-28 12:41:59,601 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:41:59,948 INFO ===> New TaichiEnv created.
+2024-08-28 12:41:59,948 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:41:59,970 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:42:00,237 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:42:39,647 INFO =====> Epoch: 104
+2024-08-28 12:42:39,647 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.353450775146484, 'emd_loss': 40.680259704589844, 'total_loss': 40.680259704589844}
+2024-08-28 12:42:39,648 INFO =====> Param: E: [287423.6], nu: [0.25862947], rho: [2177.3616], sand_angle: [40.]
+2024-08-28 12:42:39,648 INFO =====> Grad: [-9.2036813e-02 -6.0203316e+04 -3.4451241e+00 -1.5056783e+03]
+2024-08-28 12:42:39,648 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:42:40,004 INFO ===> New TaichiEnv created.
+2024-08-28 12:42:40,005 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:42:40,027 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:42:40,171 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:43:18,770 INFO =====> Epoch: 105
+2024-08-28 12:43:18,770 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.42111587524414, 'emd_loss': 40.50043487548828, 'total_loss': 40.50043487548828}
+2024-08-28 12:43:18,770 INFO =====> Param: E: [302571.2], nu: [0.28007928], rho: [2188.6697], sand_angle: [40.]
+2024-08-28 12:43:18,770 INFO =====> Grad: [-3.5926553e-03 -1.4264717e+04 -3.5962219e+01 -8.9003265e+02]
+2024-08-28 12:43:18,770 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:43:19,142 INFO ===> New TaichiEnv created.
+2024-08-28 12:43:19,142 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:43:19,164 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 12:43:19,319 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:43:57,988 INFO =====> Epoch: 106
+2024-08-28 12:43:57,988 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.42734909057617, 'emd_loss': 40.2745361328125, 'total_loss': 40.2745361328125}
+2024-08-28 12:43:57,988 INFO =====> Param: E: [313018.94], nu: [0.2944435], rho: [2200.], sand_angle: [40.]
+2024-08-28 12:43:57,988 INFO =====> Grad: [ 1.7791905e-02  2.0065469e+04 -2.1189985e+01  2.0041136e+02]
+2024-08-28 12:43:57,988 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:43:58,344 INFO ===> New TaichiEnv created.
+2024-08-28 12:43:58,344 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:43:58,367 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:43:58,517 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:44:38,168 INFO =====> Epoch: 107
+2024-08-28 12:44:38,168 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.392791748046875, 'emd_loss': 40.12505340576172, 'total_loss': 40.12505340576172}
+2024-08-28 12:44:38,168 INFO =====> Param: E: [315187.44], nu: [0.29406], rho: [2200.], sand_angle: [40.]
+2024-08-28 12:44:38,168 INFO =====> Grad: [3.9852910e-02 5.4083656e+04 9.5367517e+00 8.1764124e+02]
+2024-08-28 12:44:38,168 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:44:38,510 INFO ===> New TaichiEnv created.
+2024-08-28 12:44:38,511 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:44:38,533 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:44:38,682 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:45:19,168 INFO =====> Epoch: 108
+2024-08-28 12:45:19,168 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.44539260864258, 'emd_loss': 40.15621566772461, 'total_loss': 40.15621566772461}
+2024-08-28 12:45:19,168 INFO =====> Param: E: [318371.7], nu: [0.2925036], rho: [2200.], sand_angle: [40.]
+2024-08-28 12:45:19,168 INFO =====> Grad: [-6.7562722e-03  5.0317188e+03 -4.7818524e-01  3.9049969e+01]
+2024-08-28 12:45:19,168 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:45:19,585 INFO ===> New TaichiEnv created.
+2024-08-28 12:45:19,586 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:45:19,608 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:45:19,754 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:45:58,848 INFO =====> Epoch: 109
+2024-08-28 12:45:58,848 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.40672302246094, 'emd_loss': 40.146568298339844, 'total_loss': 40.146568298339844}
+2024-08-28 12:45:58,848 INFO =====> Param: E: [325234.], nu: [0.29932675], rho: [2200.], sand_angle: [40.]
+2024-08-28 12:45:58,848 INFO =====> Grad: [-2.1999806e-02 -3.4444594e+04 -2.2219660e+01 -6.2156323e+02]
+2024-08-28 12:45:58,848 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:45:59,214 INFO ===> New TaichiEnv created.
+2024-08-28 12:45:59,214 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:45:59,238 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:45:59,394 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0008s
+2024-08-28 12:46:38,827 INFO =====> Epoch: 110
+2024-08-28 12:46:38,827 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.393577575683594, 'emd_loss': 40.02701950073242, 'total_loss': 40.02701950073242}
+2024-08-28 12:46:38,827 INFO =====> Param: E: [319460.88], nu: [0.28730005], rho: [2200.], sand_angle: [39.836628]
+2024-08-28 12:46:38,827 INFO =====> Grad: [6.6584915e-02 7.9294758e+04 3.1469105e+01 2.0214750e+03]
+2024-08-28 12:46:38,827 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:46:39,187 INFO ===> New TaichiEnv created.
+2024-08-28 12:46:39,187 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:46:39,210 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:46:39,367 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:47:18,142 INFO =====> Epoch: 111
+2024-08-28 12:47:18,142 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.36887741088867, 'emd_loss': 40.20988082885742, 'total_loss': 40.20988082885742}
+2024-08-28 12:47:18,142 INFO =====> Param: E: [308213.3], nu: [0.2624387], rho: [2196.557], sand_angle: [38.4992]
+2024-08-28 12:47:18,142 INFO =====> Grad: [3.42573263e-02 6.65601328e+04 1.49402685e+01 1.82740796e+03]
+2024-08-28 12:47:18,142 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:47:18,490 INFO ===> New TaichiEnv created.
+2024-08-28 12:47:18,490 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:47:18,512 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:47:18,664 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:47:58,518 INFO =====> Epoch: 112
+2024-08-28 12:47:58,518 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.05344009399414, 'emd_loss': 40.09212112426758, 'total_loss': 40.09212112426758}
+2024-08-28 12:47:58,518 INFO =====> Param: E: [301473.34], nu: [0.23789442], rho: [2197.562], sand_angle: [37.96776]
+2024-08-28 12:47:58,519 INFO =====> Grad: [-1.9208362e-02  9.5718730e+03 -8.0883942e+00 -1.0260793e+03]
+2024-08-28 12:47:58,519 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:47:58,866 INFO ===> New TaichiEnv created.
+2024-08-28 12:47:58,866 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:47:58,888 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:47:59,040 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:48:38,019 INFO =====> Epoch: 113
+2024-08-28 12:48:38,019 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 37.9463996887207, 'emd_loss': 40.227813720703125, 'total_loss': 40.227813720703125}
+2024-08-28 12:48:38,019 INFO =====> Param: E: [300199.28], nu: [0.21962823], rho: [2200.], sand_angle: [38.12146]
+2024-08-28 12:48:38,020 INFO =====> Grad: [-2.70079877e-02 -1.77371055e+04 -1.44250765e+01 -9.71748352e+02]
+2024-08-28 12:48:38,020 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:48:38,371 INFO ===> New TaichiEnv created.
+2024-08-28 12:48:38,371 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:48:38,393 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:48:38,544 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:49:17,795 INFO =====> Epoch: 114
+2024-08-28 12:49:17,796 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.12903594970703, 'emd_loss': 40.369754791259766, 'total_loss': 40.369754791259766}
+2024-08-28 12:49:17,796 INFO =====> Param: E: [301885.47], nu: [0.20463659], rho: [2200.], sand_angle: [38.75759]
+2024-08-28 12:49:17,796 INFO =====> Grad: [-1.5929163e-02 -6.9324355e+03 -2.1999831e-01 -7.6697968e+02]
+2024-08-28 12:49:17,796 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:49:18,168 INFO ===> New TaichiEnv created.
+2024-08-28 12:49:18,168 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:49:18,191 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:49:18,344 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:49:57,834 INFO =====> Epoch: 115
+2024-08-28 12:49:57,834 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.246429443359375, 'emd_loss': 40.63245391845703, 'total_loss': 40.63245391845703}
+2024-08-28 12:49:57,835 INFO =====> Param: E: [309086.75], nu: [0.19810219], rho: [2200.], sand_angle: [39.724392]
+2024-08-28 12:49:57,835 INFO =====> Grad: [-3.1973477e-02 -3.1670609e+04 -1.8397688e+01 -6.0488812e+02]
+2024-08-28 12:49:57,835 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:49:58,308 INFO ===> New TaichiEnv created.
+2024-08-28 12:49:58,308 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:49:58,330 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 12:49:58,480 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:50:37,986 INFO =====> Epoch: 116
+2024-08-28 12:50:37,986 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.43971252441406, 'emd_loss': 40.62992858886719, 'total_loss': 40.62992858886719}
+2024-08-28 12:50:37,986 INFO =====> Param: E: [322402.5], nu: [0.19613135], rho: [2200.], sand_angle: [40.]
+2024-08-28 12:50:37,986 INFO =====> Grad: [-3.8737785e-02 -1.7958613e+04  6.1217480e+00 -6.9347125e+02]
+2024-08-28 12:50:37,986 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:50:38,583 INFO ===> New TaichiEnv created.
+2024-08-28 12:50:38,583 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:50:38,606 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:50:38,751 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:51:18,615 INFO =====> Epoch: 117
+2024-08-28 12:51:18,615 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.45740509033203, 'emd_loss': 40.66386413574219, 'total_loss': 40.66386413574219}
+2024-08-28 12:51:18,615 INFO =====> Param: E: [342017.9], nu: [0.19880182], rho: [2200.], sand_angle: [40.]
+2024-08-28 12:51:18,615 INFO =====> Grad: [-4.3784507e-02 -2.0346332e+04 -3.0038456e+01 -9.4527820e+02]
+2024-08-28 12:51:18,615 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:51:19,218 INFO ===> New TaichiEnv created.
+2024-08-28 12:51:19,218 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:51:19,241 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:51:19,392 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:51:58,929 INFO =====> Epoch: 118
+2024-08-28 12:51:58,929 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.463199615478516, 'emd_loss': 40.60548782348633, 'total_loss': 40.60548782348633}
+2024-08-28 12:51:58,929 INFO =====> Param: E: [353838.4], nu: [0.19705692], rho: [2200.], sand_angle: [40.]
+2024-08-28 12:51:58,929 INFO =====> Grad: [ 3.3038463e-02  1.8973301e+04 -1.7359316e+01  3.7866611e+02]
+2024-08-28 12:51:58,929 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:51:59,544 INFO ===> New TaichiEnv created.
+2024-08-28 12:51:59,544 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:51:59,568 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:51:59,718 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:52:38,965 INFO =====> Epoch: 119
+2024-08-28 12:52:38,965 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.44992446899414, 'emd_loss': 40.45641326904297, 'total_loss': 40.45641326904297}
+2024-08-28 12:52:38,965 INFO =====> Param: E: [358454.94], nu: [0.19052987], rho: [2200.], sand_angle: [40.]
+2024-08-28 12:52:38,965 INFO =====> Grad: [ 3.421700e-02  2.264980e+04 -9.331070e+00  4.698498e+02]
+2024-08-28 12:52:38,965 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:52:39,639 INFO ===> New TaichiEnv created.
+2024-08-28 12:52:39,639 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:52:39,663 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:52:39,824 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0008s
+2024-08-28 12:53:18,501 INFO =====> Epoch: 120
+2024-08-28 12:53:18,501 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.43928146362305, 'emd_loss': 40.52057647705078, 'total_loss': 40.52057647705078}
+2024-08-28 12:53:18,502 INFO =====> Param: E: [371517.03], nu: [0.1932492], rho: [2200.], sand_angle: [40.]
+2024-08-28 12:53:18,502 INFO =====> Grad: [-5.1524617e-02 -3.9377352e+04 -2.2638851e+01 -1.8313140e+03]
+2024-08-28 12:53:18,502 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:53:19,104 INFO ===> New TaichiEnv created.
+2024-08-28 12:53:19,104 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:53:19,127 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:53:19,275 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:53:59,198 INFO =====> Epoch: 121
+2024-08-28 12:53:59,198 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.43486404418945, 'emd_loss': 40.4885139465332, 'total_loss': 40.4885139465332}
+2024-08-28 12:53:59,198 INFO =====> Param: E: [381161.6], nu: [0.19652088], rho: [2200.], sand_angle: [40.]
+2024-08-28 12:53:59,198 INFO =====> Grad: [ 1.23551413e-02 -3.73513281e+03 -7.54712963e+00  1.06545906e+02]
+2024-08-28 12:53:59,198 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:53:59,786 INFO ===> New TaichiEnv created.
+2024-08-28 12:53:59,786 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:53:59,809 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0028s
+2024-08-28 12:53:59,955 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:54:40,200 INFO =====> Epoch: 122
+2024-08-28 12:54:40,200 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.43138122558594, 'emd_loss': 40.4308967590332, 'total_loss': 40.4308967590332}
+2024-08-28 12:54:40,200 INFO =====> Param: E: [388737.56], nu: [0.19564967], rho: [2200.], sand_angle: [40.]
+2024-08-28 12:54:40,200 INFO =====> Grad: [6.5137628e-03 1.7504805e+04 2.1598291e+01 3.1158463e+02]
+2024-08-28 12:54:40,200 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:54:40,815 INFO ===> New TaichiEnv created.
+2024-08-28 12:54:40,815 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:54:40,839 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:54:40,986 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:55:20,937 INFO =====> Epoch: 123
+2024-08-28 12:55:20,937 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.41626739501953, 'emd_loss': 40.37825012207031, 'total_loss': 40.37825012207031}
+2024-08-28 12:55:20,937 INFO =====> Param: E: [408981.75], nu: [0.21230942], rho: [2200.], sand_angle: [40.]
+2024-08-28 12:55:20,937 INFO =====> Grad: [-8.0067642e-02 -8.3867938e+04 -6.1715244e+01 -2.9226711e+03]
+2024-08-28 12:55:20,937 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:55:21,545 INFO ===> New TaichiEnv created.
+2024-08-28 12:55:21,545 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:55:21,571 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 12:55:21,726 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:56:00,948 INFO =====> Epoch: 124
+2024-08-28 12:56:00,948 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.29222869873047, 'emd_loss': 40.243804931640625, 'total_loss': 40.243804931640625}
+2024-08-28 12:56:00,948 INFO =====> Param: E: [424046.56], nu: [0.22008383], rho: [2200.], sand_angle: [40.]
+2024-08-28 12:56:00,949 INFO =====> Grad: [1.8773533e-02 3.4617637e+04 1.6966938e+01 9.7507770e+02]
+2024-08-28 12:56:00,949 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:56:01,731 INFO ===> New TaichiEnv created.
+2024-08-28 12:56:01,731 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:56:01,762 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0039s
+2024-08-28 12:56:01,962 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0009s
+2024-08-28 12:56:40,993 INFO =====> Epoch: 125
+2024-08-28 12:56:40,993 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.27312469482422, 'emd_loss': 40.08559799194336, 'total_loss': 40.08559799194336}
+2024-08-28 12:56:40,993 INFO =====> Param: E: [440277.44], nu: [0.23077074], rho: [2200.], sand_angle: [40.]
+2024-08-28 12:56:40,993 INFO =====> Grad: [-1.5382345e-02 -1.7759553e+04  7.0270057e+00 -6.4395312e+02]
+2024-08-28 12:56:40,993 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:56:41,594 INFO ===> New TaichiEnv created.
+2024-08-28 12:56:41,594 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:56:41,618 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:56:41,767 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:57:21,670 INFO =====> Epoch: 126
+2024-08-28 12:57:21,670 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.22488784790039, 'emd_loss': 40.05183029174805, 'total_loss': 40.05183029174805}
+2024-08-28 12:57:21,670 INFO =====> Param: E: [454325.3], nu: [0.2392869], rho: [2200.], sand_angle: [40.]
+2024-08-28 12:57:21,670 INFO =====> Grad: [ 3.6132545e-03  5.4876641e+03 -1.7970257e+01  5.9703369e+02]
+2024-08-28 12:57:21,670 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:57:22,285 INFO ===> New TaichiEnv created.
+2024-08-28 12:57:22,285 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:57:22,309 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 12:57:22,458 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:58:02,236 INFO =====> Epoch: 127
+2024-08-28 12:58:02,236 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.28729248046875, 'emd_loss': 39.961246490478516, 'total_loss': 39.961246490478516}
+2024-08-28 12:58:02,236 INFO =====> Param: E: [474444.88], nu: [0.26005042], rho: [2200.], sand_angle: [40.]
+2024-08-28 12:58:02,236 INFO =====> Grad: [-4.4165809e-02 -6.5673766e+04 -4.2102558e+01 -2.4079097e+03]
+2024-08-28 12:58:02,236 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:58:02,846 INFO ===> New TaichiEnv created.
+2024-08-28 12:58:02,846 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:58:02,869 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:58:03,017 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:58:41,569 INFO =====> Epoch: 128
+2024-08-28 12:58:41,569 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.241695404052734, 'emd_loss': 39.850921630859375, 'total_loss': 39.850921630859375}
+2024-08-28 12:58:41,569 INFO =====> Param: E: [496024.56], nu: [0.28570515], rho: [2200.], sand_angle: [40.]
+2024-08-28 12:58:41,569 INFO =====> Grad: [-2.0049009e-02 -3.4936305e+04  2.7474771e+00 -1.8618652e+03]
+2024-08-28 12:58:41,569 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:58:42,191 INFO ===> New TaichiEnv created.
+2024-08-28 12:58:42,191 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:58:42,214 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 12:58:42,364 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 12:59:22,212 INFO =====> Epoch: 129
+2024-08-28 12:59:22,212 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.275672912597656, 'emd_loss': 39.8663215637207, 'total_loss': 39.8663215637207}
+2024-08-28 12:59:22,212 INFO =====> Param: E: [515884.38], nu: [0.31084755], rho: [2200.], sand_angle: [40.]
+2024-08-28 12:59:22,212 INFO =====> Grad: [-2.0849337e-03 -9.7495781e+03 -1.2243906e+00 -5.9709094e+02]
+2024-08-28 12:59:22,212 INFO =====> Num. aborted data so far: 0
+2024-08-28 12:59:22,833 INFO ===> New TaichiEnv created.
+2024-08-28 12:59:22,833 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 12:59:22,857 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0031s
+2024-08-28 12:59:23,015 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 13:00:02,208 INFO =====> Epoch: 130
+2024-08-28 13:00:02,208 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.313987731933594, 'emd_loss': 39.786624908447266, 'total_loss': 39.786624908447266}
+2024-08-28 13:00:02,208 INFO =====> Param: E: [542406.1], nu: [0.35098544], rho: [2200.], sand_angle: [40.]
+2024-08-28 13:00:02,208 INFO =====> Grad: [-5.1655356e-02 -9.8122758e+04 -4.7790722e+01 -2.2752432e+03]
+2024-08-28 13:00:02,208 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:00:02,821 INFO ===> New TaichiEnv created.
+2024-08-28 13:00:02,822 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 13:00:02,845 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 13:00:02,996 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 13:00:42,501 INFO =====> Epoch: 131
+2024-08-28 13:00:42,502 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.49359130859375, 'emd_loss': 39.68852233886719, 'total_loss': 39.68852233886719}
+2024-08-28 13:00:42,502 INFO =====> Param: E: [567216.], nu: [0.37712374], rho: [2200.], sand_angle: [40.]
+2024-08-28 13:00:42,502 INFO =====> Grad: [-4.9449741e-03  5.0717668e+04 -8.2834558e+00  7.3348901e+02]
+2024-08-28 13:00:42,502 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:00:43,095 INFO ===> New TaichiEnv created.
+2024-08-28 13:00:43,095 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 13:00:43,119 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 13:00:43,267 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 13:01:22,413 INFO =====> Epoch: 132
+2024-08-28 13:01:22,413 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.650634765625, 'emd_loss': 39.62932586669922, 'total_loss': 39.62932586669922}
+2024-08-28 13:01:22,414 INFO =====> Param: E: [591085.4], nu: [0.4], rho: [2200.], sand_angle: [40.]
+2024-08-28 13:01:22,414 INFO =====> Grad: [-8.4908837e-03 -3.7449289e+04  3.2955873e+00  1.9455760e+02]
+2024-08-28 13:01:22,414 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:01:23,016 INFO ===> New TaichiEnv created.
+2024-08-28 13:01:23,016 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 13:01:23,040 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 13:01:23,188 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 13:02:02,061 INFO =====> Epoch: 133
+2024-08-28 13:02:02,061 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.61284637451172, 'emd_loss': 39.5625114440918, 'total_loss': 39.5625114440918}
+2024-08-28 13:02:02,061 INFO =====> Param: E: [613205.06], nu: [0.4], rho: [2200.], sand_angle: [40.]
+2024-08-28 13:02:02,062 INFO =====> Grad: [-3.2030221e-03  2.2509748e+04 -1.6141150e+01  1.0107495e+03]
+2024-08-28 13:02:02,062 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:02:02,677 INFO ===> New TaichiEnv created.
+2024-08-28 13:02:02,677 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 13:02:02,700 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 13:02:02,852 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 13:02:41,740 INFO =====> Epoch: 134
+2024-08-28 13:02:41,740 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.669410705566406, 'emd_loss': 39.56160354614258, 'total_loss': 39.56160354614258}
+2024-08-28 13:02:41,741 INFO =====> Param: E: [630822.8], nu: [0.3990971], rho: [2200.], sand_angle: [40.]
+2024-08-28 13:02:41,741 INFO =====> Grad: [ 1.3599431e-02  1.1597568e+05  2.5032871e+01 -3.8755734e+02]
+2024-08-28 13:02:41,741 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:02:42,419 INFO ===> New TaichiEnv created.
+2024-08-28 13:02:42,419 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 13:02:42,443 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 13:02:42,599 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 13:03:21,312 INFO =====> Epoch: 135
+2024-08-28 13:03:21,313 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.715919494628906, 'emd_loss': 39.626041412353516, 'total_loss': 39.626041412353516}
+2024-08-28 13:03:21,313 INFO =====> Param: E: [644881.44], nu: [0.4], rho: [2200.], sand_angle: [40.]
+2024-08-28 13:03:21,313 INFO =====> Grad: [ 1.0669805e-02 -1.3974533e+05 -7.9482918e+00 -4.0339169e+01]
+2024-08-28 13:03:21,313 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:03:21,929 INFO ===> New TaichiEnv created.
+2024-08-28 13:03:21,929 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 13:03:21,953 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 13:03:22,107 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 13:04:01,677 INFO =====> Epoch: 136
+2024-08-28 13:04:01,677 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.6967658996582, 'emd_loss': 39.68796157836914, 'total_loss': 39.68796157836914}
+2024-08-28 13:04:01,678 INFO =====> Param: E: [655029.94], nu: [0.4], rho: [2200.], sand_angle: [40.]
+2024-08-28 13:04:01,678 INFO =====> Grad: [1.4602330e-02 8.0916734e+04 2.3226542e+01 2.8780563e+02]
+2024-08-28 13:04:01,678 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:04:02,274 INFO ===> New TaichiEnv created.
+2024-08-28 13:04:02,274 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 13:04:02,298 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 13:04:02,448 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 13:04:42,059 INFO =====> Epoch: 137
+2024-08-28 13:04:42,059 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.65113067626953, 'emd_loss': 39.54693603515625, 'total_loss': 39.54693603515625}
+2024-08-28 13:04:42,059 INFO =====> Param: E: [664075.6], nu: [0.4], rho: [2200.], sand_angle: [40.]
+2024-08-28 13:04:42,059 INFO =====> Grad: [ 7.0712587e-04  2.8905631e+04 -3.5948396e+00 -6.2748877e+02]
+2024-08-28 13:04:42,059 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:04:42,661 INFO ===> New TaichiEnv created.
+2024-08-28 13:04:42,661 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 13:04:42,685 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 13:04:42,833 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 13:05:21,468 INFO =====> Epoch: 138
+2024-08-28 13:05:21,468 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.69516372680664, 'emd_loss': 39.654388427734375, 'total_loss': 39.654388427734375}
+2024-08-28 13:05:21,468 INFO =====> Param: E: [674471.3], nu: [0.4], rho: [2200.], sand_angle: [40.]
+2024-08-28 13:05:21,468 INFO =====> Grad: [-1.2720968e-02 -1.1222453e+05 -5.0206963e+01 -1.2570350e+03]
+2024-08-28 13:05:21,468 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:05:22,102 INFO ===> New TaichiEnv created.
+2024-08-28 13:05:22,102 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 13:05:22,126 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 13:05:22,282 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 13:06:01,425 INFO =====> Epoch: 139
+2024-08-28 13:06:01,425 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.679927825927734, 'emd_loss': 39.5930290222168, 'total_loss': 39.5930290222168}
+2024-08-28 13:06:01,425 INFO =====> Param: E: [686601.06], nu: [0.4], rho: [2200.], sand_angle: [40.]
+2024-08-28 13:06:01,425 INFO =====> Grad: [-1.5641524e-02 -7.3092695e+04 -1.0539234e+01  2.3069891e+02]
+2024-08-28 13:06:01,425 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:06:02,056 INFO ===> New TaichiEnv created.
+2024-08-28 13:06:02,056 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 13:06:02,079 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 13:06:02,237 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 13:06:41,636 INFO =====> Epoch: 140
+2024-08-28 13:06:41,636 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.63725280761719, 'emd_loss': 39.532352447509766, 'total_loss': 39.532352447509766}
+2024-08-28 13:06:41,636 INFO =====> Param: E: [701405.3], nu: [0.4], rho: [2200.], sand_angle: [40.]
+2024-08-28 13:06:41,636 INFO =====> Grad: [-2.1994591e-02 -1.4272719e+05 -3.2339725e+01 -2.4148218e+03]
+2024-08-28 13:06:41,637 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:06:42,247 INFO ===> New TaichiEnv created.
+2024-08-28 13:06:42,247 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 13:06:42,270 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 13:06:42,422 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 13:07:21,713 INFO =====> Epoch: 141
+2024-08-28 13:07:21,713 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.61198043823242, 'emd_loss': 39.561614990234375, 'total_loss': 39.561614990234375}
+2024-08-28 13:07:21,714 INFO =====> Param: E: [714969.7], nu: [0.4], rho: [2200.], sand_angle: [40.]
+2024-08-28 13:07:21,714 INFO =====> Grad: [-1.0758759e-03 -2.1130544e+05 -6.6397209e+01 -2.3424893e+03]
+2024-08-28 13:07:21,714 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:07:22,315 INFO ===> New TaichiEnv created.
+2024-08-28 13:07:22,315 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 13:07:22,338 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 13:07:22,489 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 13:08:01,895 INFO =====> Epoch: 142
+2024-08-28 13:08:01,895 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.61687088012695, 'emd_loss': 39.568546295166016, 'total_loss': 39.568546295166016}
+2024-08-28 13:08:01,895 INFO =====> Param: E: [726522.7], nu: [0.4], rho: [2200.], sand_angle: [40.]
+2024-08-28 13:08:01,895 INFO =====> Grad: [ 3.9485302e-03 -9.5730547e+04  9.8605309e+00 -2.7621027e+02]
+2024-08-28 13:08:01,895 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:08:02,497 INFO ===> New TaichiEnv created.
+2024-08-28 13:08:02,498 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 13:08:02,521 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 13:08:02,669 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 13:08:41,898 INFO =====> Epoch: 143
+2024-08-28 13:08:41,898 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.630714416503906, 'emd_loss': 39.51724624633789, 'total_loss': 39.51724624633789}
+2024-08-28 13:08:41,898 INFO =====> Param: E: [734077.06], nu: [0.4], rho: [2200.], sand_angle: [40.]
+2024-08-28 13:08:41,898 INFO =====> Grad: [1.6143188e-02 2.4392495e+05 6.5846909e+01 2.0110736e+03]
+2024-08-28 13:08:41,898 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:08:42,516 INFO ===> New TaichiEnv created.
+2024-08-28 13:08:42,516 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 13:08:42,540 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 13:08:42,701 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0008s
+2024-08-28 13:09:22,367 INFO =====> Epoch: 144
+2024-08-28 13:09:22,367 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.621177673339844, 'emd_loss': 39.44871139526367, 'total_loss': 39.44871139526367}
+2024-08-28 13:09:22,367 INFO =====> Param: E: [742762.7], nu: [0.4], rho: [2200.], sand_angle: [40.]
+2024-08-28 13:09:22,367 INFO =====> Grad: [-1.0458119e-02 -5.4072520e+03 -3.2869144e+01 -5.8389465e+01]
+2024-08-28 13:09:22,367 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:09:22,976 INFO ===> New TaichiEnv created.
+2024-08-28 13:09:22,976 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 13:09:22,999 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 13:09:23,152 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 13:10:02,009 INFO =====> Epoch: 145
+2024-08-28 13:10:02,009 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.61658477783203, 'emd_loss': 39.531402587890625, 'total_loss': 39.531402587890625}
+2024-08-28 13:10:02,009 INFO =====> Param: E: [754951.2], nu: [0.4], rho: [2200.], sand_angle: [40.]
+2024-08-28 13:10:02,009 INFO =====> Grad: [-2.44539231e-02 -1.34336875e+04 -1.03510380e+01  1.64571716e+03]
+2024-08-28 13:10:02,009 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:10:02,623 INFO ===> New TaichiEnv created.
+2024-08-28 13:10:02,623 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 13:10:02,652 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0061s
+2024-08-28 13:10:02,811 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 13:10:42,299 INFO =====> Epoch: 146
+2024-08-28 13:10:42,299 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.6217155456543, 'emd_loss': 39.535484313964844, 'total_loss': 39.535484313964844}
+2024-08-28 13:10:42,299 INFO =====> Param: E: [761665.06], nu: [0.4], rho: [2200.], sand_angle: [39.21819]
+2024-08-28 13:10:42,299 INFO =====> Grad: [2.3882130e-02 1.2632546e+05 3.7640148e+01 3.1371792e+03]
+2024-08-28 13:10:42,299 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:10:43,001 INFO ===> New TaichiEnv created.
+2024-08-28 13:10:43,001 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 13:10:43,025 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0030s
+2024-08-28 13:10:43,177 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 13:11:23,250 INFO =====> Epoch: 147
+2024-08-28 13:11:23,250 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.51263427734375, 'emd_loss': 39.2415657043457, 'total_loss': 39.2415657043457}
+2024-08-28 13:11:23,250 INFO =====> Param: E: [765710.6], nu: [0.39903992], rho: [2200.], sand_angle: [38.30628]
+2024-08-28 13:11:23,251 INFO =====> Grad: [ 1.1246436e-02  6.4753562e+04 -4.6465425e+00  3.9169650e+02]
+2024-08-28 13:11:23,251 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:11:23,873 INFO ===> New TaichiEnv created.
+2024-08-28 13:11:23,873 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 13:11:23,897 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0029s
+2024-08-28 13:11:24,049 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 13:12:02,911 INFO =====> Epoch: 148
+2024-08-28 13:12:02,911 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 38.25051498413086, 'emd_loss': 39.06410217285156, 'total_loss': 39.06410217285156}
+2024-08-28 13:12:02,911 INFO =====> Param: E: [769502.44], nu: [0.4], rho: [2200.], sand_angle: [36.653835]
+2024-08-28 13:12:02,911 INFO =====> Grad: [-7.6515041e-04 -3.6871129e+04  9.4810313e-01  1.6011223e+03]
+2024-08-28 13:12:02,911 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:12:03,533 INFO ===> New TaichiEnv created.
+2024-08-28 13:12:03,533 INFO ===> Specifications: horizon = 311, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-08-28 13:12:03,557 DEBUG loaded <trimesh.Trimesh(vertices.shape=(916, 3), faces.shape=(856, 3))> using `load_obj` in 0.0031s
+2024-08-28 13:12:03,721 DEBUG loaded <trimesh.Trimesh(vertices.shape=(48, 3), faces.shape=(28, 3))> using `load_obj` in 0.0007s
+2024-08-28 13:12:42,568 INFO =====> Epoch: 149
+2024-08-28 13:12:42,568 INFO =====> Loss info: {'particle_has_naninf': False, 'height_map_loss': 37.63881301879883, 'emd_loss': 38.74787521362305, 'total_loss': 38.74787521362305}
+2024-08-28 13:12:42,569 INFO =====> Param: E: [773135.25], nu: [0.39531264], rho: [2200.], sand_angle: [35.723896]
+2024-08-28 13:12:42,569 INFO =====> Grad: [-1.1517281e-03  6.9706500e+04 -1.6491261e+01 -1.0643225e+03]
+2024-08-28 13:12:42,569 INFO =====> Num. aborted data so far: 0
+2024-08-28 13:12:42,570 INFO ====> Finished training.
+2024-08-28 13:12:42,571 INFO ====> Final loss: 
+2024-08-28 13:12:42,571 INFO ====> Final params: E [773135.25], nu [0.39531264], rho [2200.], sand_angle [35.723896]
+2024-08-28 13:12:42,571 INFO ===> End grad computation at:, 2024-8-28 13:12:42
+2024-08-28 13:12:42,571 INFO ===> Total time taken: 6084.169232368469 seconds
+2024-08-28 13:12:42,571 INFO ===> Number of aborted data: 0
