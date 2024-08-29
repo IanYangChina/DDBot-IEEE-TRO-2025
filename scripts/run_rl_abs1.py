@@ -29,62 +29,6 @@ LINEAR_VELOCITY = 0.2  # m/s
 ANGULAR_VELOCITY = np.pi / 4  # rad/s
 
 
-def abstraction_two_skill(skill_params, dt):
-    assert np.all(skill_params >= -1.0) and np.all(skill_params <= 1.0), 'RL skill params should be in [-1, 1]'
-    trajectory = np.zeros(shape=(1000, 6), dtype=np.float32)
-    move_distance = skill_params[0] * 0.12  # map [-1, 1] to [-0.12, 0.12]
-    rotate_x = skill_params[1] * (np.pi / 2)  # map [-1, 1] to [-pi/2, pi/2]
-
-    n_step_move = np.abs(int(move_distance / (LINEAR_VELOCITY * dt)))
-    n_step_rotate = np.abs((int(rotate_x / (ANGULAR_VELOCITY * dt))))
-    n_step = max(n_step_move, n_step_rotate)
-    if n_step > 0:
-        move_delta_x = move_distance / n_step
-        for i in range(n_step):
-            trajectory[i][0] = move_delta_x
-        rotate_delta_x = rotate_x / n_step
-        for i in range(n_step):
-            trajectory[i][3] = rotate_delta_x
-
-    insert_angle = rotate_x + np.pi / 2
-    insert_distance = (skill_params[2] + 1) / 2 * 0.05  # map [-1, 1] to [0, 0.05]
-    n_step_insert = int(insert_distance / (LINEAR_VELOCITY * dt))
-    insert_distance_x = insert_distance * np.cos(insert_angle)
-    insert_distance_z = insert_distance * np.sin(insert_angle)
-    insert_delta_x = insert_distance_x / n_step_insert
-    insert_delta_z = insert_distance_z / n_step_insert
-    if n_step_insert > 0:
-        for i in range(n_step, n_step + n_step_insert):
-            trajectory[i][0] = insert_delta_x
-            trajectory[i][2] = -insert_delta_z
-
-    push_angle = (skill_params[3] + 1) * np.pi / 2  # map [-1, 1] to [0, pi]
-    push_distance = (skill_params[4] + 1) * 0.1  # map [-1, 1] to [0, 0.2]
-    n_step_push = int(push_distance / (LINEAR_VELOCITY * dt))
-    push_distance_x = push_distance * np.cos(push_angle)
-    push_distance_z = push_distance * np.sin(push_angle)
-    push_delta_x = push_distance_x / n_step_push
-    push_delta_z = push_distance_z / n_step_push
-    if n_step_push > 0:
-        for i in range(n_step + n_step_insert, n_step + n_step_insert + n_step_push):
-            trajectory[i][0] = push_delta_x
-            trajectory[i][2] = push_delta_z
-
-    rotate_x_back = -rotate_x
-    n_step_rotate_back = n_step_rotate
-    move_up_distance = 0.1
-    n_step_move_up = int(move_up_distance / (LINEAR_VELOCITY * dt))
-    n_step_return = max(n_step_rotate_back, n_step_move_up)
-    rotate_delta_x_back = rotate_x_back / n_step_return
-    move_up_delta_z = move_up_distance / n_step_return
-    if n_step_return > 0:
-        for i in range(n_step + n_step_insert + n_step_push, n_step + n_step_insert + n_step_push + n_step_return):
-            trajectory[i][3] = rotate_delta_x_back
-            trajectory[i][5] = move_up_delta_z
-
-    return trajectory[:n_step + n_step_insert + n_step_push + n_step_return, :]
-
-
 def abstraction_one_skills(skill_index, skill_params, dt):
     assert np.all(skill_params >= -1.0) and np.all(skill_params <= 1.0), 'RL skill params should be in [-1, 1]'
     # set the initial pose of the end effector
@@ -156,12 +100,13 @@ def abstraction_one_skills(skill_index, skill_params, dt):
 def main(arguments):
     seed = arguments['seed']
     task_id = arguments['task_id']
+    n_skill = arguments['n_skills']
     if arguments['demonstrate_skills']:
-        log_dir = os.path.join(script_path, '..', 'log-gpasac-ds', f'task-{task_id}', f'seed-{seed}')
+        log_dir = os.path.join(script_path, '..', 'log-abs1-gpasac-ds', f'task{task_id}-{n_skill}skills', f'seed-{seed}')
     elif arguments['planned_skills']:
-        log_dir = os.path.join(script_path, '..', 'log-gpasac-ps', f'task-{task_id}', f'seed-{seed}')
+        log_dir = os.path.join(script_path, '..', 'log-abs1-gpasac-ps', f'task{task_id}-{n_skill}skills', f'seed-{seed}')
     else:
-        log_dir = os.path.join(script_path, '..', 'log-gpasac', f'task-{task_id}', f'seed-{seed}')
+        log_dir = os.path.join(script_path, '..', 'log-abs1-gpasac', f'task{task_id}-{n_skill}skills', f'seed-{seed}')
     os.makedirs(log_dir, exist_ok=True)
     log_file_name = os.path.join(log_dir, 'optimisation.log')
     if os.path.isfile(log_file_name):
@@ -188,7 +133,7 @@ def main(arguments):
         'dt_global': 0.01,
         'n_substeps': 20,
         'grid_scale': 1.0,
-        'agent_init_pos': (0.2, 0.2, 0.2),
+        'agent_init_pos': (0.2, 0.2, 0.205),
         'agent_init_euler': (0, 180, 90),
     }
     loss_cfg = {
@@ -199,34 +144,27 @@ def main(arguments):
     }
 
     ti.reset()
-    ti.init(arch=backend, device_memory_GB=5,
+    ti.init(arch=backend, device_memory_GB=arguments['cuda_GB'],
             default_fp=ti.f32, fast_math=True, random_seed=seed)
     env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
     set_parameters(mpm_env, SAND, e=4e5, nu=0.2, rho=1800., sand_friction_angle=45.,
                    manipulator_friction=0.05, container_friction=0.5)
     gym_env_config = {
-        'mpm_env_init_state': init_state['state'],
+        # 'mpm_env_init_state': init_state['state'],
         'pcd_file_path': os.path.join(script_path, '..', 'data', 'task_target_pcds',
                                       f'pcd_{task_id}_cropped_norm_z_aligned.ply'),
         'render_skill': arguments['env_test'],
-        'horizon': arguments['n_skills'],
+        'horizon': n_skill,
         'obs_mode': 'point_cloud',
         'reward_scale': -1.0,
         'n_discrete_action': 3,
         'dim_continuous_action': 6,
         'continuous_action_max': 1.0,
         'continuous_action_min': -1.0,
-        'skill_generation_func': None
+        'skill_generation_func': abstraction_one_skills
     }
-    if arguments['abstraction_level'] == 1:
-        gym_env_config['skill_generation_func'] = abstraction_one_skills
-        gym_env = HybridActionEnv(mpm_env, gym_env_config, seed=arguments['seed'], logger=logging)
-    elif arguments['abstraction_level'] == 2:
-        gym_env_config['skill_generation_func'] = abstraction_two_skill
-        gym_env_config['dim_continuous_action'] = 5
-        gym_env = SingleSkillEnv(mpm_env, gym_env_config, seed=arguments['seed'], logger=logging)
-    else:
-        raise ValueError('Invalid abstraction level')
+    gym_env = HybridActionEnv(mpm_env, gym_env_config, seed=arguments['seed'], logger=logging)
+    # gym_env = FakeEnv(gym_env_config, seed=seed, logger=logging)
 
     if arguments['env_test']:
         skill_plan = [0, 1, 0, 2]
@@ -263,18 +201,19 @@ def main(arguments):
 
                 gym_env.render(mode='human')
     else:
-        # gym_env = FakeEnv(gym_env_config, seed=seed, logger=logging)
-
         with open(os.path.join(script_path, '..', 'data', 'rl_agent_config.json'), 'rb') as f_ac:
             rl_agent_config = json.load(f_ac)
         rl_agent_config['cuda_device_id'] = arguments['torch_cuda_device_id']
-        rl_agent_config['batch_size'] = 8
-        rl_agent_config['optimization_steps'] = arguments['n_skills']
+        rl_agent_config['batch_size'] = 24
+        rl_agent_config['optimization_steps'] = n_skill
         rl_agent_config['demonstrate_skills'] = arguments['demonstrate_skills']
         rl_agent_config['demonstrate_percentage'] = arguments['demonstrate_percentage']
         rl_agent_config['planned_skills'] = arguments['planned_skills']
         rl_agent_config['skill_plan'] = [0, 1, 0, 2]  # move, insert, move, pullout
-        assert len(rl_agent_config['skill_plan']) == arguments['n_skills'], 'The length of skill plan should be equal to n_skills'
+        rl_agent_config['hindsight'] = True
+        rl_agent_config['her_sampling_strategy'] = 'future'
+        rl_agent_config['num_sampled_goal'] = 2
+        assert len(rl_agent_config['skill_plan']) == n_skill, 'The length of skill plan should be equal to n_skills'
         with open(os.path.join(log_dir, 'rl_agent_config.json'), 'w') as f_ac:
             json.dump(rl_agent_config, f_ac)
 
@@ -287,13 +226,13 @@ if __name__ == '__main__':
     parser.add_argument('--seed', dest='seed', type=int, default=0, help='seed')
     parser.add_argument('--backend', dest='backend', type=str, default='cuda', help='backend')
     parser.add_argument('--task-id', dest='task_id', type=int, default=0, help='task id')
-    parser.add_argument('--abs_lv', dest='abstraction_level', type=int, default=2, help='abstraction level')
-    parser.add_argument('--e-test', dest='env_test', action='store_true', default=True, help='testing gym env')
+    parser.add_argument('--e-test', dest='env_test', action='store_true', default=False, help='testing gym env')
     parser.add_argument('--ptcl-d', dest='ptcl_density', type=float, default=1e7, help='particle density')
     parser.add_argument('--n-skills', dest='n_skills', type=int, default=4, help='number of skills')
     parser.add_argument('--demo-skills', dest='demonstrate_skills', action='store_true', default=False, help='demonstrate the order of skills')
     parser.add_argument('--demo-frequency', dest='demonstrate_percentage', type=float, default=0.5, help='percentage of demonstration episodes')
-    parser.add_argument('--planned-skills', dest='planned_skills', action='store_true', default=True, help='always ues planed order of skills')
+    parser.add_argument('--planned-skills', dest='planned_skills', action='store_true', default=False, help='always ues planed order of skills')
     parser.add_argument('--t-cuda-id', dest='torch_cuda_device_id', type=int, default=0, help='cuda device id')
+    parser.add_argument('--cuda_GB', dest='cuda_GB', default=2, type=int, help='preallocated GPU memory in GB')
     args = vars(parser.parse_args())
     main(args)

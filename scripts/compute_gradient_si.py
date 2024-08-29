@@ -125,7 +125,7 @@ def main(args):
                        container_friction=0.5,
                        sand_friction_angle=sand_angle.copy())
         if args['debug']:
-            set_parameters(mpm_env, SAND, e=5e6, nu=0.3, rho=2000., sand_friction_angle=60.,
+            set_parameters(mpm_env, SAND, e=5e5, nu=0.3, rho=2000., sand_friction_angle=60.,
                            manipulator_friction=0.5, container_friction=0.5)
         print(
             f'===> Created Env with {mpm_env.simulator.n_particles} particles, {mpm_env.loss.n_target_pcd_points} target pcd points.')
@@ -260,6 +260,6 @@ if __name__ == '__main__':
     parser.add_argument('--backend', dest='backend', default='cuda', type=str,
                         help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
-    parser.add_argument('--n_substep', dest='n_substep', default='20', type=int, help='number of simulation substeps')
+    parser.add_argument('--n_substep', dest='n_substep', default=20, type=int, help='number of simulation substeps')
     arguments = vars(parser.parse_args())
     main(arguments)

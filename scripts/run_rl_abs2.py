@@ -5,13 +5,13 @@ import logging
 import argparse
 import numpy as np
 import taichi as ti
-from drl_implementation.agent.continuous_action.sac_parameterised_action_goal_conditioned import GPASAC
+from drl_implementation.agent.continuous_action.sac_onestep_pointnet import OneStepSAC
 script_path = os.path.dirname(os.path.realpath(__file__))
 
 from doma.envs.planting_env import make_env
 from doma.engine.configs.macros import DTYPE_NP, SAND
 from doma.engine.utils.misc import set_parameters
-from doma.envs.wrappers import SingleSkillEnv, HybridActionEnv, FakeEnv
+from doma.envs.wrappers import SingleSkillEnv, FakeEnv
 cam_cfg = {  # same camera pose as the real-world setup
     'pos': (0.2, 0.57, 0.6),
     'lookat': (0.2, 0.2, 0.03),
@@ -25,8 +25,10 @@ cam_cfg = {  # same camera pose as the real-world setup
     'res': (800, 800),
     'pcd_gen_res': 60
 }
+
 LINEAR_VELOCITY = 0.2  # m/s
 ANGULAR_VELOCITY = np.pi / 4  # rad/s
+DT_GLOBAL = 0.01  # sec
 
 
 def abstraction_two_skill(skill_params, dt):
@@ -47,7 +49,7 @@ def abstraction_two_skill(skill_params, dt):
             trajectory[i][3] = rotate_delta_x
 
     insert_angle = rotate_x + np.pi / 2
-    insert_distance = (skill_params[2] + 1) / 2 * 0.05  # map [-1, 1] to [0, 0.05]
+    insert_distance = (skill_params[2] + 1) / 2 * 0.06  # map [-1, 1] to [0, 0.06]
     n_step_insert = int(insert_distance / (LINEAR_VELOCITY * dt))
     if n_step_insert > 0:
         insert_distance_x = insert_distance * np.cos(insert_angle)
@@ -88,7 +90,7 @@ def abstraction_two_skill(skill_params, dt):
 def main(arguments):
     seed = arguments['seed']
     task_id = arguments['task_id']
-    log_dir = os.path.join(script_path, '..', 'log-sac', f'task-{task_id}', f'seed-{seed}')
+    log_dir = os.path.join(script_path, '..', 'log-abs2-sac', f'task-{task_id}', f'seed-{seed}')
     os.makedirs(log_dir, exist_ok=True)
     log_file_name = os.path.join(log_dir, 'optimisation.log')
     if os.path.isfile(log_file_name):
@@ -111,11 +113,11 @@ def main(arguments):
     env_cfg = {
         'material_id': SAND,
         'p_density': arguments['ptcl_density'],
-        'horizon': 10000,
-        'dt_global': 0.01,
+        'horizon': 600,
+        'dt_global': DT_GLOBAL,
         'n_substeps': 20,
         'grid_scale': 1.0,
-        'agent_init_pos': (0.2, 0.2, 0.2),
+        'agent_init_pos': (0.2, 0.2, 0.205),
         'agent_init_euler': (0, 180, 90),
     }
     loss_cfg = {
@@ -126,7 +128,7 @@ def main(arguments):
     }
 
     ti.reset()
-    ti.init(arch=backend, device_memory_GB=5,
+    ti.init(arch=backend, device_memory_GB=arguments['cuda_GB'],
             default_fp=ti.f32, fast_math=True, random_seed=seed)
     env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
     set_parameters(mpm_env, SAND, e=4e5, nu=0.2, rho=1800., sand_friction_angle=45.,
@@ -139,15 +141,14 @@ def main(arguments):
         'horizon': 1,
         'obs_mode': 'point_cloud',
         'reward_scale': -1.0,
-        'n_discrete_action': 3,
-        'dim_continuous_action': 5,
-        'continuous_action_max': 1.0,
-        'continuous_action_min': -1.0,
+        'action_dim': 5,
+        'action_max': 1.0,
+        'action_min': -1.0,
         'skill_generation_func': abstraction_two_skill
     }
     gym_env = SingleSkillEnv(mpm_env, gym_env_config, seed=arguments['seed'], logger=logging)
+    # gym_env = FakeEnv(gym_env_config, onestep=True, seed=seed, logger=logging)
     if arguments['env_test']:
-        skill_plan = [0, 1, 0, 2]
         frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
         for n in range(5):
             gym_env.reset()
@@ -159,7 +160,7 @@ def main(arguments):
                 # a3 = float(input('Enter the skill param 3: '))
                 # a4 = float(input('Enter the skill param 4: '))
                 # a5 = float(input('Enter the skill param 5: '))
-                a = gym_env.continuous_action_space.sample()
+                a = gym_env.action_space.sample()
                 a = np.asarray(a, dtype=DTYPE_NP)
                 obs, reward, done, info = gym_env.step(a)
 
@@ -175,18 +176,17 @@ def main(arguments):
 
                 gym_env.render(mode='human')
     else:
-        # gym_env = FakeEnv(gym_env_config, seed=seed, logger=logging)
-
         with open(os.path.join(script_path, '..', 'data', 'rl_agent_config.json'), 'rb') as f_ac:
             rl_agent_config = json.load(f_ac)
         rl_agent_config['cuda_device_id'] = arguments['torch_cuda_device_id']
-        rl_agent_config['batch_size'] = 8
-        rl_agent_config['optimization_steps'] = arguments['n_skills']
+        rl_agent_config['batch_size'] = 24
+        rl_agent_config['optimization_steps'] = 1
+        rl_agent_config['hindsight'] = True
         with open(os.path.join(log_dir, 'rl_agent_config.json'), 'w') as f_ac:
             json.dump(rl_agent_config, f_ac)
 
-        gpasac_agent = GPASAC(rl_agent_config, gym_env, path=log_dir, seed=seed)
-        gpasac_agent.run()
+        agent = OneStepSAC(rl_agent_config, gym_env, path=log_dir, seed=seed)
+        agent.run()
 
 
 if __name__ == '__main__':
@@ -194,8 +194,10 @@ if __name__ == '__main__':
     parser.add_argument('--seed', dest='seed', type=int, default=0, help='seed')
     parser.add_argument('--backend', dest='backend', type=str, default='cuda', help='backend')
     parser.add_argument('--task-id', dest='task_id', type=int, default=0, help='task id')
-    parser.add_argument('--e-test', dest='env_test', action='store_true', default=True, help='testing gym env')
+    parser.add_argument('--e-test', dest='env_test', action='store_true', default=False, help='testing gym env')
     parser.add_argument('--ptcl-d', dest='ptcl_density', type=float, default=1e7, help='particle density')
     parser.add_argument('--t-cuda-id', dest='torch_cuda_device_id', type=int, default=0, help='cuda device id')
+    parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
+
     args = vars(parser.parse_args())
     main(args)
