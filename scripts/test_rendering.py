@@ -1,5 +1,6 @@
 import os
 import argparse
+import json
 import numpy as np
 import open3d as o3d
 import matplotlib.pyplot as plt
@@ -13,7 +14,7 @@ script_path = os.path.dirname(os.path.realpath(__file__))
 def main(args):
     saving_folder = os.path.join(script_path, '..', 'render_test')
     os.makedirs(saving_folder, exist_ok=True)
-    sys_id_motion = 0
+    sys_id_motion = 1
     dt_sim = 0.01
     trajectory = np.load(os.path.join(script_path, '..', 'data',
                                       'moveit_trajectories', f'sys_id_sim_{sys_id_motion}_pos-dt_{dt_sim}.npy'))
@@ -54,30 +55,39 @@ def main(args):
     ti.reset()
     ti.init(arch=ti.cuda, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True, random_seed=1)
     env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg)
-    set_parameters(mpm_env, SAND, e=1e6, nu=0.3, rho=2300., sand_friction_angle=15.)
-    mpm_env.set_state(init_state['state'], grad_enabled=True)
-    mpm_env.render(mode='human')
+    with open(os.path.join(script_path, '..', 'log-sys_id', 'best_params.json')) as f:
+        best_params = json.load(f)[args['ptcl_density']]["Parameters"]
+    set_parameters(mpm_env, SAND,
+                   e=best_params['E'],
+                   nu=best_params['nu'],
+                   rho=best_params['rho'],
+                   sand_friction_angle=best_params['sand_angle'])
+    mpm_env.set_state(init_state['state'], grad_enabled=False)
+    if args['render']:
+        mpm_env.render(mode='human')
     for i in range(mpm_env.horizon):
         mpm_env.step(trajectory[i])
-        mpm_env.render(mode='human')
+        if args['render']:
+            mpm_env.render(mode='human')
     loss_info = mpm_env.get_final_loss()
     print('===> Loss info:', loss_info)
 
-    fig, ax = plt.subplots(1, 2, figsize=(12, 6))
-    ax[0].imshow(mpm_env.loss.height_map.to_numpy(),
-                 vmin=0.002, vmax=0.09)
-    ax[0].set_title('Height map')
-    ax[1].imshow(mpm_env.loss.height_map_pcd_target.to_numpy(),
-                 vmin=0.002, vmax=0.09)
-    ax[1].set_title('Target height map')
-    plt.show()
+    if args['render']:
+        fig, ax = plt.subplots(1, 2, figsize=(12, 6))
+        ax[0].imshow(mpm_env.loss.height_map.to_numpy(),
+                     vmin=0.002, vmax=0.09)
+        ax[0].set_title('Height map')
+        ax[1].imshow(mpm_env.loss.height_map_pcd_target.to_numpy(),
+                     vmin=0.002, vmax=0.09)
+        ax[1].set_title('Target height map')
+        plt.show()
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run system identification simulation')
-    parser.add_argument('--ptcl_d', dest='ptcl_density', type=float, default=5e6, help='Particle density')
+    parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default=5e6, help='Particle density')
     parser.add_argument('--ns', dest='n_substep', type=int, default=20, help='Number of substeps')
     parser.add_argument('--cuda_GB', dest='cuda_GB', type=float, default=5, help='CUDA memory in GB')
     parser.add_argument('--r', dest='render', default=False, action='store_true', help='Render the simulation')
-    args = vars(parser.parse_args())
-    main(args)
+    arguments = vars(parser.parse_args())
+    main(arguments)
