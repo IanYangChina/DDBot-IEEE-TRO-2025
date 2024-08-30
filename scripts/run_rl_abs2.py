@@ -177,6 +177,7 @@ def main(arguments):
                 cloud_array_2[:, 0] += 0.3
                 obj_vec_2 = o3d.utility.Vector3dVector(cloud_array_2)
                 obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2)
+                print(obj_pcd, obj_pcd_2)
                 o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2], width=800, height=600)
 
                 gym_env.render(mode='human')
@@ -192,7 +193,6 @@ def main(arguments):
             json.dump(rl_agent_config, f_ac)
 
         agent = OneStepSAC(rl_agent_config, gym_env, path=log_dir, seed=seed)
-        print(agent.state_shape)
         agent.run()
 
 
@@ -202,7 +202,7 @@ if __name__ == '__main__':
     parser.add_argument('--backend', dest='backend', type=str, default='cuda', help='backend')
     parser.add_argument('--task-id', dest='task_id', type=int, default=0, help='task id')
     parser.add_argument('--e-test', dest='env_test', action='store_true', default=False, help='testing gym env')
-    parser.add_argument('--ptcl-d', dest='ptcl_density', type=str, default=1e7, help='particle density')
+    parser.add_argument('--ptcl-d', dest='ptcl_density', type=str, default="1e7", help='particle density')
     parser.add_argument('--t-cuda-id', dest='torch_cuda_device_id', type=int, default=0, help='cuda device id')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
 
