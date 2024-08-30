@@ -203,9 +203,9 @@ if __name__ == '__main__':
     parser.add_argument('--backend', dest='backend', type=str, default='cuda', help='backend')
     parser.add_argument('--task-id', dest='task_id', type=int, default=0, help='task id')
     parser.add_argument('--e-test', dest='env_test', action='store_true', default=False, help='testing gym env')
-    parser.add_argument('--ptcl-d', dest='ptcl_density', type=str, default="1e7", help='particle density')
+    parser.add_argument('--ptcl-d', dest='ptcl_density', type=str, default="5e6", help='particle density')
     parser.add_argument('--t-cuda-id', dest='torch_cuda_device_id', type=int, default=0, help='cuda device id')
-    parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
+    parser.add_argument('--cuda_GB', dest='cuda_GB', default=4, type=int, help='preallocated GPU memory in GB')
 
     args = vars(parser.parse_args())
     main(args)
