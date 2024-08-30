@@ -8,9 +8,7 @@ import taichi as ti
 from drl_implementation.agent.continuous_action.sac_onestep_pointnet import OneStepSAC
 script_path = os.path.dirname(os.path.realpath(__file__))
 
-from doma.envs.planting_env import make_env
 from doma.engine.configs.macros import DTYPE_NP, SAND
-from doma.engine.utils.misc import set_parameters
 from doma.envs.wrappers import SingleSkillEnv, FakeEnv
 cam_cfg = {
     'pos': (0.2, 0.57, 0.6),
@@ -120,6 +118,7 @@ def main(arguments):
         'grid_scale': 1.0,
         'agent_init_pos': (0.2, 0.2, 0.205),
         'agent_init_euler': (0, 180, 90),
+        'best_params': None
     }
     loss_cfg = {
         'target_pcd_path': os.path.join(script_path, '..', 'data', 'task_target_pcds',
@@ -127,20 +126,23 @@ def main(arguments):
         'target_pcd_offset': [0.2, 0.2, 0],
         'down_sample_voxel_size': 0.007,
     }
+    ti_cfg = {
+        'arch': backend,
+        'device_memory_GB': arguments['cuda_GB'],
+        'fast_math': True,
+        'random_seed': seed
+    }
+    ti_env_cfg = {
+        'env_cfg': env_cfg,
+        'loss_cfg': loss_cfg,
+        'ti_cfg': ti_cfg,
+        'cam_cfg': cam_cfg
+    }
 
-    ti.reset()
-    ti.init(arch=backend, device_memory_GB=arguments['cuda_GB'],
-            default_fp=ti.f32, fast_math=True, random_seed=seed)
-    env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
     with open(os.path.join(script_path, '..', 'log-sys_id', 'best_params.json')) as f:
         best_params = json.load(f)[arguments['ptcl_density']]["Parameters"]
-    set_parameters(mpm_env, SAND,
-                   e=best_params['E'],
-                   nu=best_params['nu'],
-                   rho=best_params['rho'],
-                   sand_friction_angle=best_params['sand_angle'])
+    env_cfg['best_params'] = best_params
     gym_env_config = {
-        'mpm_env_init_state': init_state['state'],
         'pcd_file_path': os.path.join(script_path, '..', 'data', 'task_target_pcds',
                                       f'pcd_{task_id}_cropped_norm_z_aligned.ply'),
         'render_skill': arguments['env_test'],
@@ -152,7 +154,7 @@ def main(arguments):
         'action_min': -1.0,
         'skill_generation_func': abstraction_two_skill
     }
-    gym_env = SingleSkillEnv(mpm_env, gym_env_config, seed=arguments['seed'], logger=logging)
+    gym_env = SingleSkillEnv(ti_env_cfg, gym_env_config, seed=arguments['seed'], logger=logging)
     # gym_env = FakeEnv(gym_env_config, onestep=True, seed=seed, logger=logging)
     if arguments['env_test']:
         frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
