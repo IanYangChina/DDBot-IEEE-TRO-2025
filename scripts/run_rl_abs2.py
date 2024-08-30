@@ -90,7 +90,8 @@ def abstraction_two_skill(skill_params, dt):
 def main(arguments):
     seed = arguments['seed']
     task_id = arguments['task_id']
-    log_dir = os.path.join(script_path, '..', 'log-abs2-sac', f'task-{task_id}', f'seed-{seed}')
+    ptcl_d = arguments['ptcl_density']
+    log_dir = os.path.join(script_path, '..', 'log-abs2-sac', f'd{ptcl_d}-task-{task_id}', f'seed-{seed}')
     os.makedirs(log_dir, exist_ok=True)
     log_file_name = os.path.join(log_dir, 'optimisation.log')
     if os.path.isfile(log_file_name):
