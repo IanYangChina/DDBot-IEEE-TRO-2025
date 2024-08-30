@@ -32,7 +32,7 @@ def run(args):
 
     process = psutil.Process(os.getpid())
     script_path = os.path.dirname(os.path.realpath(__file__))
-    for data_ind in [str(_) for _ in range(2)]:
+    for data_ind in range(5):
         data_path = os.path.join(script_path, '..', 'data', 'task_target_pcds')
         # hm = np.load(os.path.join(data_path, f'target_pcd_height_map-{data_ind}-res{str(height_map_res)}-vdsize{str(down_sample_voxel_size)}.npy'))
         # plt.imshow(hm, cmap='Greys')
@@ -62,14 +62,14 @@ def run(args):
 
         compute_height_map_pcd()
         height_map_pcd = height_map_pcd_target.to_numpy()
-        plt.imshow(height_map_pcd, cmap='Greys')
+        plt.imshow(height_map_pcd, cmap='YlOrBr')
         plt.show()
         save = input("Save the height map? (y/n)")
         if save == 'y':
             np.save(
-                os.path.join(data_path, f'pcd_{data_ind}_cropped_norm_z_aligned_height_map-{data_ind}-res{str(height_map_res)}-vdsize{str(down_sample_voxel_size)}.npy'), height_map_pcd)
+                os.path.join(data_path, f'pcd_{data_ind}_cropped_norm_z_aligned_height_map-res{str(height_map_res)}-vdsize{str(down_sample_voxel_size)}.npy'), height_map_pcd)
             print(f'height map saved as:\n'
-                  f'{os.path.join(data_path, f"pcd_{data_ind}_cropped_norm_z_aligned_height_map-{data_ind}-res{str(height_map_res)}-vdsize{str(down_sample_voxel_size)}.npy")}')
+                  f'{os.path.join(data_path, f"pcd_{data_ind}_cropped_norm_z_aligned_height_map-res{str(height_map_res)}-vdsize{str(down_sample_voxel_size)}.npy")}')
 
 
 if __name__ == '__main__':

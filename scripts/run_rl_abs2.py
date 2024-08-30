@@ -12,7 +12,7 @@ from doma.envs.planting_env import make_env
 from doma.engine.configs.macros import DTYPE_NP, SAND
 from doma.engine.utils.misc import set_parameters
 from doma.envs.wrappers import SingleSkillEnv, FakeEnv
-cam_cfg = {  # same camera pose as the real-world setup
+cam_cfg = {
     'pos': (0.2, 0.57, 0.6),
     'lookat': (0.2, 0.2, 0.03),
     'euler': (180+np.rad2deg(np.arctan(1.0/(0.9-0.03))), 0, 180),
@@ -112,7 +112,7 @@ def main(arguments):
 
     env_cfg = {
         'material_id': SAND,
-        'p_density': arguments['ptcl_density'],
+        'p_density': float(arguments['ptcl_density']),
         'horizon': 600,
         'dt_global': DT_GLOBAL,
         'n_substeps': 20,
@@ -131,8 +131,13 @@ def main(arguments):
     ti.init(arch=backend, device_memory_GB=arguments['cuda_GB'],
             default_fp=ti.f32, fast_math=True, random_seed=seed)
     env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
-    set_parameters(mpm_env, SAND, e=4e5, nu=0.2, rho=1800., sand_friction_angle=45.,
-                   manipulator_friction=0.05, container_friction=0.5)
+    with open(os.path.join(script_path, '..', 'log-sys_id', 'best_params.json')) as f:
+        best_params = json.load(f)[arguments['ptcl_density']]["Parameters"]
+    set_parameters(mpm_env, SAND,
+                   e=best_params['E'],
+                   nu=best_params['nu'],
+                   rho=best_params['rho'],
+                   sand_friction_angle=best_params['sand_angle'])
     gym_env_config = {
         'mpm_env_init_state': init_state['state'],
         'pcd_file_path': os.path.join(script_path, '..', 'data', 'task_target_pcds',
@@ -182,10 +187,12 @@ def main(arguments):
         rl_agent_config['batch_size'] = 24
         rl_agent_config['optimization_steps'] = 1
         rl_agent_config['hindsight'] = True
+        rl_agent_config['sampling_strategy'] = 'her_sampling_strategy'
         with open(os.path.join(log_dir, 'rl_agent_config.json'), 'w') as f_ac:
             json.dump(rl_agent_config, f_ac)
 
         agent = OneStepSAC(rl_agent_config, gym_env, path=log_dir, seed=seed)
+        print(agent.state_shape)
         agent.run()
 
 
@@ -195,7 +202,7 @@ if __name__ == '__main__':
     parser.add_argument('--backend', dest='backend', type=str, default='cuda', help='backend')
     parser.add_argument('--task-id', dest='task_id', type=int, default=0, help='task id')
     parser.add_argument('--e-test', dest='env_test', action='store_true', default=False, help='testing gym env')
-    parser.add_argument('--ptcl-d', dest='ptcl_density', type=float, default=1e7, help='particle density')
+    parser.add_argument('--ptcl-d', dest='ptcl_density', type=str, default=1e7, help='particle density')
     parser.add_argument('--t-cuda-id', dest='torch_cuda_device_id', type=int, default=0, help='cuda device id')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
 
