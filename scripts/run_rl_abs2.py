@@ -195,7 +195,7 @@ def main(arguments):
         with open(os.path.join(log_dir, 'rl_agent_config.json'), 'w') as f_ac:
             json.dump(rl_agent_config, f_ac)
 
-        agent = OneStepSAC(rl_agent_config, gym_env, path=log_dir, seed=seed)
+        agent = OneStepSAC(rl_agent_config, gym_env, logging=logging, path=log_dir, seed=seed)
         agent.run()
 
 
