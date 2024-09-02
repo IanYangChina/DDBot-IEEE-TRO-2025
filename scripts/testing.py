@@ -5,7 +5,7 @@ ANGULAR_VELOCITY = np.pi / 4  # rad/s
 DT_GLOBAL = 0.01  # sec
 
 ti.reset()
-ti.init(arch=ti.cuda, device_memory_GB=5, default_fp=ti.f32,
+ti.init(arch=ti.cpu, device_memory_GB=5, default_fp=ti.f32,
         fast_math=True, random_seed=0)
 
 horizon = 300
@@ -21,7 +21,7 @@ loss = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
 def loss_func():
     for i in range(int(n_step_total[None])):
         for j in ti.static(range(6)):
-            loss[None] += ti.abs((trajectory[i][j] - 5) ** 2)
+            loss[None] += ((trajectory[i][j] - 5) ** 2)
 
 
 def reset_grads():
@@ -70,7 +70,7 @@ def abstraction_two_skill():
     push_angle = (skill_params_ti[3] + 1) * np.pi / 2  # map [-1, 1] to [0, pi]
     push_distance = (skill_params_ti[4] + 1) * 0.1  # map [-1, 1] to [0, 0.2]
     n_step_push[None] = ti.abs(push_distance / (LINEAR_VELOCITY * DT_GLOBAL))
-    n_step_push_int = ti.cast(n_step_push[None], ti.i32)
+    n_step_push_int = ti.floor(n_step_push[None], ti.i32)
     if n_step_push_int > 0:
         push_distance_x = push_distance * ti.cos(push_angle)
         push_distance_z = push_distance * ti.sin(push_angle)
@@ -92,19 +92,30 @@ def abstraction_two_skill():
 
 
 @ti.kernel
-def fill_trajectory():
+def fill_trajectory_1():
     for k in range(1):
         n_step_move_int = ti.cast(n_step_move[None], ti.i32)
         for i in range(n_step_move_int):
             trajectory[i][0] = move_delta_x[None]
             trajectory[i][3] = rotate_delta_x[None]
 
+
+@ti.kernel
+def fill_trajectory_2():
+    for k in range(1):
+        n_step_move_int = ti.cast(n_step_move[None], ti.i32)
         n_step_insert_int = ti.cast(n_step_insert[None], ti.i32)
         for i in range(n_step_insert_int):
             index = i+n_step_move_int
             trajectory[index][0] = insert_delta_x[None]
             trajectory[index][2] = -insert_delta_z[None]
 
+
+@ti.kernel
+def fill_trajectory_3():
+    for k in range(1):
+        n_step_move_int = ti.cast(n_step_move[None], ti.i32)
+        n_step_insert_int = ti.cast(n_step_insert[None], ti.i32)
         n_step_push_int = ti.cast(n_step_push[None], ti.i32)
         for i in range(n_step_push_int):
             index = i+n_step_move_int
@@ -112,6 +123,13 @@ def fill_trajectory():
             trajectory[index][0] = push_delta_x[None]
             trajectory[index][2] = push_delta_z[None]
 
+
+@ti.kernel
+def fill_trajectory_4():
+    for k in range(1):
+        n_step_move_int = ti.cast(n_step_move[None], ti.i32)
+        n_step_insert_int = ti.cast(n_step_insert[None], ti.i32)
+        n_step_push_int = ti.cast(n_step_push[None], ti.i32)
         n_step_return_int = ti.cast(n_step_return[None], ti.i32)
         for i in range(n_step_return_int):
             index = i+n_step_move_int+n_step_insert_int+n_step_push_int
@@ -122,8 +140,13 @@ def fill_trajectory():
 skill_params_ti.from_numpy(np.array([0.5, 0.5, 0.5, 0.5, 0.5], dtype=np.float32))
 
 abstraction_two_skill()
+print('push_delta_x:', push_delta_x[None])
+print('n_step_push:', n_step_push[None])
 trajectory.fill(0)
-fill_trajectory()
+fill_trajectory_1()
+fill_trajectory_2()
+fill_trajectory_3()
+fill_trajectory_4()
 total_step = int(n_step_total[None])
 print(trajectory.to_numpy()[:total_step, :])
 print(total_step)
@@ -138,11 +161,33 @@ loss_func.grad()
 print('trajectory.grad:', trajectory.grad.to_numpy()[:total_step, :])
 print('skill_params_ti.grad:', skill_params_ti.grad.to_numpy())
 
-fill_trajectory.grad()
+fill_trajectory_4.grad()
 print('trajectory.grad:', trajectory.grad.to_numpy()[:total_step, :])
+print('push_delta_x.grad:', push_delta_x.grad.to_numpy())
+print('n_step_push.grad:', n_step_push.grad.to_numpy())
+print('skill_params_ti.grad:', skill_params_ti.grad.to_numpy())
+
+fill_trajectory_3.grad()
+print('trajectory.grad:', trajectory.grad.to_numpy()[:total_step, :])
+print('push_delta_x.grad:', push_delta_x.grad.to_numpy())
+print('n_step_push.grad:', n_step_push.grad.to_numpy())
+print('skill_params_ti.grad:', skill_params_ti.grad.to_numpy())
+
+fill_trajectory_2.grad()
+print('trajectory.grad:', trajectory.grad.to_numpy()[:total_step, :])
+print('push_delta_x.grad:', push_delta_x.grad.to_numpy())
+print('n_step_push.grad:', n_step_push.grad.to_numpy())
+print('skill_params_ti.grad:', skill_params_ti.grad.to_numpy())
+
+fill_trajectory_1.grad()
+print('trajectory.grad:', trajectory.grad.to_numpy()[:total_step, :])
+print('push_delta_x.grad:', push_delta_x.grad.to_numpy())
+print('n_step_push.grad:', n_step_push.grad.to_numpy())
 print('skill_params_ti.grad:', skill_params_ti.grad.to_numpy())
 
 abstraction_two_skill.grad()
 print('trajectory.grad:', trajectory.grad.to_numpy()[:total_step, :])
+print('push_delta_x.grad:', push_delta_x.grad.to_numpy())
+print('n_step_push.grad:', n_step_push.grad.to_numpy())
 print('skill_params_ti.grad:', skill_params_ti.grad.to_numpy())
 
