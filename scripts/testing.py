@@ -5,17 +5,15 @@ ANGULAR_VELOCITY = np.pi / 4  # rad/s
 DT_GLOBAL = 0.01  # sec
 
 ti.reset()
-ti.init(arch=ti.vulkan, device_memory_GB=5, default_fp=ti.f32,
+ti.init(arch=ti.cuda, device_memory_GB=5, default_fp=ti.f32,
         fast_math=True, random_seed=0)
 
-horizon = 400
+horizon = 300
 
 skill_params_ti = ti.field(dtype=ti.f32, shape=5, needs_grad=True)
 n_step_total = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
 
 trajectory = ti.Vector.field(n=6, dtype=ti.f32, shape=horizon, needs_grad=True)
-target = ti.Vector.field(n=6, dtype=ti.f32, shape=horizon, needs_grad=True)
-target.fill(1)
 loss = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
 
 
@@ -23,7 +21,7 @@ loss = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
 def loss_func():
     for i in range(int(n_step_total[None])):
         for j in ti.static(range(6)):
-            loss[None] += ti.abs((trajectory[i][j] - target[i][j]) ** 2)
+            loss[None] += ti.abs((trajectory[i][j] - 5) ** 2)
 
 
 def reset_grads():
@@ -122,9 +120,9 @@ def fill_trajectory():
 
 
 skill_params_ti.from_numpy(np.array([0.5, 0.5, 0.5, 0.5, 0.5], dtype=np.float32))
-trajectory.fill(0)
 
 abstraction_two_skill()
+trajectory.fill(0)
 fill_trajectory()
 total_step = int(n_step_total[None])
 print(trajectory.to_numpy()[:total_step, :])
