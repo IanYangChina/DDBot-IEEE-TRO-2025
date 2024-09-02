@@ -89,7 +89,10 @@ def main(arguments):
     seed = arguments['seed']
     task_id = arguments['task_id']
     ptcl_d = arguments['ptcl_density']
-    log_dir = os.path.join(script_path, '..', 'log-abs2-sac', f'd{ptcl_d}-task-{task_id}', f'seed-{seed}')
+    if arguments['use_demo']:
+        log_dir = os.path.join(script_path, '..', 'log-abs2-sac', f'd{ptcl_d}-task-{task_id}-demo', f'seed-{seed}')
+    else:
+        log_dir = os.path.join(script_path, '..', 'log-abs2-sac', f'd{ptcl_d}-task-{task_id}', f'seed-{seed}')
     os.makedirs(log_dir, exist_ok=True)
     log_file_name = os.path.join(log_dir, 'optimisation.log')
     if os.path.isfile(log_file_name):
@@ -192,6 +195,9 @@ def main(arguments):
         rl_agent_config['optimization_steps'] = 1
         rl_agent_config['hindsight'] = True
         rl_agent_config['sampling_strategy'] = 'her_sampling_strategy'
+        rl_agent_config['use_demonstrations'] = arguments['use_demo']
+        rl_agent_config['demonstrate_percentage'] = 0.25
+        rl_agent_config['demonstration_action'] = [1.0, 0.3, 0.8, 1.0, 0.3]
         with open(os.path.join(log_dir, 'rl_agent_config.json'), 'w') as f_ac:
             json.dump(rl_agent_config, f_ac)
 
@@ -204,6 +210,7 @@ if __name__ == '__main__':
     parser.add_argument('--seed', dest='seed', type=int, default=0, help='seed')
     parser.add_argument('--backend', dest='backend', type=str, default='cuda', help='backend')
     parser.add_argument('--task-id', dest='task_id', type=int, default=0, help='task id')
+    parser.add_argument('--demo', dest='use_demo', action='store_true', default=False, help='use demonstrations')
     parser.add_argument('--e-test', dest='env_test', action='store_true', default=False, help='testing gym env')
     parser.add_argument('--ptcl-d', dest='ptcl_density', type=str, default="5e6", help='particle density')
     parser.add_argument('--t-cuda-id', dest='torch_cuda_device_id', type=int, default=0, help='cuda device id')

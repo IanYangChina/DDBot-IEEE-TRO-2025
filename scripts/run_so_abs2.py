@@ -1,5 +1,6 @@
 import os
 import yaml
+import json
 import logging
 import argparse
 import numpy as np
@@ -47,7 +48,14 @@ def get_skill_params(params=None):
 def main(args):
     seed = args['seed']
     # np_rng = np.random.default_rng(seed=seed)
-    log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'seed-{seed}')
+    task_id = args['task_id']
+    ptcl_d = arguments['ptcl_density']
+    if args['compute_grad']:
+        log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}', 'grads')
+    else:
+        log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}', f'seed-{seed}')
+    grad_mean_file_name = os.path.join(log_dir, 'grad_mean.npy')
+    grad_std_file_name = os.path.join(log_dir, 'grad_std.npy')
     os.makedirs(log_dir, exist_ok=True)
     log_file_name = os.path.join(log_dir, 'optimisation.log')
     if os.path.isfile(log_file_name):
@@ -67,99 +75,16 @@ def main(args):
         backend = ti.vulkan
     else:
         backend = ti.cpu
-    ti.reset()
-    ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=DTYPE_TI,
-            fast_math=True, random_seed=args['seed'])
 
     horizon = 600
+    with open(os.path.join(script_path, '..', 'log-sys_id', 'best_params.json')) as f:
+        best_params = json.load(f)[arguments['ptcl_density']]["Parameters"]
 
-    skill_params_optim = Adam(parameters_shape=(5,),
-                              cfg={'lr': 0.001, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
-    skill_params_ti = ti.field(dtype=DTYPE_TI, shape=5, needs_grad=True)
-    n_step_total = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
-
-    trajectory = ti.Vector.field(n=6, dtype=DTYPE_TI, shape=horizon, needs_grad=True)
-
-    def reset_grads():
-        skill_params_ti.grad.fill(0)
-        trajectory.grad.fill(0)
-
-    @ti.kernel
-    def abstraction_two_skill():
-        move_distance = skill_params_ti[0] * 0.12  # map [-1, 1] to [-0.12, 0.12]
-        rotate_x = skill_params_ti[1] * (np.pi / 2)  # map [-1, 1] to [-pi/2, pi/2]
-
-        n_step_move = ti.abs(ti.floor(move_distance / (LINEAR_VELOCITY * DT_GLOBAL)))
-        n_step_rotate = ti.abs(ti.floor(rotate_x / (ANGULAR_VELOCITY * DT_GLOBAL)))
-        n_step = n_step_move
-        ti.atomic_max(n_step, n_step_rotate)
-        n_step_int = int(n_step)
-        if n_step_int > 0:
-            move_delta_x = move_distance / n_step
-            for j in range(n_step_int):
-                trajectory[j][0] = move_delta_x
-            rotate_delta_x = rotate_x / n_step
-            for j in range(n_step_int):
-                trajectory[j][3] = rotate_delta_x
-
-        insert_angle = rotate_x + np.pi / 2
-        insert_distance = (skill_params_ti[2] + 1) / 2 * 0.06  # map [-1, 1] to [0, 0.06]
-        n_step_insert = ti.floor(insert_distance / (LINEAR_VELOCITY * DT_GLOBAL))
-        n_step_insert_int = int(n_step_insert)
-        if n_step_insert_int > 0:
-            insert_distance_x = insert_distance * ti.cos(insert_angle)
-            insert_distance_z = insert_distance * ti.sin(insert_angle)
-            insert_delta_x = insert_distance_x / n_step_insert
-            insert_delta_z = insert_distance_z / n_step_insert
-            for j in range(n_step_int, n_step_int + n_step_insert_int):
-                trajectory[j][0] = insert_delta_x
-                trajectory[j][2] = -insert_delta_z
-
-        push_angle = (skill_params_ti[3] + 1) * np.pi / 2  # map [-1, 1] to [0, pi]
-        push_distance = (skill_params_ti[4] + 1) * 0.1  # map [-1, 1] to [0, 0.2]
-        n_step_push = ti.floor(push_distance / (LINEAR_VELOCITY * DT_GLOBAL))
-        n_step_push_int = int(n_step_push)
-        if n_step_push_int > 0:
-            push_distance_x = push_distance * ti.cos(push_angle)
-            push_distance_z = push_distance * ti.sin(push_angle)
-            push_delta_x = push_distance_x / n_step_push
-            push_delta_z = push_distance_z / n_step_push
-            for j in range(n_step_int + n_step_insert_int, n_step_int + n_step_insert_int + n_step_push_int):
-                trajectory[j][0] = push_delta_x
-                trajectory[j][2] = push_delta_z
-
-        rotate_x_back = -rotate_x
-        n_step_rotate_back = n_step_rotate
-        move_up_distance = 0.1
-        n_step_move_up = ti.floor(move_up_distance / (LINEAR_VELOCITY * DT_GLOBAL))
-        n_step_return = n_step_rotate_back
-        ti.atomic_max(n_step_return, n_step_move_up)
-        n_step_return_int = int(n_step_return)
-        if n_step_return_int > 0:
-            rotate_delta_x_back = rotate_x_back / n_step_return
-            move_up_delta_z = move_up_distance / n_step_return
-            for j in range(n_step_int + n_step_insert_int + n_step_push_int,
-                           n_step_int + n_step_insert_int + n_step_push_int + n_step_return_int):
-                trajectory[j][3] = rotate_delta_x_back
-                trajectory[j][5] = move_up_delta_z
-
-        n_step_total[None] = n_step_int + n_step_insert_int + n_step_push_int + n_step_return_int
-
-    def update_trajectory_grad(grads, length):
-        for m in range(length):
-            trajectory.grad[m][0] = grads[m][0]
-            trajectory.grad[m][1] = grads[m][1]
-            trajectory.grad[m][2] = grads[m][2]
-            trajectory.grad[m][3] = grads[m][3]
-            trajectory.grad[m][4] = grads[m][4]
-            trajectory.grad[m][5] = grads[m][5]
-
-    task_id = 0
     env_cfg = {
         'p_density': float(args['ptcl_density']),
         'material_id': SAND,
         'grid_scale': 1,
-        'horizon': trajectory.shape[0],
+        'horizon': horizon,
         'dt_global': DT_GLOBAL,
         'n_substeps': 20,
         'agent_init_pos': (0.2, 0.2, 0.205),
@@ -173,20 +98,211 @@ def main(args):
         'target_pcd_offset': [0.2, 0.2, 0],
         'down_sample_voxel_size': 0.007,
     }
-    n_epoch = 150
+    n_epoch = 100
     n_aborted_data = 0
     losses = []
+    grads = []
     skill_params_np = np.random.uniform(-1, 1, size=5).astype(DTYPE_NP)
-    env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
-    set_parameters(mpm_env, SAND, e=5e5, nu=0.3, rho=2000., sand_friction_angle=30.,
-                   manipulator_friction=0.5, container_friction=0.5)
     for n in range(n_epoch):
+        ti.reset()
+        ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=DTYPE_TI,
+                fast_math=True, random_seed=args['seed'])
+
+        skill_params_optim = Adam(parameters_shape=(5,),
+                                  cfg={'lr': 0.001, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+        skill_params_ti = ti.field(dtype=DTYPE_TI, shape=5, needs_grad=True)
+        n_step_total = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
+
+        move_delta_x = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
+        rotate_delta_x = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
+        n_step_move = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
+        insert_delta_x = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
+        insert_delta_z = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
+        n_step_insert = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
+        push_delta_x = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
+        push_delta_z = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
+        n_step_push = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
+        rotate_delta_x_back = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
+        move_up_delta_z = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
+        n_step_return = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
+
+        trajectory = ti.Vector.field(n=6, dtype=DTYPE_TI, shape=horizon, needs_grad=True)
+
+        def reset_vars():
+            n_step_total.fill(0)
+            move_delta_x.fill(0)
+            rotate_delta_x.fill(0)
+            n_step_move.fill(0)
+            insert_delta_x.fill(0)
+            insert_delta_z.fill(0)
+            n_step_insert.fill(0)
+            push_delta_x.fill(0)
+            push_delta_z.fill(0)
+            n_step_push.fill(0)
+            rotate_delta_x_back.fill(0)
+            move_up_delta_z.fill(0)
+            n_step_return.fill(0)
+            trajectory.fill(0)
+
+        def reset_grads():
+            skill_params_ti.grad.fill(0)
+            trajectory.grad.fill(0)
+            move_delta_x.grad.fill(0)
+            rotate_delta_x.grad.fill(0)
+            n_step_move.grad.fill(0)
+            insert_delta_x.grad.fill(0)
+            insert_delta_z.grad.fill(0)
+            n_step_insert.grad.fill(0)
+            push_delta_x.grad.fill(0)
+            push_delta_z.grad.fill(0)
+            n_step_push.grad.fill(0)
+            rotate_delta_x_back.grad.fill(0)
+            move_up_delta_z.grad.fill(0)
+            n_step_return.grad.fill(0)
+
+        @ti.kernel
+        def abstraction_two_skill():
+            move_distance = skill_params_ti[0] * 0.12
+            rotate_x = skill_params_ti[1] * (np.pi / 2)  # map [-1, 1] to [-pi/2, pi/2]
+            n_step_move[None] = ti.abs(move_distance / (LINEAR_VELOCITY * DT_GLOBAL))
+            n_step_rotate = ti.abs(rotate_x / (ANGULAR_VELOCITY * DT_GLOBAL))
+            ti.atomic_max(n_step_move[None], n_step_rotate)
+            n_step_move_int = ti.cast(n_step_move[None], ti.i32)
+            if n_step_move_int > 0:
+                move_delta_x[None] = move_distance / n_step_move[None]
+                rotate_delta_x[None] = rotate_x / n_step_move[None]
+            n_step_total[None] += n_step_move_int
+
+            insert_angle = rotate_x + np.pi / 2
+            insert_distance = (skill_params_ti[2] + 1) / 2 * 0.06  # map [-1, 1] to [0, 0.06]
+            n_step_insert[None] = ti.abs(insert_distance / (LINEAR_VELOCITY * DT_GLOBAL))
+            n_step_insert_int = ti.cast(n_step_insert[None], ti.i32)
+            if n_step_insert_int > 0:
+                insert_distance_x = insert_distance * ti.cos(insert_angle)
+                insert_distance_z = insert_distance * ti.sin(insert_angle)
+                insert_delta_x[None] = insert_distance_x / n_step_insert[None]
+                insert_delta_z[None] = insert_distance_z / n_step_insert[None]
+            n_step_total[None] += n_step_insert_int
+
+            push_angle = (skill_params_ti[3] + 1) * np.pi / 2  # map [-1, 1] to [0, pi]
+            push_distance = (skill_params_ti[4] + 1) * 0.1  # map [-1, 1] to [0, 0.2]
+            n_step_push[None] = ti.abs(push_distance / (LINEAR_VELOCITY * DT_GLOBAL))
+            n_step_push_int = ti.floor(n_step_push[None], ti.i32)
+            if n_step_push_int > 0:
+                push_distance_x = push_distance * ti.cos(push_angle)
+                push_distance_z = push_distance * ti.sin(push_angle)
+                push_delta_x[None] = push_distance_x / n_step_push[None]
+                push_delta_z[None] = push_distance_z / n_step_push[None]
+            n_step_total[None] += n_step_push_int
+
+            rotate_x_back = -rotate_x
+            n_step_rotate_back = ti.abs(rotate_x / (ANGULAR_VELOCITY * DT_GLOBAL))
+            move_up_distance = 0.1
+            n_step_move_up = ti.abs(move_up_distance / (LINEAR_VELOCITY * DT_GLOBAL))
+            n_step_return[None] = n_step_rotate_back
+            ti.atomic_max(n_step_return[None], n_step_move_up)
+            n_step_return_int = ti.cast(n_step_return[None], ti.i32)
+            if n_step_return_int > 0:
+                rotate_delta_x_back[None] = rotate_x_back / n_step_return[None]
+                move_up_delta_z[None] = move_up_distance / n_step_return[None]
+            n_step_total[None] += n_step_return_int
+
+        @ti.kernel
+        def fill_trajectory_10():
+            for k in range(1):
+                n_step_move_int = ti.cast(n_step_move[None], ti.i32)
+                half_n_step_move_int = n_step_move_int // 2
+                for j in range(half_n_step_move_int):
+                    trajectory[j][0] = move_delta_x[None]
+                    trajectory[j][3] = rotate_delta_x[None]
+
+        @ti.kernel
+        def fill_trajectory_11():
+            for k in range(1):
+                n_step_move_int = ti.cast(n_step_move[None], ti.i32)
+                half_n_step_move_int = n_step_move_int // 2
+                for j in range(n_step_move_int - half_n_step_move_int):
+                    index = j + half_n_step_move_int
+                    trajectory[index][0] = move_delta_x[None]
+                    trajectory[index][3] = rotate_delta_x[None]
+
+        @ti.kernel
+        def fill_trajectory_2():
+            for k in range(1):
+                n_step_move_int = ti.cast(n_step_move[None], ti.i32)
+                n_step_insert_int = ti.cast(n_step_insert[None], ti.i32)
+                for j in range(n_step_insert_int):
+                    index = j + n_step_move_int
+                    trajectory[index][0] = insert_delta_x[None]
+                    trajectory[index][2] = -insert_delta_z[None]
+
+        @ti.kernel
+        def fill_trajectory_3():
+            for k in range(1):
+                n_step_move_int = ti.cast(n_step_move[None], ti.i32)
+                n_step_insert_int = ti.cast(n_step_insert[None], ti.i32)
+                n_step_push_int = ti.cast(n_step_push[None], ti.i32)
+                for j in range(n_step_push_int):
+                    index = j + n_step_move_int
+                    index = index + n_step_insert_int
+                    trajectory[index][0] = push_delta_x[None]
+                    trajectory[index][2] = push_delta_z[None]
+
+        @ti.kernel
+        def fill_trajectory_40():
+            for k in range(1):
+                n_step_move_int = ti.cast(n_step_move[None], ti.i32)
+                n_step_insert_int = ti.cast(n_step_insert[None], ti.i32)
+                n_step_push_int = ti.cast(n_step_push[None], ti.i32)
+                n_step_return_int = ti.cast(n_step_return[None], ti.i32)
+                half_n_step_return_int = n_step_return_int // 2
+                for j in range(half_n_step_return_int):
+                    index = j + n_step_move_int + n_step_insert_int + n_step_push_int
+                    trajectory[index][3] = rotate_delta_x_back[None]
+                    trajectory[index][5] = move_up_delta_z[None]
+
+        @ti.kernel
+        def fill_trajectory_41():
+            for k in range(1):
+                n_step_move_int = ti.cast(n_step_move[None], ti.i32)
+                n_step_insert_int = ti.cast(n_step_insert[None], ti.i32)
+                n_step_push_int = ti.cast(n_step_push[None], ti.i32)
+                n_step_return_int = ti.cast(n_step_return[None], ti.i32)
+                half_n_step_return_int = n_step_return_int // 2
+                for j in range(half_n_step_return_int - half_n_step_return_int):
+                    index = j + n_step_move_int + n_step_insert_int + n_step_push_int + half_n_step_return_int
+                    trajectory[index][3] = rotate_delta_x_back[None]
+                    trajectory[index][5] = move_up_delta_z[None]
+
+        def update_trajectory_grad(grads, length):
+            for m in range(length):
+                trajectory.grad[m][0] = grads[m][0]
+                trajectory.grad[m][1] = grads[m][1]
+                trajectory.grad[m][2] = grads[m][2]
+                trajectory.grad[m][3] = grads[m][3]
+                trajectory.grad[m][4] = grads[m][4]
+                trajectory.grad[m][5] = grads[m][5]
+
+        env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
+
+        set_parameters(mpm_env, SAND,
+                       e=best_params['E'],
+                       nu=best_params['nu'],
+                       rho=best_params['rho'],
+                       sand_friction_angle=best_params['sand_angle'])
+
         """forward pass"""
         mpm_env.set_state(init_state['state'], grad_enabled=True)
         # prepare trajectory
         skill_params_ti.from_numpy(skill_params_np.copy())
-        trajectory.fill(0)
+        reset_vars()
         abstraction_two_skill()
+        fill_trajectory_10()
+        fill_trajectory_11()
+        fill_trajectory_2()
+        fill_trajectory_3()
+        fill_trajectory_40()
+        fill_trajectory_41()
         trajectory_np = trajectory.to_numpy()
         trajectory_length = int(n_step_total[None])
         for i in range(trajectory_length):
@@ -204,8 +320,15 @@ def main(args):
             # This is a trick that prevents faulty gradient computation
             # It works for unknown reasons
             _ = mpm_env.simulator.particle_param.grad[2].E
+
         trajectory_grads = mpm_env.agent.get_grad(trajectory_length)
         update_trajectory_grad(trajectory_grads, trajectory_length)
+        fill_trajectory_41.grad()
+        fill_trajectory_40.grad()
+        fill_trajectory_3.grad()
+        fill_trajectory_2.grad()
+        fill_trajectory_11.grad()
+        fill_trajectory_10.grad()
         abstraction_two_skill.grad()
         skill_params_grad_np = skill_params_ti.grad.to_numpy()
 
@@ -230,8 +353,8 @@ def main(args):
 
         if not abort:
             num_zero_grad = 0
-            for n in range(5):
-                if skill_params_grad_np[n] == 0.0:
+            for j in range(5):
+                if skill_params_grad_np[j] == 0.0:
                     num_zero_grad += 1
             if num_zero_grad > 4:
                 abort = True
@@ -251,45 +374,69 @@ def main(args):
             logging.error(f'===> [Warning] Loss info: {loss_info}')
             n_aborted_data += 1
         else:
-            skill_params_np = skill_params_optim.step(skill_params_np.copy(), skill_params_grad_np)
-            skill_params_np = np.clip(skill_params_np, -1, 1)
+            if args['compute_grad']:
+                grads.append(skill_params_grad_np)
+                skill_params_np = np.random.uniform(-1, 1, size=5).astype(DTYPE_NP)
+            else:
+                skill_params_np = skill_params_optim.step(skill_params_np.copy(), skill_params_grad_np)
+                skill_params_np = np.clip(skill_params_np, -1, 1)
 
-        print(f'=====> Epoch: {n}')
-        print(f'=====> Loss: {mpm_env.loss.total_loss[None]}')
-        print(f'=====> Grad: {skill_params_grad_np}')
-        print(f"=====> Num. aborted data so far: {n_aborted_data}")
-        logging.info(f'=====> Epoch: {n}')
-        logging.info(f'=====> Loss: {mpm_env.loss.total_loss[None]}')
-        logging.info(f'=====> Grad: {skill_params_grad_np}')
-        logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
+        if args['compute_grad']:
+            print(f'=====> Epoch: {n}')
+            print(f'=====> Grad: {skill_params_grad_np}')
+            print(f"=====> Num. aborted data so far: {n_aborted_data}")
+            logging.info(f'=====> Epoch: {n}')
+            logging.info(f'=====> Grad: {skill_params_grad_np}')
+            logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
+        else:
+            print(f'=====> Epoch: {n}')
+            print(f'=====> Loss: {mpm_env.loss.total_loss[None]}')
+            print(f'=====> Grad: {skill_params_grad_np}')
+            print(f"=====> Num. aborted data so far: {n_aborted_data}")
+            logging.info(f'=====> Epoch: {n}')
+            logging.info(f'=====> Loss: {mpm_env.loss.total_loss[None]}')
+            logging.info(f'=====> Grad: {skill_params_grad_np}')
+            logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
 
-        losses.append(loss_info['total_loss'])
-        logger.add_scalar(tag='loss/EMD', scalar_value=loss_info['emd_loss'], global_step=n)
-        logger.add_scalar(tag='param/0-move_distance', scalar_value=skill_params_np[0], global_step=n)
-        logger.add_scalar(tag='param/1-rotate_x', scalar_value=skill_params_np[1], global_step=n)
-        logger.add_scalar(tag='param/2-insert_distance', scalar_value=skill_params_np[2], global_step=n)
-        logger.add_scalar(tag='param/3-push_angle', scalar_value=skill_params_np[3], global_step=n)
-        logger.add_scalar(tag='param/4-push_distance', scalar_value=skill_params_np[4], global_step=n)
+            losses.append(loss_info['total_loss'])
+            logger.add_scalar(tag='loss/EMD', scalar_value=loss_info['emd_loss'], global_step=n)
+            logger.add_scalar(tag='param/0-move_distance', scalar_value=skill_params_np[0], global_step=n)
+            logger.add_scalar(tag='param/1-rotate_x', scalar_value=skill_params_np[1], global_step=n)
+            logger.add_scalar(tag='param/2-insert_distance', scalar_value=skill_params_np[2], global_step=n)
+            logger.add_scalar(tag='param/3-push_angle', scalar_value=skill_params_np[3], global_step=n)
+            logger.add_scalar(tag='param/4-push_distance', scalar_value=skill_params_np[4], global_step=n)
 
-    mpm_env.simulator.clear_ckpt()
+        mpm_env.simulator.clear_ckpt()
 
     logger.close()
+    if args['compute_grad']:
+        grad_mean = np.mean(grads, axis=0)
+        grad_std = np.std(grads, axis=0)
+        print('====> Mean grad: ', grad_mean)
+        print('====> Std grad: ', grad_std)
+        logging.info('====> Mean grad: ', grad_mean)
+        logging.info('====> Std grad: ', grad_std)
+        np.save(grad_mean_file_name, grad_mean)
+        np.save(grad_std_file_name, grad_std)
+
     print('====> Finished training.')
     print('====> Final loss: ', losses[-1])
     print('====> Final skill params: ', skill_params_np)
     logging.info('====> Finished training.')
     logging.info('====> Final loss: ', losses[-1])
     logging.info('====> Final skill params: ', skill_params_np)
-    np.save(os.path.join(log_dir, 'final_skill_params_.npy'), np.array(losses))
+    np.save(os.path.join(log_dir, 'final_skill_params.npy'), np.array(skill_params_np))
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Gradient-based skill parameter optimisation")
-    parser.add_argument('--seed', dest='seed', type=int, default=-1, help='Random seed')
-    parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default=1e7,
+    parser.add_argument('--seed', dest='seed', type=int, default=0, help='Random seed')
+    parser.add_argument('--com_grad', dest='compute_grad', action='store_true', default=False, help='Compute gradient')
+    parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default="1e7",
                         help='Particle density, use scientific notation like \'5e6\'.')
     parser.add_argument('--backend', dest='backend', default='cuda', type=str,
                         help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
+    parser.add_argument('--task-id', dest='task_id', type=int, default=0, help='task id')
     arguments = vars(parser.parse_args())
     main(arguments)

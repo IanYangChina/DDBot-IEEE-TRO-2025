@@ -1,0 +1,1 @@
+python run_so_abs2.py --com_grad --ptcl_d 5e7 --cuda_GB 8 --task-id 0
