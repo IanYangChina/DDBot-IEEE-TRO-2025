@@ -52,6 +52,8 @@ def main(args):
     ptcl_d = arguments['ptcl_density']
     if args['compute_grad']:
         log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}', 'grads')
+    if args['demon']:
+        log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}-demo', f'seed-{seed}')
     else:
         log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}', f'seed-{seed}')
     grad_mean_file_name = os.path.join(log_dir, 'grad_mean.npy')
@@ -102,7 +104,11 @@ def main(args):
     n_aborted_data = 0
     losses = []
     grads = []
-    skill_params_np = np.random.uniform(-1, 1, size=5).astype(DTYPE_NP)
+
+    if args['demon']:
+        skill_params_np = np.asarray([1.0, 0.3, 0.8, 1.0, 0.3]).astype(DTYPE_NP)
+    else:
+        skill_params_np = np.random.uniform(-1, 1, size=5).astype(DTYPE_NP)
     for n in range(n_epoch):
         ti.reset()
         ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=DTYPE_TI,
@@ -348,7 +354,7 @@ def main(args):
                         break
 
         if not abort:
-            if np.any(np.isnan(skill_params_grad_np)) or np.any(np.isinf(skill_params_grad_np)) or np.any(np.abs(skill_params_grad_np) > 1e6):
+            if np.any(np.isnan(skill_params_grad_np)) or np.any(np.isinf(skill_params_grad_np)) or np.any(np.abs(skill_params_grad_np) > 1e10):
                 abort = True
 
         if not abort:
@@ -400,6 +406,7 @@ def main(args):
 
             losses.append(loss_info['total_loss'])
             logger.add_scalar(tag='loss/EMD', scalar_value=loss_info['emd_loss'], global_step=n)
+            logger.add_scalar(tag='loss/Heightmap', scalar_value=loss_info['height_map_loss'], global_step=n)
             logger.add_scalar(tag='param/0-move_distance', scalar_value=skill_params_np[0], global_step=n)
             logger.add_scalar(tag='param/1-rotate_x', scalar_value=skill_params_np[1], global_step=n)
             logger.add_scalar(tag='param/2-insert_distance', scalar_value=skill_params_np[2], global_step=n)
@@ -412,20 +419,20 @@ def main(args):
     if args['compute_grad']:
         grad_mean = np.mean(grads, axis=0)
         grad_std = np.std(grads, axis=0)
-        print('====> Mean grad: ', grad_mean)
-        print('====> Std grad: ', grad_std)
-        logging.info('====> Mean grad: ', grad_mean)
-        logging.info('====> Std grad: ', grad_std)
         np.save(grad_mean_file_name, grad_mean)
         np.save(grad_std_file_name, grad_std)
+        print('====> Mean grad: ', grad_mean)
+        print('====> Std grad: ', grad_std)
+        logging.info('====> Mean grad: ', grad_mean.tolist())
+        logging.info('====> Std grad: ', grad_std.tolist())
 
+    np.save(os.path.join(log_dir, 'final_skill_params.npy'), np.array(skill_params_np))
     print('====> Finished training.')
     print('====> Final loss: ', losses[-1])
     print('====> Final skill params: ', skill_params_np)
     logging.info('====> Finished training.')
     logging.info('====> Final loss: ', losses[-1])
-    logging.info('====> Final skill params: ', skill_params_np)
-    np.save(os.path.join(log_dir, 'final_skill_params.npy'), np.array(skill_params_np))
+    logging.info('====> Final skill params: ', skill_params_np.tolist())
 
 
 if __name__ == '__main__':
@@ -438,5 +445,6 @@ if __name__ == '__main__':
                         help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
     parser.add_argument('--task-id', dest='task_id', type=int, default=0, help='task id')
+    parser.add_argument('--demon', dest='demon', action='store_true', default=False, help='Use demonstration')
     arguments = vars(parser.parse_args())
     main(arguments)
