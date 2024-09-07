@@ -100,7 +100,7 @@ def main(args):
         'target_pcd_offset': [0.2, 0.2, 0],
         'down_sample_voxel_size': 0.007,
     }
-    n_epoch = 100
+    n_epoch = 150
     n_aborted_data = 0
     losses = []
     grads = []
@@ -115,7 +115,7 @@ def main(args):
                 fast_math=True, random_seed=args['seed'])
 
         skill_params_optim = Adam(parameters_shape=(5,),
-                                  cfg={'lr': 0.001, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+                                  cfg={'lr': 0.05, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
         skill_params_ti = ti.field(dtype=DTYPE_TI, shape=5, needs_grad=True)
         n_step_total = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
 
@@ -425,14 +425,14 @@ def main(args):
         print('====> Std grad: ', grad_std)
         logging.info('====> Mean grad: ', grad_mean.tolist())
         logging.info('====> Std grad: ', grad_std.tolist())
-
-    np.save(os.path.join(log_dir, 'final_skill_params.npy'), np.array(skill_params_np))
-    print('====> Finished training.')
-    print('====> Final loss: ', losses[-1])
-    print('====> Final skill params: ', skill_params_np)
-    logging.info('====> Finished training.')
-    logging.info('====> Final loss: ', losses[-1])
-    logging.info('====> Final skill params: ', skill_params_np.tolist())
+    else:
+        np.save(os.path.join(log_dir, 'final_skill_params.npy'), np.array(skill_params_np))
+        print('====> Finished training.')
+        print('====> Final loss: ', losses[-1])
+        print('====> Final skill params: ', skill_params_np)
+        logging.info('====> Finished training.')
+        logging.info('====> Final loss: ', losses[-1])
+        logging.info('====> Final skill params: ', skill_params_np.tolist())
 
 
 if __name__ == '__main__':
