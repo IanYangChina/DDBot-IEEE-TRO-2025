@@ -5,6 +5,8 @@ import logging
 import argparse
 import numpy as np
 import taichi as ti
+import matplotlib.pyplot as plt
+import open3d as o3d
 from torch.utils.tensorboard import SummaryWriter
 script_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -52,22 +54,24 @@ def main(args):
     ptcl_d = arguments['ptcl_density']
     if args['compute_grad']:
         log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}', 'grads')
-    if args['demon']:
+    elif args['demon']:
         log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}-demo', f'seed-{seed}')
     else:
         log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}', f'seed-{seed}')
     grad_mean_file_name = os.path.join(log_dir, 'grad_mean.npy')
     grad_std_file_name = os.path.join(log_dir, 'grad_std.npy')
     os.makedirs(log_dir, exist_ok=True)
-    log_file_name = os.path.join(log_dir, 'optimisation.log')
-    if os.path.isfile(log_file_name):
-        filemode = "a"
-    else:
-        filemode = "w"
-    logging.basicConfig(level=logging.NOTSET, filemode=filemode,
-                        filename=log_file_name,
-                        format="%(asctime)s %(levelname)s %(message)s")
-    logger = SummaryWriter(log_dir=log_dir)
+
+    if not args['eval']:
+        log_file_name = os.path.join(log_dir, 'optimisation.log')
+        if os.path.isfile(log_file_name):
+            filemode = "a"
+        else:
+            filemode = "w"
+        logging.basicConfig(level=logging.NOTSET, filemode=filemode,
+                            filename=log_file_name,
+                            format="%(asctime)s %(levelname)s %(message)s")
+        logger = SummaryWriter(log_dir=log_dir)
 
     if args['backend'] == 'opengl':
         backend = ti.opengl
@@ -100,13 +104,24 @@ def main(args):
         'target_pcd_offset': [0.2, 0.2, 0],
         'down_sample_voxel_size': 0.007,
     }
-    n_epoch = 150
+    n_epoch = 100
     n_aborted_data = 0
     losses = []
     grads = []
 
     if args['demon']:
         skill_params_np = np.asarray([1.0, 0.3, 0.8, 1.0, 0.3]).astype(DTYPE_NP)
+        if args['eval']:
+            with open(os.path.join(script_path, '..', 'log-abs2-adam', 'best_params-demo.json')) as f:
+                best_skill_params = json.load(f)[ptcl_d]["Parameters"]
+            skill_params_np = np.asarray([
+                best_skill_params['skill_params_0'],
+                best_skill_params['skill_params_1'],
+                best_skill_params['skill_params_2'],
+                best_skill_params['skill_params_3'],
+                best_skill_params['skill_params_4']
+            ]).astype(DTYPE_NP).reshape((5,))
+            print("===> Loaded skill params for evaluation:", skill_params_np)
     else:
         skill_params_np = np.random.uniform(-1, 1, size=5).astype(DTYPE_NP)
     for n in range(n_epoch):
@@ -115,7 +130,7 @@ def main(args):
                 fast_math=True, random_seed=args['seed'])
 
         skill_params_optim = Adam(parameters_shape=(5,),
-                                  cfg={'lr': 0.05, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+                                  cfg={'lr': 0.005, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
         skill_params_ti = ti.field(dtype=DTYPE_TI, shape=5, needs_grad=True)
         n_step_total = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
 
@@ -299,6 +314,8 @@ def main(args):
 
         """forward pass"""
         mpm_env.set_state(init_state['state'], grad_enabled=True)
+        if args['eval']:
+            mpm_env.render(mode='human')
         # prepare trajectory
         skill_params_ti.from_numpy(skill_params_np.copy())
         reset_vars()
@@ -313,7 +330,33 @@ def main(args):
         trajectory_length = int(n_step_total[None])
         for i in range(trajectory_length):
             mpm_env.step(trajectory_np[i])
+            if args['eval']:
+                mpm_env.render(mode='human')
         loss_info = mpm_env.get_final_loss()
+
+        if args['eval']:
+            print('===> Loss info:', loss_info)
+            fig, ax = plt.subplots(1, 2, figsize=(12, 6))
+            ax[0].imshow(mpm_env.loss.height_map.to_numpy(),
+                         vmin=0.002, vmax=0.09)
+            ax[0].set_title('Height map')
+            ax[1].imshow(mpm_env.loss.height_map_pcd_target.to_numpy(),
+                         vmin=0.002, vmax=0.09)
+            ax[1].set_title('Target height map')
+            plt.show()
+
+            # cloud_array = obs['observation']
+            # frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
+            # obj_vec = o3d.utility.Vector3dVector(cloud_array)
+            # obj_pcd = o3d.geometry.PointCloud(obj_vec)
+            # cloud_array_2 = obs['desired_goal']
+            # cloud_array_2[:, 0] += 0.3
+            # obj_vec_2 = o3d.utility.Vector3dVector(cloud_array_2)
+            # obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2)
+            # print(obj_pcd, obj_pcd_2)
+            # o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2], width=800, height=600)
+
+            exit()
 
         """backward pass"""
         reset_grads()
@@ -412,6 +455,11 @@ def main(args):
             logger.add_scalar(tag='param/2-insert_distance', scalar_value=skill_params_np[2], global_step=n)
             logger.add_scalar(tag='param/3-push_angle', scalar_value=skill_params_np[3], global_step=n)
             logger.add_scalar(tag='param/4-push_distance', scalar_value=skill_params_np[4], global_step=n)
+            logger.add_scalar(tag='grad/0-move_distance', scalar_value=skill_params_grad_np[0], global_step=n)
+            logger.add_scalar(tag='grad/1-rotate_x', scalar_value=skill_params_grad_np[1], global_step=n)
+            logger.add_scalar(tag='grad/2-insert_distance', scalar_value=skill_params_grad_np[2], global_step=n)
+            logger.add_scalar(tag='grad/3-push_angle', scalar_value=skill_params_grad_np[3], global_step=n)
+            logger.add_scalar(tag='grad/4-push_distance', scalar_value=skill_params_grad_np[4], global_step=n)
 
         mpm_env.simulator.clear_ckpt()
 
@@ -446,5 +494,6 @@ if __name__ == '__main__':
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
     parser.add_argument('--task-id', dest='task_id', type=int, default=0, help='task id')
     parser.add_argument('--demon', dest='demon', action='store_true', default=False, help='Use demonstration')
+    parser.add_argument('--eval', dest='eval', action='store_true', default=False, help='Evaluate the model')
     arguments = vars(parser.parse_args())
     main(arguments)
