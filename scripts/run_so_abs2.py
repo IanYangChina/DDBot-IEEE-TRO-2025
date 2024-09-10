@@ -104,9 +104,8 @@ def main(args):
         'target_pcd_offset': [0.2, 0.2, 0],
         'down_sample_voxel_size': 0.007,
     }
-    n_epoch = 100
+    n_epoch = 150
     n_aborted_data = 0
-    losses = []
     grads = []
 
     if args['demon']:
@@ -130,7 +129,7 @@ def main(args):
                 fast_math=True, random_seed=args['seed'])
 
         skill_params_optim = Adam(parameters_shape=(5,),
-                                  cfg={'lr': 0.005, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+                                  cfg={'lr': 0.01, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
         skill_params_ti = ti.field(dtype=DTYPE_TI, shape=5, needs_grad=True)
         n_step_total = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
 
@@ -418,8 +417,8 @@ def main(args):
             logging.error(f'===> [Warning] Aborting epoch: {n}')
             logging.error(f'===> [Warning] Particle has nan or inf: {particle_has_naninf}')
             logging.error(f'===> [Warning] Strange loss or gradient.')
-            logging.error(f'===> [Warning] Skill params: {skill_params_np}')
-            logging.error(f'===> [Warning] Skill params grad: {skill_params_grad_np}')
+            logging.error(f'===> [Warning] Skill params: {skill_params_np.tolist()}')
+            logging.error(f'===> [Warning] Skill params grad: {skill_params_grad_np.tolist()}')
             logging.error(f'===> [Warning] Loss info: {loss_info}')
             n_aborted_data += 1
         else:
@@ -435,7 +434,7 @@ def main(args):
             print(f'=====> Grad: {skill_params_grad_np}')
             print(f"=====> Num. aborted data so far: {n_aborted_data}")
             logging.info(f'=====> Epoch: {n}')
-            logging.info(f'=====> Grad: {skill_params_grad_np}')
+            logging.info(f'=====> Grad: {skill_params_grad_np.tolist()}')
             logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
         else:
             print(f'=====> Epoch: {n}')
@@ -444,10 +443,9 @@ def main(args):
             print(f"=====> Num. aborted data so far: {n_aborted_data}")
             logging.info(f'=====> Epoch: {n}')
             logging.info(f'=====> Loss: {mpm_env.loss.total_loss[None]}')
-            logging.info(f'=====> Grad: {skill_params_grad_np}')
+            logging.info(f'=====> Grad: {skill_params_grad_np.tolist()}')
             logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
 
-            losses.append(loss_info['total_loss'])
             logger.add_scalar(tag='loss/EMD', scalar_value=loss_info['emd_loss'], global_step=n)
             logger.add_scalar(tag='loss/Heightmap', scalar_value=loss_info['height_map_loss'], global_step=n)
             logger.add_scalar(tag='param/0-move_distance', scalar_value=skill_params_np[0], global_step=n)
@@ -476,10 +474,12 @@ def main(args):
     else:
         np.save(os.path.join(log_dir, 'final_skill_params.npy'), np.array(skill_params_np))
         print('====> Finished training.')
-        print('====> Final loss: ', losses[-1])
+        print('====> Final EMD loss: ', loss_info['emd_loss'])
+        print('Final height map loss: ', loss_info['height_map_loss'])
         print('====> Final skill params: ', skill_params_np)
         logging.info('====> Finished training.')
-        logging.info('====> Final loss: ', losses[-1])
+        logging.info('====> Final EMD loss: ', float(loss_info['emd_loss']))
+        logging.info('Final height map loss: ', float(loss_info['height_map_loss']))
         logging.info('====> Final skill params: ', skill_params_np.tolist())
 
 

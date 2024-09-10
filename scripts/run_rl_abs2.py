@@ -194,7 +194,7 @@ def main(arguments):
         rl_agent_config['batch_size'] = 24
         rl_agent_config['optimization_steps'] = 1
         rl_agent_config['hindsight'] = True
-        rl_agent_config['sampling_strategy'] = 'her_sampling_strategy'
+        rl_agent_config['sampling_strategy'] = 'final'
         rl_agent_config['use_demonstrations'] = arguments['use_demo']
         rl_agent_config['demonstrate_percentage'] = 0.25
         rl_agent_config['demonstration_action'] = [1.0, 0.3, 0.8, 1.0, 0.3]
