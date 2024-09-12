@@ -9,14 +9,17 @@ ti.init(arch=ti.cuda, device_memory_GB=5, default_fp=ti.f32, fast_math=False)
 from doma.envs import PlantingEnv
 
 cam_cfg = {
-    'pos': (-0.2, -0.2, 0.7),
+    'pos': (0.2, 1.2, 0.9),
     'lookat': (0.2, 0.2, 0.03),
+    'euler': (180+np.rad2deg(np.arctan(1.0/(0.9-0.03))), 0, 180),
+    'focal_length': 0.3,
     'fov': 30,
-    'lights': [{'pos': (-1.2, 0.25, 0.2), 'color': (0.6, 0.6, 0.6)},
-               {'pos': (-1.2, 0.5, 1.0), 'color': (0.6, 0.6, 0.6)},
-               {'pos': (-1.2, 0.0, 1.0), 'color': (0.8, 0.8, 0.8)}],
+    'lights': [{'pos': (1.2, 0.25, 0.2), 'color': (0.6, 0.6, 0.6)},
+               {'pos': (1.2, 0.5, 1.0), 'color': (0.6, 0.6, 0.6)},
+               {'pos': (1.2, 0.0, 1.0), 'color': (0.8, 0.8, 0.8)}],
     'particle_radius': 0.001,
-    'res': (640, 640)
+    'res': (800, 800),
+    'pcd_gen_res': 150
 }
 
 env = PlantingEnv(ptcl_density=3e6, horizon=500, agent_cfg_file='shovel_eef.yaml',
@@ -27,12 +30,12 @@ env.reset()
 
 env.mpm_env.step(np.array([0., 0., 0., 0., 0., 0.]))
 
-x, _ = env.render(mode='point_cloud')
+x = env.render(mode='point_cloud')
 sim_particles = o3d.utility.Vector3dVector(x)
 sim_particles = o3d.geometry.PointCloud(sim_particles).paint_uniform_color([1.0, 0.0, 0.0])
 
-pcd_id = 2
-pcd_path = os.path.join(data_path, 'target_pcds', f'pcd_{pcd_id}_cropped_norm_z_aligned.ply')
+pcd_id = 0
+pcd_path = os.path.join(data_path, 'task_target_pcds', f'pcd_{pcd_id}_cropped_norm_z_aligned.ply')
 pcd_in_cam_frame = o3d.io.read_point_cloud(pcd_path)
 pcd_in_cam_frame.translate([0.2, 0.2, 0.0])
 pcd_in_cam_frame.paint_uniform_color([0.0, 0.0, 1.0])

@@ -34,7 +34,7 @@ transform_cam_to_world = np.linalg.inv(transform_world_to_cam)
 
 task = 'task'
 pcd_id = 0
-test = False
+test = True
 for pcd_id in range(5):
     frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
     pcd_path = os.path.join(data_path, f'{task}_target_pcds', f'pcd_{pcd_id}.ply')

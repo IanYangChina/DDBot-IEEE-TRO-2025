@@ -88,7 +88,6 @@ def find_best_parameters():
         best_emd_loss = 1000
         seed_1 = 0
         for seed in ["0", "1", "2", "4", "5"]:
-            print(f"Parameters with best heightmap loss for particle density {d}, seed {seed}:")
             with open(os.path.join(script_path, '..', 'log-sys_id', f'd{d}_ns20', f'seed-{seed}',
                                    'best_heightmap_loss.json')) as f:
                 data_0 = json.load(f)
@@ -96,7 +95,6 @@ def find_best_parameters():
                     best_heightmap_loss = data_0['Loss']['height_map_loss']
                     seed_0 = seed
 
-            print(f"Parameters with best emd loss for particle density {d}, seed {seed}:")
             with open(os.path.join(script_path, '..', 'log-sys_id', f'd{d}_ns20', f'seed-{seed}',
                                    'best_emd_loss.json')) as f:
                 data_1 = json.load(f)
@@ -115,7 +113,7 @@ def find_best_parameters():
 
 
 def find_best_skill_params():
-    task_id = 0
+    task_id = 1
     best_params = {"5e6": None,
                    "1e7": None}
     for d in ["5e6", "1e7"]:
@@ -199,7 +197,6 @@ def find_best_skill_params():
         best_emd_loss = 1000
         seed_1 = 0
         for seed in ["0", "1", "2", "3", "4"]:
-            print(f"Parameters with best heightmap loss for particle density {d}, seed {seed}:")
             with open(os.path.join(script_path, '..', 'log-abs2-adam', f'd{d}-task-{task_id}-demo', f'seed-{seed}',
                                    'best_heightmap_loss.json')) as f:
                 data_0 = json.load(f)
@@ -207,7 +204,6 @@ def find_best_skill_params():
                     best_heightmap_loss = data_0['Loss']['height_map_loss']
                     seed_0 = seed
 
-            print(f"Parameters with best emd loss for particle density {d}, seed {seed}:")
             with open(os.path.join(script_path, '..', 'log-abs2-adam', f'd{d}-task-{task_id}-demo', f'seed-{seed}',
                                    'best_emd_loss.json')) as f:
                 data_1 = json.load(f)

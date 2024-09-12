@@ -33,20 +33,6 @@ ANGULAR_VELOCITY = np.pi / 4  # rad/s
 DT_GLOBAL = 0.01  # sec
 
 
-def get_skill_params(params=None):
-    if params is None:
-        with open(os.path.join(script_path, '..', 'data', 'skills.yaml'), 'r') as f:
-            skill_params = yaml.safe_load(f)
-        params = skill_params.copy()
-
-    return [params['insert']['xy_location'][0],
-            params['insert']['xy_location'][1],
-            params['insert']['distance'],
-            params['insert']['angle'] / 180 * np.pi,
-            params['pullout']['distance'],
-            params['push-forward']['distance']]
-
-
 def main(args):
     seed = args['seed']
     # np_rng = np.random.default_rng(seed=seed)
@@ -97,9 +83,7 @@ def main(args):
         'agent_init_euler': (0, 180, 90),
     }
     loss_cfg = {
-        'target_pcd_height_map_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
-                                                   f'pcd_{task_id}_cropped_norm_z_aligned_height_map-res60-vdsize0.001.npy'),
-        'target_pcd_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
+        'target_pcd_path': os.path.join(script_path, '..', 'data', 'task_target_pcds',
                                         f'pcd_{task_id}_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
         'down_sample_voxel_size': 0.007,
@@ -111,7 +95,8 @@ def main(args):
     if args['demon']:
         skill_params_np = np.asarray([1.0, 0.3, 0.8, 1.0, 0.3]).astype(DTYPE_NP)
         if args['eval']:
-            with open(os.path.join(script_path, '..', 'log-abs2-adam', 'best_params-demo.json')) as f:
+            with open(os.path.join(script_path, '..', 'log-abs2-adam',
+                                   f'best_params-task-{task_id}-demo.json')) as f:
                 best_skill_params = json.load(f)[ptcl_d]["Parameters"]
             skill_params_np = np.asarray([
                 best_skill_params['skill_params_0'],
@@ -123,13 +108,26 @@ def main(args):
             print("===> Loaded skill params for evaluation:", skill_params_np)
     else:
         skill_params_np = np.random.uniform(-1, 1, size=5).astype(DTYPE_NP)
+        if args['zero_init']:
+            skill_params_np *= 0.0
+            with open(os.path.join(script_path, '..', 'log-abs2-adam',
+                                   f'best_params-task-{task_id}.json')) as f:
+                best_skill_params = json.load(f)[ptcl_d]["Parameters"]
+            skill_params_np = np.asarray([
+                best_skill_params['skill_params_0'],
+                best_skill_params['skill_params_1'],
+                best_skill_params['skill_params_2'],
+                best_skill_params['skill_params_3'],
+                best_skill_params['skill_params_4']
+            ]).astype(DTYPE_NP).reshape((5,))
+            print("===> Loaded skill params for evaluation:", skill_params_np)
     for n in range(n_epoch):
         ti.reset()
         ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=DTYPE_TI,
                 fast_math=True, random_seed=args['seed'])
 
         skill_params_optim = Adam(parameters_shape=(5,),
-                                  cfg={'lr': 0.01, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+                                  cfg={'lr': 0.1, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
         skill_params_ti = ti.field(dtype=DTYPE_TI, shape=5, needs_grad=True)
         n_step_total = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
 
@@ -343,17 +341,18 @@ def main(args):
                          vmin=0.002, vmax=0.09)
             ax[1].set_title('Target height map')
             plt.show()
+            plt.close()
 
-            # cloud_array = obs['observation']
-            # frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
-            # obj_vec = o3d.utility.Vector3dVector(cloud_array)
-            # obj_pcd = o3d.geometry.PointCloud(obj_vec)
-            # cloud_array_2 = obs['desired_goal']
-            # cloud_array_2[:, 0] += 0.3
-            # obj_vec_2 = o3d.utility.Vector3dVector(cloud_array_2)
-            # obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2)
-            # print(obj_pcd, obj_pcd_2)
-            # o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2], width=800, height=600)
+            cloud_array = mpm_env.render(mode='point_cloud')
+            frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
+            obj_vec = o3d.utility.Vector3dVector(cloud_array)
+            obj_pcd = o3d.geometry.PointCloud(obj_vec)
+            cloud_array_2 = mpm_env.loss.target_pcd_original_points_np.copy()
+            cloud_array_2[:, 0] += 0.3
+            obj_vec_2 = o3d.utility.Vector3dVector(cloud_array_2)
+            obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2)
+            print(obj_pcd, obj_pcd_2)
+            o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2], width=800, height=600)
 
             exit()
 
@@ -493,6 +492,7 @@ if __name__ == '__main__':
                         help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
     parser.add_argument('--task-id', dest='task_id', type=int, default=0, help='task id')
+    parser.add_argument('--zero-init', dest='zero_init', action='store_true', default=False, help='Initialise parameters to zero')
     parser.add_argument('--demon', dest='demon', action='store_true', default=False, help='Use demonstration')
     parser.add_argument('--eval', dest='eval', action='store_true', default=False, help='Evaluate the model')
     arguments = vars(parser.parse_args())
