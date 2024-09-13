@@ -55,6 +55,7 @@ def main(args):
     ti.reset()
     ti.init(arch=ti.cuda, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True, random_seed=1)
     env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg)
+    print("Number of particles:", mpm_env.simulator.n_particles)
     with open(os.path.join(script_path, '..', 'log-sys_id', 'best_params.json')) as f:
         best_params = json.load(f)[args['ptcl_density']]["Parameters"]
     set_parameters(mpm_env, SAND,

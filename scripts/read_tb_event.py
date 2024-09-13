@@ -10,10 +10,11 @@ def find_best_parameters():
     """generate mean and deviation data from tensorboard logs"""
     best_params = {"5e6": None,
                    "1e7": None,
-                   "2e7": None}
-    for d in ["5e6", "1e7", "2e7"]:
+                   "2e7": None,
+                   "4e7": None,}
+    for d in ["5e6", "1e7", "2e7", "4e7"]:
         case = f'd{d}_ns20'
-        for seed in [0, 1, 2, 4, 5]:
+        for seed in range(5):
             folder = os.path.join(script_path, '..', 'log-sys_id', case, f'seed-{seed}')
             data_dict = {
                 'Loss': {
@@ -87,7 +88,7 @@ def find_best_parameters():
         seed_0 = 0
         best_emd_loss = 1000
         seed_1 = 0
-        for seed in ["0", "1", "2", "4", "5"]:
+        for seed in range(5):
             with open(os.path.join(script_path, '..', 'log-sys_id', f'd{d}_ns20', f'seed-{seed}',
                                    'best_heightmap_loss.json')) as f:
                 data_0 = json.load(f)
@@ -105,15 +106,19 @@ def find_best_parameters():
         with open(os.path.join(script_path, '..', 'log-sys_id', f'd{d}_ns20', f'seed-{seed_0}',
                                'best_heightmap_loss.json')) as f:
             data_0 = json.load(f)
-            print(data_0['Loss']['height_map_loss'], '&', data_0['Loss']['emd_loss'], '&', data_0['Parameters']['E'], '&',
-                  data_0['Parameters']['nu'], '&', data_0['Parameters']['rho'], '&', data_0['Parameters']['sand_angle'])
+            print(data_0['Loss']['height_map_loss'],
+                  '&', data_0['Loss']['emd_loss'],
+                  '&', data_0['Parameters']['E'],
+                  '&', data_0['Parameters']['nu'],
+                  '&', data_0['Parameters']['rho'],
+                  '&', data_0['Parameters']['sand_angle'])
             best_params[d] = data_0
 
         open(os.path.join(script_path, '..', 'log-sys_id', 'best_params.json'), 'w').write(json.dumps(best_params))
 
 
-def find_best_skill_params():
-    task_id = 1
+def find_best_skill_parameters():
+    task_id = 0
     best_params = {"5e6": None,
                    "1e7": None}
     for d in ["5e6", "1e7"]:
@@ -222,4 +227,4 @@ def find_best_skill_params():
     open(os.path.join(script_path, '..', 'log-abs2-adam', f'best_params-task-{task_id}-demo.json'), 'w').write(json.dumps(best_params))
 
 
-find_best_skill_params()
+find_best_skill_parameters()
