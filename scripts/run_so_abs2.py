@@ -40,12 +40,15 @@ def main(args):
     ptcl_d = arguments['ptcl_density']
     if args['demon']:
         log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}-demo', f'seed-{seed}')
-        if args['compute_grad']:
-            log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}-demo', 'grads')
+        if args['mini_batch']:
+            log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}-demo-batch', f'seed-{seed}')
     else:
         log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}', f'seed-{seed}')
-        if args['compute_grad']:
-            log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}', 'grads')
+        if args['mini_batch']:
+            log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}-batch', f'seed-{seed}')
+
+    if args['compute_grad']:
+        log_dir = log_dir[:-6] + '-grads'
     grad_mean_file_name = os.path.join(log_dir, 'grad_mean.npy')
     grad_std_file_name = os.path.join(log_dir, 'grad_std.npy')
     os.makedirs(log_dir, exist_ok=True)
@@ -121,15 +124,13 @@ def main(args):
             ]).astype(DTYPE_NP).reshape((5,))
             print("===> Loaded skill params for evaluation:", skill_params_np)
 
-    n_epoch = 150
+    n_epoch = 30
     n_aborted_data = 0
     emd_loss = 0.0
     height_map_loss = 0.0
     grads_to_save = []
     skill_params_optim = Adam(parameters_shape=(5,),
-                              cfg={'lr': 0.05, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
-    if args['mini_batch']:
-        n_epoch = 30
+                              cfg={'lr': 0.1, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
     for n in range(n_epoch):
         grads = []
         emd_losses = []
