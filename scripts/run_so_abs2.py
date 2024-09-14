@@ -124,19 +124,19 @@ def main(args):
             ]).astype(DTYPE_NP).reshape((5,))
             print("===> Loaded skill params for evaluation:", skill_params_np)
 
-    n_epoch = 30
+    n_epoch = 50
     n_aborted_data = 0
     emd_loss = 0.0
     height_map_loss = 0.0
     grads_to_save = []
     skill_params_optim = Adam(parameters_shape=(5,),
-                              cfg={'lr': 0.1, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+                              cfg={'lr': 0.05, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
     for n in range(n_epoch):
         grads = []
         emd_losses = []
         height_map_losses = []
         if args['mini_batch']:
-            n_inner_epoch = 5
+            n_inner_epoch = 3
         else:
             n_inner_epoch = 1
         for m in range(n_inner_epoch):
