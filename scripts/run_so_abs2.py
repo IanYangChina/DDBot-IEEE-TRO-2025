@@ -124,7 +124,7 @@ def main(args):
             ]).astype(DTYPE_NP).reshape((5,))
             print("===> Loaded skill params for evaluation:", skill_params_np)
 
-    n_epoch = 50
+    n_epoch = 150
     n_aborted_data = 0
     emd_loss = 0.0
     height_map_loss = 0.0
@@ -433,8 +433,8 @@ def main(args):
                 logging.error(f'===> [Warning] Aborting epoch: {n}')
                 logging.error(f'===> [Warning] Particle has nan or inf: {particle_has_naninf}')
                 logging.error(f'===> [Warning] Strange loss or gradient.')
-                logging.error(f'===> [Warning] Skill params: {skill_params_np.tolist()}')
-                logging.error(f'===> [Warning] Skill params grad: {skill_params_grad_np.tolist()}')
+                logging.error(f'===> [Warning] Skill params: {skill_params_np}')
+                logging.error(f'===> [Warning] Skill params grad: {skill_params_grad_np}')
                 logging.error(f'===> [Warning] Loss info: {loss_info}')
                 n_aborted_data += 1
             else:
@@ -493,8 +493,8 @@ def main(args):
         np.save(grad_std_file_name, grad_std)
         print('====> Mean grad: ', grad_mean)
         print('====> Std grad: ', grad_std)
-        logging.info('====> Mean grad: ', grad_mean.tolist())
-        logging.info('====> Std grad: ', grad_std.tolist())
+        logging.info(f'====> Mean grad: {grad_mean}')
+        logging.info(f'====> Std grad: {grad_std}')
     else:
         np.save(os.path.join(log_dir, 'final_skill_params.npy'), np.array(skill_params_np))
         print('====> Finished training.')
@@ -502,9 +502,9 @@ def main(args):
         print('====> Final height map loss: ', height_map_loss)
         print('====> Final skill params: ', skill_params_np)
         logging.info('====> Finished training.')
-        logging.info('====> Final EMD loss: ', emd_loss)
-        logging.info('====> Final height map loss: ', height_map_loss)
-        logging.info('====> Final skill params: ', skill_params_np.tolist())
+        logging.info(f'====> Final EMD loss: {emd_loss}')
+        logging.info(f'====> Final height map loss: {height_map_loss}')
+        logging.info(f'====> Final skill params: {skill_params_np}')
 
 
 if __name__ == '__main__':
