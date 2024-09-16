@@ -121,9 +121,11 @@ def main(args):
     height_map_loss = 0.0
     grads_to_save = []
     if args['use_height_map_loss']:
-        lrs = [0.01, 0.01, 0.05, 0.01, 0.05]
+        lrs = [0.02, 0.03, 0.03, 0.01, 0.15]
+        if args['demon']:
+            lrs = [0.01, 0.01, 0.03, 0.008, 0.03]
     else:
-        lrs = [0.05 for _ in range(5)]
+        lrs = [0.05, 0.03, 0.03, 0.07, 0.07]
     skill_params_optim_0 = Adam(parameters_shape=(1,),
                                 cfg={'lr': lrs[0], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
     skill_params_optim_1 = Adam(parameters_shape=(1,),

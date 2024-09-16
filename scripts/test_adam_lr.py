@@ -4,29 +4,29 @@ from doma.optimiser.adam import Adam
 from doma.engine.configs.macros import DTYPE_NP
 
 script_path = os.path.dirname(os.path.realpath(__file__))
-#
-# for d in ["5e6", "1e7", "2e7"]:
-#     for task in [0, 1]:
-#         grad_mean = np.load(os.path.join(script_path, '..', 'log-abs2-adam', f'd{d}-task-{task}', 'grads', "grad_mean.npy"))
-#         grad_std = np.load(os.path.join(script_path, '..', 'log-abs2-adam', f'd{d}-task-{task}', 'grads', "grad_std.npy"))
+subfux = '-hm'
+# for d in ["5e6"]:
+#     for task in [0]:
+#         grad_mean = np.load(os.path.join(script_path, '..', 'log-abs2-adam', f'd{d}-task-{task}{subfux}', 'grads', "grad_mean.npy"))
+#         grad_std = np.load(os.path.join(script_path, '..', 'log-abs2-adam', f'd{d}-task-{task}{subfux}', 'grads', "grad_std.npy"))
 #         print(f"Found gradient stats for d={d}, task={task}:")
 #         print(grad_mean)
 #         print(grad_std)
 # exit()
 
-for d in ["5e6", "1e7", "2e7"]:
-    for task in [0, 1]:
+for d in ["5e6"]:
+    for task in [0]:
         print("d:", d, "task:", task)
-        grad_mean = np.load(os.path.join(script_path, '..', 'log-abs2-adam', f'd{d}-task-{task}', 'grads', "grad_mean.npy"))
-        grad_std = np.load(os.path.join(script_path, '..', 'log-abs2-adam', f'd{d}-task-{task}', 'grads', "grad_std.npy"))
-        E_range = (2.5e5, 4e5)
-        nu_range = (0.2, 0.4)
-        rho_range = (1600, 2300)
-        sand_angle_range = (30, 45)
-        mf_range = (0.05, 2.0)
-        sf_range = (0.05, 2.0)
-        n_epoch = 100
-        ranges = [E_range, nu_range, rho_range, sand_angle_range, mf_range, sf_range]
+        grad_mean = np.load(os.path.join(script_path, '..', 'log-abs2-adam', f'd{d}-task-{task}{subfux}', 'grads', "grad_mean.npy"))
+        grad_std = np.load(os.path.join(script_path, '..', 'log-abs2-adam', f'd{d}-task-{task}{subfux}', 'grads', "grad_std.npy"))
+        # E_range = (2.5e5, 4e5)
+        # nu_range = (0.2, 0.4)
+        # rho_range = (1600, 2300)
+        # sand_angle_range = (30, 45)
+        # mf_range = (0.05, 2.0)
+        # sf_range = (0.05, 2.0)
+        # n_epoch = 100
+        # ranges = [E_range, nu_range, rho_range, sand_angle_range, mf_range, sf_range]
         """
         Found learning rates:
         E: 2e5
@@ -36,7 +36,7 @@ for d in ["5e6", "1e7", "2e7"]:
         mf: 1
         sf: 0.5
         """
-        lr = [0.05, 0.05, 0.05, 0.05, 0.05]
+        lr = [0.02, 0.03, 0.03, 0.01, 0.15]
         n = 5
         for n in range(5):
             bounds = (-1.0, 1.0)

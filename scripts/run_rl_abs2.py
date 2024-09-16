@@ -196,7 +196,7 @@ def main(arguments):
         rl_agent_config['hindsight'] = True
         rl_agent_config['sampling_strategy'] = 'final'
         rl_agent_config['use_demonstrations'] = arguments['use_demo']
-        rl_agent_config['demonstrate_percentage'] = 0.25
+        rl_agent_config['demonstrate_percentage'] = 0.50
         rl_agent_config['demonstration_action'] = [1.0, 0.3, 0.8, 1.0, 0.3]
         with open(os.path.join(log_dir, 'rl_agent_config.json'), 'w') as f_ac:
             json.dump(rl_agent_config, f_ac)
