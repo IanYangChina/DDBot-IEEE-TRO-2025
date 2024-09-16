@@ -38,17 +38,17 @@ def main(args):
     # np_rng = np.random.default_rng(seed=seed)
     task_id = args['task_id']
     ptcl_d = arguments['ptcl_density']
+    subfix = ''
+    if args['use_height_map_loss']:
+        subfix += '-hm'
     if args['demon']:
-        log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}-demo', f'seed-{seed}')
-        if args['mini_batch']:
-            log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}-demo-batch', f'seed-{seed}')
-    else:
-        log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}', f'seed-{seed}')
-        if args['mini_batch']:
-            log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}-batch', f'seed-{seed}')
+        subfix += '-demo'
+    if args['mini_batch']:
+        subfix += '-batch'
 
+    log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}{subfix}', f'seed-{seed}')
     if args['compute_grad']:
-        log_dir = log_dir[:-6] + '-grads'
+        log_dir = log_dir[:-6] + 'grads'
     grad_mean_file_name = os.path.join(log_dir, 'grad_mean.npy')
     grad_std_file_name = os.path.join(log_dir, 'grad_std.npy')
     os.makedirs(log_dir, exist_ok=True)
@@ -88,49 +88,53 @@ def main(args):
         'agent_init_euler': (0, 180, 90),
     }
     loss_cfg = {
+        'use_height_map_loss': args['use_height_map_loss'],
         'target_pcd_path': os.path.join(script_path, '..', 'data', 'task_target_pcds',
                                         f'pcd_{task_id}_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
         'down_sample_voxel_size': 0.007,
     }
 
-    if args['demon']:
-        skill_params_np = np.asarray([1.0, 0.3, 0.8, 1.0, 0.3]).astype(DTYPE_NP)
-        if args['eval']:
-            with open(os.path.join(script_path, '..', 'log-abs2-adam',
-                                   f'best_params-task-{task_id}-demo.json')) as f:
-                best_skill_params = json.load(f)[ptcl_d]["Parameters"]
-            skill_params_np = np.asarray([
-                best_skill_params['skill_params_0'],
-                best_skill_params['skill_params_1'],
-                best_skill_params['skill_params_2'],
-                best_skill_params['skill_params_3'],
-                best_skill_params['skill_params_4']
-            ]).astype(DTYPE_NP).reshape((5,))
-            print("===> Loaded skill params for evaluation:", skill_params_np)
+    if args['eval']:
+        with open(os.path.join(script_path, '..', 'log-abs2-adam',
+                               f'best_params-task-{task_id}{subfix}.json')) as f:
+            best_skill_params = json.load(f)[ptcl_d]["Parameters"]
+        skill_params_np = np.asarray([
+            best_skill_params['skill_params_0'],
+            best_skill_params['skill_params_1'],
+            best_skill_params['skill_params_2'],
+            best_skill_params['skill_params_3'],
+            best_skill_params['skill_params_4']
+        ]).astype(DTYPE_NP).reshape((5,))
+        print("===> Loaded skill params for evaluation:", skill_params_np)
     else:
-        skill_params_np = np.random.uniform(-1, 1, size=5).astype(DTYPE_NP)
-        if args['zero_init']:
-            skill_params_np *= 0.0
-            with open(os.path.join(script_path, '..', 'log-abs2-adam',
-                                   f'best_params-task-{task_id}.json')) as f:
-                best_skill_params = json.load(f)[ptcl_d]["Parameters"]
-            skill_params_np = np.asarray([
-                best_skill_params['skill_params_0'],
-                best_skill_params['skill_params_1'],
-                best_skill_params['skill_params_2'],
-                best_skill_params['skill_params_3'],
-                best_skill_params['skill_params_4']
-            ]).astype(DTYPE_NP).reshape((5,))
-            print("===> Loaded skill params for evaluation:", skill_params_np)
+        if args['demon']:
+            skill_params_np = np.asarray([1.0, 0.3, 0.8, 1.0, 0.3]).astype(DTYPE_NP)
+        else:
+            skill_params_np = np.random.uniform(-1, 1, size=5).astype(DTYPE_NP)
+            if args['zero_init']:
+                skill_params_np *= 0.0
 
     n_epoch = 150
     n_aborted_data = 0
     emd_loss = 0.0
     height_map_loss = 0.0
     grads_to_save = []
-    skill_params_optim = Adam(parameters_shape=(5,),
-                              cfg={'lr': 0.05, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+    if args['use_height_map_loss']:
+        lrs = [0.01, 0.01, 0.05, 0.01, 0.05]
+    else:
+        lrs = [0.05 for _ in range(5)]
+    skill_params_optim_0 = Adam(parameters_shape=(1,),
+                                cfg={'lr': lrs[0], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+    skill_params_optim_1 = Adam(parameters_shape=(1,),
+                                cfg={'lr': lrs[1], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+    skill_params_optim_2 = Adam(parameters_shape=(1,),
+                                cfg={'lr': lrs[2], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+    skill_params_optim_3 = Adam(parameters_shape=(1,),
+                                cfg={'lr': lrs[3], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+    skill_params_optim_4 = Adam(parameters_shape=(1,),
+                                cfg={'lr': lrs[4], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+
     for n in range(n_epoch):
         grads = []
         emd_losses = []
@@ -437,6 +441,7 @@ def main(args):
                 logging.error(f'===> [Warning] Skill params grad: {skill_params_grad_np}')
                 logging.error(f'===> [Warning] Loss info: {loss_info}')
                 n_aborted_data += 1
+                grads.append(np.ones_like(skill_params_grad_np)*1e-6)
             else:
                 grads.append(skill_params_grad_np)
                 emd_losses.append(loss_info['emd_loss'])
@@ -449,27 +454,40 @@ def main(args):
         height_map_loss = np.mean(height_map_losses)
         if args['compute_grad']:
             grads_to_save.append(grad)
-            # skill_params_np = np.random.uniform(-1, 1, size=5).astype(DTYPE_NP)
-        else:
-            skill_params_np = skill_params_optim.step(skill_params_np.copy(), grad)
-            skill_params_np = np.clip(skill_params_np, -1, 1)
+            skill_params_np = np.random.uniform(-1, 1, size=5).astype(DTYPE_NP)
 
-        if args['compute_grad']:
-            print(f'=====> Epoch: {n}')
-            print(f'=====> Grad: {grad}')
-            print(f"=====> Num. aborted data so far: {n_aborted_data}")
-            logging.info(f'=====> Epoch: {n}')
-            logging.info(f'=====> Grad: {grad.tolist()}')
-            logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
-        else:
             print(f'=====> Epoch: {n}')
             print(f'=====> EMD Loss: {emd_loss}')
             print(f'=====> Height map loss: {height_map_loss}')
             print(f'=====> Grad: {grad}')
+            print(f'=====> Skill params: {skill_params_np}')
             print(f"=====> Num. aborted data so far: {n_aborted_data}")
             logging.info(f'=====> Epoch: {n}')
             logging.info(f'=====> EMD Loss: {emd_loss}')
             logging.info(f'=====> Height map loss: {height_map_loss}')
+            logging.info(f'=====> Grad: {grad}')
+            logging.info(f'=====> Skill params: {skill_params_np}')
+            logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
+        else:
+            skill_params_np_0 = skill_params_optim_0.step(skill_params_np.copy()[0], grad[0])
+            skill_params_np_1 = skill_params_optim_1.step(skill_params_np.copy()[1], grad[1])
+            skill_params_np_2 = skill_params_optim_2.step(skill_params_np.copy()[2], grad[2])
+            skill_params_np_3 = skill_params_optim_3.step(skill_params_np.copy()[3], grad[3])
+            skill_params_np_4 = skill_params_optim_4.step(skill_params_np.copy()[4], grad[4])
+            skill_params_np = np.array([skill_params_np_0, skill_params_np_1, skill_params_np_2, skill_params_np_3, skill_params_np_4]).reshape((5,))
+            skill_params_np = np.clip(skill_params_np, -1, 1)
+
+            print(f'=====> Epoch: {n}')
+            print(f'=====> EMD Loss: {emd_loss}')
+            print(f'=====> Height map loss: {height_map_loss}')
+            print(f'=====> Grad: {grad}')
+            print(f'=====> Skill params: {skill_params_np}')
+            print(f"=====> Num. aborted data so far: {n_aborted_data}")
+            logging.info(f'=====> Epoch: {n}')
+            logging.info(f'=====> EMD Loss: {emd_loss}')
+            logging.info(f'=====> Height map loss: {height_map_loss}')
+            logging.info(f'=====> Grad: {grad}')
+            logging.info(f'=====> Skill params: {skill_params_np}')
             logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
 
             logger.add_scalar(tag='loss/EMD', scalar_value=emd_loss, global_step=n)
@@ -511,7 +529,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Gradient-based skill parameter optimisation")
     parser.add_argument('--seed', dest='seed', type=int, default=0, help='Random seed')
     parser.add_argument('--com_grad', dest='compute_grad', action='store_true', default=False, help='Compute gradient')
-    parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default="1e7",
+    parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default="5e6",
                         help='Particle density, use scientific notation like \'5e6\'.')
     parser.add_argument('--backend', dest='backend', default='cuda', type=str,
                         help='Computation backend: cuda, opengl, or cpu')
@@ -520,6 +538,7 @@ if __name__ == '__main__':
     parser.add_argument('--zero-init', dest='zero_init', action='store_true', default=False, help='Initialise parameters to zero')
     parser.add_argument('--demon', dest='demon', action='store_true', default=False, help='Use demonstration')
     parser.add_argument('--mini-batch', dest='mini_batch', action='store_true', default=False, help='Use mini-batch')
+    parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False, help='Use height map loss')
     parser.add_argument('--eval', dest='eval', action='store_true', default=False, help='Evaluate the model')
     arguments = vars(parser.parse_args())
     main(arguments)
