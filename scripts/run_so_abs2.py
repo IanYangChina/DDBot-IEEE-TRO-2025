@@ -455,6 +455,8 @@ def main(args):
         if args['compute_grad']:
             grads_to_save.append(grad)
             skill_params_np = np.random.uniform(-1, 1, size=5).astype(DTYPE_NP)
+            if args['demon']:
+                skill_params_np = np.asarray([1.0, 0.3, 0.8, 1.0, 0.3]).astype(DTYPE_NP) + np.random.uniform(-1, 1, size=5).astype(DTYPE_NP) * 0.1
 
             print(f'=====> Epoch: {n}')
             print(f'=====> EMD Loss: {emd_loss}')
