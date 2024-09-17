@@ -96,157 +96,60 @@ def main(args):
         'down_sample_voxel_size': 0.007,
     }
 
-    ti.reset()
-    ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=DTYPE_TI,
-            fast_math=True, random_seed=args['seed'])
+    def abstraction_two_skill(skill_params, dt):
+        assert np.all(skill_params >= -1.0) and np.all(skill_params <= 1.0), 'RL skill params should be in [-1, 1]'
+        trajectory = np.zeros(shape=(1000, 6), dtype=np.float32)
+        move_distance = skill_params[0] * 0.12  # map [-1, 1] to [-0.12, 0.12]
+        rotate_x = skill_params[1] * (np.pi / 2)  # map [-1, 1] to [-pi/2, pi/2]
 
-    skill_params_ti = ti.field(dtype=DTYPE_TI, shape=5, needs_grad=False)
-    n_step_total = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
-
-    move_delta_x = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
-    rotate_delta_x = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
-    n_step_move = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
-    insert_delta_x = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
-    insert_delta_z = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
-    n_step_insert = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
-    push_delta_x = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
-    push_delta_z = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
-    n_step_push = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
-    rotate_delta_x_back = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
-    move_up_delta_z = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
-    n_step_return = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
-
-    trajectory = ti.Vector.field(n=6, dtype=DTYPE_TI, shape=horizon, needs_grad=False)
-
-    def reset_vars():
-        n_step_total.fill(0)
-        move_delta_x.fill(0)
-        rotate_delta_x.fill(0)
-        n_step_move.fill(0)
-        insert_delta_x.fill(0)
-        insert_delta_z.fill(0)
-        n_step_insert.fill(0)
-        push_delta_x.fill(0)
-        push_delta_z.fill(0)
-        n_step_push.fill(0)
-        rotate_delta_x_back.fill(0)
-        move_up_delta_z.fill(0)
-        n_step_return.fill(0)
-        trajectory.fill(0)
-
-    @ti.kernel
-    def abstraction_two_skill():
-        move_distance = skill_params_ti[0] * 0.12
-        rotate_x = skill_params_ti[1] * (np.pi / 2)  # map [-1, 1] to [-pi/2, pi/2]
-        n_step_move[None] = ti.abs(move_distance / (LINEAR_VELOCITY * DT_GLOBAL))
-        n_step_rotate = ti.abs(rotate_x / (ANGULAR_VELOCITY * DT_GLOBAL))
-        ti.atomic_max(n_step_move[None], n_step_rotate)
-        n_step_move_int = ti.cast(n_step_move[None], ti.i32)
-        if n_step_move_int > 0:
-            move_delta_x[None] = move_distance / n_step_move[None]
-            rotate_delta_x[None] = rotate_x / n_step_move[None]
-        n_step_total[None] += n_step_move_int
+        n_step_move = np.abs(int(move_distance / (LINEAR_VELOCITY * dt)))
+        n_step_rotate = np.abs((int(rotate_x / (ANGULAR_VELOCITY * dt))))
+        n_step = max(n_step_move, n_step_rotate)
+        if n_step > 0:
+            move_delta_x = move_distance / n_step
+            for i in range(n_step):
+                trajectory[i][0] = move_delta_x
+            rotate_delta_x = rotate_x / n_step
+            for i in range(n_step):
+                trajectory[i][3] = rotate_delta_x
 
         insert_angle = rotate_x + np.pi / 2
-        insert_distance = (skill_params_ti[2] + 1) / 2 * 0.06  # map [-1, 1] to [0, 0.06]
-        n_step_insert[None] = ti.abs(insert_distance / (LINEAR_VELOCITY * DT_GLOBAL))
-        n_step_insert_int = ti.cast(n_step_insert[None], ti.i32)
-        if n_step_insert_int > 0:
-            insert_distance_x = insert_distance * ti.cos(insert_angle)
-            insert_distance_z = insert_distance * ti.sin(insert_angle)
-            insert_delta_x[None] = insert_distance_x / n_step_insert[None]
-            insert_delta_z[None] = insert_distance_z / n_step_insert[None]
-        n_step_total[None] += n_step_insert_int
+        insert_distance = (skill_params[2] + 1) / 2 * 0.06  # map [-1, 1] to [0, 0.06]
+        n_step_insert = int(insert_distance / (LINEAR_VELOCITY * dt))
+        if n_step_insert > 0:
+            insert_distance_x = insert_distance * np.cos(insert_angle)
+            insert_distance_z = insert_distance * np.sin(insert_angle)
+            insert_delta_x = insert_distance_x / n_step_insert
+            insert_delta_z = insert_distance_z / n_step_insert
+            for i in range(n_step, n_step + n_step_insert):
+                trajectory[i][0] = insert_delta_x
+                trajectory[i][2] = -insert_delta_z
 
-        push_angle = (skill_params_ti[3] + 1) * np.pi / 2  # map [-1, 1] to [0, pi]
-        push_distance = (skill_params_ti[4] + 1) * 0.1  # map [-1, 1] to [0, 0.2]
-        n_step_push[None] = ti.abs(push_distance / (LINEAR_VELOCITY * DT_GLOBAL))
-        n_step_push_int = ti.floor(n_step_push[None], ti.i32)
-        if n_step_push_int > 0:
-            push_distance_x = push_distance * ti.cos(push_angle)
-            push_distance_z = push_distance * ti.sin(push_angle)
-            push_delta_x[None] = push_distance_x / n_step_push[None]
-            push_delta_z[None] = push_distance_z / n_step_push[None]
-        n_step_total[None] += n_step_push_int
+        push_angle = (skill_params[3] + 1) * np.pi / 2  # map [-1, 1] to [0, pi]
+        push_distance = (skill_params[4] + 1) * 0.1  # map [-1, 1] to [0, 0.2]
+        n_step_push = int(push_distance / (LINEAR_VELOCITY * dt))
+        if n_step_push > 0:
+            push_distance_x = push_distance * np.cos(push_angle)
+            push_distance_z = push_distance * np.sin(push_angle)
+            push_delta_x = push_distance_x / n_step_push
+            push_delta_z = push_distance_z / n_step_push
+            for i in range(n_step + n_step_insert, n_step + n_step_insert + n_step_push):
+                trajectory[i][0] = push_delta_x
+                trajectory[i][2] = push_delta_z
 
         rotate_x_back = -rotate_x
-        n_step_rotate_back = ti.abs(rotate_x / (ANGULAR_VELOCITY * DT_GLOBAL))
+        n_step_rotate_back = n_step_rotate
         move_up_distance = 0.1
-        n_step_move_up = ti.abs(move_up_distance / (LINEAR_VELOCITY * DT_GLOBAL))
-        n_step_return[None] = n_step_rotate_back
-        ti.atomic_max(n_step_return[None], n_step_move_up)
-        n_step_return_int = ti.cast(n_step_return[None], ti.i32)
-        if n_step_return_int > 0:
-            rotate_delta_x_back[None] = rotate_x_back / n_step_return[None]
-            move_up_delta_z[None] = move_up_distance / n_step_return[None]
-        n_step_total[None] += n_step_return_int
+        n_step_move_up = int(move_up_distance / (LINEAR_VELOCITY * dt))
+        n_step_return = max(n_step_rotate_back, n_step_move_up)
+        if n_step_return > 0:
+            rotate_delta_x_back = rotate_x_back / n_step_return
+            move_up_delta_z = move_up_distance / n_step_return
+            for i in range(n_step + n_step_insert + n_step_push, n_step + n_step_insert + n_step_push + n_step_return):
+                trajectory[i][3] = rotate_delta_x_back
+                trajectory[i][5] = move_up_delta_z
 
-    @ti.kernel
-    def fill_trajectory_10():
-        for k in range(1):
-            n_step_move_int = ti.cast(n_step_move[None], ti.i32)
-            half_n_step_move_int = n_step_move_int // 2
-            for j in range(half_n_step_move_int):
-                trajectory[j][0] = move_delta_x[None]
-                trajectory[j][3] = rotate_delta_x[None]
-
-    @ti.kernel
-    def fill_trajectory_11():
-        for k in range(1):
-            n_step_move_int = ti.cast(n_step_move[None], ti.i32)
-            half_n_step_move_int = n_step_move_int // 2
-            for j in range(n_step_move_int - half_n_step_move_int):
-                index = j + half_n_step_move_int
-                trajectory[index][0] = move_delta_x[None]
-                trajectory[index][3] = rotate_delta_x[None]
-
-    @ti.kernel
-    def fill_trajectory_2():
-        for k in range(1):
-            n_step_move_int = ti.cast(n_step_move[None], ti.i32)
-            n_step_insert_int = ti.cast(n_step_insert[None], ti.i32)
-            for j in range(n_step_insert_int):
-                index = j + n_step_move_int
-                trajectory[index][0] = insert_delta_x[None]
-                trajectory[index][2] = -insert_delta_z[None]
-
-    @ti.kernel
-    def fill_trajectory_3():
-        for k in range(1):
-            n_step_move_int = ti.cast(n_step_move[None], ti.i32)
-            n_step_insert_int = ti.cast(n_step_insert[None], ti.i32)
-            n_step_push_int = ti.cast(n_step_push[None], ti.i32)
-            for j in range(n_step_push_int):
-                index = j + n_step_move_int
-                index = index + n_step_insert_int
-                trajectory[index][0] = push_delta_x[None]
-                trajectory[index][2] = push_delta_z[None]
-
-    @ti.kernel
-    def fill_trajectory_40():
-        for k in range(1):
-            n_step_move_int = ti.cast(n_step_move[None], ti.i32)
-            n_step_insert_int = ti.cast(n_step_insert[None], ti.i32)
-            n_step_push_int = ti.cast(n_step_push[None], ti.i32)
-            n_step_return_int = ti.cast(n_step_return[None], ti.i32)
-            half_n_step_return_int = n_step_return_int // 2
-            for j in range(half_n_step_return_int):
-                index = j + n_step_move_int + n_step_insert_int + n_step_push_int
-                trajectory[index][3] = rotate_delta_x_back[None]
-                trajectory[index][5] = move_up_delta_z[None]
-
-    @ti.kernel
-    def fill_trajectory_41():
-        for k in range(1):
-            n_step_move_int = ti.cast(n_step_move[None], ti.i32)
-            n_step_insert_int = ti.cast(n_step_insert[None], ti.i32)
-            n_step_push_int = ti.cast(n_step_push[None], ti.i32)
-            n_step_return_int = ti.cast(n_step_return[None], ti.i32)
-            half_n_step_return_int = n_step_return_int // 2
-            for j in range(half_n_step_return_int - half_n_step_return_int):
-                index = j + n_step_move_int + n_step_insert_int + n_step_push_int + half_n_step_return_int
-                trajectory[index][3] = rotate_delta_x_back[None]
-                trajectory[index][5] = move_up_delta_z[None]
+        return trajectory[:n_step + n_step_insert + n_step_push + n_step_return, :]
 
     trajectory_np = np.zeros((horizon, 6), dtype=DTYPE_NP)
     if args['eval']:
@@ -254,34 +157,14 @@ def main(args):
                                f'best_tr-task-{task_id}{subfix}.json')) as f:
             trajectory_np = json.load(f)[ptcl_d]["Trajectory"]
         if args['view_demon']:
-            skill_params_np = np.asarray([1.0, 0.3, 0.8, 1.0, 0.3]).astype(DTYPE_NP)
-            skill_params_ti.from_numpy(skill_params_np.copy())
-            reset_vars()
-            abstraction_two_skill()
-            fill_trajectory_10()
-            fill_trajectory_11()
-            fill_trajectory_2()
-            fill_trajectory_3()
-            fill_trajectory_40()
-            fill_trajectory_41()
-            trajectory_demon = trajectory.to_numpy()
-            trajectory_length = int(n_step_total[None])
+            trajectory_demon = abstraction_two_skill(np.asarray([1.0, 0.3, 0.8, 1.0, 0.3], dtype=DTYPE_NP), DT_GLOBAL)
+            trajectory_length = trajectory_demon.shape[0]
             trajectory_np[:trajectory_length] = trajectory_demon[:trajectory_length]
         print("===> Loaded trajectory.")
     else:
         if args['demon']:
-            skill_params_np = np.asarray([1.0, 0.3, 0.8, 1.0, 0.3]).astype(DTYPE_NP)
-            skill_params_ti.from_numpy(skill_params_np.copy())
-            reset_vars()
-            abstraction_two_skill()
-            fill_trajectory_10()
-            fill_trajectory_11()
-            fill_trajectory_2()
-            fill_trajectory_3()
-            fill_trajectory_40()
-            fill_trajectory_41()
-            trajectory_demon = trajectory.to_numpy()
-            trajectory_length = int(n_step_total[None])
+            trajectory_demon = abstraction_two_skill(np.asarray([1.0, 0.3, 0.8, 1.0, 0.3], dtype=DTYPE_NP), DT_GLOBAL)
+            trajectory_length = trajectory_demon.shape[0]
             trajectory_np[:trajectory_length] = trajectory_demon[:trajectory_length]
 
     n_epoch = 150
@@ -307,6 +190,10 @@ def main(args):
         else:
             n_inner_epoch = 1
         for k in range(n_inner_epoch):
+            ti.reset()
+            ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=DTYPE_TI,
+                    fast_math=True, random_seed=args['seed'])
+
             env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
 
             set_parameters(mpm_env, SAND,
@@ -414,17 +301,8 @@ def main(args):
             if args['demon']:
                 skill_params_np = np.asarray([1.0, 0.3, 0.8, 1.0, 0.3]).astype(DTYPE_NP) + np.random.uniform(-1, 1, size=5).astype(DTYPE_NP) * 0.5
                 skill_params_np = np.clip(skill_params_np, -1, 1)
-                skill_params_ti.from_numpy(skill_params_np.copy())
-                reset_vars()
-                abstraction_two_skill()
-                fill_trajectory_10()
-                fill_trajectory_11()
-                fill_trajectory_2()
-                fill_trajectory_3()
-                fill_trajectory_40()
-                fill_trajectory_41()
-                trajectory_demon = trajectory.to_numpy()
-                trajectory_length = int(n_step_total[None])
+                trajectory_demon = abstraction_two_skill(skill_params_np, DT_GLOBAL)
+                trajectory_length = trajectory_demon.shape[0]
                 trajectory_np[:trajectory_length] = trajectory_demon[:trajectory_length]
 
             print(f'=====> Epoch: {n}')
