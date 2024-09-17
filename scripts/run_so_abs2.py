@@ -106,6 +106,8 @@ def main(args):
             best_skill_params['skill_params_3'],
             best_skill_params['skill_params_4']
         ]).astype(DTYPE_NP).reshape((5,))
+        if args['view_demon']:
+            skill_params_np = np.asarray([1.0, 0.3, 0.8, 1.0, 0.3]).astype(DTYPE_NP)
         print("===> Loaded skill params for evaluation:", skill_params_np)
     else:
         if args['demon']:
@@ -545,5 +547,6 @@ if __name__ == '__main__':
     parser.add_argument('--mini-batch', dest='mini_batch', action='store_true', default=False, help='Use mini-batch')
     parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False, help='Use height map loss')
     parser.add_argument('--eval', dest='eval', action='store_true', default=False, help='Evaluate the model')
+    parser.add_argument('--view-demon', dest='view_demon', action='store_true', default=False, help='View demonstration')
     arguments = vars(parser.parse_args())
     main(arguments)
