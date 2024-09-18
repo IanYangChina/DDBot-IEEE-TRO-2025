@@ -74,7 +74,7 @@ def main(args):
     else:
         backend = ti.cpu
 
-    horizon = 300
+    horizon = 450
     with open(os.path.join(script_path, '..', 'log-sys_id', 'best_params.json')) as f:
         best_params = json.load(f)[arguments['ptcl_density']]["Parameters"]
 
