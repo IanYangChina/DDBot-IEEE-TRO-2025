@@ -74,7 +74,7 @@ def main(args):
     else:
         backend = ti.cpu
 
-    horizon = 450
+    horizon = 300
     with open(os.path.join(script_path, '..', 'log-sys_id', 'best_params.json')) as f:
         best_params = json.load(f)[arguments['ptcl_density']]["Parameters"]
 
@@ -173,11 +173,11 @@ def main(args):
     height_map_loss = 0.0
     grads_to_save = []
     if args['use_height_map_loss']:
-        lrs = 0.01
+        lrs = 0.001
         if args['demon']:
-            lrs = 0.01
+            lrs = 0.001
     else:
-        lrs = 0.01
+        lrs = 0.001
     tr_optim = Adam(parameters_shape=trajectory_np.shape,
                     cfg={'lr': lrs, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
 
@@ -303,6 +303,8 @@ def main(args):
                 skill_params_np = np.clip(skill_params_np, -1, 1)
                 trajectory_demon = abstraction_two_skill(skill_params_np, DT_GLOBAL)
                 trajectory_length = trajectory_demon.shape[0]
+                if trajectory_length > horizon:
+                    trajectory_length = horizon
                 trajectory_np[:trajectory_length] = trajectory_demon[:trajectory_length]
 
             print(f'=====> Epoch: {n}')
@@ -316,7 +318,7 @@ def main(args):
             logging.info(f'=====> Trajectory grad mean: {grad.mean()}')
             logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
         else:
-            tr_optim.step(trajectory_np, grad)
+            tr_optim.step(trajectory_np, grad[:trajectory_np.shape[0]])
             trajectory_np[:, :3] = np.clip(trajectory_np[:, :3], -0.004, 0.004)
             trajectory_np[:, 3:] = np.clip(trajectory_np[:, 3:], -0.0157, 0.0157)
 
