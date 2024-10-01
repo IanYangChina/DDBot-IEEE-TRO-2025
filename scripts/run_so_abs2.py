@@ -125,7 +125,7 @@ def main(args):
     if args['use_height_map_loss']:
         lrs = [0.02, 0.03, 0.03, 0.01, 0.15]
         if args['demon']:
-            lrs = [0.01, 0.01, 0.03, 0.008, 0.03]
+            lrs = [0.01, 0.01, 0.05, 0.06, 0.05]
     else:
         lrs = [0.05, 0.03, 0.03, 0.07, 0.07]
     skill_params_optim_0 = Adam(parameters_shape=(1,),
