@@ -173,7 +173,7 @@ def main(args):
     height_map_loss = 0.0
     grads_to_save = []
     if args['use_height_map_loss']:
-        lrs = 0.001
+        lrs = 0.0001
         if args['demon']:
             lrs = 0.001
     else:
@@ -318,7 +318,7 @@ def main(args):
             logging.info(f'=====> Trajectory grad mean: {grad.mean()}')
             logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
         else:
-            tr_optim.step(trajectory_np, grad[:trajectory_np.shape[0]])
+            trajectory_np = tr_optim.step(trajectory_np, grad[:trajectory_np.shape[0]])
             trajectory_np[:, :3] = np.clip(trajectory_np[:, :3], -0.004, 0.004)
             trajectory_np[:, 3:] = np.clip(trajectory_np[:, 3:], -0.0157, 0.0157)
 
