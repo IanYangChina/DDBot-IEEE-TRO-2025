@@ -124,6 +124,7 @@ def main(arguments):
         'best_params': None
     }
     loss_cfg = {
+        'use_height_map_loss': False,
         'target_pcd_path': os.path.join(script_path, '..', 'data', 'task_target_pcds',
                                         f'pcd_{task_id}_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
