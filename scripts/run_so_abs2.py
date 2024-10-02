@@ -125,6 +125,7 @@ def main(args):
     n_aborted_data = 0
     emd_loss = 0.0
     height_map_loss = 0.0
+    insertion_loss = 0.0
     grads_to_save = []
     if args['use_height_map_loss']:
         lrs = [0.02, 0.03, 0.03, 0.01, 0.15]
@@ -479,6 +480,7 @@ def main(args):
         grad = np.mean(grads, axis=0)
         emd_loss = np.mean(emd_losses)
         height_map_loss = np.mean(height_map_losses)
+        insertion_loss = np.mean(insertion_losses)
         if args['compute_grad']:
             grads_to_save.append(grad)
             skill_params_np = np.random.uniform(-1, 1, size=5).astype(DTYPE_NP)
@@ -489,12 +491,14 @@ def main(args):
             print(f'=====> Epoch: {n}')
             print(f'=====> EMD Loss: {emd_loss}')
             print(f'=====> Height map loss: {height_map_loss}')
+            print(f'=====> Insertion loss: {insertion_loss}')
             print(f'=====> Grad: {grad}')
             print(f'=====> Skill params: {skill_params_np}')
             print(f"=====> Num. aborted data so far: {n_aborted_data}")
             logging.info(f'=====> Epoch: {n}')
             logging.info(f'=====> EMD Loss: {emd_loss}')
             logging.info(f'=====> Height map loss: {height_map_loss}')
+            logging.info(f'=====> Insertion loss: {insertion_loss}')
             logging.info(f'=====> Grad: {grad}')
             logging.info(f'=====> Skill params: {skill_params_np}')
             logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
@@ -514,18 +518,21 @@ def main(args):
             print(f'=====> Epoch: {n}')
             print(f'=====> EMD Loss: {emd_loss}')
             print(f'=====> Height map loss: {height_map_loss}')
+            print(f'=====> Insertion loss: {insertion_loss}')
             print(f'=====> Grad: {grad}')
             print(f'=====> Skill params: {skill_params_np}')
             print(f"=====> Num. aborted data so far: {n_aborted_data}")
             logging.info(f'=====> Epoch: {n}')
             logging.info(f'=====> EMD Loss: {emd_loss}')
             logging.info(f'=====> Height map loss: {height_map_loss}')
+            logging.info(f'=====> Insertion loss: {insertion_loss}')
             logging.info(f'=====> Grad: {grad}')
             logging.info(f'=====> Skill params: {skill_params_np}')
             logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
 
             logger.add_scalar(tag='loss/EMD', scalar_value=emd_loss, global_step=n)
             logger.add_scalar(tag='loss/Heightmap', scalar_value=height_map_loss, global_step=n)
+            logger.add_scalar(tag='loss/Insertion', scalar_value=insertion_loss, global_step=n)
             logger.add_scalar(tag='param/0-move_distance', scalar_value=skill_params_np[0], global_step=n)
             logger.add_scalar(tag='param/1-rotate_x', scalar_value=skill_params_np[1], global_step=n)
             logger.add_scalar(tag='param/2-insert_distance', scalar_value=skill_params_np[2], global_step=n)
