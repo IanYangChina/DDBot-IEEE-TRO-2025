@@ -147,6 +147,7 @@ def main(args):
         grads = []
         emd_losses = []
         height_map_losses = []
+        insertion_losses = []
         if args['mini_batch']:
             n_inner_epoch = 3
         else:
@@ -471,10 +472,11 @@ def main(args):
                 grads.append(skill_params_grad_np)
                 emd_losses.append(loss_info['emd_loss'])
                 height_map_losses.append(loss_info['height_map_loss'])
+                insertion_losses.append(insertion_loss_ti[None])
 
             mpm_env.simulator.clear_ckpt()
 
-        grad = np.mean(grads, axis=0)
+        grad = np.mean(grads, axis=0) * -1.0
         emd_loss = np.mean(emd_losses)
         height_map_loss = np.mean(height_map_losses)
         if args['compute_grad']:
