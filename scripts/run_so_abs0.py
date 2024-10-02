@@ -290,7 +290,7 @@ def main(args):
 
             mpm_env.simulator.clear_ckpt()
 
-        grad = np.mean(grads, axis=0) * -1.0
+        grad = np.mean(grads, axis=0)
         emd_loss = np.mean(emd_losses)
         height_map_loss = np.mean(height_map_losses)
         if args['compute_grad']:

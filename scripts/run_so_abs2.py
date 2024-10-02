@@ -32,7 +32,7 @@ LINEAR_VELOCITY = 0.2  # m/s
 ANGULAR_VELOCITY = np.pi / 4  # rad/s
 DT_GLOBAL = 0.01  # sec
 SHOVEL_HEIGHT = 0.12
-SOIL_HEIGHT = 0.085
+SOIL_HEIGHT = 0.085 + 0.005
 
 
 def main(args):
@@ -332,7 +332,7 @@ def main(args):
                 insert_distance_z = insert_distance * ti.sin(insert_angle)
                 new_ee_tip_z = 0.205 - SHOVEL_HEIGHT * ti.cos(rotate_x) - insert_distance_z
                 if new_ee_tip_z > SOIL_HEIGHT:
-                    insertion_loss_ti[None] = SOIL_HEIGHT - new_ee_tip_z
+                    insertion_loss_ti[None] = new_ee_tip_z - SOIL_HEIGHT
 
             def update_trajectory_grad(tr_grads, length):
                 for k in range(length):
@@ -476,7 +476,7 @@ def main(args):
 
             mpm_env.simulator.clear_ckpt()
 
-        grad = np.mean(grads, axis=0) * -1.0
+        grad = np.mean(grads, axis=0)
         emd_loss = np.mean(emd_losses)
         height_map_loss = np.mean(height_map_losses)
         if args['compute_grad']:
