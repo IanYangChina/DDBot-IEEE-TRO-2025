@@ -9,14 +9,19 @@ ti.init(arch=ti.cuda, device_memory_GB=5, default_fp=ti.f32,
         fast_math=True, random_seed=0)
 
 horizon = 300
+SHOVEL_HEIGHT = 0.12
+SOIL_HEIGHT = 0.085 + 0.005
 
 skill_params_ti = ti.field(dtype=ti.f32, shape=5, needs_grad=True)
 n_step_total = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
 
 trajectory = ti.Vector.field(n=6, dtype=ti.f32, shape=horizon, needs_grad=True)
 loss = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
-target = ti.field(dtype=ti.f32, shape=6, needs_grad=True)
+target = ti.field(dtype=ti.f32, shape=6, needs_grad=False)
 target.fill(6.0)
+
+new_ee_tip_z = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
+insertion_loss_ti = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
 
 
 @ti.kernel
@@ -24,11 +29,6 @@ def loss_func():
     for i in range(int(n_step_total[None])):
         for j in ti.static(range(6)):
             loss[None] += ((trajectory[i][j] - target[j]) ** 2)
-
-
-def reset_grads():
-    skill_params_ti.grad.fill(0)
-    trajectory.grad.fill(0)
 
 
 move_delta_x = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
@@ -43,6 +43,29 @@ n_step_push = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
 rotate_delta_x_back = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
 move_up_delta_z = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
 n_step_return = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
+
+
+def reset_grads():
+    skill_params_ti.grad.fill(0)
+    trajectory.grad.fill(0)
+    new_ee_tip_z.grad.fill(0)
+    n_step_total.grad.fill(0)
+    move_delta_x.grad.fill(0)
+    rotate_delta_x.grad.fill(0)
+    n_step_move.grad.fill(0)
+    insert_delta_x.grad.fill(0)
+    insert_delta_z.grad.fill(0)
+    n_step_insert.grad.fill(0)
+    push_delta_x.grad.fill(0)
+    push_delta_z.grad.fill(0)
+    n_step_push.grad.fill(0)
+    rotate_delta_x_back.grad.fill(0)
+    move_up_delta_z.grad.fill(0)
+    n_step_return.grad.fill(0)
+    trajectory.grad.fill(0)
+
+    loss.fill(0)
+    insertion_loss_ti.fill(0)
 
 
 def reset_vars():
@@ -60,6 +83,7 @@ def reset_vars():
     move_up_delta_z.fill(0)
     n_step_return.fill(0)
     trajectory.fill(0)
+    new_ee_tip_z.fill(0)
 
 
 @ti.kernel
@@ -183,18 +207,30 @@ def fill_trajectory_41():
             trajectory[index][5] = move_up_delta_z[None]
 
 
-skill_params_np = np.asarray([1.0, 0.3, 0.8, 1.0, 0.3]).astype(np.float32)
+@ti.kernel
+def insertion_loss():
+    rotate_x = skill_params_ti[1] * (np.pi / 2)
+    insert_angle = rotate_x + np.pi / 2
+    insert_distance = (skill_params_ti[2] + 1) / 2 * 0.06
+    insert_distance_z = insert_distance * ti.sin(insert_angle)
+    new_ee_tip_z[None] = 0.205 - SHOVEL_HEIGHT * ti.cos(rotate_x) - insert_distance_z
+    if new_ee_tip_z[None] > SOIL_HEIGHT:
+        insertion_loss_ti[None] = 100 * (new_ee_tip_z[None] - SOIL_HEIGHT)
+
+skill_params_np = np.random.uniform(-1, 1, size=5).astype(np.float32)
+#skill_params_np = np.asarray([1.0, 0.3, 0.8, 1.0, 0.3]).astype(np.float32)
                    #+ np.random.uniform(-1, 1, size=5).astype(np.float32) * 0.5)
 skill_params_np = np.clip(skill_params_np, -1, 1)
 skill_params_ti.from_numpy(skill_params_np)
 reset_vars()
 
+
 abstraction_two_skill()
-# print('n_step_total:', n_step_total[None])
-# print('n_step_move:', n_step_move[None])
-# print('n_step_insert:', n_step_insert[None])
-# print('n_step_push:', n_step_push[None])
-# print('n_step_return:', n_step_return[None])
+print('n_step_total:', n_step_total[None])
+print('n_step_move:', n_step_move[None])
+print('n_step_insert:', n_step_insert[None])
+print('n_step_push:', n_step_push[None])
+print('n_step_return:', n_step_return[None])
 fill_trajectory_10()
 fill_trajectory_11()
 fill_trajectory_2()
@@ -204,6 +240,8 @@ fill_trajectory_41()
 total_step = int(n_step_total[None])
 loss_func()
 print('loss:', loss[None])
+insertion_loss()
+print('insertion_loss:', insertion_loss_ti[None])
 
 loss.grad.fill(1)
 skill_params_ti.grad.fill(0)
@@ -229,4 +267,8 @@ fill_trajectory_2.grad()
 fill_trajectory_11.grad()
 fill_trajectory_10.grad()
 abstraction_two_skill.grad()
+print('skill_params_ti.grad:', skill_params_ti.grad.to_numpy())
+
+insertion_loss_ti.grad.fill(1)
+insertion_loss.grad()
 print('skill_params_ti.grad:', skill_params_ti.grad.to_numpy())

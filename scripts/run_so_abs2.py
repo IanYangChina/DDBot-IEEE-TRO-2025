@@ -175,6 +175,8 @@ def main(args):
             n_step_return = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
 
             trajectory = ti.Vector.field(n=6, dtype=DTYPE_TI, shape=horizon, needs_grad=True)
+
+            new_ee_tip_z = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
             insertion_loss_ti = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
 
             def reset_vars():
@@ -192,6 +194,7 @@ def main(args):
                 move_up_delta_z.fill(0)
                 n_step_return.fill(0)
                 trajectory.fill(0)
+
                 insertion_loss_ti.fill(0)
 
             def reset_grads():
@@ -209,7 +212,8 @@ def main(args):
                 rotate_delta_x_back.grad.fill(0)
                 move_up_delta_z.grad.fill(0)
                 n_step_return.grad.fill(0)
-                insertion_loss_ti.grad.fill(0)
+
+                insertion_loss_ti.grad.fill(1)
 
             @ti.kernel
             def abstraction_two_skill():
@@ -331,9 +335,9 @@ def main(args):
                 insert_angle = rotate_x + np.pi / 2
                 insert_distance = (skill_params_ti[2] + 1) / 2 * 0.06
                 insert_distance_z = insert_distance * ti.sin(insert_angle)
-                new_ee_tip_z = 0.205 - SHOVEL_HEIGHT * ti.cos(rotate_x) - insert_distance_z
-                if new_ee_tip_z > SOIL_HEIGHT:
-                    insertion_loss_ti[None] = new_ee_tip_z - SOIL_HEIGHT
+                new_ee_tip_z[None] = 0.205 - SHOVEL_HEIGHT * ti.cos(rotate_x) - insert_distance_z
+                if new_ee_tip_z[None] > SOIL_HEIGHT:
+                    insertion_loss_ti[None] = (new_ee_tip_z[None] - SOIL_HEIGHT) * 100
 
             def update_trajectory_grad(tr_grads, length):
                 for k in range(length):
