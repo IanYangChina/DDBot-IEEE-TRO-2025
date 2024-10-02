@@ -31,6 +31,8 @@ cam_cfg = {
 LINEAR_VELOCITY = 0.2  # m/s
 ANGULAR_VELOCITY = np.pi / 4  # rad/s
 DT_GLOBAL = 0.01  # sec
+SHOVEL_HEIGHT = 0.12
+SOIL_HEIGHT = 0.085
 
 
 def main(args):
@@ -39,6 +41,8 @@ def main(args):
     task_id = args['task_id']
     ptcl_d = arguments['ptcl_density']
     subfix = ''
+    if args['use_insertion_loss']:
+        subfix += '-ins'
     if args['use_height_map_loss']:
         subfix += '-hm'
     if args['demon']:
@@ -169,6 +173,7 @@ def main(args):
             n_step_return = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
 
             trajectory = ti.Vector.field(n=6, dtype=DTYPE_TI, shape=horizon, needs_grad=True)
+            insertion_loss_ti = ti.field(dtype=ti.f32, shape=(), needs_grad=True)
 
             def reset_vars():
                 n_step_total.fill(0)
@@ -185,6 +190,7 @@ def main(args):
                 move_up_delta_z.fill(0)
                 n_step_return.fill(0)
                 trajectory.fill(0)
+                insertion_loss_ti.fill(0)
 
             def reset_grads():
                 skill_params_ti.grad.fill(0)
@@ -201,6 +207,7 @@ def main(args):
                 rotate_delta_x_back.grad.fill(0)
                 move_up_delta_z.grad.fill(0)
                 n_step_return.grad.fill(0)
+                insertion_loss_ti.grad.fill(0)
 
             @ti.kernel
             def abstraction_two_skill():
@@ -316,14 +323,24 @@ def main(args):
                         trajectory[index][3] = rotate_delta_x_back[None]
                         trajectory[index][5] = move_up_delta_z[None]
 
-            def update_trajectory_grad(grads, length):
-                for m in range(length):
-                    trajectory.grad[m][0] = grads[m][0]
-                    trajectory.grad[m][1] = grads[m][1]
-                    trajectory.grad[m][2] = grads[m][2]
-                    trajectory.grad[m][3] = grads[m][3]
-                    trajectory.grad[m][4] = grads[m][4]
-                    trajectory.grad[m][5] = grads[m][5]
+            @ti.kernel
+            def insertion_loss():
+                rotate_x = skill_params_ti[1] * (np.pi / 2)
+                insert_angle = rotate_x + np.pi / 2
+                insert_distance = (skill_params_ti[2] + 1) / 2 * 0.06
+                insert_distance_z = insert_distance * ti.sin(insert_angle)
+                new_ee_tip_z = 0.205 - SHOVEL_HEIGHT * ti.cos(rotate_x) - insert_distance_z
+                if new_ee_tip_z > SOIL_HEIGHT:
+                    insertion_loss_ti[None] = SOIL_HEIGHT - new_ee_tip_z
+
+            def update_trajectory_grad(tr_grads, length):
+                for k in range(length):
+                    trajectory.grad[k][0] = tr_grads[k][0]
+                    trajectory.grad[k][1] = tr_grads[k][1]
+                    trajectory.grad[k][2] = tr_grads[k][2]
+                    trajectory.grad[k][3] = tr_grads[k][3]
+                    trajectory.grad[k][4] = tr_grads[k][4]
+                    trajectory.grad[k][5] = tr_grads[k][5]
 
             env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
 
@@ -340,6 +357,8 @@ def main(args):
             # prepare trajectory
             skill_params_ti.from_numpy(skill_params_np.copy())
             reset_vars()
+            if args['use_insertion_loss']:
+                insertion_loss()
             abstraction_two_skill()
             fill_trajectory_10()
             fill_trajectory_11()
@@ -401,6 +420,8 @@ def main(args):
             fill_trajectory_11.grad()
             fill_trajectory_10.grad()
             abstraction_two_skill.grad()
+            if args['use_insertion_loss']:
+                insertion_loss.grad()
 
             skill_params_grad_np = skill_params_ti.grad.to_numpy()
 
@@ -425,8 +446,8 @@ def main(args):
 
             if not abort:
                 num_zero_grad = 0
-                for j in range(5):
-                    if skill_params_grad_np[j] == 0.0:
+                for h in range(5):
+                    if skill_params_grad_np[h] == 0.0:
                         num_zero_grad += 1
                 if num_zero_grad > 4:
                     abort = True
@@ -460,7 +481,7 @@ def main(args):
             grads_to_save.append(grad)
             skill_params_np = np.random.uniform(-1, 1, size=5).astype(DTYPE_NP)
             if args['demon']:
-                skill_params_np = np.asarray([1.0, 0.3, 0.8, 1.0, 0.3]).astype(DTYPE_NP) + np.random.uniform(-1, 1, size=5).astype(DTYPE_NP) * 0.5
+                skill_params_np = (np.asarray([1.0, 0.3, 0.8, 1.0, 0.3]).astype(DTYPE_NP) + np.random.uniform(-1, 1, size=5).astype(DTYPE_NP) * 0.5)
                 skill_params_np = np.clip(skill_params_np, -1, 1)
 
             print(f'=====> Epoch: {n}')
@@ -481,7 +502,11 @@ def main(args):
             skill_params_np_2 = skill_params_optim_2.step(skill_params_np.copy()[2], grad[2])
             skill_params_np_3 = skill_params_optim_3.step(skill_params_np.copy()[3], grad[3])
             skill_params_np_4 = skill_params_optim_4.step(skill_params_np.copy()[4], grad[4])
-            skill_params_np = np.array([skill_params_np_0, skill_params_np_1, skill_params_np_2, skill_params_np_3, skill_params_np_4]).reshape((5,))
+            skill_params_np = np.array([skill_params_np_0,
+                                        skill_params_np_1,
+                                        skill_params_np_2,
+                                        skill_params_np_3,
+                                        skill_params_np_4]).reshape((5,))
             skill_params_np = np.clip(skill_params_np, -1, 1)
 
             print(f'=====> Epoch: {n}')
@@ -546,6 +571,7 @@ if __name__ == '__main__':
     parser.add_argument('--demon', dest='demon', action='store_true', default=False, help='Use demonstration')
     parser.add_argument('--mini-batch', dest='mini_batch', action='store_true', default=False, help='Use mini-batch')
     parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False, help='Use height map loss')
+    parser.add_argument('--insert-loss', dest='use_insertion_loss', action='store_true', default=False, help='Use insertion loss')
     parser.add_argument('--eval', dest='eval', action='store_true', default=False, help='Evaluate the model')
     parser.add_argument('--view-demon', dest='view_demon', action='store_true', default=False, help='View demonstration')
     arguments = vars(parser.parse_args())
