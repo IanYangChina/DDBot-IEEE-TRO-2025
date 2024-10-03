@@ -36,6 +36,10 @@ DT_GLOBAL = 0.01  # sec
 SHOVEL_HEIGHT = 0.12
 SOIL_HEIGHT = 0.085 + 0.005
 
+OOM_0 = -1
+OOM_1 = -2
+OOM_2 = -3
+
 
 def main(args):
     seed = args['seed']
@@ -536,11 +540,24 @@ def main(args):
             logging.info(f'=====> Skill params: {skill_params_np}')
             logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
         else:
+            oom_grad = np.round(np.log10(np.abs(grad)))
+            if n < 50:
+                lrs = 10 ** (OOM_0 - oom_grad)
+            elif n < 100:
+                lrs = 10 ** (OOM_1 - oom_grad)
+            else:
+                lrs = 10 ** (OOM_2 - oom_grad)
+            skill_params_optim_0.lr = lrs[0]
             skill_params_np_0 = skill_params_optim_0.step(skill_params_np.copy()[0], grad[0])
+            skill_params_optim_1.lr = lrs[1]
             skill_params_np_1 = skill_params_optim_1.step(skill_params_np.copy()[1], grad[1])
+            skill_params_optim_2.lr = lrs[2]
             skill_params_np_2 = skill_params_optim_2.step(skill_params_np.copy()[2], grad[2])
+            skill_params_optim_3.lr = lrs[3]
             skill_params_np_3 = skill_params_optim_3.step(skill_params_np.copy()[3], grad[3])
+            skill_params_optim_4.lr = lrs[4]
             skill_params_np_4 = skill_params_optim_4.step(skill_params_np.copy()[4], grad[4])
+
             skill_params_np = np.array([skill_params_np_0,
                                         skill_params_np_1,
                                         skill_params_np_2,
