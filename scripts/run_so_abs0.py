@@ -54,7 +54,7 @@ def main(args):
     os.makedirs(log_dir, exist_ok=True)
     os.makedirs(os.path.join(log_dir, 'ckpts'), exist_ok=True)
 
-    if not args['eval']:
+    if not args['eval'] and not args['eval_specific']:
         log_file_name = os.path.join(log_dir, 'optimisation.log')
         if os.path.isfile(log_file_name):
             filemode = "a"
@@ -161,6 +161,11 @@ def main(args):
             trajectory_length = trajectory_demon.shape[0]
             trajectory_np[:trajectory_length] = trajectory_demon[:trajectory_length]
         print("===> Loaded trajectory.")
+    elif args['eval_specific']:
+        seed = 0
+        epoch = 46
+        trajectory_np = np.load(os.path.join(script_path, '..', 'log-abs0-adam', f'd{ptcl_d}-task-{task_id}{subfix}',
+                                             f'seed-{seed}', 'ckpts', f'trajectory_{epoch}.npy'))
     else:
         if args['demon']:
             trajectory_demon = abstraction_two_skill(np.asarray([1.0, 0.45, 0.8, 0.0, -0.1], dtype=DTYPE_NP), DT_GLOBAL)
@@ -204,16 +209,16 @@ def main(args):
 
             """forward pass"""
             mpm_env.set_state(init_state['state'], grad_enabled=True)
-            if args['eval']:
+            if args['eval'] or args['eval_specific']:
                 mpm_env.render(mode='human')
 
             for i in range(horizon):
                 mpm_env.step(trajectory_np[i])
-                if args['eval']:
+                if args['eval'] or args['eval_specific']:
                     mpm_env.render(mode='human')
             loss_info = mpm_env.get_final_loss()
 
-            if args['eval']:
+            if args['eval'] or args['eval_specific']:
                 print('===> Loss info:', loss_info)
                 fig, ax = plt.subplots(1, 2, figsize=(12, 6))
                 ax[0].imshow(mpm_env.loss.height_map.to_numpy(),
@@ -225,16 +230,16 @@ def main(args):
                 plt.show()
                 plt.close()
 
-                cloud_array = mpm_env.render(mode='point_cloud')
-                frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
-                obj_vec = o3d.utility.Vector3dVector(cloud_array)
-                obj_pcd = o3d.geometry.PointCloud(obj_vec)
-                cloud_array_2 = mpm_env.loss.target_pcd_original_points_np.copy()
-                cloud_array_2[:, 0] += 0.3
-                obj_vec_2 = o3d.utility.Vector3dVector(cloud_array_2)
-                obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2)
-                print(obj_pcd, obj_pcd_2)
-                o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2], width=800, height=600)
+                # cloud_array = mpm_env.render(mode='point_cloud')
+                # frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
+                # obj_vec = o3d.utility.Vector3dVector(cloud_array)
+                # obj_pcd = o3d.geometry.PointCloud(obj_vec)
+                # cloud_array_2 = mpm_env.loss.target_pcd_original_points_np.copy()
+                # cloud_array_2[:, 0] += 0.3
+                # obj_vec_2 = o3d.utility.Vector3dVector(cloud_array_2)
+                # obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2)
+                # print(obj_pcd, obj_pcd_2)
+                # o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2], width=800, height=600)
 
                 exit()
 
@@ -372,6 +377,7 @@ if __name__ == '__main__':
     parser.add_argument('--mini-batch', dest='mini_batch', action='store_true', default=False, help='Use mini-batch')
     parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False, help='Use height map loss')
     parser.add_argument('--eval', dest='eval', action='store_true', default=False, help='Evaluate the model')
+    parser.add_argument('--eval-specific', dest='eval_specific', action='store_true', default=False, help='Evaluate the model with specific epoch')
     parser.add_argument('--view-demon', dest='view_demon', action='store_true', default=False, help='View demonstration')
     arguments = vars(parser.parse_args())
     main(arguments)
