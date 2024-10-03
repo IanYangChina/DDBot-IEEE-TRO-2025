@@ -178,11 +178,11 @@ def main(args):
     height_map_loss = 0.0
     grads_to_save = []
     if args['use_height_map_loss']:
-        lrs = 0.0001
+        lrs = 0.00000000001
         if args['demon']:
-            lrs = 0.001
+            lrs = 0.0000000001
     else:
-        lrs = 0.001
+        lrs = 0.00000001
     tr_optim = GD(parameters_shape=trajectory_np.shape,
                   cfg={'lr': lrs, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
 
