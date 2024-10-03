@@ -8,16 +8,18 @@ import taichi as ti
 import matplotlib.pyplot as plt
 import open3d as o3d
 from torch.utils.tensorboard import SummaryWriter
+
 script_path = os.path.dirname(os.path.realpath(__file__))
 
-from doma.optimiser.adam import Adam
+from doma.optimiser.adam import Adam, GD
 from doma.envs.planting_env import make_env
 from doma.engine.configs.macros import DTYPE_NP, DTYPE_TI, SAND
 from doma.engine.utils.misc import set_parameters
+
 cam_cfg = {
     'pos': (0.2, 1.2, 0.9),
     'lookat': (0.2, 0.2, 0.03),
-    'euler': (180+np.rad2deg(np.arctan(1.0/(0.9-0.03))), 0, 180),
+    'euler': (180 + np.rad2deg(np.arctan(1.0 / (0.9 - 0.03))), 0, 180),
     'focal_length': 0.3,
     'fov': 30,
     'lights': [{'pos': (1.2, 0.25, 0.2), 'color': (0.6, 0.6, 0.6)},
@@ -147,16 +149,16 @@ def main(args):
             lrs = [0.01, 0.01, 0.05, 0.06, 0.05]
     else:
         lrs = [0.05, 0.03, 0.03, 0.07, 0.07]
-    skill_params_optim_0 = Adam(parameters_shape=(1,),
-                                cfg={'lr': lrs[0], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
-    skill_params_optim_1 = Adam(parameters_shape=(1,),
-                                cfg={'lr': lrs[1], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
-    skill_params_optim_2 = Adam(parameters_shape=(1,),
-                                cfg={'lr': lrs[2], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
-    skill_params_optim_3 = Adam(parameters_shape=(1,),
-                                cfg={'lr': lrs[3], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
-    skill_params_optim_4 = Adam(parameters_shape=(1,),
-                                cfg={'lr': lrs[4], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+    skill_params_optim_0 = GD(parameters_shape=(1,),
+                              cfg={'lr': lrs[0], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+    skill_params_optim_1 = GD(parameters_shape=(1,),
+                              cfg={'lr': lrs[1], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+    skill_params_optim_2 = GD(parameters_shape=(1,),
+                              cfg={'lr': lrs[2], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+    skill_params_optim_3 = GD(parameters_shape=(1,),
+                              cfg={'lr': lrs[3], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+    skill_params_optim_4 = GD(parameters_shape=(1,),
+                              cfg={'lr': lrs[4], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
 
     for n in range(n_epoch):
         grads = []
@@ -468,7 +470,8 @@ def main(args):
                             break
 
             if not abort:
-                if np.any(np.isnan(skill_params_grad_np)) or np.any(np.isinf(skill_params_grad_np)) or np.any(np.abs(skill_params_grad_np) > 1e10):
+                if np.any(np.isnan(skill_params_grad_np)) or np.any(np.isinf(skill_params_grad_np)) or np.any(
+                        np.abs(skill_params_grad_np) > 1e10):
                     abort = True
 
             if not abort:
@@ -493,7 +496,7 @@ def main(args):
                 logging.error(f'===> [Warning] Skill params grad: {skill_params_grad_np}')
                 logging.error(f'===> [Warning] Loss info: {loss_info}')
                 n_aborted_data += 1
-                grads.append(np.ones_like(skill_params_grad_np)*1e-6)
+                grads.append(np.ones_like(skill_params_grad_np) * 1e-6)
             else:
                 grads.append(skill_params_grad_np)
                 emd_losses.append(loss_info['emd_loss'])
@@ -510,7 +513,9 @@ def main(args):
             grads_to_save.append(grad)
             skill_params_np = np.random.uniform(-1, 1, size=5).astype(DTYPE_NP)
             if args['demon']:
-                skill_params_np = (np.asarray([1.0, 0.45, 0.8, 0.0, -0.1]).astype(DTYPE_NP) + np.random.uniform(-1, 1, size=5).astype(DTYPE_NP) * 0.5)
+                skill_params_np = (np.asarray([1.0, 0.45, 0.8, 0.0, -0.1]).astype(DTYPE_NP) + np.random.uniform(-1, 1,
+                                                                                                                size=5).astype(
+                    DTYPE_NP) * 0.5)
                 skill_params_np = np.clip(skill_params_np, -1, 1)
 
             print(f'=====> Epoch: {n}')
@@ -603,13 +608,18 @@ if __name__ == '__main__':
                         help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
     parser.add_argument('--task-id', dest='task_id', type=int, default=0, help='task id')
-    parser.add_argument('--zero-init', dest='zero_init', action='store_true', default=False, help='Initialise parameters to zero')
+    parser.add_argument('--zero-init', dest='zero_init', action='store_true', default=False,
+                        help='Initialise parameters to zero')
     parser.add_argument('--demon', dest='demon', action='store_true', default=False, help='Use demonstration')
     parser.add_argument('--mini-batch', dest='mini_batch', action='store_true', default=False, help='Use mini-batch')
-    parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False, help='Use height map loss')
-    parser.add_argument('--insert-loss', dest='use_insertion_loss', action='store_true', default=False, help='Use insertion loss')
+    parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False,
+                        help='Use height map loss')
+    parser.add_argument('--insert-loss', dest='use_insertion_loss', action='store_true', default=False,
+                        help='Use insertion loss')
     parser.add_argument('--eval', dest='eval', action='store_true', default=False, help='Evaluate the model')
-    parser.add_argument('--eval-spec', dest='eval_specific', action='store_true', default=False, help='Evaluate the model with specific epoch')
-    parser.add_argument('--view-demon', dest='view_demon', action='store_true', default=False, help='View demonstration')
+    parser.add_argument('--eval-spec', dest='eval_specific', action='store_true', default=False,
+                        help='Evaluate the model with specific epoch')
+    parser.add_argument('--view-demon', dest='view_demon', action='store_true', default=False,
+                        help='View demonstration')
     arguments = vars(parser.parse_args())
     main(arguments)

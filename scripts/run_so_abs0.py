@@ -10,7 +10,7 @@ import open3d as o3d
 from torch.utils.tensorboard import SummaryWriter
 script_path = os.path.dirname(os.path.realpath(__file__))
 
-from doma.optimiser.adam import Adam
+from doma.optimiser.adam import Adam, GD
 from doma.envs.planting_env import make_env
 from doma.engine.configs.macros import DTYPE_NP, DTYPE_TI, SAND
 from doma.engine.utils.misc import set_parameters
@@ -183,8 +183,8 @@ def main(args):
             lrs = 0.001
     else:
         lrs = 0.001
-    tr_optim = Adam(parameters_shape=trajectory_np.shape,
-                    cfg={'lr': lrs, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+    tr_optim = GD(parameters_shape=trajectory_np.shape,
+                  cfg={'lr': lrs, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
 
     for n in range(n_epoch):
         grads = []
