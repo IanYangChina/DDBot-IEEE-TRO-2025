@@ -89,7 +89,7 @@ def reset_vars():
 @ti.kernel
 def abstraction_two_skill():
     move_distance = skill_params_ti[0] * 0.12
-    rotate_x = skill_params_ti[1] * (np.pi / 2)  # map [-1, 1] to [-pi/2, pi/2]
+    rotate_x = skill_params_ti[1] * (np.pi / 3)  # map [-1, 1] to [-pi/3, pi/3]
     n_step_move[None] = ti.abs(move_distance / (LINEAR_VELOCITY * DT_GLOBAL))
     n_step_rotate = ti.abs(rotate_x / (ANGULAR_VELOCITY * DT_GLOBAL))
     ti.atomic_max(n_step_move[None], n_step_rotate)
@@ -110,7 +110,7 @@ def abstraction_two_skill():
         insert_delta_z[None] = insert_distance_z / n_step_insert[None]
     n_step_total[None] += n_step_insert_int
 
-    push_angle = (skill_params_ti[3] + 1) * np.pi / 2  # map [-1, 1] to [0, pi]
+    push_angle = (skill_params_ti[3] + 3) * np.pi / 3  # map [-1, 1] to [2*pi/3, 4*pi/3]
     push_distance = (skill_params_ti[4] + 1) * 0.1  # map [-1, 1] to [0, 0.2]
     n_step_push[None] = ti.abs(push_distance / (LINEAR_VELOCITY * DT_GLOBAL))
     n_step_push_int = ti.floor(n_step_push[None], ti.i32)

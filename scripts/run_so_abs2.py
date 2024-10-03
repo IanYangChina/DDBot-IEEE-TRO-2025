@@ -57,7 +57,7 @@ def main(args):
     grad_std_file_name = os.path.join(log_dir, 'grad_std.npy')
     os.makedirs(log_dir, exist_ok=True)
 
-    if not args['eval']:
+    if not args['eval'] and not args['eval_specific']:
         log_file_name = os.path.join(log_dir, 'optimisation.log')
         if os.path.isfile(log_file_name):
             filemode = "a"
@@ -111,11 +111,25 @@ def main(args):
             best_skill_params['skill_params_4']
         ]).astype(DTYPE_NP).reshape((5,))
         if args['view_demon']:
-            skill_params_np = np.asarray([1.0, 0.3, 0.8, 1.0, 0.3]).astype(DTYPE_NP)
+            skill_params_np = np.asarray([1.0, 0.45, 0.8, 0.0, -0.1]).astype(DTYPE_NP)
         print("===> Loaded skill params for evaluation:", skill_params_np)
+    elif args['eval_specific']:
+        seed = 2
+        epoch = 120
+        with open(os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}{subfix}', f'seed-{seed}',
+                               'raw_data.json')) as f:
+            raw_data = json.load(f)["Parameters"]
+        skill_params_np = np.asarray([
+            raw_data['skill_params_0'][epoch],
+            raw_data['skill_params_1'][epoch],
+            raw_data['skill_params_2'][epoch],
+            raw_data['skill_params_3'][epoch],
+            raw_data['skill_params_4'][epoch]
+        ]).astype(DTYPE_NP).reshape((5,))
+        print(f"===> Loaded skill params for evaluation from seed {seed}, epoch {epoch}:", skill_params_np)
     else:
         if args['demon']:
-            skill_params_np = np.asarray([1.0, 0.3, 0.8, 1.0, 0.3]).astype(DTYPE_NP)
+            skill_params_np = np.asarray([1.0, 0.45, 0.8, 0.0, -0.1]).astype(DTYPE_NP)
         else:
             skill_params_np = np.random.uniform(-1, 1, size=5).astype(DTYPE_NP)
             if args['zero_init']:
@@ -218,7 +232,7 @@ def main(args):
             @ti.kernel
             def abstraction_two_skill():
                 move_distance = skill_params_ti[0] * 0.12
-                rotate_x = skill_params_ti[1] * (np.pi / 2)  # map [-1, 1] to [-pi/2, pi/2]
+                rotate_x = skill_params_ti[1] * (np.pi / 3)  # map [-1, 1] to [-pi/3, pi/3]
                 n_step_move[None] = ti.abs(move_distance / (LINEAR_VELOCITY * DT_GLOBAL))
                 n_step_rotate = ti.abs(rotate_x / (ANGULAR_VELOCITY * DT_GLOBAL))
                 ti.atomic_max(n_step_move[None], n_step_rotate)
@@ -239,13 +253,16 @@ def main(args):
                     insert_delta_z[None] = insert_distance_z / n_step_insert[None]
                 n_step_total[None] += n_step_insert_int
 
-                push_angle = (skill_params_ti[3] + 1) * np.pi / 2  # map [-1, 1] to [0, pi]
-                push_distance = (skill_params_ti[4] + 1) * 0.1  # map [-1, 1] to [0, 0.2]
+                push_angle = (skill_params_ti[3] + 3) * np.pi / 3  # map [-1, 1] to [2*pi/3, 4*pi/3]
+                push_distance = (skill_params_ti[4] + 1) * 0.1 + 0.04  # map [-1, 1] to [0.04, 0.24]
                 n_step_push[None] = ti.abs(push_distance / (LINEAR_VELOCITY * DT_GLOBAL))
                 n_step_push_int = ti.floor(n_step_push[None], ti.i32)
+                print('n_step_push', n_step_push[None])
                 if n_step_push_int > 0:
                     push_distance_x = push_distance * ti.cos(push_angle)
+                    print('push_distance_x:', push_distance_x)
                     push_distance_z = push_distance * ti.sin(push_angle)
+                    print('push_distance_z:', push_distance_z)
                     push_delta_x[None] = push_distance_x / n_step_push[None]
                     push_delta_z[None] = push_distance_z / n_step_push[None]
                 n_step_total[None] += n_step_push_int
@@ -335,7 +352,9 @@ def main(args):
                 insert_angle = rotate_x + np.pi / 2
                 insert_distance = (skill_params_ti[2] + 1) / 2 * 0.06
                 insert_distance_z = insert_distance * ti.sin(insert_angle)
+                print('insert_distance_z:', insert_distance_z)
                 new_ee_tip_z[None] = 0.205 - SHOVEL_HEIGHT * ti.cos(rotate_x) - insert_distance_z
+                print('new_ee_tip_z', new_ee_tip_z[None])
                 if new_ee_tip_z[None] > SOIL_HEIGHT:
                     insertion_loss_ti[None] = (new_ee_tip_z[None] - SOIL_HEIGHT) * 100
 
@@ -358,7 +377,7 @@ def main(args):
 
             """forward pass"""
             mpm_env.set_state(init_state['state'], grad_enabled=True)
-            if args['eval']:
+            if args['eval'] or args['eval_specific']:
                 mpm_env.render(mode='human')
             # prepare trajectory
             skill_params_ti.from_numpy(skill_params_np.copy())
@@ -376,12 +395,14 @@ def main(args):
             trajectory_length = int(n_step_total[None])
             for i in range(trajectory_length):
                 mpm_env.step(trajectory_np[i])
-                if args['eval']:
+                if args['eval'] or args['eval_specific']:
                     mpm_env.render(mode='human')
             loss_info = mpm_env.get_final_loss()
 
-            if args['eval']:
-                print('===> Loss info:', loss_info)
+            if args['eval'] or args['eval_specific']:
+                print('=====> EMD Loss:', loss_info['emd_loss'])
+                print('=====> Height map loss:', loss_info['height_map_loss'])
+                print('=====> Insertion loss:', insertion_loss_ti[None])
                 fig, ax = plt.subplots(1, 2, figsize=(12, 6))
                 ax[0].imshow(mpm_env.loss.height_map.to_numpy(),
                              vmin=0.002, vmax=0.09)
@@ -489,7 +510,7 @@ def main(args):
             grads_to_save.append(grad)
             skill_params_np = np.random.uniform(-1, 1, size=5).astype(DTYPE_NP)
             if args['demon']:
-                skill_params_np = (np.asarray([1.0, 0.3, 0.8, 1.0, 0.3]).astype(DTYPE_NP) + np.random.uniform(-1, 1, size=5).astype(DTYPE_NP) * 0.5)
+                skill_params_np = (np.asarray([1.0, 0.45, 0.8, 0.0, -0.1]).astype(DTYPE_NP) + np.random.uniform(-1, 1, size=5).astype(DTYPE_NP) * 0.5)
                 skill_params_np = np.clip(skill_params_np, -1, 1)
 
             print(f'=====> Epoch: {n}')
@@ -563,10 +584,12 @@ def main(args):
         print('====> Finished training.')
         print('====> Final EMD loss: ', emd_loss)
         print('====> Final height map loss: ', height_map_loss)
+        print('====> Final insertion loss: ', insertion_loss)
         print('====> Final skill params: ', skill_params_np)
         logging.info('====> Finished training.')
         logging.info(f'====> Final EMD loss: {emd_loss}')
         logging.info(f'====> Final height map loss: {height_map_loss}')
+        logging.info(f'====> Final insertion loss: {insertion_loss}')
         logging.info(f'====> Final skill params: {skill_params_np}')
 
 
@@ -586,6 +609,7 @@ if __name__ == '__main__':
     parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False, help='Use height map loss')
     parser.add_argument('--insert-loss', dest='use_insertion_loss', action='store_true', default=False, help='Use insertion loss')
     parser.add_argument('--eval', dest='eval', action='store_true', default=False, help='Evaluate the model')
+    parser.add_argument('--eval-spec', dest='eval_specific', action='store_true', default=False, help='Evaluate the model with specific epoch')
     parser.add_argument('--view-demon', dest='view_demon', action='store_true', default=False, help='View demonstration')
     arguments = vars(parser.parse_args())
     main(arguments)

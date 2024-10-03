@@ -33,7 +33,7 @@ def abstraction_two_skill(skill_params, dt):
     assert np.all(skill_params >= -1.0) and np.all(skill_params <= 1.0), 'RL skill params should be in [-1, 1]'
     trajectory = np.zeros(shape=(1000, 6), dtype=np.float32)
     move_distance = skill_params[0] * 0.12  # map [-1, 1] to [-0.12, 0.12]
-    rotate_x = skill_params[1] * (np.pi / 2)  # map [-1, 1] to [-pi/2, pi/2]
+    rotate_x = skill_params[1] * (np.pi / 3)  # map [-1, 1] to [-pi/3, pi/3]
 
     n_step_move = np.abs(int(move_distance / (LINEAR_VELOCITY * dt)))
     n_step_rotate = np.abs((int(rotate_x / (ANGULAR_VELOCITY * dt))))
@@ -58,8 +58,8 @@ def abstraction_two_skill(skill_params, dt):
             trajectory[i][0] = insert_delta_x
             trajectory[i][2] = -insert_delta_z
 
-    push_angle = (skill_params[3] + 1) * np.pi / 2  # map [-1, 1] to [0, pi]
-    push_distance = (skill_params[4] + 1) * 0.1  # map [-1, 1] to [0, 0.2]
+    push_angle = (skill_params[3] + 3) * np.pi / 3  # map [-1, 1] to [2*pi/3, 4*pi/3]
+    push_distance = (skill_params[4] + 1) * 0.1 + 0.04  # map [-1, 1] to [0.04, 0.24]
     n_step_push = int(push_distance / (LINEAR_VELOCITY * dt))
     if n_step_push > 0:
         push_distance_x = push_distance * np.cos(push_angle)
@@ -198,7 +198,7 @@ def main(arguments):
         rl_agent_config['sampling_strategy'] = 'final'
         rl_agent_config['use_demonstrations'] = arguments['use_demo']
         rl_agent_config['demonstrate_percentage'] = 0.50
-        rl_agent_config['demonstration_action'] = [1.0, 0.3, 0.8, 1.0, 0.3]
+        rl_agent_config['demonstration_action'] = [1.0, 0.45, 0.8, 0.0, -0.1]
         with open(os.path.join(log_dir, 'rl_agent_config.json'), 'w') as f_ac:
             json.dump(rl_agent_config, f_ac)
 

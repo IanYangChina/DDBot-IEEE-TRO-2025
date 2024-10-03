@@ -117,15 +117,21 @@ def find_best_parameters():
         open(os.path.join(script_path, '..', 'log-sys_id', 'best_params.json'), 'w').write(json.dumps(best_params))
 
 
-def find_best_skill_parameters(demo=False, demo_batch=False, seeds=None, task_id=0):
+def find_best_skill_parameters(ins=False, hm=False,
+                               demo=False, batch=False, seeds=None, task_id=0):
     best_params = {"5e6": None,
                    "1e7": None}
+
+    subfix = ''
+    if ins:
+        subfix += '-ins'
+    if hm:
+        subfix += '-hm'
     if demo:
-        subfix = '-demo'
-    elif demo_batch:
-        subfix = '-demo-batch'
-    else:
-        subfix = ''
+        subfix += '-demo'
+    if batch:
+        subfix += '-batch'
+
     if seeds is None:
         seeds = [0, 1, 2, 3, 4]
     for d in ["5e6"]:
@@ -234,4 +240,4 @@ def find_best_skill_parameters(demo=False, demo_batch=False, seeds=None, task_id
     open(os.path.join(script_path, '..', 'log-abs2-adam', f'best_params-task-{task_id}{subfix}.json'), 'w').write(json.dumps(best_params))
 
 
-find_best_skill_parameters(demo=False, seeds=[0, 1, 2, 3, 4], task_id=0)
+find_best_skill_parameters(ins=True, demo=True, seeds=[0, 1, 2, 3, 4], task_id=1)
