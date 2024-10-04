@@ -240,4 +240,4 @@ def find_best_skill_parameters(ins=False, hm=False,
     open(os.path.join(script_path, '..', 'log-abs2-adam', f'best_params-task-{task_id}{subfix}.json'), 'w').write(json.dumps(best_params))
 
 
-find_best_skill_parameters(ins=True, demo=True, seeds=[0, 1, 2, 3, 4], task_id=1)
+find_best_skill_parameters(ins=True, demo=False, seeds=[0, 1, 2, 3], task_id=0)

@@ -120,8 +120,8 @@ def main(args):
             skill_params_np = np.asarray([1.0, 0.45, 0.8, 0.0, -0.1]).astype(DTYPE_NP)
         print("===> Loaded skill params for evaluation:", skill_params_np)
     elif args['eval_specific']:
-        seed = 2
-        epoch = 120
+        seed = 3
+        epoch = 100
         with open(os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}{subfix}', f'seed-{seed}',
                                'raw_data.json')) as f:
             raw_data = json.load(f)["Parameters"]
@@ -266,12 +266,12 @@ def main(args):
                 push_distance = (skill_params_ti[4] + 1) * 0.1 + 0.04  # map [-1, 1] to [0.04, 0.24]
                 n_step_push[None] = ti.abs(push_distance / (LINEAR_VELOCITY * DT_GLOBAL))
                 n_step_push_int = ti.floor(n_step_push[None], ti.i32)
-                print('n_step_push', n_step_push[None])
+                # print('n_step_push', n_step_push[None])
                 if n_step_push_int > 0:
                     push_distance_x = push_distance * ti.cos(push_angle)
-                    print('push_distance_x:', push_distance_x)
+                    # print('push_distance_x:', push_distance_x)
                     push_distance_z = push_distance * ti.sin(push_angle)
-                    print('push_distance_z:', push_distance_z)
+                    # print('push_distance_z:', push_distance_z)
                     push_delta_x[None] = push_distance_x / n_step_push[None]
                     push_delta_z[None] = push_distance_z / n_step_push[None]
                 n_step_total[None] += n_step_push_int
@@ -340,7 +340,7 @@ def main(args):
                     for j in range(half_n_step_return_int):
                         index = j + n_step_move_int + n_step_insert_int + n_step_push_int
                         trajectory[index][3] = rotate_delta_x_back[None]
-                        trajectory[index][5] = move_up_delta_z[None]
+                        trajectory[index][2] = move_up_delta_z[None]
 
             @ti.kernel
             def fill_trajectory_41():
@@ -353,7 +353,7 @@ def main(args):
                     for j in range(half_n_step_return_int - half_n_step_return_int):
                         index = j + n_step_move_int + n_step_insert_int + n_step_push_int + half_n_step_return_int
                         trajectory[index][3] = rotate_delta_x_back[None]
-                        trajectory[index][5] = move_up_delta_z[None]
+                        trajectory[index][2] = move_up_delta_z[None]
 
             @ti.kernel
             def insertion_loss():
@@ -361,9 +361,9 @@ def main(args):
                 insert_angle = rotate_x + np.pi / 2
                 insert_distance = (skill_params_ti[2] + 1) / 2 * 0.06
                 insert_distance_z = insert_distance * ti.sin(insert_angle)
-                print('insert_distance_z:', insert_distance_z)
+                # print('insert_distance_z:', insert_distance_z)
                 new_ee_tip_z[None] = 0.205 - SHOVEL_HEIGHT * ti.cos(rotate_x) - insert_distance_z
-                print('new_ee_tip_z', new_ee_tip_z[None])
+                # print('new_ee_tip_z', new_ee_tip_z[None])
                 if new_ee_tip_z[None] > SOIL_HEIGHT:
                     insertion_loss_ti[None] = (new_ee_tip_z[None] - SOIL_HEIGHT) * 100
 
@@ -430,7 +430,7 @@ def main(args):
                 cloud_array_2[:, 0] += 0.3
                 obj_vec_2 = o3d.utility.Vector3dVector(cloud_array_2)
                 obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2)
-                print(obj_pcd, obj_pcd_2)
+                # print(obj_pcd, obj_pcd_2)
                 o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2], width=800, height=600)
 
                 exit()
@@ -541,12 +541,11 @@ def main(args):
             logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
         else:
             oom_grad = np.round(np.log10(np.abs(grad + 1e-9)))
-            if n < 50:
+            if n < 40:
                 lrs = 10 ** (OOM_0 - oom_grad)
-            elif n < 100:
-                lrs = 10 ** (OOM_1 - oom_grad)
             else:
-                lrs = 10 ** (OOM_2 - oom_grad)
+                lrs = 10 ** (OOM_1 - oom_grad)
+
             skill_params_optim_0.lr = lrs[0]
             skill_params_np_0 = skill_params_optim_0.step(skill_params_np.copy()[0], grad[0])
             skill_params_optim_1.lr = lrs[1]
