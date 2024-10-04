@@ -540,7 +540,7 @@ def main(args):
             logging.info(f'=====> Skill params: {skill_params_np}')
             logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
         else:
-            oom_grad = np.round(np.log10(np.abs(grad)))
+            oom_grad = np.round(np.log10(np.abs(grad + 1e-9)))
             if n < 50:
                 lrs = 10 ** (OOM_0 - oom_grad)
             elif n < 100:
