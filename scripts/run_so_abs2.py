@@ -147,25 +147,16 @@ def main(args):
     height_map_loss = 0.0
     insertion_loss = 0.0
     grads_to_save = []
-    if args['use_height_map_loss']:
-        # lrs = [0.02, 0.03, 0.03, 0.01, 0.15]
-        lrs = [1e-5, 1e-5, 1e2, 1e-6, 1]
-        if args['demon']:
-            # lrs = [0.01, 0.01, 0.05, 0.06, 0.05]
-            lrs = [1e-5, 1e-5, 1e2, 1e-6, 1]
-    else:
-        # lrs = [0.05, 0.03, 0.03, 0.07, 0.07]
-        lrs = [1e-5, 1e-5, 1e2, 1e-6, 1]
     skill_params_optim_0 = GD(parameters_shape=(1,),
-                              cfg={'lr': lrs[0], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+                              cfg={'lr': 1, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
     skill_params_optim_1 = GD(parameters_shape=(1,),
-                              cfg={'lr': lrs[1], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+                              cfg={'lr': 1, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
     skill_params_optim_2 = GD(parameters_shape=(1,),
-                              cfg={'lr': lrs[2], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+                              cfg={'lr': 1, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
     skill_params_optim_3 = GD(parameters_shape=(1,),
-                              cfg={'lr': lrs[3], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+                              cfg={'lr': 1, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
     skill_params_optim_4 = GD(parameters_shape=(1,),
-                              cfg={'lr': lrs[4], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+                              cfg={'lr': 1, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
 
     for n in range(n_epoch):
         grads = []
@@ -541,10 +532,7 @@ def main(args):
             logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
         else:
             oom_grad = np.round(np.log10(np.abs(grad + 1e-9)))
-            if n < 40:
-                lrs = 10 ** (OOM_0 - oom_grad)
-            else:
-                lrs = 10 ** (OOM_1 - oom_grad)
+            lrs = 10 ** (OOM_0 - oom_grad) * 3
 
             skill_params_optim_0.lr = lrs[0]
             skill_params_np_0 = skill_params_optim_0.step(skill_params_np.copy()[0], grad[0])
