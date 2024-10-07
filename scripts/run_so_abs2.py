@@ -36,9 +36,7 @@ DT_GLOBAL = 0.01  # sec
 SHOVEL_HEIGHT = 0.12
 SOIL_HEIGHT = 0.085 + 0.005
 
-OOM_0 = -1
-OOM_1 = -2
-OOM_2 = -3
+OOM_0 = -2
 
 
 def main(args):
@@ -533,6 +531,9 @@ def main(args):
         else:
             oom_grad = np.round(np.log10(np.abs(grad + 1e-9)))
             lrs = 10 ** (OOM_0 - oom_grad) * 3
+            for i in range(5):
+                if oom_grad[i] < -7:
+                    lrs[i] = 10 ** (-3 + oom_grad[i])
 
             skill_params_optim_0.lr = lrs[0]
             skill_params_np_0 = skill_params_optim_0.step(skill_params_np.copy()[0], grad[0])
