@@ -12,6 +12,7 @@ from torch.utils.tensorboard import SummaryWriter
 script_path = os.path.dirname(os.path.realpath(__file__))
 
 from doma.optimiser.adam import Adam, GD
+from doma.optimiser.rmsprop import RMSprop
 from doma.envs.planting_env import make_env
 from doma.engine.configs.macros import DTYPE_NP, DTYPE_TI, SAND
 from doma.engine.utils.misc import set_parameters
@@ -36,8 +37,6 @@ DT_GLOBAL = 0.01  # sec
 SHOVEL_HEIGHT = 0.12
 SOIL_HEIGHT = 0.085 + 0.005
 
-OOM_0 = -2
-
 
 def main(args):
     seed = args['seed']
@@ -54,7 +53,10 @@ def main(args):
     if args['mini_batch']:
         subfix += '-batch'
 
-    log_dir = os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}{subfix}', f'seed-{seed}')
+    optimiser = '-rmsprop'
+    learning_rate = args['lr']
+    subfix += f'-lr{learning_rate}'
+    log_dir = os.path.join(script_path, '..', f'log-abs2{optimiser}', f'd{ptcl_d}-task-{task_id}{subfix}', f'seed-{seed}')
     if args['compute_grad']:
         log_dir = log_dir[:-6] + 'grads'
     grad_mean_file_name = os.path.join(log_dir, 'grad_mean.npy')
@@ -104,7 +106,7 @@ def main(args):
     }
 
     if args['eval']:
-        with open(os.path.join(script_path, '..', 'log-abs2-adam',
+        with open(os.path.join(script_path, '..', f'log-abs2{optimiser}',
                                f'best_params-task-{task_id}{subfix}.json')) as f:
             best_skill_params = json.load(f)[ptcl_d]["Parameters"]
         skill_params_np = np.asarray([
@@ -120,7 +122,7 @@ def main(args):
     elif args['eval_specific']:
         seed = 3
         epoch = 100
-        with open(os.path.join(script_path, '..', 'log-abs2-adam', f'd{ptcl_d}-task-{task_id}{subfix}', f'seed-{seed}',
+        with open(os.path.join(script_path, '..', f'log-abs2{optimiser}', f'd{ptcl_d}-task-{task_id}{subfix}', f'seed-{seed}',
                                'raw_data.json')) as f:
             raw_data = json.load(f)["Parameters"]
         skill_params_np = np.asarray([
@@ -145,16 +147,8 @@ def main(args):
     height_map_loss = 0.0
     insertion_loss = 0.0
     grads_to_save = []
-    skill_params_optim_0 = GD(parameters_shape=(1,),
-                              cfg={'lr': 1, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
-    skill_params_optim_1 = GD(parameters_shape=(1,),
-                              cfg={'lr': 1, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
-    skill_params_optim_2 = GD(parameters_shape=(1,),
-                              cfg={'lr': 1, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
-    skill_params_optim_3 = GD(parameters_shape=(1,),
-                              cfg={'lr': 1, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
-    skill_params_optim_4 = GD(parameters_shape=(1,),
-                              cfg={'lr': 1, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+    optimiser = RMSprop(parameters_shape=(5,),
+                        cfg={'lr': learning_rate, 'beta': 0.7, 'epsilon': 1e-8})
 
     for n in range(n_epoch):
         grads = []
@@ -529,28 +523,7 @@ def main(args):
             logging.info(f'=====> Skill params: {skill_params_np}')
             logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
         else:
-            oom_grad = np.round(np.log10(np.abs(grad + 1e-9)))
-            lrs = 10 ** (OOM_0 - oom_grad) * 3
-            for i in range(5):
-                if oom_grad[i] < -7:
-                    lrs[i] = 10 ** (-3 + oom_grad[i])
-
-            skill_params_optim_0.lr = lrs[0]
-            skill_params_np_0 = skill_params_optim_0.step(skill_params_np.copy()[0], grad[0])
-            skill_params_optim_1.lr = lrs[1]
-            skill_params_np_1 = skill_params_optim_1.step(skill_params_np.copy()[1], grad[1])
-            skill_params_optim_2.lr = lrs[2]
-            skill_params_np_2 = skill_params_optim_2.step(skill_params_np.copy()[2], grad[2])
-            skill_params_optim_3.lr = lrs[3]
-            skill_params_np_3 = skill_params_optim_3.step(skill_params_np.copy()[3], grad[3])
-            skill_params_optim_4.lr = lrs[4]
-            skill_params_np_4 = skill_params_optim_4.step(skill_params_np.copy()[4], grad[4])
-
-            skill_params_np = np.array([skill_params_np_0,
-                                        skill_params_np_1,
-                                        skill_params_np_2,
-                                        skill_params_np_3,
-                                        skill_params_np_4]).reshape((5,))
+            skill_params_np = optimiser.step(skill_params_np, grad)
             skill_params_np = np.clip(skill_params_np, -1, 1)
 
             print(f'=====> Epoch: {n}')
@@ -629,5 +602,6 @@ if __name__ == '__main__':
                         help='Evaluate the model with specific epoch')
     parser.add_argument('--view-demon', dest='view_demon', action='store_true', default=False,
                         help='View demonstration')
+    parser.add_argument('--lr', dest='lr', type=float, default=0.01, help='Learning rate')
     arguments = vars(parser.parse_args())
     main(arguments)
