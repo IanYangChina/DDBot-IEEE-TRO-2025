@@ -58,6 +58,7 @@ def main(args):
         'agent_init_euler': (0, 180, 90),
     }
     loss_cfg = {
+        'use_height_map_loss': False,
         'target_pcd_height_map_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
                                                    f'pcd_{motion_id}_cropped_norm_z_aligned_height_map-res60-vdsize0.001.npy'),
         'target_pcd_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
