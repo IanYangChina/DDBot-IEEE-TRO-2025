@@ -1,8 +1,4 @@
-python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 0 --demon --lr 0.005
-python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 1 --demon --lr 0.005
-python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 2 --demon --lr 0.005
-python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 3 --demon --lr 0.005
-python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 4 --demon --lr 0.005
+python run_si.py --cuda_GB 8 --n_substep 20 --ptcl_d 1e7
 
 python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 0 --demon --lr 0.01
 python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 1 --demon --lr 0.01
@@ -15,12 +11,6 @@ python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 1 --demon --lr
 python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 2 --demon --lr 0.02
 python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 3 --demon --lr 0.02
 python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 4 --demon --lr 0.02
-
-python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 0 --demon --lr 0.03
-python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 1 --demon --lr 0.03
-python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 2 --demon --lr 0.03
-python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 3 --demon --lr 0.03
-python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 4 --demon --lr 0.03
 
 #python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 0 --demon --insert-loss
 #python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 1 --demon --insert-loss

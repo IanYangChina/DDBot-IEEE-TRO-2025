@@ -117,11 +117,11 @@ def find_best_parameters():
         open(os.path.join(script_path, '..', 'log-sys_id', 'best_params.json'), 'w').write(json.dumps(best_params))
 
 
-def find_best_skill_parameters(ins=False, hm=False, main_folder_suffix='',
+def find_best_skill_parameters(ins=False, hm=False, main_folder_suffix='', lr='',
                                demo=False, batch=False, seeds=None, task_id=0):
     best_params = {"5e6": None,
                    "1e7": None}
-
+    optimiser = 'rmsprop'
     subfix = ''
     if ins:
         subfix += '-ins'
@@ -132,11 +132,14 @@ def find_best_skill_parameters(ins=False, hm=False, main_folder_suffix='',
     if batch:
         subfix += '-batch'
 
+    if lr is not '':
+        subfix += f'-lr{lr}'
+
     if seeds is None:
         seeds = [0, 1, 2, 3, 4]
     for d in ["5e6"]:
         for seed in seeds:
-            folder = os.path.join(script_path, '..', f'log-abs2-adam{main_folder_suffix}',
+            folder = os.path.join(script_path, '..', f'log-abs2-{optimiser}{main_folder_suffix}',
                                   f'd{d}-task-{task_id}{subfix}', f'seed-{seed}')
             data_dict = {
                 'Loss': {
@@ -215,21 +218,21 @@ def find_best_skill_parameters(ins=False, hm=False, main_folder_suffix='',
         best_emd_loss = 1000
         seed_1 = 0
         for seed in seeds:
-            with open(os.path.join(script_path, '..', f'log-abs2-adam{main_folder_suffix}', f'd{d}-task-{task_id}{subfix}', f'seed-{seed}',
+            with open(os.path.join(script_path, '..', f'log-abs2-{optimiser}{main_folder_suffix}', f'd{d}-task-{task_id}{subfix}', f'seed-{seed}',
                                    'best_heightmap_loss.json')) as f:
                 data_0 = json.load(f)
                 if data_0['Loss']['height_map_loss'] < best_heightmap_loss:
                     best_heightmap_loss = data_0['Loss']['height_map_loss']
                     seed_0 = seed
 
-            with open(os.path.join(script_path, '..', f'log-abs2-adam{main_folder_suffix}', f'd{d}-task-{task_id}{subfix}', f'seed-{seed}',
+            with open(os.path.join(script_path, '..', f'log-abs2-{optimiser}{main_folder_suffix}', f'd{d}-task-{task_id}{subfix}', f'seed-{seed}',
                                    'best_emd_loss.json')) as f:
                 data_1 = json.load(f)
                 if data_1['Loss']['emd_loss'] < best_emd_loss:
                     best_emd_loss = data_1['Loss']['emd_loss']
                     seed_1 = seed
 
-        with open(os.path.join(script_path, '..', f'log-abs2-adam{main_folder_suffix}', f'd{d}-task-{task_id}{subfix}', f'seed-{seed_0}',
+        with open(os.path.join(script_path, '..', f'log-abs2-{optimiser}{main_folder_suffix}', f'd{d}-task-{task_id}{subfix}', f'seed-{seed_0}',
                                'best_heightmap_loss.json')) as f:
             data_0 = json.load(f)
             print(f"Ptcl: {d}, best skill params with the lowest heightmap loss:")
@@ -237,8 +240,8 @@ def find_best_skill_parameters(ins=False, hm=False, main_folder_suffix='',
                   data_0['Parameters']['skill_params_1'], '&', data_0['Parameters']['skill_params_2'], '&', data_0['Parameters']['skill_params_3'], '&', data_0['Parameters']['skill_params_4'])
             best_params[d] = data_0
 
-    open(os.path.join(script_path, '..', f'log-abs2-adam{main_folder_suffix}', f'best_params-task-{task_id}{subfix}.json'), 'w').write(json.dumps(best_params))
+    open(os.path.join(script_path, '..', f'log-abs2-{optimiser}{main_folder_suffix}', f'best_params-task-{task_id}{subfix}.json'), 'w').write(json.dumps(best_params))
 
 
-find_best_skill_parameters(hm=True, demo=True, seeds=[0, 1, 2, 3, 4], task_id=0,
-                           main_folder_suffix='-e40o0.1o0.01')
+find_best_skill_parameters(hm=False, demo=True, seeds=[0, 1, 2, 3, 4], task_id=1,
+                           main_folder_suffix='', lr='0.02')

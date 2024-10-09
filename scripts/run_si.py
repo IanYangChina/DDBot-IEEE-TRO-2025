@@ -10,6 +10,7 @@ from torch.utils.tensorboard import SummaryWriter
 script_path = os.path.dirname(os.path.realpath(__file__))
 
 from doma.optimiser.adam import Adam
+from doma.optimiser.rmsprop import RMSprop
 from doma.envs.planting_env import make_env
 from doma.engine.utils.misc import set_parameters, reset_logging
 from doma.engine.configs.macros import DTYPE_NP, DTYPE_TI, SAND
@@ -31,7 +32,7 @@ cam_cfg = {
 def main(args):
     d_str = args['ptcl_density']
     ns = args['n_substep']
-    result_path = os.path.join(script_path, '..', 'log-sys_id', f'd{d_str}_ns{ns}')
+    result_path = os.path.join(script_path, '..', 'log-sys_id-rmsprop', f'd{d_str}_ns{ns}')
 
     if args['backend'] == 'opengl':
         backend = ti.opengl
@@ -75,10 +76,10 @@ def main(args):
     else:
         seeds = [0, 1, 2, 4, 5]
     training_config = {
-        'lr_E': 5e4,
-        'lr_nu': 0.05,
-        'lr_rho': 1e2,
-        'lr_sand_angle': 5,
+        'lr_E': 5e3,
+        'lr_nu': 0.005,
+        'lr_rho': 100,
+        'lr_sand_angle': 2,
         'n_epoch': n_epoch,
         'seeds': seeds,
     }
@@ -110,14 +111,14 @@ def main(args):
         rho = np.asarray(np.random.uniform(rho_range[0], rho_range[1]), dtype=DTYPE_NP).reshape((1,))  # Density
         sand_angle = np.asarray(np.random.uniform(sand_angle_range[0], sand_angle_range[1]), dtype=DTYPE_NP).reshape((1,))  # Sand friction angle
         # Optimisers
-        optim_E = Adam(parameters_shape=E.shape,
-                       cfg={'lr': training_config['lr_E'], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
-        optim_nu = Adam(parameters_shape=nu.shape,
-                        cfg={'lr': training_config['lr_nu'], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
-        optim_rho = Adam(parameters_shape=rho.shape,
-                         cfg={'lr': training_config['lr_rho'], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
-        optim_sand_angle = Adam(parameters_shape=sand_angle.shape,
-                                cfg={'lr': training_config['lr_sand_angle'], 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+        optim_E = RMSprop(parameters_shape=E.shape,
+                          cfg={'lr': training_config['lr_E'], 'beta': 0.7})
+        optim_nu = RMSprop(parameters_shape=nu.shape,
+                           cfg={'lr': training_config['lr_nu'], 'beta': 0.7})
+        optim_rho = RMSprop(parameters_shape=rho.shape,
+                            cfg={'lr': training_config['lr_rho'], 'beta': 0.7})
+        optim_sand_angle = RMSprop(parameters_shape=sand_angle.shape,
+                                   cfg={'lr': training_config['lr_sand_angle'], 'beta': 0.7})
 
         n_aborted_data = 0
         """===========Training==========="""

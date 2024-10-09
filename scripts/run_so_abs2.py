@@ -53,7 +53,7 @@ def main(args):
     if args['mini_batch']:
         subfix += '-batch'
 
-    optimiser = '-rmsprop'
+    optimiser = '-rmsprop-b0.9'
     learning_rate = args['lr']
     subfix += f'-lr{learning_rate}'
     log_dir = os.path.join(script_path, '..', f'log-abs2{optimiser}', f'd{ptcl_d}-task-{task_id}{subfix}', f'seed-{seed}')
@@ -120,8 +120,8 @@ def main(args):
             skill_params_np = np.asarray([1.0, 0.45, 0.8, 0.0, -0.1]).astype(DTYPE_NP)
         print("===> Loaded skill params for evaluation:", skill_params_np)
     elif args['eval_specific']:
-        seed = 3
-        epoch = 100
+        seed = 4
+        epoch = 70
         with open(os.path.join(script_path, '..', f'log-abs2{optimiser}', f'd{ptcl_d}-task-{task_id}{subfix}', f'seed-{seed}',
                                'raw_data.json')) as f:
             raw_data = json.load(f)["Parameters"]
@@ -148,7 +148,7 @@ def main(args):
     insertion_loss = 0.0
     grads_to_save = []
     optimiser = RMSprop(parameters_shape=(5,),
-                        cfg={'lr': learning_rate, 'beta': 0.7, 'epsilon': 1e-8})
+                        cfg={'lr': learning_rate, 'beta': 0.9, 'epsilon': 1e-8})
 
     for n in range(n_epoch):
         grads = []
