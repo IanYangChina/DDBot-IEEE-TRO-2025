@@ -33,6 +33,8 @@ def main(args):
     d_str = args['ptcl_density']
     ns = args['n_substep']
     result_path = os.path.join(script_path, '..', 'log-sys_id-rmsprop', f'd{d_str}_ns{ns}')
+    if args['use_height_map_loss']:
+        result_path += '_hm'
 
     if args['backend'] == 'opengl':
         backend = ti.opengl
@@ -77,10 +79,10 @@ def main(args):
     else:
         seeds = [0, 1, 2, 4, 5]
     training_config = {
-        'lr_E': 5e3,
-        'lr_nu': 0.005,
-        'lr_rho': 100,
-        'lr_sand_angle': 2,
+        'lr_E': 2e4,
+        'lr_nu': 0.01,
+        'lr_rho': 50,
+        'lr_sand_angle': 1,
         'n_epoch': n_epoch,
         'seeds': seeds,
     }
@@ -113,13 +115,13 @@ def main(args):
         sand_angle = np.asarray(np.random.uniform(sand_angle_range[0], sand_angle_range[1]), dtype=DTYPE_NP).reshape((1,))  # Sand friction angle
         # Optimisers
         optim_E = RMSprop(parameters_shape=E.shape,
-                          cfg={'lr': training_config['lr_E'], 'beta': 0.7})
+                          cfg={'lr': training_config['lr_E'], 'beta': 0.9})
         optim_nu = RMSprop(parameters_shape=nu.shape,
-                           cfg={'lr': training_config['lr_nu'], 'beta': 0.7})
+                           cfg={'lr': training_config['lr_nu'], 'beta': 0.9})
         optim_rho = RMSprop(parameters_shape=rho.shape,
-                            cfg={'lr': training_config['lr_rho'], 'beta': 0.7})
+                            cfg={'lr': training_config['lr_rho'], 'beta': 0.9})
         optim_sand_angle = RMSprop(parameters_shape=sand_angle.shape,
-                                   cfg={'lr': training_config['lr_sand_angle'], 'beta': 0.7})
+                                   cfg={'lr': training_config['lr_sand_angle'], 'beta': 0.9})
 
         n_aborted_data = 0
         """===========Training==========="""
@@ -256,6 +258,8 @@ if __name__ == '__main__':
     parser.add_argument('--seed', dest='seed', type=int, default=-1, help='Random seed')
     parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default=5e6,
                         help='Particle density, use scientific notation like \'5e6\'.')
+    parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False,
+                        help='Use height map loss')
     parser.add_argument('--backend', dest='backend', default='cuda', type=str,
                         help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
