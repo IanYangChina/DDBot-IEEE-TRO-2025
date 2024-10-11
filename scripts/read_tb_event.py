@@ -6,16 +6,18 @@ from tensorflow.python.summary.summary_iterator import summary_iterator
 script_path = os.path.dirname(os.path.realpath(__file__))
 
 
-def find_best_parameters():
+def find_best_parameters(hm=False):
     """generate mean and deviation data from tensorboard logs"""
     best_params = {"5e6": None,
-                   "1e7": None,
-                   "2e7": None,
-                   "4e7": None,}
-    for d in ["5e6", "1e7", "2e7", "4e7"]:
+                   "1e7": None}
+    folder_suffix = ''
+    for d in ["5e6", "1e7"]:
         case = f'd{d}_ns20'
+        if hm:
+            case += '_hm'
+        case_folder = os.path.join(script_path, '..', 'log-sys_id'+folder_suffix, case)
         for seed in range(5):
-            folder = os.path.join(script_path, '..', 'log-sys_id', case, f'seed-{seed}')
+            folder = os.path.join(case_folder, f'seed-{seed}')
             data_dict = {
                 'Loss': {
                     'emd_loss': [],
@@ -69,6 +71,7 @@ def find_best_parameters():
                     'sand_angle': data_dict['Parameters']['sand_angle'][min_heightmap_id],
                 }},
                 open(os.path.join(folder, 'best_heightmap_loss.json'), 'w'))
+
             min_emd_id = np.argmin(data_dict['Loss']['emd_loss'])
             json.dump({
                 'Step': float(min_emd_id),
@@ -89,24 +92,25 @@ def find_best_parameters():
         best_emd_loss = 1000
         seed_1 = 0
         for seed in range(5):
-            with open(os.path.join(script_path, '..', 'log-sys_id', f'd{d}_ns20', f'seed-{seed}',
+            with open(os.path.join(case_folder, f'seed-{seed}',
                                    'best_heightmap_loss.json')) as f:
                 data_0 = json.load(f)
                 if data_0['Loss']['height_map_loss'] < best_heightmap_loss:
                     best_heightmap_loss = data_0['Loss']['height_map_loss']
                     seed_0 = seed
 
-            with open(os.path.join(script_path, '..', 'log-sys_id', f'd{d}_ns20', f'seed-{seed}',
+            with open(os.path.join(case_folder, f'seed-{seed}',
                                    'best_emd_loss.json')) as f:
                 data_1 = json.load(f)
                 if data_1['Loss']['emd_loss'] < best_emd_loss:
                     best_emd_loss = data_1['Loss']['emd_loss']
                     seed_1 = seed
 
-        with open(os.path.join(script_path, '..', 'log-sys_id', f'd{d}_ns20', f'seed-{seed_0}',
+        with open(os.path.join(case_folder, f'seed-{seed_0}',
                                'best_heightmap_loss.json')) as f:
             data_0 = json.load(f)
-            print(data_0['Loss']['height_map_loss'],
+            print(f'seed-{seed_0}',data_0['Step'],
+                  data_0['Loss']['height_map_loss'],
                   '&', data_0['Loss']['emd_loss'],
                   '&', data_0['Parameters']['E'],
                   '&', data_0['Parameters']['nu'],
@@ -114,14 +118,19 @@ def find_best_parameters():
                   '&', data_0['Parameters']['sand_angle'])
             best_params[d] = data_0
 
-        open(os.path.join(script_path, '..', 'log-sys_id', 'best_params.json'), 'w').write(json.dumps(best_params))
+        open(os.path.join(script_path, '..', 'log-sys_id'+folder_suffix, 'best_params.json'), 'w').write(json.dumps(best_params))
+
+
+# find_best_parameters()
+# find_best_parameters(hm=True)
+# exit()
 
 
 def find_best_skill_parameters(ins=False, hm=False, main_folder_suffix='', lr='',
                                demo=False, batch=False, seeds=None, task_id=0):
     best_params = {"5e6": None,
                    "1e7": None}
-    optimiser = 'rmsprop'
+    optimiser = 'rmsprop-b0.9'
     subfix = ''
     if ins:
         subfix += '-ins'
@@ -243,5 +252,5 @@ def find_best_skill_parameters(ins=False, hm=False, main_folder_suffix='', lr=''
     open(os.path.join(script_path, '..', f'log-abs2-{optimiser}{main_folder_suffix}', f'best_params-task-{task_id}{subfix}.json'), 'w').write(json.dumps(best_params))
 
 
-find_best_skill_parameters(hm=False, demo=True, seeds=[0, 1, 2, 3, 4], task_id=1,
+find_best_skill_parameters(hm=False, demo=False, seeds=[0, 1, 2, 3, 4], task_id=0,
                            main_folder_suffix='', lr='0.02')

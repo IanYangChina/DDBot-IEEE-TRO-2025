@@ -1,10 +1,12 @@
 import os
-import yaml
+import json
 import logging
 import argparse
 import numpy as np
 import taichi as ti
 import datetime as dt
+import open3d as o3d
+import matplotlib.pyplot as plt
 from time import time
 from torch.utils.tensorboard import SummaryWriter
 script_path = os.path.dirname(os.path.realpath(__file__))
@@ -32,7 +34,7 @@ cam_cfg = {
 def main(args):
     d_str = args['ptcl_density']
     ns = args['n_substep']
-    result_path = os.path.join(script_path, '..', 'log-sys_id-rmsprop', f'd{d_str}_ns{ns}')
+    result_path = os.path.join(script_path, '..', 'log-sys_id', f'd{d_str}_ns{ns}')
     if args['use_height_map_loss']:
         result_path += '_hm'
 
@@ -77,7 +79,7 @@ def main(args):
     if args['seed'] != -1:
         seeds = [args['seed']]
     else:
-        seeds = [0, 1, 2, 4, 5]
+        seeds = [0, 1, 2, 3, 4]
     training_config = {
         'lr_E': 2e4,
         'lr_nu': 0.01,
@@ -91,45 +93,57 @@ def main(args):
         log_dir = os.path.join(result_path, f'seed-{seed}')
         os.makedirs(log_dir, exist_ok=True)
 
-        reset_logging(logging)
-        log_file_name = os.path.join(log_dir, 'optimisation.log')
-        if os.path.isfile(log_file_name):
-            filemode = "a"
+        if args['eval']:
+            seed = 4
+            epoch = 138
+            with open(os.path.join(result_path, f'seed-{seed}',
+                                   'raw_data.json')) as f:
+                params = json.load(f)["Parameters"]
+            E = np.asarray(params['E'][epoch])
+            nu = np.asarray(params['nu'][epoch])
+            rho = np.asarray(params['rho'][epoch])
+            sand_angle = np.asarray(params['sand_angle'][epoch])
+            print("Loaded parameters: ", E, nu, rho, sand_angle)
         else:
-            filemode = "w"
-        logging.basicConfig(level=logging.NOTSET, filemode=filemode,
-                            filename=log_file_name,
-                            format="%(asctime)s %(levelname)s %(message)s")
-        logger = SummaryWriter(log_dir=log_dir)
-        start_time = dt.datetime.now()
-        print(f"===> Start system identification optimisation at:, {start_time.year}-{start_time.month}-{start_time.day} "
-              f"{start_time.hour}:{start_time.minute}:{start_time.second}")
-        logging.info(f"===> Start grad computation at:, {start_time.year}-{start_time.month}-{start_time.day} "
-                     f"{start_time.hour}:{start_time.minute}:{start_time.second}")
+            reset_logging(logging)
+            log_file_name = os.path.join(log_dir, 'optimisation.log')
+            if os.path.isfile(log_file_name):
+                filemode = "a"
+            else:
+                filemode = "w"
+            logging.basicConfig(level=logging.NOTSET, filemode=filemode,
+                                filename=log_file_name,
+                                format="%(asctime)s %(levelname)s %(message)s")
+            logger = SummaryWriter(log_dir=log_dir)
+            start_time = dt.datetime.now()
+            print(f"===> Start system identification optimisation at:, {start_time.year}-{start_time.month}-{start_time.day} "
+                  f"{start_time.hour}:{start_time.minute}:{start_time.second}")
+            logging.info(f"===> Start grad computation at:, {start_time.year}-{start_time.month}-{start_time.day} "
+                         f"{start_time.hour}:{start_time.minute}:{start_time.second}")
+
+            # Initialising parameters
+            E = np.asarray(np.random.uniform(E_range[0], E_range[1]), dtype=DTYPE_NP).reshape((1,))  # Young's modulus
+            nu = np.asarray(np.random.uniform(nu_range[0], nu_range[1]), dtype=DTYPE_NP).reshape((1,))  # Poisson's ratio
+            rho = np.asarray(np.random.uniform(rho_range[0], rho_range[1]), dtype=DTYPE_NP).reshape((1,))  # Density
+            sand_angle = np.asarray(np.random.uniform(sand_angle_range[0], sand_angle_range[1]), dtype=DTYPE_NP).reshape((1,))  # Sand friction angle
+            # Optimisers
+            optim_E = RMSprop(parameters_shape=E.shape,
+                              cfg={'lr': training_config['lr_E'], 'beta': 0.9})
+            optim_nu = RMSprop(parameters_shape=nu.shape,
+                               cfg={'lr': training_config['lr_nu'], 'beta': 0.9})
+            optim_rho = RMSprop(parameters_shape=rho.shape,
+                                cfg={'lr': training_config['lr_rho'], 'beta': 0.9})
+            optim_sand_angle = RMSprop(parameters_shape=sand_angle.shape,
+                                       cfg={'lr': training_config['lr_sand_angle'], 'beta': 0.9})
+
         start_time_sec = time()
-
-        # Initialising parameters
-        E = np.asarray(np.random.uniform(E_range[0], E_range[1]), dtype=DTYPE_NP).reshape((1,))  # Young's modulus
-        nu = np.asarray(np.random.uniform(nu_range[0], nu_range[1]), dtype=DTYPE_NP).reshape((1,))  # Poisson's ratio
-        rho = np.asarray(np.random.uniform(rho_range[0], rho_range[1]), dtype=DTYPE_NP).reshape((1,))  # Density
-        sand_angle = np.asarray(np.random.uniform(sand_angle_range[0], sand_angle_range[1]), dtype=DTYPE_NP).reshape((1,))  # Sand friction angle
-        # Optimisers
-        optim_E = RMSprop(parameters_shape=E.shape,
-                          cfg={'lr': training_config['lr_E'], 'beta': 0.9})
-        optim_nu = RMSprop(parameters_shape=nu.shape,
-                           cfg={'lr': training_config['lr_nu'], 'beta': 0.9})
-        optim_rho = RMSprop(parameters_shape=rho.shape,
-                            cfg={'lr': training_config['lr_rho'], 'beta': 0.9})
-        optim_sand_angle = RMSprop(parameters_shape=sand_angle.shape,
-                                   cfg={'lr': training_config['lr_sand_angle'], 'beta': 0.9})
-
         n_aborted_data = 0
         """===========Training==========="""
         loss_names = ['height_map_loss', 'emd_loss', 'total_loss']
         loss_info = {}
         for n in range(n_epoch):
             ti.reset()
-            ti.init(arch=backend, device_memory_GB=15, default_fp=ti.f32, fast_math=True, random_seed=args['seed'])
+            ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True, random_seed=args['seed'])
             env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
             set_parameters(mpm_env, material_id=SAND, e=E.copy(), nu=nu.copy(), rho=rho.copy(),
                            sand_friction_angle=sand_angle.copy(),
@@ -137,9 +151,37 @@ def main(args):
 
             """forward pass"""
             mpm_env.set_state(init_state['state'], grad_enabled=True)
+            if args['eval']:
+                mpm_env.render('human')
             for i in range(mpm_env.horizon):
                 mpm_env.step(trajectory[i])
+                if args['eval']:
+                    mpm_env.render('human')
             loss_info = mpm_env.get_final_loss()
+            if args['eval']:
+                print('=====> EMD Loss:', loss_info['emd_loss'])
+                print('=====> Height map loss:', loss_info['height_map_loss'])
+                fig, ax = plt.subplots(1, 2, figsize=(12, 6))
+                ax[0].imshow(mpm_env.loss.height_map.to_numpy(),
+                             vmin=0.002, vmax=0.09)
+                ax[0].set_title('Height map')
+                ax[1].imshow(mpm_env.loss.height_map_pcd_target.to_numpy(),
+                             vmin=0.002, vmax=0.09)
+                ax[1].set_title('Target height map')
+                plt.show()
+                plt.close()
+
+                cloud_array = mpm_env.render(mode='point_cloud')
+                frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
+                obj_vec = o3d.utility.Vector3dVector(cloud_array)
+                obj_pcd = o3d.geometry.PointCloud(obj_vec)
+                cloud_array_2 = mpm_env.loss.target_pcd_original_points_np.copy()
+                cloud_array_2[:, 0] += 0.3
+                obj_vec_2 = o3d.utility.Vector3dVector(cloud_array_2)
+                obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2)
+                # print(obj_pcd, obj_pcd_2)
+                o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2], width=800, height=600)
+                exit()
 
             """backward pass"""
             mpm_env.reset_grad()
@@ -264,5 +306,6 @@ if __name__ == '__main__':
                         help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
     parser.add_argument('--n_substep', dest='n_substep', default='20', type=int, help='number of simulation substeps')
+    parser.add_argument('--eval', dest='eval', action='store_true', default=False, help='Evaluate the model')
     arguments = vars(parser.parse_args())
     main(arguments)
