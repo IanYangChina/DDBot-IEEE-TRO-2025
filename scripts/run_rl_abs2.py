@@ -89,10 +89,13 @@ def main(arguments):
     seed = arguments['seed']
     task_id = arguments['task_id']
     ptcl_d = arguments['ptcl_density']
+    suffix = ''
+    if arguments['her']:
+        suffix += '-her'
     if arguments['use_demo']:
-        log_dir = os.path.join(script_path, '..', 'log-abs2-sac', f'd{ptcl_d}-task-{task_id}-demo', f'seed-{seed}')
-    else:
-        log_dir = os.path.join(script_path, '..', 'log-abs2-sac', f'd{ptcl_d}-task-{task_id}', f'seed-{seed}')
+        suffix += '-demo'
+
+    log_dir = os.path.join(script_path, '..', 'log-abs2-sac', f'd{ptcl_d}-task-{task_id}{suffix}', f'seed-{seed}')
     os.makedirs(log_dir, exist_ok=True)
     log_file_name = os.path.join(log_dir, 'optimisation.log')
     if os.path.isfile(log_file_name):
@@ -194,7 +197,7 @@ def main(arguments):
         rl_agent_config['cuda_device_id'] = arguments['torch_cuda_device_id']
         rl_agent_config['batch_size'] = 24
         rl_agent_config['optimization_steps'] = 1
-        rl_agent_config['hindsight'] = True
+        rl_agent_config['hindsight'] = arguments['her']
         rl_agent_config['sampling_strategy'] = 'final'
         rl_agent_config['use_demonstrations'] = arguments['use_demo']
         rl_agent_config['demonstrate_percentage'] = 0.50
@@ -216,6 +219,6 @@ if __name__ == '__main__':
     parser.add_argument('--ptcl-d', dest='ptcl_density', type=str, default="5e6", help='particle density')
     parser.add_argument('--t-cuda-id', dest='torch_cuda_device_id', type=int, default=0, help='cuda device id')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=4, type=int, help='preallocated GPU memory in GB')
-
+    parser.add_argument('--her', dest='her', action='store_true', default=False, help='use hindsight experience replay')
     args = vars(parser.parse_args())
     main(args)

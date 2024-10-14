@@ -106,18 +106,19 @@ def main(args):
     }
 
     if args['eval']:
-        with open(os.path.join(script_path, '..', f'log-abs2{optimiser}',
-                               f'best_params-task-{task_id}{subfix}.json')) as f:
-            best_skill_params = json.load(f)[ptcl_d]["Parameters"]
-        skill_params_np = np.asarray([
-            best_skill_params['skill_params_0'],
-            best_skill_params['skill_params_1'],
-            best_skill_params['skill_params_2'],
-            best_skill_params['skill_params_3'],
-            best_skill_params['skill_params_4']
-        ]).astype(DTYPE_NP).reshape((5,))
         if args['view_demon']:
             skill_params_np = np.asarray([1.0, 0.45, 0.8, 0.0, -0.1]).astype(DTYPE_NP)
+        else:
+            with open(os.path.join(script_path, '..', f'log-abs2{optimiser}',
+                                   f'best_params-task-{task_id}{subfix}.json')) as f:
+                best_skill_params = json.load(f)[ptcl_d]["Parameters"]
+            skill_params_np = np.asarray([
+                best_skill_params['skill_params_0'],
+                best_skill_params['skill_params_1'],
+                best_skill_params['skill_params_2'],
+                best_skill_params['skill_params_3'],
+                best_skill_params['skill_params_4']
+            ]).astype(DTYPE_NP).reshape((5,))
         print("===> Loaded skill params for evaluation:", skill_params_np)
     elif args['eval_specific']:
         seed = 4
@@ -389,6 +390,7 @@ def main(args):
                 mpm_env.step(trajectory_np[i])
                 if args['eval'] or args['eval_specific']:
                     mpm_env.render(mode='human')
+                    # input('Press Enter to continue...')
             loss_info = mpm_env.get_final_loss()
 
             if args['eval'] or args['eval_specific']:
