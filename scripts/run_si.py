@@ -33,11 +33,11 @@ cam_cfg = {
 
 def main(args):
     d_str = args['ptcl_density']
-    ns = args['n_substep']
-    result_path = os.path.join(script_path, '..', 'log-sys_id-rmsprop', f'd{d_str}_ns{ns}')
+    result_path = os.path.join(script_path, '..', 'log-sys_id-rmsprop', f'd{d_str}')
     if args['soft_contact']:
         result_path += '-soft'
-
+    if args['toi_contact']:
+        result_path += '-toi'
     if args['use_height_map_loss']:
         result_path += '_hm'
 
@@ -60,12 +60,16 @@ def main(args):
         'grid_scale': 1,
         'horizon': trajectory.shape[0],
         'dt_global': dt_global,
-        'n_substeps': args['n_substep'],
+        'n_substeps': 20,
         'agent_init_pos': (0.2, 0.2, 0.205),
         'agent_init_euler': (0, 180, 90),
     }
     if args['soft_contact']:
+        assert not args['toi_contact']
         env_cfg['collide_type'] = 'soft'
+    elif args['toi_contact']:
+        assert not args['soft_contact']
+        env_cfg['collide_type'] = 'toi'
 
     loss_cfg = {
         'use_height_map_loss': False,
@@ -97,20 +101,28 @@ def main(args):
 
     for seed in seeds:
         log_dir = os.path.join(result_path, f'seed-{seed}')
-        os.makedirs(log_dir, exist_ok=True)
 
         if args['eval']:
-            seed = 4
-            epoch = 138
-            with open(os.path.join(result_path, f'seed-{seed}',
-                                   'raw_data.json')) as f:
-                params = json.load(f)["Parameters"]
-            E = np.asarray(params['E'][epoch])
-            nu = np.asarray(params['nu'][epoch])
-            rho = np.asarray(params['rho'][epoch])
-            sand_angle = np.asarray(params['sand_angle'][epoch])
+            # seed = 4
+            # epoch = 138
+            # with open(os.path.join(result_path, f'seed-{seed}',
+            #                        'raw_data.json')) as f:
+            #     params = json.load(f)["Parameters"]
+            # E = np.asarray(params['E'][epoch])
+            # nu = np.asarray(params['nu'][epoch])
+            # rho = np.asarray(params['rho'][epoch])
+            # sand_angle = np.asarray(params['sand_angle'][epoch])
+
+            # with open(os.path.join(script_path, '..', 'log-sys_id', 'best_params.json')) as f:
+            #     best_params = json.load(f)[arguments['ptcl_density']]["Parameters"]
+            E = np.asarray([865728.8125])
+            nu = np.asarray([0.2514926])
+            rho = np.asarray([1831.06])
+            sand_angle = np.asarray([18.0643596])
+
             print("Loaded parameters: ", E, nu, rho, sand_angle)
         else:
+            os.makedirs(log_dir, exist_ok=True)
             reset_logging(logging)
             log_file_name = os.path.join(log_dir, 'optimisation.log')
             if os.path.isfile(log_file_name):
@@ -306,10 +318,10 @@ if __name__ == '__main__':
     parser.add_argument('--seed', dest='seed', type=int, default=-1, help='Random seed')
     parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default=5e6, help='Particle density, use scientific notation like \'5e6\'.')
     parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False, help='Use height map loss')
-    parser.add_argument('--soft-contact', dest='soft_contact', action='store_true', default=False, help='Use soft constraint')
+    parser.add_argument('--soft-contact', dest='soft_contact', action='store_true', default=False, help='Use soft contact')
+    parser.add_argument('--toi-contact', dest='toi_contact', action='store_true', default=False, help='Use time-of-impact contact')
     parser.add_argument('--backend', dest='backend', default='cuda', type=str, help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
-    parser.add_argument('--n_substep', dest='n_substep', default='20', type=int, help='number of simulation substeps')
     parser.add_argument('--eval', dest='eval', action='store_true', default=False, help='Evaluate the model')
     arguments = vars(parser.parse_args())
     main(arguments)
