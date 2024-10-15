@@ -598,15 +598,11 @@ if __name__ == '__main__':
     parser.add_argument('--soft-contact', dest='soft_contact', action='store_true', default=False, help='Use soft constraint')
     parser.add_argument('--demon', dest='demon', action='store_true', default=False, help='Use demonstration')
     parser.add_argument('--mini-batch', dest='mini_batch', action='store_true', default=False, help='Use mini-batch')
-    parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False,
-                        help='Use height map loss')
-    parser.add_argument('--insert-loss', dest='use_insertion_loss', action='store_true', default=False,
-                        help='Use insertion loss')
+    parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False, help='Use height map loss')
+    parser.add_argument('--insert-loss', dest='use_insertion_loss', action='store_true', default=False, help='Use insertion loss')
     parser.add_argument('--eval', dest='eval', action='store_true', default=False, help='Evaluate the model')
-    parser.add_argument('--eval-spec', dest='eval_specific', action='store_true', default=False,
-                        help='Evaluate the model with specific epoch')
-    parser.add_argument('--view-demon', dest='view_demon', action='store_true', default=False,
-                        help='View demonstration')
+    parser.add_argument('--eval-spec', dest='eval_specific', action='store_true', default=False, help='Evaluate the model with specific epoch')
+    parser.add_argument('--view-demon', dest='view_demon', action='store_true', default=False, help='View demonstration')
     parser.add_argument('--lr', dest='lr', type=float, default=0.01, help='Learning rate')
     arguments = vars(parser.parse_args())
     main(arguments)

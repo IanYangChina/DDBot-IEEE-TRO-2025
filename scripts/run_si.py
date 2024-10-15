@@ -34,7 +34,10 @@ cam_cfg = {
 def main(args):
     d_str = args['ptcl_density']
     ns = args['n_substep']
-    result_path = os.path.join(script_path, '..', 'log-sys_id', f'd{d_str}_ns{ns}')
+    result_path = os.path.join(script_path, '..', 'log-sys_id-rmsprop', f'd{d_str}_ns{ns}')
+    if args['soft_contact']:
+        result_path += '-soft'
+
     if args['use_height_map_loss']:
         result_path += '_hm'
 
@@ -61,6 +64,9 @@ def main(args):
         'agent_init_pos': (0.2, 0.2, 0.205),
         'agent_init_euler': (0, 180, 90),
     }
+    if args['soft_contact']:
+        env_cfg['collide_type'] = 'soft'
+
     loss_cfg = {
         'use_height_map_loss': False,
         'target_pcd_height_map_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
@@ -298,12 +304,10 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="System identification for soil")
     parser.add_argument('--seed', dest='seed', type=int, default=-1, help='Random seed')
-    parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default=5e6,
-                        help='Particle density, use scientific notation like \'5e6\'.')
-    parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False,
-                        help='Use height map loss')
-    parser.add_argument('--backend', dest='backend', default='cuda', type=str,
-                        help='Computation backend: cuda, opengl, or cpu')
+    parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default=5e6, help='Particle density, use scientific notation like \'5e6\'.')
+    parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False, help='Use height map loss')
+    parser.add_argument('--soft-contact', dest='soft_contact', action='store_true', default=False, help='Use soft constraint')
+    parser.add_argument('--backend', dest='backend', default='cuda', type=str, help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
     parser.add_argument('--n_substep', dest='n_substep', default='20', type=int, help='number of simulation substeps')
     parser.add_argument('--eval', dest='eval', action='store_true', default=False, help='Evaluate the model')
