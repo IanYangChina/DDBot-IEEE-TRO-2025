@@ -10,7 +10,7 @@ python run_si.py --ptcl_d 5e6 --cuda_GB 8 --soft-contact --seed 2
 python run_si.py --ptcl_d 5e6 --cuda_GB 8 --soft-contact --seed 3
 python run_si.py --ptcl_d 5e6 --cuda_GB 8 --soft-contact --seed 4
 
-python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 0 --seed 0 --demon --mini-batch --lr 0.02
+#python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 0 --seed 0 --demon --mini-batch --lr 0.02
 python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 0 --seed 1 --demon --mini-batch --lr 0.02
 python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 0 --seed 2 --demon --mini-batch --lr 0.02
 python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 0 --seed 3 --demon --mini-batch --lr 0.02
