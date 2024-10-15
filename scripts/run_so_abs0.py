@@ -10,7 +10,7 @@ import open3d as o3d
 from torch.utils.tensorboard import SummaryWriter
 script_path = os.path.dirname(os.path.realpath(__file__))
 
-from doma.optimiser.adam import Adam, GD
+from doma.optimiser.rmsprop import RMSprop
 from doma.envs.planting_env import make_env
 from doma.engine.configs.macros import DTYPE_NP, DTYPE_TI, SAND
 from doma.engine.utils.misc import set_parameters
@@ -47,10 +47,6 @@ def main(args):
         subfix += '-batch'
 
     log_dir = os.path.join(script_path, '..', 'log-abs0-adam', f'd{ptcl_d}-task-{task_id}{subfix}', f'seed-{seed}')
-    if args['compute_grad']:
-        log_dir = log_dir[:-6] + 'grads'
-    grad_mean_file_name = os.path.join(log_dir, 'grad_mean.npy')
-    grad_std_file_name = os.path.join(log_dir, 'grad_std.npy')
     os.makedirs(log_dir, exist_ok=True)
     os.makedirs(os.path.join(log_dir, 'ckpts'), exist_ok=True)
 
@@ -176,15 +172,7 @@ def main(args):
     n_aborted_data = 0
     emd_loss = 0.0
     height_map_loss = 0.0
-    grads_to_save = []
-    if args['use_height_map_loss']:
-        lrs = 0.00000000001
-        if args['demon']:
-            lrs = 0.0000000001
-    else:
-        lrs = 0.00000001
-    tr_optim = GD(parameters_shape=trajectory_np.shape,
-                  cfg={'lr': lrs, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-8})
+    tr_optim = RMSprop(parameters_shape=trajectory_np.shape, cfg={'lr': 0.0005, 'beta': 0.9})
 
     for n in range(n_epoch):
         grads = []
@@ -298,75 +286,40 @@ def main(args):
         grad = np.mean(grads, axis=0)
         emd_loss = np.mean(emd_losses)
         height_map_loss = np.mean(height_map_losses)
-        if args['compute_grad']:
-            grads_to_save.append(grad)
-            trajectory_np = np.ones((horizon, 6), dtype=DTYPE_NP)
-            trajectory_np[:, :3] = np.random.uniform(-0.004, 0.004, size=(horizon, 3))
-            trajectory_np[:, 3:] = np.random.uniform(-0.0157, 0.0157, size=(horizon, 3))
-            if args['demon']:
-                skill_params_np = np.asarray([1.0, 0.45, 0.8, 0.0, -0.1]).astype(DTYPE_NP) + np.random.uniform(-1, 1, size=5).astype(DTYPE_NP) * 0.5
-                skill_params_np = np.clip(skill_params_np, -1, 1)
-                trajectory_demon = abstraction_two_skill(skill_params_np, DT_GLOBAL)
-                trajectory_length = trajectory_demon.shape[0]
-                if trajectory_length > horizon:
-                    trajectory_length = horizon
-                trajectory_np[:trajectory_length] = trajectory_demon[:trajectory_length]
 
-            print(f'=====> Epoch: {n}')
-            print(f'=====> EMD Loss: {emd_loss}')
-            print(f'=====> Height map loss: {height_map_loss}')
-            print(f'=====> Trajectory grad mean: {grad.mean()}')
-            print(f"=====> Num. aborted data so far: {n_aborted_data}")
-            logging.info(f'=====> Epoch: {n}')
-            logging.info(f'=====> EMD Loss: {emd_loss}')
-            logging.info(f'=====> Height map loss: {height_map_loss}')
-            logging.info(f'=====> Trajectory grad mean: {grad.mean()}')
-            logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
-        else:
-            trajectory_np = tr_optim.step(trajectory_np, grad[:trajectory_np.shape[0]])
-            trajectory_np[:, :3] = np.clip(trajectory_np[:, :3], -0.004, 0.004)
-            trajectory_np[:, 3:] = np.clip(trajectory_np[:, 3:], -0.0157, 0.0157)
+        trajectory_np = tr_optim.step(trajectory_np, grad[:trajectory_np.shape[0]])
+        trajectory_np[:, :3] = np.clip(trajectory_np[:, :3], -0.004, 0.004)
+        trajectory_np[:, 3:] = np.clip(trajectory_np[:, 3:], -0.0157, 0.0157)
 
-            np.save(os.path.join(log_dir, 'ckpts', f'grad_{n}.npy'), grad)
-            np.save(os.path.join(log_dir, 'ckpts', f'trajectory_{n}.npy'), trajectory_np)
-            print(f'=====> Epoch: {n}')
-            print(f'=====> EMD Loss: {emd_loss}')
-            print(f'=====> Height map loss: {height_map_loss}')
-            print(f'=====> Trajectory grad mean: {grad.mean()}')
-            print(f"=====> Num. aborted data so far: {n_aborted_data}")
-            logging.info(f'=====> Epoch: {n}')
-            logging.info(f'=====> EMD Loss: {emd_loss}')
-            logging.info(f'=====> Height map loss: {height_map_loss}')
-            logging.info(f'=====> Trajectory grad mean: {grad.mean()}')
-            logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
+        np.save(os.path.join(log_dir, 'ckpts', f'grad_{n}.npy'), grad)
+        np.save(os.path.join(log_dir, 'ckpts', f'trajectory_{n}.npy'), trajectory_np)
+        print(f'=====> Epoch: {n}')
+        print(f'=====> EMD Loss: {emd_loss}')
+        print(f'=====> Height map loss: {height_map_loss}')
+        print(f'=====> Trajectory grad mean: {grad.mean()}')
+        print(f"=====> Num. aborted data so far: {n_aborted_data}")
+        logging.info(f'=====> Epoch: {n}')
+        logging.info(f'=====> EMD Loss: {emd_loss}')
+        logging.info(f'=====> Height map loss: {height_map_loss}')
+        logging.info(f'=====> Trajectory grad mean: {grad.mean()}')
+        logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
 
-            logger.add_scalar(tag='loss/EMD', scalar_value=emd_loss, global_step=n)
-            logger.add_scalar(tag='loss/Heightmap', scalar_value=height_map_loss, global_step=n)
+        logger.add_scalar(tag='loss/EMD', scalar_value=emd_loss, global_step=n)
+        logger.add_scalar(tag='loss/Heightmap', scalar_value=height_map_loss, global_step=n)
 
     logger.close()
-    if args['compute_grad']:
-        grad_mean = np.mean(grads_to_save, axis=0)
-        grad_std = np.std(grads_to_save, axis=0)
-        np.save(grad_mean_file_name, grad_mean)
-        np.save(grad_std_file_name, grad_std)
-        print('====> Mean grad: ', grad_mean)
-        print('====> Std grad: ', grad_std)
-        logging.info(f'====> Mean grad: {grad_mean}')
-        logging.info(f'====> Std grad: {grad_std}')
-    else:
-        np.save(os.path.join(log_dir, 'final_trajectory.npy'), trajectory_np)
-        print('====> Finished training.')
-        print('====> Final EMD loss: ', emd_loss)
-        print('====> Final height map loss: ', height_map_loss)
-        logging.info('====> Finished training.')
-        logging.info(f'====> Final EMD loss: {emd_loss}')
-        logging.info(f'====> Final height map loss: {height_map_loss}')
+    np.save(os.path.join(log_dir, 'final_trajectory.npy'), trajectory_np)
+    print('====> Finished training.')
+    print('====> Final EMD loss: ', emd_loss)
+    print('====> Final height map loss: ', height_map_loss)
+    logging.info('====> Finished training.')
+    logging.info(f'====> Final EMD loss: {emd_loss}')
+    logging.info(f'====> Final height map loss: {height_map_loss}')
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Gradient-based trajectory optimisation")
     parser.add_argument('--seed', dest='seed', type=int, default=0, help='Random seed')
-    parser.add_argument('--com_grad', dest='compute_grad', action='store_true', default=False, help='Compute gradient')
     parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default="5e6",
                         help='Particle density, use scientific notation like \'5e6\'.')
     parser.add_argument('--backend', dest='backend', default='cuda', type=str,

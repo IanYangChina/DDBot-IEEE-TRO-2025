@@ -44,6 +44,8 @@ def main(args):
     task_id = args['task_id']
     ptcl_d = arguments['ptcl_density']
     subfix = ''
+    if args['soft_contact']:
+        subfix += '-soft'
     if args['use_insertion_loss']:
         subfix += '-ins'
     if args['use_height_map_loss']:
@@ -97,6 +99,9 @@ def main(args):
         'agent_init_pos': (0.2, 0.2, 0.205),
         'agent_init_euler': (0, 180, 90),
     }
+    if args['soft_contact']:
+        env_cfg['collide_type'] = 'soft'
+
     loss_cfg = {
         'use_height_map_loss': args['use_height_map_loss'],
         'target_pcd_path': os.path.join(script_path, '..', 'data', 'task_target_pcds',
@@ -585,14 +590,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Gradient-based skill parameter optimisation")
     parser.add_argument('--seed', dest='seed', type=int, default=0, help='Random seed')
     parser.add_argument('--com_grad', dest='compute_grad', action='store_true', default=False, help='Compute gradient')
-    parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default="5e6",
-                        help='Particle density, use scientific notation like \'5e6\'.')
-    parser.add_argument('--backend', dest='backend', default='cuda', type=str,
-                        help='Computation backend: cuda, opengl, or cpu')
+    parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default="5e6", help='Particle density, use scientific notation like \'5e6\'.')
+    parser.add_argument('--backend', dest='backend', default='cuda', type=str, help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
     parser.add_argument('--task-id', dest='task_id', type=int, default=0, help='task id')
-    parser.add_argument('--zero-init', dest='zero_init', action='store_true', default=False,
-                        help='Initialise parameters to zero')
+    parser.add_argument('--zero-init', dest='zero_init', action='store_true', default=False, help='Initialise parameters to zero')
+    parser.add_argument('--soft-contact', dest='soft_contact', action='store_true', default=False, help='Use soft constraint')
     parser.add_argument('--demon', dest='demon', action='store_true', default=False, help='Use demonstration')
     parser.add_argument('--mini-batch', dest='mini_batch', action='store_true', default=False, help='Use mini-batch')
     parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False,

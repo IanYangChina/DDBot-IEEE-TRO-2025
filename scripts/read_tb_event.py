@@ -252,5 +252,6 @@ def find_best_skill_parameters(ins=False, hm=False, main_folder_suffix='', lr=''
     open(os.path.join(script_path, '..', f'log-abs2-{optimiser}{main_folder_suffix}', f'best_params-task-{task_id}{subfix}.json'), 'w').write(json.dumps(best_params))
 
 
-find_best_skill_parameters(hm=False, demo=False, seeds=[0, 1, 2, 3, 4], task_id=0,
+find_best_skill_parameters(hm=False, demo=True, ins=True,
+                           seeds=[0, 1, 2, 3, 4], task_id=0,
                            main_folder_suffix='', lr='0.02')
