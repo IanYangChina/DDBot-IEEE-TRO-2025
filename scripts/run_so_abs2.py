@@ -86,7 +86,10 @@ def main(args):
         backend = ti.cpu
 
     horizon = 600
-    with open(os.path.join(script_path, '..', 'log-sys_id', 'best_params.json')) as f:
+    param_folder_prefix = f'd{ptcl_d}'
+    if args['soft_contact']:
+        param_folder_prefix += '-soft'
+    with open(os.path.join(script_path, '..', 'log-sys_id-rmsprop', f'{param_folder_prefix}-best_params.json')) as f:
         best_params = json.load(f)[arguments['ptcl_density']]["Parameters"]
 
     env_cfg = {
