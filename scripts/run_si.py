@@ -17,7 +17,7 @@ from doma.envs.planting_env import make_env
 from doma.engine.utils.misc import set_parameters, reset_logging
 from doma.engine.configs.macros import DTYPE_NP, DTYPE_TI, SAND
 cam_cfg = {
-    'pos': (0.2, 1.2, 0.9),
+    'pos': (0.2, 0.8, 0.7),
     'lookat': (0.2, 0.2, 0.03),
     'euler': (180+np.rad2deg(np.arctan(1.0/(0.9-0.03))), 0, 180),
     'focal_length': 0.3,
@@ -27,19 +27,20 @@ cam_cfg = {
                {'pos': (1.2, 0.0, 1.0), 'color': (0.8, 0.8, 0.8)}],
     'particle_radius': 0.001,
     'res': (800, 800),
-    'pcd_gen_res': 150
+    'pcd_gen_res': 60
 }
 
 
 def main(args):
     d_str = args['ptcl_density']
-    result_path = os.path.join(script_path, '..', 'log-sys_id-rmsprop', f'd{d_str}')
+    case = f'd{d_str}'
     if args['soft_contact']:
-        result_path += '-soft'
+        case += '-soft'
     if args['toi_contact']:
-        result_path += '-toi'
+        case += '-toi'
     if args['use_height_map_loss']:
-        result_path += '_hm'
+        case += '-hm'
+    result_path = os.path.join(script_path, '..', 'log-sys_id-rmsprop', case)
 
     if args['backend'] == 'opengl':
         backend = ti.opengl
@@ -113,12 +114,12 @@ def main(args):
             # rho = np.asarray(params['rho'][epoch])
             # sand_angle = np.asarray(params['sand_angle'][epoch])
 
-            # with open(os.path.join(script_path, '..', 'log-sys_id', 'best_params.json')) as f:
-            #     best_params = json.load(f)[arguments['ptcl_density']]["Parameters"]
-            E = np.asarray([865728.8125])
-            nu = np.asarray([0.2514926])
-            rho = np.asarray([1831.06])
-            sand_angle = np.asarray([18.0643596])
+            with open(os.path.join(script_path, '..', 'log-sys_id-rmsprop', f'{case}-best_params.json')) as f:
+                best_params = json.load(f)[arguments['ptcl_density']]["Parameters"]
+            E = np.asarray(best_params['E'])
+            nu = np.asarray(best_params['nu'])
+            rho = np.asarray(best_params['rho'])
+            sand_angle = np.asarray(best_params['sand_angle'])
 
             print("Loaded parameters: ", E, nu, rho, sand_angle)
         else:
@@ -194,10 +195,14 @@ def main(args):
                 obj_vec = o3d.utility.Vector3dVector(cloud_array)
                 obj_pcd = o3d.geometry.PointCloud(obj_vec)
                 cloud_array_2 = mpm_env.loss.target_pcd_original_points_np.copy()
+                obj_vec_2 = o3d.utility.Vector3dVector(cloud_array_2)
+                obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2).voxel_down_sample(0.007)
+                bbx = obj_pcd_2.get_axis_aligned_bounding_box()
+                obj_pcd = obj_pcd.crop(bbx)
                 cloud_array_2[:, 0] += 0.3
                 obj_vec_2 = o3d.utility.Vector3dVector(cloud_array_2)
-                obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2)
-                # print(obj_pcd, obj_pcd_2)
+                obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2).voxel_down_sample(0.007)
+                print(obj_pcd, obj_pcd_2)
                 o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2], width=800, height=600)
                 exit()
 

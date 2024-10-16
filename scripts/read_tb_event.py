@@ -6,15 +6,17 @@ from tensorflow.python.summary.summary_iterator import summary_iterator
 script_path = os.path.dirname(os.path.realpath(__file__))
 
 
-def find_best_parameters(hm=False):
+def find_best_parameters(hm=False, soft=False):
     """generate mean and deviation data from tensorboard logs"""
     best_params = {"5e6": None,
                    "1e7": None}
-    folder_suffix = ''
+    folder_suffix = '-rmsprop'
     for d in ["5e6", "1e7"]:
-        case = f'd{d}_ns20'
+        case = f'd{d}'
+        if soft:
+            case += '-soft'
         if hm:
-            case += '_hm'
+            case += '-hm'
         case_folder = os.path.join(script_path, '..', 'log-sys_id'+folder_suffix, case)
         for seed in range(5):
             folder = os.path.join(case_folder, f'seed-{seed}')
@@ -118,10 +120,10 @@ def find_best_parameters(hm=False):
                   '&', data_0['Parameters']['sand_angle'])
             best_params[d] = data_0
 
-        open(os.path.join(script_path, '..', 'log-sys_id'+folder_suffix, 'best_params.json'), 'w').write(json.dumps(best_params))
+        open(os.path.join(script_path, '..', 'log-sys_id'+folder_suffix, f'{case}-best_params.json'), 'w').write(json.dumps(best_params))
 
 
-# find_best_parameters()
+find_best_parameters(soft=True)
 # find_best_parameters(hm=True)
 # exit()
 
@@ -252,6 +254,6 @@ def find_best_skill_parameters(ins=False, hm=False, main_folder_suffix='', lr=''
     open(os.path.join(script_path, '..', f'log-abs2-{optimiser}{main_folder_suffix}', f'best_params-task-{task_id}{subfix}.json'), 'w').write(json.dumps(best_params))
 
 
-find_best_skill_parameters(hm=False, demo=True, ins=True,
-                           seeds=[0, 1, 2, 3, 4], task_id=0,
-                           main_folder_suffix='', lr='0.02')
+# find_best_skill_parameters(hm=False, demo=True, ins=True,
+#                            seeds=[0, 1, 2, 3, 4], task_id=0,
+#                            main_folder_suffix='', lr='0.02')

@@ -4,17 +4,37 @@ python run_si.py --ptcl_d 1e7 --cuda_GB 8 --seed 2
 python run_si.py --ptcl_d 1e7 --cuda_GB 8 --seed 3
 python run_si.py --ptcl_d 1e7 --cuda_GB 8 --seed 4
 
-python run_si.py --ptcl_d 1e7 --cuda_GB 8 --soft-contact --seed 0
-python run_si.py --ptcl_d 1e7 --cuda_GB 8 --soft-contact --seed 1
-python run_si.py --ptcl_d 1e7 --cuda_GB 8 --soft-contact --seed 2
-python run_si.py --ptcl_d 1e7 --cuda_GB 8 --soft-contact --seed 3
-python run_si.py --ptcl_d 1e7 --cuda_GB 8 --soft-contact --seed 4
+python run_si.py --ptcl_d 1e7 --cuda_GB 8 --seed 0 --hm --toi-contact
+python run_si.py --ptcl_d 1e7 --cuda_GB 8 --seed 1 --hm --toi-contact
+python run_si.py --ptcl_d 1e7 --cuda_GB 8 --seed 2 --hm --toi-contact
+python run_si.py --ptcl_d 1e7 --cuda_GB 8 --seed 3 --hm --toi-contact
+python run_si.py --ptcl_d 1e7 --cuda_GB 8 --seed 4 --hm --toi-contact
 
-python run_si.py --ptcl_d 2e7 --cuda_GB 8 --soft-contact --seed 0
-python run_si.py --ptcl_d 2e7 --cuda_GB 8 --soft-contact --seed 1
-python run_si.py --ptcl_d 2e7 --cuda_GB 8 --soft-contact --seed 2
-python run_si.py --ptcl_d 2e7 --cuda_GB 8 --soft-contact --seed 3
-python run_si.py --ptcl_d 2e7 --cuda_GB 8 --soft-contact --seed 4
+python run_si.py --ptcl_d 1e7 --cuda_GB 8 --seed 0 --hm
+python run_si.py --ptcl_d 1e7 --cuda_GB 8 --seed 1 --hm
+python run_si.py --ptcl_d 1e7 --cuda_GB 8 --seed 2 --hm
+python run_si.py --ptcl_d 1e7 --cuda_GB 8 --seed 3 --hm
+python run_si.py --ptcl_d 1e7 --cuda_GB 8 --seed 4 --hm
+
+python run_si.py --ptcl_d 1e7 --cuda_GB 8 --soft-contact --seed 0 --hm
+python run_si.py --ptcl_d 1e7 --cuda_GB 8 --soft-contact --seed 1 --hm
+python run_si.py --ptcl_d 1e7 --cuda_GB 8 --soft-contact --seed 2 --hm
+python run_si.py --ptcl_d 1e7 --cuda_GB 8 --soft-contact --seed 3 --hm
+python run_si.py --ptcl_d 1e7 --cuda_GB 8 --soft-contact --seed 4 --hm
+
+python run_si.py --ptcl_d 2e7 --cuda_GB 8 --seed 1 --soft-contact
+python run_si.py --ptcl_d 2e7 --cuda_GB 8 --seed 2 --soft-contact
+python run_si.py --ptcl_d 2e7 --cuda_GB 8 --seed 3 --soft-contact
+python run_si.py --ptcl_d 2e7 --cuda_GB 8 --seed 4 --soft-contact
+
+python run_si.py --ptcl_d 2e7 --cuda_GB 8 --soft-contact --seed 0 --hm
+python run_si.py --ptcl_d 2e7 --cuda_GB 8 --soft-contact --seed 1 --hm
+python run_si.py --ptcl_d 2e7 --cuda_GB 8 --soft-contact --seed 2 --hm
+python run_si.py --ptcl_d 2e7 --cuda_GB 8 --soft-contact --seed 3 --hm
+python run_si.py --ptcl_d 2e7 --cuda_GB 8 --soft-contact --seed 4 --hm
+python run_si.py --ptcl_d 2e7 --cuda_GB 8 --seed 3 --hm --toi-contact
+python run_si.py --ptcl_d 2e7 --cuda_GB 8 --seed 4 --hm --toi-contact
+
 
 #python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 0 --lr 0.02 --mini-batch
 #python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 1 --seed 1 --lr 0.02 --mini-batch
