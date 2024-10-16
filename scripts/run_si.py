@@ -135,7 +135,7 @@ def main(args):
                                 format="%(asctime)s %(levelname)s %(message)s")
             logger = SummaryWriter(log_dir=log_dir)
             start_time = dt.datetime.now()
-            print(f"===> Start system identification optimisation at:, {start_time.year}-{start_time.month}-{start_time.day} "
+            print(f"===> Start system identification optimisation at: {start_time.year}-{start_time.month}-{start_time.day} "
                   f"{start_time.hour}:{start_time.minute}:{start_time.second}")
             logging.info(f"===> Start grad computation at:, {start_time.year}-{start_time.month}-{start_time.day} "
                          f"{start_time.hour}:{start_time.minute}:{start_time.second}")
