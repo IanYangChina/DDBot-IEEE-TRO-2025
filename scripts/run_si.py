@@ -73,7 +73,7 @@ def main(args):
         env_cfg['collide_type'] = 'toi'
 
     loss_cfg = {
-        'use_height_map_loss': False,
+        'use_height_map_loss': args['use_height_map_loss'],
         'target_pcd_height_map_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
                                                    f'pcd_{motion_id}_cropped_norm_z_aligned_height_map-res60-vdsize0.001.npy'),
         'target_pcd_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',

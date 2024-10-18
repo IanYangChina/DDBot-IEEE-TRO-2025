@@ -1,14 +1,14 @@
-#python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 0 --toi-contact
-#python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 1 --toi-contact
-#python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 2 --toi-contact
-#python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 3 --toi-contact
-#python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 4 --toi-contact
-#
-#python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 0 --hm --toi-contact
-#python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 1 --hm --toi-contact
-#python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 2 --hm --toi-contact
-#python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 3 --hm --toi-contact
-#python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 4 --hm --toi-contact
+python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 0 --hm
+python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 1 --hm
+python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 2 --hm
+python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 3 --hm
+python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 4 --hm
+
+python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 0 --hm --soft-contact
+python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 1 --hm --soft-contact
+python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 2 --hm --soft-contact
+python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 3 --hm --soft-contact
+python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 4 --hm --soft-contact
 
 python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 0 --seed 0 --lr 0.02
 python run_so_abs2.py --ptcl_d 5e6 --cuda_GB 8 --task-id 0 --seed 1 --lr 0.02
