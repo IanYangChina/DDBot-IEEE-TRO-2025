@@ -111,7 +111,9 @@ def find_best_parameters(hm=False, soft=False):
         with open(os.path.join(case_folder, f'seed-{seed_0}',
                                'best_heightmap_loss.json')) as f:
             data_0 = json.load(f)
-            print(f'seed-{seed_0}',data_0['Step'],
+            print(f'case-{case}\n',
+                  f'seed-{seed_0}',
+                  data_0['Step'],
                   data_0['Loss']['height_map_loss'],
                   '&', data_0['Loss']['emd_loss'],
                   '&', data_0['Parameters']['E'],
@@ -123,8 +125,8 @@ def find_best_parameters(hm=False, soft=False):
         open(os.path.join(script_path, '..', 'log-sys_id'+folder_suffix, f'{case}-best_params.json'), 'w').write(json.dumps(best_params))
 
 
+find_best_parameters(soft=True, hm=True)
 find_best_parameters(soft=True)
-# find_best_parameters(hm=True)
 # exit()
 
 
