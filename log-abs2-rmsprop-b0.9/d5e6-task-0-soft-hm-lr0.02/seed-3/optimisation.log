@@ -1,0 +1,2200 @@
+2024-10-20 19:09:27,875 INFO ===> New TaichiEnv created.
+2024-10-20 19:09:27,875 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:09:56,075 INFO =====> Epoch: 0
+2024-10-20 19:09:56,075 INFO =====> EMD Loss: 27.78391456604004
+2024-10-20 19:09:56,075 INFO =====> Height map loss: 24.09552574157715
+2024-10-20 19:09:56,075 INFO =====> Insertion loss: 0.0
+2024-10-20 19:09:56,075 INFO =====> Grad: [ 3.2626088e+04 -5.0529371e+04  1.2776953e-03 -8.7094930e+04
+  1.9133616e-03]
+2024-10-20 19:09:56,075 INFO =====> Skill params: [-0.7651835  -0.64511055  0.08461067  0.6440012  -0.36402848]
+2024-10-20 19:09:56,075 INFO =====> Num. aborted data so far: 0
+2024-10-20 19:09:56,348 INFO ===> New TaichiEnv created.
+2024-10-20 19:09:56,348 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:10:22,621 ERROR ===> [Warning] Aborting epoch: 1
+2024-10-20 19:10:22,621 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:10:22,621 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:10:22,621 ERROR ===> [Warning] Skill params: [-0.7651835  -0.64511055  0.08461067  0.6440012  -0.36402848]
+2024-10-20 19:10:22,621 ERROR ===> [Warning] Skill params grad: [-3.3776327e+10  9.3338837e+10 -2.9461377e+02 -7.8655349e+10
+ -2.2315969e+03]
+2024-10-20 19:10:22,621 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.29876708984375, 'emd_loss': 28.01117706298828, 'total_loss': 24.29876708984375}
+2024-10-20 19:10:22,623 INFO =====> Epoch: 1
+2024-10-20 19:10:22,623 INFO =====> EMD Loss: nan
+2024-10-20 19:10:22,623 INFO =====> Height map loss: nan
+2024-10-20 19:10:22,623 INFO =====> Insertion loss: nan
+2024-10-20 19:10:22,623 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:10:22,623 INFO =====> Skill params: [-0.7651835  -0.64511055  0.08455987  0.6440012  -0.3640629 ]
+2024-10-20 19:10:22,623 INFO =====> Num. aborted data so far: 1
+2024-10-20 19:10:22,896 INFO ===> New TaichiEnv created.
+2024-10-20 19:10:22,896 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:10:49,913 INFO =====> Epoch: 2
+2024-10-20 19:10:49,914 INFO =====> EMD Loss: 28.02016258239746
+2024-10-20 19:10:49,914 INFO =====> Height map loss: 24.3038387298584
+2024-10-20 19:10:49,914 INFO =====> Insertion loss: 0.0
+2024-10-20 19:10:49,914 INFO =====> Grad: [-2.5447923e+09  7.0043034e+09  1.3679840e+03 -6.6185795e+09
+  2.5971936e+02]
+2024-10-20 19:10:49,914 INFO =====> Skill params: [-0.701938   -0.7083561   0.02131432  0.7072467  -0.42730844]
+2024-10-20 19:10:49,914 INFO =====> Num. aborted data so far: 1
+2024-10-20 19:10:50,201 INFO ===> New TaichiEnv created.
+2024-10-20 19:10:50,201 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:11:18,460 ERROR ===> [Warning] Aborting epoch: 3
+2024-10-20 19:11:18,460 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:11:18,460 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:11:18,460 ERROR ===> [Warning] Skill params: [-0.701938   -0.7083561   0.02131432  0.7072467  -0.42730844]
+2024-10-20 19:11:18,460 ERROR ===> [Warning] Skill params grad: [-1.9487105e+11  3.7447736e+11 -6.9813340e+03 -5.5238407e+11
+ -1.6079140e+04]
+2024-10-20 19:11:18,460 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.61990737915039, 'emd_loss': 27.710134506225586, 'total_loss': 23.61990737915039}
+2024-10-20 19:11:18,461 INFO =====> Epoch: 3
+2024-10-20 19:11:18,461 INFO =====> EMD Loss: nan
+2024-10-20 19:11:18,461 INFO =====> Height map loss: nan
+2024-10-20 19:11:18,461 INFO =====> Insertion loss: nan
+2024-10-20 19:11:18,462 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:11:18,462 INFO =====> Skill params: [-0.701938   -0.7083561   0.02131432  0.7072467  -0.42730844]
+2024-10-20 19:11:18,462 INFO =====> Num. aborted data so far: 2
+2024-10-20 19:11:18,821 INFO ===> New TaichiEnv created.
+2024-10-20 19:11:18,821 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:11:46,010 ERROR ===> [Warning] Aborting epoch: 4
+2024-10-20 19:11:46,010 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:11:46,010 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:11:46,010 ERROR ===> [Warning] Skill params: [-0.701938   -0.7083561   0.02131432  0.7072467  -0.42730844]
+2024-10-20 19:11:46,010 ERROR ===> [Warning] Skill params grad: [ 8.2439545e+10 -1.5839671e+11 -2.9590645e+03  2.3356542e+11
+ -1.0594170e+03]
+2024-10-20 19:11:46,010 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.620519638061523, 'emd_loss': 27.70878791809082, 'total_loss': 23.620519638061523}
+2024-10-20 19:11:46,011 INFO =====> Epoch: 4
+2024-10-20 19:11:46,011 INFO =====> EMD Loss: nan
+2024-10-20 19:11:46,012 INFO =====> Height map loss: nan
+2024-10-20 19:11:46,012 INFO =====> Insertion loss: nan
+2024-10-20 19:11:46,012 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:11:46,012 INFO =====> Skill params: [-0.701938   -0.7083561   0.02131432  0.7072467  -0.42730844]
+2024-10-20 19:11:46,012 INFO =====> Num. aborted data so far: 3
+2024-10-20 19:11:46,305 INFO ===> New TaichiEnv created.
+2024-10-20 19:11:46,305 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:12:13,383 ERROR ===> [Warning] Aborting epoch: 5
+2024-10-20 19:12:13,383 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:12:13,383 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:12:13,383 ERROR ===> [Warning] Skill params: [-0.701938   -0.7083561   0.02131432  0.7072467  -0.42730844]
+2024-10-20 19:12:13,384 ERROR ===> [Warning] Skill params grad: [-4.1803773e+09  8.0467021e+09  2.7082434e+02 -1.2945394e+10
+  2.2828523e+02]
+2024-10-20 19:12:13,384 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.633533477783203, 'emd_loss': 27.707544326782227, 'total_loss': 23.633533477783203}
+2024-10-20 19:12:13,385 INFO =====> Epoch: 5
+2024-10-20 19:12:13,385 INFO =====> EMD Loss: nan
+2024-10-20 19:12:13,385 INFO =====> Height map loss: nan
+2024-10-20 19:12:13,385 INFO =====> Insertion loss: nan
+2024-10-20 19:12:13,385 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:12:13,385 INFO =====> Skill params: [-0.701938   -0.7083561   0.02131432  0.7072467  -0.42730844]
+2024-10-20 19:12:13,385 INFO =====> Num. aborted data so far: 4
+2024-10-20 19:12:13,824 INFO ===> New TaichiEnv created.
+2024-10-20 19:12:13,824 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:12:42,272 INFO =====> Epoch: 6
+2024-10-20 19:12:42,272 INFO =====> EMD Loss: 27.70645523071289
+2024-10-20 19:12:42,272 INFO =====> Height map loss: 23.632478713989258
+2024-10-20 19:12:42,272 INFO =====> Insertion loss: 0.0
+2024-10-20 19:12:42,272 INFO =====> Grad: [ 1.0858182e+07 -2.1219164e+07 -1.0273123e+00  3.4573884e+07
+  7.0277369e-01]
+2024-10-20 19:12:42,272 INFO =====> Skill params: [-0.7022711  -0.7081196   0.02137296  0.70683885 -0.4275197 ]
+2024-10-20 19:12:42,272 INFO =====> Num. aborted data so far: 4
+2024-10-20 19:12:42,579 INFO ===> New TaichiEnv created.
+2024-10-20 19:12:42,579 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:13:09,741 ERROR ===> [Warning] Aborting epoch: 7
+2024-10-20 19:13:09,741 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:13:09,741 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:13:09,741 ERROR ===> [Warning] Skill params: [-0.7022711  -0.7081196   0.02137296  0.70683885 -0.4275197 ]
+2024-10-20 19:13:09,741 ERROR ===> [Warning] Skill params grad: [-4.5012296e+10  8.6068339e+10 -4.1521016e+03 -1.1835677e+11
+  7.6336870e+03]
+2024-10-20 19:13:09,741 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.665590286254883, 'emd_loss': 27.727752685546875, 'total_loss': 23.665590286254883}
+2024-10-20 19:13:09,742 INFO =====> Epoch: 7
+2024-10-20 19:13:09,742 INFO =====> EMD Loss: nan
+2024-10-20 19:13:09,742 INFO =====> Height map loss: nan
+2024-10-20 19:13:09,742 INFO =====> Insertion loss: nan
+2024-10-20 19:13:09,742 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:13:09,742 INFO =====> Skill params: [-0.7022711  -0.7081196   0.02137296  0.70683885 -0.4275197 ]
+2024-10-20 19:13:09,742 INFO =====> Num. aborted data so far: 5
+2024-10-20 19:13:10,068 INFO ===> New TaichiEnv created.
+2024-10-20 19:13:10,068 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:13:37,109 INFO =====> Epoch: 8
+2024-10-20 19:13:37,109 INFO =====> EMD Loss: 27.741649627685547
+2024-10-20 19:13:37,109 INFO =====> Height map loss: 23.669126510620117
+2024-10-20 19:13:37,109 INFO =====> Insertion loss: 0.0
+2024-10-20 19:13:37,109 INFO =====> Grad: [ 9.9733641e+04 -2.5472085e+03 -2.0564228e-02 -6.8650888e+05
+  2.7818812e-02]
+2024-10-20 19:13:37,109 INFO =====> Skill params: [-0.7022745  -0.7081195   0.02137426  0.70684785 -0.427529  ]
+2024-10-20 19:13:37,109 INFO =====> Num. aborted data so far: 5
+2024-10-20 19:13:37,423 INFO ===> New TaichiEnv created.
+2024-10-20 19:13:37,423 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:14:04,591 INFO =====> Epoch: 9
+2024-10-20 19:14:04,591 INFO =====> EMD Loss: 27.724348068237305
+2024-10-20 19:14:04,591 INFO =====> Height map loss: 23.668914794921875
+2024-10-20 19:14:04,591 INFO =====> Insertion loss: 0.0
+2024-10-20 19:14:04,591 INFO =====> Grad: [ 4.9859441e+04 -8.0891789e+04 -1.8590159e-03  6.0842646e+03
+  1.8935226e-03]
+2024-10-20 19:14:04,591 INFO =====> Skill params: [-0.7022763  -0.70811844  0.02137439  0.7068478  -0.42752966]
+2024-10-20 19:14:04,591 INFO =====> Num. aborted data so far: 5
+2024-10-20 19:14:04,918 INFO ===> New TaichiEnv created.
+2024-10-20 19:14:04,918 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:14:32,113 INFO =====> Epoch: 10
+2024-10-20 19:14:32,113 INFO =====> EMD Loss: 27.727672576904297
+2024-10-20 19:14:32,113 INFO =====> Height map loss: 23.66814613342285
+2024-10-20 19:14:32,113 INFO =====> Insertion loss: 0.0
+2024-10-20 19:14:32,113 INFO =====> Grad: [ 6.4928219e+05 -1.1529546e+06  1.5768800e-02  1.7201556e+06
+ -1.1939531e-02]
+2024-10-20 19:14:32,113 INFO =====> Skill params: [-0.7023009  -0.7081026   0.02137328  0.70682275 -0.42752522]
+2024-10-20 19:14:32,113 INFO =====> Num. aborted data so far: 5
+2024-10-20 19:14:32,421 INFO ===> New TaichiEnv created.
+2024-10-20 19:14:32,421 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:14:59,288 ERROR ===> [Warning] Aborting epoch: 11
+2024-10-20 19:14:59,288 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:14:59,288 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:14:59,288 ERROR ===> [Warning] Skill params: [-0.7023009  -0.7081026   0.02137328  0.70682275 -0.42752522]
+2024-10-20 19:14:59,288 ERROR ===> [Warning] Skill params grad: [ 2.9204365e+11 -5.5746200e+11  3.1228350e+04  7.6227294e+11
+ -2.2377029e+04]
+2024-10-20 19:14:59,288 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.668346405029297, 'emd_loss': 27.725704193115234, 'total_loss': 23.668346405029297}
+2024-10-20 19:14:59,289 INFO =====> Epoch: 11
+2024-10-20 19:14:59,289 INFO =====> EMD Loss: nan
+2024-10-20 19:14:59,289 INFO =====> Height map loss: nan
+2024-10-20 19:14:59,289 INFO =====> Insertion loss: nan
+2024-10-20 19:14:59,289 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:14:59,289 INFO =====> Skill params: [-0.7023009  -0.7081026   0.02137328  0.70682275 -0.42752522]
+2024-10-20 19:14:59,289 INFO =====> Num. aborted data so far: 6
+2024-10-20 19:14:59,607 INFO ===> New TaichiEnv created.
+2024-10-20 19:14:59,607 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:15:26,663 ERROR ===> [Warning] Aborting epoch: 12
+2024-10-20 19:15:26,663 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:15:26,663 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:15:26,663 ERROR ===> [Warning] Skill params: [-0.7023009  -0.7081026   0.02137328  0.70682275 -0.42752522]
+2024-10-20 19:15:26,663 ERROR ===> [Warning] Skill params grad: [-5.06254705e+10  9.69799680e+10 -3.89813232e+03 -1.34186435e+11
+  3.62161108e+03]
+2024-10-20 19:15:26,663 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.66819953918457, 'emd_loss': 27.72502326965332, 'total_loss': 23.66819953918457}
+2024-10-20 19:15:26,664 INFO =====> Epoch: 12
+2024-10-20 19:15:26,664 INFO =====> EMD Loss: nan
+2024-10-20 19:15:26,664 INFO =====> Height map loss: nan
+2024-10-20 19:15:26,664 INFO =====> Insertion loss: nan
+2024-10-20 19:15:26,664 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:15:26,664 INFO =====> Skill params: [-0.7023009  -0.7081026   0.02137328  0.70682275 -0.42752522]
+2024-10-20 19:15:26,664 INFO =====> Num. aborted data so far: 7
+2024-10-20 19:15:26,980 INFO ===> New TaichiEnv created.
+2024-10-20 19:15:26,980 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:15:54,128 INFO =====> Epoch: 13
+2024-10-20 19:15:54,128 INFO =====> EMD Loss: 27.718429565429688
+2024-10-20 19:15:54,128 INFO =====> Height map loss: 23.665489196777344
+2024-10-20 19:15:54,129 INFO =====> Insertion loss: 0.0
+2024-10-20 19:15:54,129 INFO =====> Grad: [-1.1426969e+05  1.6583852e+05 -1.4454047e-03  7.1222906e+04
+ -9.5328633e-03]
+2024-10-20 19:15:54,129 INFO =====> Skill params: [-0.70229584 -0.70810527  0.02137339  0.70682156 -0.42752108]
+2024-10-20 19:15:54,129 INFO =====> Num. aborted data so far: 7
+2024-10-20 19:15:54,441 INFO ===> New TaichiEnv created.
+2024-10-20 19:15:54,442 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:16:21,545 ERROR ===> [Warning] Aborting epoch: 14
+2024-10-20 19:16:21,545 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:16:21,545 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:16:21,545 ERROR ===> [Warning] Skill params: [-0.70229584 -0.70810527  0.02137339  0.70682156 -0.42752108]
+2024-10-20 19:16:21,545 ERROR ===> [Warning] Skill params grad: [-2.0415190e+11  3.9129249e+11  3.1317641e+04 -5.4172913e+11
+ -1.7233088e+04]
+2024-10-20 19:16:21,545 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.66794776916504, 'emd_loss': 27.72613525390625, 'total_loss': 23.66794776916504}
+2024-10-20 19:16:21,546 INFO =====> Epoch: 14
+2024-10-20 19:16:21,546 INFO =====> EMD Loss: nan
+2024-10-20 19:16:21,546 INFO =====> Height map loss: nan
+2024-10-20 19:16:21,546 INFO =====> Insertion loss: nan
+2024-10-20 19:16:21,546 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:16:21,546 INFO =====> Skill params: [-0.70229584 -0.70810527  0.02137339  0.70682156 -0.42752108]
+2024-10-20 19:16:21,546 INFO =====> Num. aborted data so far: 8
+2024-10-20 19:16:21,935 INFO ===> New TaichiEnv created.
+2024-10-20 19:16:21,935 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:16:49,225 INFO =====> Epoch: 15
+2024-10-20 19:16:49,225 INFO =====> EMD Loss: 27.72602653503418
+2024-10-20 19:16:49,225 INFO =====> Height map loss: 23.668560028076172
+2024-10-20 19:16:49,225 INFO =====> Insertion loss: 0.0
+2024-10-20 19:16:49,225 INFO =====> Grad: [-2.4157022e+05  4.6724147e+05  6.4692400e-02 -6.8235425e+05
+  1.2825102e-02]
+2024-10-20 19:16:49,225 INFO =====> Skill params: [-0.7022839  -0.7081136   0.02136746  0.7068345  -0.42752728]
+2024-10-20 19:16:49,225 INFO =====> Num. aborted data so far: 8
+2024-10-20 19:16:49,609 INFO ===> New TaichiEnv created.
+2024-10-20 19:16:49,609 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:17:16,847 ERROR ===> [Warning] Aborting epoch: 16
+2024-10-20 19:17:16,847 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:17:16,847 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:17:16,847 ERROR ===> [Warning] Skill params: [-0.7022839  -0.7081136   0.02136746  0.7068345  -0.42752728]
+2024-10-20 19:17:16,848 ERROR ===> [Warning] Skill params grad: [-1.0677702e+11  2.0378391e+11  2.0528840e+04 -2.7862611e+11
+ -1.8553926e+03]
+2024-10-20 19:17:16,848 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.668046951293945, 'emd_loss': 27.71657371520996, 'total_loss': 23.668046951293945}
+2024-10-20 19:17:16,849 INFO =====> Epoch: 16
+2024-10-20 19:17:16,849 INFO =====> EMD Loss: nan
+2024-10-20 19:17:16,849 INFO =====> Height map loss: nan
+2024-10-20 19:17:16,849 INFO =====> Insertion loss: nan
+2024-10-20 19:17:16,849 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:17:16,849 INFO =====> Skill params: [-0.7022839  -0.7081136   0.02136746  0.7068345  -0.42752728]
+2024-10-20 19:17:16,849 INFO =====> Num. aborted data so far: 9
+2024-10-20 19:17:17,166 INFO ===> New TaichiEnv created.
+2024-10-20 19:17:17,166 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:17:44,300 INFO =====> Epoch: 17
+2024-10-20 19:17:44,300 INFO =====> EMD Loss: 27.716333389282227
+2024-10-20 19:17:44,300 INFO =====> Height map loss: 23.66798210144043
+2024-10-20 19:17:44,300 INFO =====> Insertion loss: 0.0
+2024-10-20 19:17:44,300 INFO =====> Grad: [-1.8800058e+06  3.9353580e+06  4.3392122e-01 -5.0795460e+06
+ -3.0246858e-02]
+2024-10-20 19:17:44,300 INFO =====> Skill params: [-0.7021809  -0.70819193  0.02132325  0.7069415  -0.42751104]
+2024-10-20 19:17:44,300 INFO =====> Num. aborted data so far: 9
+2024-10-20 19:17:44,617 INFO ===> New TaichiEnv created.
+2024-10-20 19:17:44,617 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:18:12,582 INFO =====> Epoch: 18
+2024-10-20 19:18:12,582 INFO =====> EMD Loss: 27.718128204345703
+2024-10-20 19:18:12,582 INFO =====> Height map loss: 23.660490036010742
+2024-10-20 19:18:12,582 INFO =====> Insertion loss: 0.0
+2024-10-20 19:18:12,582 INFO =====> Grad: [-1.1979939e+07  2.3095846e+07 -3.0752873e-01 -3.6907824e+07
+ -6.6535014e-01]
+2024-10-20 19:18:12,582 INFO =====> Skill params: [-0.7014893  -0.7086764   0.02135628  0.7077607  -0.42713466]
+2024-10-20 19:18:12,582 INFO =====> Num. aborted data so far: 9
+2024-10-20 19:18:12,936 INFO ===> New TaichiEnv created.
+2024-10-20 19:18:12,936 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:18:41,850 INFO =====> Epoch: 19
+2024-10-20 19:18:41,850 INFO =====> EMD Loss: 27.701143264770508
+2024-10-20 19:18:41,850 INFO =====> Height map loss: 23.589479446411133
+2024-10-20 19:18:41,851 INFO =====> Insertion loss: 0.0
+2024-10-20 19:18:41,851 INFO =====> Grad: [ 5.1785586e+04 -5.0518160e+04  4.6988018e-04  1.7898353e+05
+  4.1796924e-03]
+2024-10-20 19:18:41,851 INFO =====> Skill params: [-0.7014925  -0.70867527  0.02135623  0.7077565  -0.42713717]
+2024-10-20 19:18:41,851 INFO =====> Num. aborted data so far: 9
+2024-10-20 19:18:42,168 INFO ===> New TaichiEnv created.
+2024-10-20 19:18:42,168 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:19:09,796 INFO =====> Epoch: 20
+2024-10-20 19:19:09,796 INFO =====> EMD Loss: 27.6910400390625
+2024-10-20 19:19:09,796 INFO =====> Height map loss: 23.5939998626709
+2024-10-20 19:19:09,796 INFO =====> Insertion loss: 0.0
+2024-10-20 19:19:09,796 INFO =====> Grad: [-4.2172875e+05  2.9343772e+05  5.7208408e-03  2.5404211e+05
+ -7.1929172e-02]
+2024-10-20 19:19:09,796 INFO =====> Skill params: [-0.7014654  -0.7086821   0.02135554  0.70775026 -0.42709196]
+2024-10-20 19:19:09,796 INFO =====> Num. aborted data so far: 9
+2024-10-20 19:19:10,116 INFO ===> New TaichiEnv created.
+2024-10-20 19:19:10,116 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:19:37,707 INFO =====> Epoch: 21
+2024-10-20 19:19:37,707 INFO =====> EMD Loss: 27.704973220825195
+2024-10-20 19:19:37,707 INFO =====> Height map loss: 23.586101531982422
+2024-10-20 19:19:37,707 INFO =====> Insertion loss: 0.0
+2024-10-20 19:19:37,707 INFO =====> Grad: [ 1.13640516e+05 -1.79256328e+05 -5.22744423e-03  1.46714734e+05
+ -5.17879054e-03]
+2024-10-20 19:19:37,707 INFO =====> Skill params: [-0.7014731  -0.7086777   0.0213562   0.70774645 -0.42708853]
+2024-10-20 19:19:37,707 INFO =====> Num. aborted data so far: 9
+2024-10-20 19:19:38,039 INFO ===> New TaichiEnv created.
+2024-10-20 19:19:38,039 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:20:05,224 INFO =====> Epoch: 22
+2024-10-20 19:20:05,224 INFO =====> EMD Loss: 27.692020416259766
+2024-10-20 19:20:05,224 INFO =====> Height map loss: 23.59592056274414
+2024-10-20 19:20:05,224 INFO =====> Insertion loss: 0.0
+2024-10-20 19:20:05,224 INFO =====> Grad: [-5.7834512e+04  1.5014028e+05 -6.5462571e-03 -3.2704844e+05
+  1.1472934e-02]
+2024-10-20 19:20:05,224 INFO =====> Skill params: [-0.701469   -0.7086816   0.02135707  0.7077554  -0.42709655]
+2024-10-20 19:20:05,224 INFO =====> Num. aborted data so far: 9
+2024-10-20 19:20:05,546 INFO ===> New TaichiEnv created.
+2024-10-20 19:20:05,547 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:20:33,769 INFO =====> Epoch: 23
+2024-10-20 19:20:33,769 INFO =====> EMD Loss: 27.702974319458008
+2024-10-20 19:20:33,769 INFO =====> Height map loss: 23.596298217773438
+2024-10-20 19:20:33,769 INFO =====> Insertion loss: 0.0
+2024-10-20 19:20:33,769 INFO =====> Grad: [ 8.5234312e+05 -1.6019865e+06  6.6478364e-02  1.9660496e+06
+  1.0944041e-01]
+2024-10-20 19:20:33,769 INFO =====> Skill params: [-0.701533   -0.70863783  0.02134778  0.7076986  -0.4271771 ]
+2024-10-20 19:20:33,769 INFO =====> Num. aborted data so far: 9
+2024-10-20 19:20:34,236 INFO ===> New TaichiEnv created.
+2024-10-20 19:20:34,236 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:21:02,449 INFO =====> Epoch: 24
+2024-10-20 19:21:02,449 INFO =====> EMD Loss: 27.702558517456055
+2024-10-20 19:21:02,449 INFO =====> Height map loss: 23.61452293395996
+2024-10-20 19:21:02,449 INFO =====> Insertion loss: 0.0
+2024-10-20 19:21:02,449 INFO =====> Grad: [-2.3034594e+04  1.0858841e+05 -1.7132645e-02 -3.1946878e+05
+ -2.3499593e-02]
+2024-10-20 19:21:02,449 INFO =====> Skill params: [-0.7015312  -0.70864093  0.0213503   0.7077083  -0.42715886]
+2024-10-20 19:21:02,449 INFO =====> Num. aborted data so far: 9
+2024-10-20 19:21:02,861 INFO ===> New TaichiEnv created.
+2024-10-20 19:21:02,861 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:21:30,231 INFO =====> Epoch: 25
+2024-10-20 19:21:30,232 INFO =====> EMD Loss: 27.708885192871094
+2024-10-20 19:21:30,232 INFO =====> Height map loss: 23.6074161529541
+2024-10-20 19:21:30,232 INFO =====> Insertion loss: 0.0
+2024-10-20 19:21:30,232 INFO =====> Grad: [-1.1016716e+04 -1.2819491e+05 -4.0224425e-02  4.3100441e+05
+  1.7567309e-02]
+2024-10-20 19:21:30,232 INFO =====> Skill params: [-0.7015303  -0.70863706  0.02135655  0.7076945  -0.42717323]
+2024-10-20 19:21:30,232 INFO =====> Num. aborted data so far: 9
+2024-10-20 19:21:30,558 INFO ===> New TaichiEnv created.
+2024-10-20 19:21:30,558 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:21:57,728 INFO =====> Epoch: 26
+2024-10-20 19:21:57,728 INFO =====> EMD Loss: 27.704376220703125
+2024-10-20 19:21:57,728 INFO =====> Height map loss: 23.606760025024414
+2024-10-20 19:21:57,728 INFO =====> Insertion loss: 0.0
+2024-10-20 19:21:57,728 INFO =====> Grad: [-4.9057865e+06  9.5798890e+06  3.4005812e-01 -1.5624873e+07
+  2.2166812e-01]
+2024-10-20 19:21:57,728 INFO =====> Skill params: [-0.7010986  -0.7089433   0.02130088  0.70822304 -0.42736435]
+2024-10-20 19:21:57,728 INFO =====> Num. aborted data so far: 9
+2024-10-20 19:21:58,060 INFO ===> New TaichiEnv created.
+2024-10-20 19:21:58,060 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:22:25,489 ERROR ===> [Warning] Aborting epoch: 27
+2024-10-20 19:22:25,490 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:22:25,490 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:22:25,490 ERROR ===> [Warning] Skill params: [-0.7010986  -0.7089433   0.02130088  0.70822304 -0.42736435]
+2024-10-20 19:22:25,490 ERROR ===> [Warning] Skill params grad: [-1.7450870e+21  3.3388460e+21 -1.7144921e+14 -4.4422130e+21
+ -1.5071792e+14]
+2024-10-20 19:22:25,490 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.60652732849121, 'emd_loss': 27.668312072753906, 'total_loss': 23.60652732849121}
+2024-10-20 19:22:25,491 INFO =====> Epoch: 27
+2024-10-20 19:22:25,491 INFO =====> EMD Loss: nan
+2024-10-20 19:22:25,491 INFO =====> Height map loss: nan
+2024-10-20 19:22:25,491 INFO =====> Insertion loss: nan
+2024-10-20 19:22:25,491 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:22:25,491 INFO =====> Skill params: [-0.7010986  -0.7089433   0.02130088  0.70822304 -0.42736435]
+2024-10-20 19:22:25,491 INFO =====> Num. aborted data so far: 10
+2024-10-20 19:22:25,815 INFO ===> New TaichiEnv created.
+2024-10-20 19:22:25,815 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:22:53,241 ERROR ===> [Warning] Aborting epoch: 28
+2024-10-20 19:22:53,241 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:22:53,241 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:22:53,241 ERROR ===> [Warning] Skill params: [-0.7010986  -0.7089433   0.02130088  0.70822304 -0.42736435]
+2024-10-20 19:22:53,241 ERROR ===> [Warning] Skill params grad: [-1.4631076e+23  2.7992610e+23 -1.9653519e+16 -3.7241494e+23
+ -1.2005453e+16]
+2024-10-20 19:22:53,241 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.602859497070312, 'emd_loss': 27.671825408935547, 'total_loss': 23.602859497070312}
+2024-10-20 19:22:53,242 INFO =====> Epoch: 28
+2024-10-20 19:22:53,243 INFO =====> EMD Loss: nan
+2024-10-20 19:22:53,243 INFO =====> Height map loss: nan
+2024-10-20 19:22:53,243 INFO =====> Insertion loss: nan
+2024-10-20 19:22:53,243 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:22:53,243 INFO =====> Skill params: [-0.7010986  -0.7089433   0.02130088  0.70822304 -0.42736435]
+2024-10-20 19:22:53,243 INFO =====> Num. aborted data so far: 11
+2024-10-20 19:22:53,565 INFO ===> New TaichiEnv created.
+2024-10-20 19:22:53,565 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:23:20,833 INFO =====> Epoch: 29
+2024-10-20 19:23:20,833 INFO =====> EMD Loss: 27.659725189208984
+2024-10-20 19:23:20,833 INFO =====> Height map loss: 23.608970642089844
+2024-10-20 19:23:20,833 INFO =====> Insertion loss: 0.0
+2024-10-20 19:23:20,833 INFO =====> Grad: [-3.7159359e+05  1.4652694e+05  1.9621616e-03  5.7176112e+05
+ -6.4791352e-02]
+2024-10-20 19:23:20,833 INFO =====> Skill params: [-0.70106035 -0.7089488   0.0213005   0.7082004  -0.42729893]
+2024-10-20 19:23:20,833 INFO =====> Num. aborted data so far: 11
+2024-10-20 19:23:21,172 INFO ===> New TaichiEnv created.
+2024-10-20 19:23:21,173 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:23:48,200 ERROR ===> [Warning] Aborting epoch: 30
+2024-10-20 19:23:48,200 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:23:48,200 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:23:48,200 ERROR ===> [Warning] Skill params: [-0.70106035 -0.7089488   0.0213005   0.7082004  -0.42729893]
+2024-10-20 19:23:48,201 ERROR ===> [Warning] Skill params grad: [ 1.7908035e+19 -3.4300956e+19 -4.0501489e+12  4.6480504e+19
+  1.5620439e+12]
+2024-10-20 19:23:48,201 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.597253799438477, 'emd_loss': 27.661752700805664, 'total_loss': 23.597253799438477}
+2024-10-20 19:23:48,202 INFO =====> Epoch: 30
+2024-10-20 19:23:48,202 INFO =====> EMD Loss: nan
+2024-10-20 19:23:48,202 INFO =====> Height map loss: nan
+2024-10-20 19:23:48,202 INFO =====> Insertion loss: nan
+2024-10-20 19:23:48,202 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:23:48,202 INFO =====> Skill params: [-0.70106035 -0.7089488   0.0213005   0.7082004  -0.42729893]
+2024-10-20 19:23:48,202 INFO =====> Num. aborted data so far: 12
+2024-10-20 19:23:48,543 INFO ===> New TaichiEnv created.
+2024-10-20 19:23:48,543 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:24:16,056 ERROR ===> [Warning] Aborting epoch: 31
+2024-10-20 19:24:16,057 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:24:16,057 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:24:16,057 ERROR ===> [Warning] Skill params: [-0.70106035 -0.7089488   0.0213005   0.7082004  -0.42729893]
+2024-10-20 19:24:16,057 ERROR ===> [Warning] Skill params grad: [-1.7355685e+22  3.3230375e+22  3.8144966e+15 -4.4978580e+22
+  1.2417646e+15]
+2024-10-20 19:24:16,057 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.59681510925293, 'emd_loss': 27.672218322753906, 'total_loss': 23.59681510925293}
+2024-10-20 19:24:16,058 INFO =====> Epoch: 31
+2024-10-20 19:24:16,058 INFO =====> EMD Loss: nan
+2024-10-20 19:24:16,058 INFO =====> Height map loss: nan
+2024-10-20 19:24:16,058 INFO =====> Insertion loss: nan
+2024-10-20 19:24:16,058 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:24:16,058 INFO =====> Skill params: [-0.70106035 -0.7089488   0.0213005   0.7082004  -0.42729893]
+2024-10-20 19:24:16,058 INFO =====> Num. aborted data so far: 13
+2024-10-20 19:24:16,416 INFO ===> New TaichiEnv created.
+2024-10-20 19:24:16,416 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:24:43,956 ERROR ===> [Warning] Aborting epoch: 32
+2024-10-20 19:24:43,956 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:24:43,956 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:24:43,956 ERROR ===> [Warning] Skill params: [-0.70106035 -0.7089488   0.0213005   0.7082004  -0.42729893]
+2024-10-20 19:24:43,956 ERROR ===> [Warning] Skill params grad: [-1.0671382e+15  2.0460395e+15  1.2383867e+08 -3.3370460e+15
+  1.3805021e+08]
+2024-10-20 19:24:43,956 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.602285385131836, 'emd_loss': 27.661029815673828, 'total_loss': 23.602285385131836}
+2024-10-20 19:24:43,957 INFO =====> Epoch: 32
+2024-10-20 19:24:43,957 INFO =====> EMD Loss: nan
+2024-10-20 19:24:43,957 INFO =====> Height map loss: nan
+2024-10-20 19:24:43,957 INFO =====> Insertion loss: nan
+2024-10-20 19:24:43,958 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:24:43,958 INFO =====> Skill params: [-0.70106035 -0.7089488   0.0213005   0.7082004  -0.42729893]
+2024-10-20 19:24:43,958 INFO =====> Num. aborted data so far: 14
+2024-10-20 19:24:44,289 INFO ===> New TaichiEnv created.
+2024-10-20 19:24:44,289 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:25:11,273 ERROR ===> [Warning] Aborting epoch: 33
+2024-10-20 19:25:11,273 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:25:11,273 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:25:11,273 ERROR ===> [Warning] Skill params: [-0.70106035 -0.7089488   0.0213005   0.7082004  -0.42729893]
+2024-10-20 19:25:11,273 ERROR ===> [Warning] Skill params grad: [-1.8906826e+16  3.6199939e+16  1.8185454e+09 -4.8823539e+16
+ -1.8700829e+09]
+2024-10-20 19:25:11,273 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.597126007080078, 'emd_loss': 27.66217613220215, 'total_loss': 23.597126007080078}
+2024-10-20 19:25:11,274 INFO =====> Epoch: 33
+2024-10-20 19:25:11,274 INFO =====> EMD Loss: nan
+2024-10-20 19:25:11,274 INFO =====> Height map loss: nan
+2024-10-20 19:25:11,274 INFO =====> Insertion loss: nan
+2024-10-20 19:25:11,275 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:25:11,275 INFO =====> Skill params: [-0.70106035 -0.7089488   0.0213005   0.7082004  -0.42729893]
+2024-10-20 19:25:11,275 INFO =====> Num. aborted data so far: 15
+2024-10-20 19:25:11,604 INFO ===> New TaichiEnv created.
+2024-10-20 19:25:11,604 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:25:38,954 INFO =====> Epoch: 34
+2024-10-20 19:25:38,955 INFO =====> EMD Loss: 27.660972595214844
+2024-10-20 19:25:38,955 INFO =====> Height map loss: 23.603374481201172
+2024-10-20 19:25:38,955 INFO =====> Insertion loss: 0.0
+2024-10-20 19:25:38,955 INFO =====> Grad: [ 2.1374346e+07 -4.1050864e+07 -4.2332401e+00  6.6982020e+07
+  4.1624242e-01]
+2024-10-20 19:25:38,955 INFO =====> Skill params: [-0.7039239  -0.70694953  0.02235655  0.70475185 -0.4278459 ]
+2024-10-20 19:25:38,955 INFO =====> Num. aborted data so far: 15
+2024-10-20 19:25:39,282 INFO ===> New TaichiEnv created.
+2024-10-20 19:25:39,282 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:26:06,571 INFO =====> Epoch: 35
+2024-10-20 19:26:06,571 INFO =====> EMD Loss: 27.727855682373047
+2024-10-20 19:26:06,571 INFO =====> Height map loss: 23.729480743408203
+2024-10-20 19:26:06,571 INFO =====> Insertion loss: 0.0
+2024-10-20 19:26:06,572 INFO =====> Grad: [ 9.5179544e+07 -1.7244942e+08 -7.9531908e-01  2.9514307e+08
+ -4.1753564e+00]
+2024-10-20 19:26:06,572 INFO =====> Skill params: [-0.71707124 -0.6981821   0.02256568  0.6892248  -0.42208645]
+2024-10-20 19:26:06,572 INFO =====> Num. aborted data so far: 15
+2024-10-20 19:26:06,914 INFO ===> New TaichiEnv created.
+2024-10-20 19:26:06,914 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:26:34,292 INFO =====> Epoch: 36
+2024-10-20 19:26:34,293 INFO =====> EMD Loss: 27.833274841308594
+2024-10-20 19:26:34,293 INFO =====> Height map loss: 24.02410125732422
+2024-10-20 19:26:34,293 INFO =====> Insertion loss: 0.0
+2024-10-20 19:26:34,293 INFO =====> Grad: [ 1.9885864e+05 -3.7303606e+05  2.1663941e-02  5.0113425e+05
+  2.8392745e-02]
+2024-10-20 19:26:34,293 INFO =====> Skill params: [-0.7171002  -0.69816214  0.02255967  0.689197   -0.42212772]
+2024-10-20 19:26:34,293 INFO =====> Num. aborted data so far: 15
+2024-10-20 19:26:34,637 INFO ===> New TaichiEnv created.
+2024-10-20 19:26:34,637 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:27:01,810 INFO =====> Epoch: 37
+2024-10-20 19:27:01,810 INFO =====> EMD Loss: 27.817636489868164
+2024-10-20 19:27:01,810 INFO =====> Height map loss: 24.04216194152832
+2024-10-20 19:27:01,810 INFO =====> Insertion loss: 0.0
+2024-10-20 19:27:01,810 INFO =====> Grad: [-4.3740781e+04  4.7969941e+04 -2.3112406e-03 -1.0492807e+05
+ -1.8095635e-03]
+2024-10-20 19:27:01,811 INFO =====> Skill params: [-0.71709347 -0.6981648   0.02256035  0.68920314 -0.42212495]
+2024-10-20 19:27:01,811 INFO =====> Num. aborted data so far: 15
+2024-10-20 19:27:02,151 INFO ===> New TaichiEnv created.
+2024-10-20 19:27:02,151 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:27:29,553 INFO =====> Epoch: 38
+2024-10-20 19:27:29,553 INFO =====> EMD Loss: 27.818777084350586
+2024-10-20 19:27:29,553 INFO =====> Height map loss: 24.045185089111328
+2024-10-20 19:27:29,553 INFO =====> Insertion loss: 0.0
+2024-10-20 19:27:29,553 INFO =====> Grad: [-6.7990420e+06  1.4134560e+07  3.1311125e-01 -1.9562138e+07
+ -6.0709602e-01]
+2024-10-20 19:27:29,553 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:27:29,553 INFO =====> Num. aborted data so far: 15
+2024-10-20 19:27:29,888 INFO ===> New TaichiEnv created.
+2024-10-20 19:27:29,888 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:27:57,472 ERROR ===> [Warning] Aborting epoch: 39
+2024-10-20 19:27:57,472 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:27:57,472 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:27:57,472 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:27:57,472 ERROR ===> [Warning] Skill params grad: [-6.9084507e+12  1.4151669e+13  1.9305045e+06 -1.7160979e+13
+  1.3589516e+04]
+2024-10-20 19:27:57,472 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.97631072998047, 'emd_loss': 27.832284927368164, 'total_loss': 23.97631072998047}
+2024-10-20 19:27:57,473 INFO =====> Epoch: 39
+2024-10-20 19:27:57,473 INFO =====> EMD Loss: nan
+2024-10-20 19:27:57,473 INFO =====> Height map loss: nan
+2024-10-20 19:27:57,473 INFO =====> Insertion loss: nan
+2024-10-20 19:27:57,473 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:27:57,474 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:27:57,474 INFO =====> Num. aborted data so far: 16
+2024-10-20 19:27:57,814 INFO ===> New TaichiEnv created.
+2024-10-20 19:27:57,814 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:28:25,409 ERROR ===> [Warning] Aborting epoch: 40
+2024-10-20 19:28:25,409 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:28:25,409 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:28:25,409 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:28:25,409 ERROR ===> [Warning] Skill params grad: [-6.8631910e+12  1.4058089e+13  3.6188694e+05 -1.7045381e+13
+ -8.6097805e+04]
+2024-10-20 19:28:25,409 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.978750228881836, 'emd_loss': 27.83635902404785, 'total_loss': 23.978750228881836}
+2024-10-20 19:28:25,411 INFO =====> Epoch: 40
+2024-10-20 19:28:25,411 INFO =====> EMD Loss: nan
+2024-10-20 19:28:25,411 INFO =====> Height map loss: nan
+2024-10-20 19:28:25,411 INFO =====> Insertion loss: nan
+2024-10-20 19:28:25,411 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:28:25,411 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:28:25,411 INFO =====> Num. aborted data so far: 17
+2024-10-20 19:28:25,766 INFO ===> New TaichiEnv created.
+2024-10-20 19:28:25,766 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:28:53,333 ERROR ===> [Warning] Aborting epoch: 41
+2024-10-20 19:28:53,333 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:28:53,333 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:28:53,333 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:28:53,333 ERROR ===> [Warning] Skill params grad: [ 7.9194006e+12 -1.6223906e+13  1.9283250e+05  1.9677479e+13
+  5.3099125e+05]
+2024-10-20 19:28:53,333 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.98025894165039, 'emd_loss': 27.836057662963867, 'total_loss': 23.98025894165039}
+2024-10-20 19:28:53,334 INFO =====> Epoch: 41
+2024-10-20 19:28:53,334 INFO =====> EMD Loss: nan
+2024-10-20 19:28:53,334 INFO =====> Height map loss: nan
+2024-10-20 19:28:53,334 INFO =====> Insertion loss: nan
+2024-10-20 19:28:53,334 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:28:53,334 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:28:53,334 INFO =====> Num. aborted data so far: 18
+2024-10-20 19:28:53,776 INFO ===> New TaichiEnv created.
+2024-10-20 19:28:53,776 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:29:20,836 ERROR ===> [Warning] Aborting epoch: 42
+2024-10-20 19:29:20,836 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:29:20,836 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:29:20,836 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:29:20,836 ERROR ===> [Warning] Skill params grad: [-3.3600406e+13  6.8844236e+13  2.9850418e+06 -8.3532223e+13
+  1.4712904e+06]
+2024-10-20 19:29:20,836 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.977827072143555, 'emd_loss': 27.836271286010742, 'total_loss': 23.977827072143555}
+2024-10-20 19:29:20,838 INFO =====> Epoch: 42
+2024-10-20 19:29:20,838 INFO =====> EMD Loss: nan
+2024-10-20 19:29:20,838 INFO =====> Height map loss: nan
+2024-10-20 19:29:20,838 INFO =====> Insertion loss: nan
+2024-10-20 19:29:20,838 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:29:20,838 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:29:20,838 INFO =====> Num. aborted data so far: 19
+2024-10-20 19:29:21,192 INFO ===> New TaichiEnv created.
+2024-10-20 19:29:21,192 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:29:48,282 ERROR ===> [Warning] Aborting epoch: 43
+2024-10-20 19:29:48,283 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:29:48,283 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:29:48,283 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:29:48,283 ERROR ===> [Warning] Skill params grad: [-3.0660106e+10  6.2802850e+10  2.0888171e+03 -7.6154208e+10
+ -2.7735626e+02]
+2024-10-20 19:29:48,283 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.978025436401367, 'emd_loss': 27.83648681640625, 'total_loss': 23.978025436401367}
+2024-10-20 19:29:48,284 INFO =====> Epoch: 43
+2024-10-20 19:29:48,284 INFO =====> EMD Loss: nan
+2024-10-20 19:29:48,284 INFO =====> Height map loss: nan
+2024-10-20 19:29:48,284 INFO =====> Insertion loss: nan
+2024-10-20 19:29:48,284 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:29:48,284 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:29:48,284 INFO =====> Num. aborted data so far: 20
+2024-10-20 19:29:48,621 INFO ===> New TaichiEnv created.
+2024-10-20 19:29:48,621 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:30:15,891 ERROR ===> [Warning] Aborting epoch: 44
+2024-10-20 19:30:15,891 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:30:15,891 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:30:15,892 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:30:15,892 ERROR ===> [Warning] Skill params grad: [ 7.2471894e+13 -1.4844617e+14 -3.9268820e+06  1.7998688e+14
+ -6.1356305e+06]
+2024-10-20 19:30:15,892 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.982011795043945, 'emd_loss': 27.836196899414062, 'total_loss': 23.982011795043945}
+2024-10-20 19:30:15,893 INFO =====> Epoch: 44
+2024-10-20 19:30:15,893 INFO =====> EMD Loss: nan
+2024-10-20 19:30:15,893 INFO =====> Height map loss: nan
+2024-10-20 19:30:15,893 INFO =====> Insertion loss: nan
+2024-10-20 19:30:15,893 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:30:15,893 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:30:15,893 INFO =====> Num. aborted data so far: 21
+2024-10-20 19:30:16,229 INFO ===> New TaichiEnv created.
+2024-10-20 19:30:16,229 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:30:43,414 ERROR ===> [Warning] Aborting epoch: 45
+2024-10-20 19:30:43,415 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:30:43,415 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:30:43,415 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:30:43,415 ERROR ===> [Warning] Skill params grad: [-6.1850711e+12  1.2668668e+13 -5.5970400e+05 -1.5359025e+13
+ -4.4101972e+05]
+2024-10-20 19:30:43,415 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.979629516601562, 'emd_loss': 27.836153030395508, 'total_loss': 23.979629516601562}
+2024-10-20 19:30:43,416 INFO =====> Epoch: 45
+2024-10-20 19:30:43,416 INFO =====> EMD Loss: nan
+2024-10-20 19:30:43,416 INFO =====> Height map loss: nan
+2024-10-20 19:30:43,416 INFO =====> Insertion loss: nan
+2024-10-20 19:30:43,416 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:30:43,416 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:30:43,416 INFO =====> Num. aborted data so far: 22
+2024-10-20 19:30:43,764 INFO ===> New TaichiEnv created.
+2024-10-20 19:30:43,764 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:31:10,963 ERROR ===> [Warning] Aborting epoch: 46
+2024-10-20 19:31:10,963 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:31:10,963 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:31:10,963 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:31:10,963 ERROR ===> [Warning] Skill params grad: [ 4.3255890e+11 -8.8586840e+11  3.5025871e+04  1.0735681e+12
+ -4.7142544e+03]
+2024-10-20 19:31:10,963 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.984506607055664, 'emd_loss': 27.832469940185547, 'total_loss': 23.984506607055664}
+2024-10-20 19:31:10,964 INFO =====> Epoch: 46
+2024-10-20 19:31:10,964 INFO =====> EMD Loss: nan
+2024-10-20 19:31:10,964 INFO =====> Height map loss: nan
+2024-10-20 19:31:10,964 INFO =====> Insertion loss: nan
+2024-10-20 19:31:10,964 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:31:10,964 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:31:10,965 INFO =====> Num. aborted data so far: 23
+2024-10-20 19:31:11,323 INFO ===> New TaichiEnv created.
+2024-10-20 19:31:11,323 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:31:38,733 ERROR ===> [Warning] Aborting epoch: 47
+2024-10-20 19:31:38,733 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:31:38,733 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:31:38,733 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:31:38,733 ERROR ===> [Warning] Skill params grad: [ 5.2688113e+13 -1.0790500e+14  8.4356760e+06  1.3077792e+14
+  3.9965640e+06]
+2024-10-20 19:31:38,733 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.979141235351562, 'emd_loss': 27.835981369018555, 'total_loss': 23.979141235351562}
+2024-10-20 19:31:38,734 INFO =====> Epoch: 47
+2024-10-20 19:31:38,734 INFO =====> EMD Loss: nan
+2024-10-20 19:31:38,734 INFO =====> Height map loss: nan
+2024-10-20 19:31:38,734 INFO =====> Insertion loss: nan
+2024-10-20 19:31:38,734 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:31:38,734 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:31:38,734 INFO =====> Num. aborted data so far: 24
+2024-10-20 19:31:39,091 INFO ===> New TaichiEnv created.
+2024-10-20 19:31:39,091 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:32:06,156 ERROR ===> [Warning] Aborting epoch: 48
+2024-10-20 19:32:06,156 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:32:06,156 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:32:06,156 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:32:06,157 ERROR ===> [Warning] Skill params grad: [-9.3469603e+13  1.9145907e+14 -1.0557194e+07 -2.3215308e+14
+ -6.1506450e+05]
+2024-10-20 19:32:06,157 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.97854995727539, 'emd_loss': 27.83671760559082, 'total_loss': 23.97854995727539}
+2024-10-20 19:32:06,158 INFO =====> Epoch: 48
+2024-10-20 19:32:06,158 INFO =====> EMD Loss: nan
+2024-10-20 19:32:06,158 INFO =====> Height map loss: nan
+2024-10-20 19:32:06,158 INFO =====> Insertion loss: nan
+2024-10-20 19:32:06,158 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:32:06,158 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:32:06,158 INFO =====> Num. aborted data so far: 25
+2024-10-20 19:32:06,498 INFO ===> New TaichiEnv created.
+2024-10-20 19:32:06,498 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:32:34,252 ERROR ===> [Warning] Aborting epoch: 49
+2024-10-20 19:32:34,252 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:32:34,252 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:32:34,252 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:32:34,252 ERROR ===> [Warning] Skill params grad: [-4.4742188e+13  9.1654418e+13  2.5030062e+06 -1.1114900e+14
+  4.5723116e+05]
+2024-10-20 19:32:34,252 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.979978561401367, 'emd_loss': 27.8369083404541, 'total_loss': 23.979978561401367}
+2024-10-20 19:32:34,253 INFO =====> Epoch: 49
+2024-10-20 19:32:34,253 INFO =====> EMD Loss: nan
+2024-10-20 19:32:34,253 INFO =====> Height map loss: nan
+2024-10-20 19:32:34,253 INFO =====> Insertion loss: nan
+2024-10-20 19:32:34,253 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:32:34,253 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:32:34,253 INFO =====> Num. aborted data so far: 26
+2024-10-20 19:32:34,611 INFO ===> New TaichiEnv created.
+2024-10-20 19:32:34,611 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:33:01,865 ERROR ===> [Warning] Aborting epoch: 50
+2024-10-20 19:33:01,865 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:33:01,865 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:33:01,865 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:33:01,865 ERROR ===> [Warning] Skill params grad: [ 4.7398018e+13 -9.7105822e+13 -3.0470590e+06  1.1780089e+14
+  1.8409866e+06]
+2024-10-20 19:33:01,865 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.979230880737305, 'emd_loss': 27.8367977142334, 'total_loss': 23.979230880737305}
+2024-10-20 19:33:01,867 INFO =====> Epoch: 50
+2024-10-20 19:33:01,867 INFO =====> EMD Loss: nan
+2024-10-20 19:33:01,867 INFO =====> Height map loss: nan
+2024-10-20 19:33:01,867 INFO =====> Insertion loss: nan
+2024-10-20 19:33:01,867 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:33:01,867 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:33:01,867 INFO =====> Num. aborted data so far: 27
+2024-10-20 19:33:02,241 INFO ===> New TaichiEnv created.
+2024-10-20 19:33:02,241 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:33:29,813 ERROR ===> [Warning] Aborting epoch: 51
+2024-10-20 19:33:29,813 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:33:29,813 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:33:29,813 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:33:29,813 ERROR ===> [Warning] Skill params grad: [ 2.5399709e+12 -5.2039097e+12  8.2624859e+04  6.3132092e+12
+ -1.2735102e+05]
+2024-10-20 19:33:29,813 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.981399536132812, 'emd_loss': 27.837116241455078, 'total_loss': 23.981399536132812}
+2024-10-20 19:33:29,814 INFO =====> Epoch: 51
+2024-10-20 19:33:29,814 INFO =====> EMD Loss: nan
+2024-10-20 19:33:29,814 INFO =====> Height map loss: nan
+2024-10-20 19:33:29,814 INFO =====> Insertion loss: nan
+2024-10-20 19:33:29,814 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:33:29,814 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:33:29,814 INFO =====> Num. aborted data so far: 28
+2024-10-20 19:33:30,215 INFO ===> New TaichiEnv created.
+2024-10-20 19:33:30,215 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:33:57,240 ERROR ===> [Warning] Aborting epoch: 52
+2024-10-20 19:33:57,240 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:33:57,240 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:33:57,240 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:33:57,240 ERROR ===> [Warning] Skill params grad: [-2.0049920e+13  4.1079231e+13  1.4590651e+06 -4.7092211e+13
+  1.9712769e+06]
+2024-10-20 19:33:57,240 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.980876922607422, 'emd_loss': 27.837684631347656, 'total_loss': 23.980876922607422}
+2024-10-20 19:33:57,241 INFO =====> Epoch: 52
+2024-10-20 19:33:57,241 INFO =====> EMD Loss: nan
+2024-10-20 19:33:57,241 INFO =====> Height map loss: nan
+2024-10-20 19:33:57,241 INFO =====> Insertion loss: nan
+2024-10-20 19:33:57,241 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:33:57,241 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:33:57,241 INFO =====> Num. aborted data so far: 29
+2024-10-20 19:33:57,607 INFO ===> New TaichiEnv created.
+2024-10-20 19:33:57,607 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:34:25,167 ERROR ===> [Warning] Aborting epoch: 53
+2024-10-20 19:34:25,167 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:34:25,167 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:34:25,167 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:34:25,167 ERROR ===> [Warning] Skill params grad: [ 1.5638794e+13 -3.2032218e+13 -2.1237655e+06  3.8836369e+13
+ -5.5532050e+05]
+2024-10-20 19:34:25,167 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.979778289794922, 'emd_loss': 27.836822509765625, 'total_loss': 23.979778289794922}
+2024-10-20 19:34:25,168 INFO =====> Epoch: 53
+2024-10-20 19:34:25,168 INFO =====> EMD Loss: nan
+2024-10-20 19:34:25,168 INFO =====> Height map loss: nan
+2024-10-20 19:34:25,168 INFO =====> Insertion loss: nan
+2024-10-20 19:34:25,168 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:34:25,168 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:34:25,168 INFO =====> Num. aborted data so far: 30
+2024-10-20 19:34:25,511 INFO ===> New TaichiEnv created.
+2024-10-20 19:34:25,511 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:34:52,713 ERROR ===> [Warning] Aborting epoch: 54
+2024-10-20 19:34:52,713 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:34:52,713 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:34:52,713 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:34:52,713 ERROR ===> [Warning] Skill params grad: [-4.7550515e+12  9.7377971e+12 -4.2999450e+05 -1.1799475e+13
+  2.2933392e+05]
+2024-10-20 19:34:52,713 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.982223510742188, 'emd_loss': 27.832992553710938, 'total_loss': 23.982223510742188}
+2024-10-20 19:34:52,714 INFO =====> Epoch: 54
+2024-10-20 19:34:52,714 INFO =====> EMD Loss: nan
+2024-10-20 19:34:52,714 INFO =====> Height map loss: nan
+2024-10-20 19:34:52,714 INFO =====> Insertion loss: nan
+2024-10-20 19:34:52,714 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:34:52,714 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:34:52,715 INFO =====> Num. aborted data so far: 31
+2024-10-20 19:34:53,072 INFO ===> New TaichiEnv created.
+2024-10-20 19:34:53,072 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:35:20,527 ERROR ===> [Warning] Aborting epoch: 55
+2024-10-20 19:35:20,527 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:35:20,527 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:35:20,527 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:35:20,527 ERROR ===> [Warning] Skill params grad: [ 4.6378617e+13 -9.4985668e+13 -7.8633635e+06  1.1512665e+14
+ -2.8624132e+06]
+2024-10-20 19:35:20,527 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.97811508178711, 'emd_loss': 27.83672523498535, 'total_loss': 23.97811508178711}
+2024-10-20 19:35:20,528 INFO =====> Epoch: 55
+2024-10-20 19:35:20,528 INFO =====> EMD Loss: nan
+2024-10-20 19:35:20,528 INFO =====> Height map loss: nan
+2024-10-20 19:35:20,528 INFO =====> Insertion loss: nan
+2024-10-20 19:35:20,528 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:35:20,529 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:35:20,529 INFO =====> Num. aborted data so far: 32
+2024-10-20 19:35:20,894 INFO ===> New TaichiEnv created.
+2024-10-20 19:35:20,894 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:35:47,863 ERROR ===> [Warning] Aborting epoch: 56
+2024-10-20 19:35:47,863 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:35:47,863 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:35:47,863 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:35:47,863 ERROR ===> [Warning] Skill params grad: [ 3.81200242e+13 -7.80795275e+13 -1.00685225e+06  9.46588646e+13
+ -5.22850812e+05]
+2024-10-20 19:35:47,863 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.979572296142578, 'emd_loss': 27.836458206176758, 'total_loss': 23.979572296142578}
+2024-10-20 19:35:47,864 INFO =====> Epoch: 56
+2024-10-20 19:35:47,864 INFO =====> EMD Loss: nan
+2024-10-20 19:35:47,865 INFO =====> Height map loss: nan
+2024-10-20 19:35:47,865 INFO =====> Insertion loss: nan
+2024-10-20 19:35:47,865 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:35:47,865 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:35:47,865 INFO =====> Num. aborted data so far: 33
+2024-10-20 19:35:48,216 INFO ===> New TaichiEnv created.
+2024-10-20 19:35:48,216 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:36:15,323 ERROR ===> [Warning] Aborting epoch: 57
+2024-10-20 19:36:15,323 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:36:15,323 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:36:15,324 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:36:15,324 ERROR ===> [Warning] Skill params grad: [ 6.8610839e+18 -1.4054285e+19 -9.5949259e+11  1.7042772e+19
+ -5.2034254e+11]
+2024-10-20 19:36:15,324 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.978559494018555, 'emd_loss': 27.83568572998047, 'total_loss': 23.978559494018555}
+2024-10-20 19:36:15,325 INFO =====> Epoch: 57
+2024-10-20 19:36:15,325 INFO =====> EMD Loss: nan
+2024-10-20 19:36:15,325 INFO =====> Height map loss: nan
+2024-10-20 19:36:15,325 INFO =====> Insertion loss: nan
+2024-10-20 19:36:15,325 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:36:15,325 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:36:15,325 INFO =====> Num. aborted data so far: 34
+2024-10-20 19:36:15,713 INFO ===> New TaichiEnv created.
+2024-10-20 19:36:15,713 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:36:42,950 ERROR ===> [Warning] Aborting epoch: 58
+2024-10-20 19:36:42,950 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:36:42,950 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:36:42,950 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:36:42,950 ERROR ===> [Warning] Skill params grad: [ 4.2329109e+11 -8.6685503e+11  1.3703477e+04  1.0504844e+12
+ -2.9877062e+04]
+2024-10-20 19:36:42,950 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.978151321411133, 'emd_loss': 27.83731460571289, 'total_loss': 23.978151321411133}
+2024-10-20 19:36:42,952 INFO =====> Epoch: 58
+2024-10-20 19:36:42,952 INFO =====> EMD Loss: nan
+2024-10-20 19:36:42,952 INFO =====> Height map loss: nan
+2024-10-20 19:36:42,952 INFO =====> Insertion loss: nan
+2024-10-20 19:36:42,952 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:36:42,952 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:36:42,952 INFO =====> Num. aborted data so far: 35
+2024-10-20 19:36:43,299 INFO ===> New TaichiEnv created.
+2024-10-20 19:36:43,300 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:37:10,366 ERROR ===> [Warning] Aborting epoch: 59
+2024-10-20 19:37:10,366 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:37:10,366 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:37:10,366 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:37:10,366 ERROR ===> [Warning] Skill params grad: [ 3.5000329e+12 -7.1697606e+12 -1.7466897e+05  8.6945589e+12
+ -2.2613591e+05]
+2024-10-20 19:37:10,366 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.979042053222656, 'emd_loss': 27.836450576782227, 'total_loss': 23.979042053222656}
+2024-10-20 19:37:10,367 INFO =====> Epoch: 59
+2024-10-20 19:37:10,367 INFO =====> EMD Loss: nan
+2024-10-20 19:37:10,368 INFO =====> Height map loss: nan
+2024-10-20 19:37:10,368 INFO =====> Insertion loss: nan
+2024-10-20 19:37:10,368 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:37:10,368 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:37:10,368 INFO =====> Num. aborted data so far: 36
+2024-10-20 19:37:10,717 INFO ===> New TaichiEnv created.
+2024-10-20 19:37:10,717 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:37:38,095 ERROR ===> [Warning] Aborting epoch: 60
+2024-10-20 19:37:38,095 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:37:38,095 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:37:38,095 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:37:38,095 ERROR ===> [Warning] Skill params grad: [-8.6184071e+12  1.7650774e+13  1.1209848e+06 -2.1391223e+13
+  5.1041747e+05]
+2024-10-20 19:37:38,095 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.985483169555664, 'emd_loss': 27.83755874633789, 'total_loss': 23.985483169555664}
+2024-10-20 19:37:38,096 INFO =====> Epoch: 60
+2024-10-20 19:37:38,096 INFO =====> EMD Loss: nan
+2024-10-20 19:37:38,096 INFO =====> Height map loss: nan
+2024-10-20 19:37:38,096 INFO =====> Insertion loss: nan
+2024-10-20 19:37:38,097 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:37:38,097 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:37:38,097 INFO =====> Num. aborted data so far: 37
+2024-10-20 19:37:38,536 INFO ===> New TaichiEnv created.
+2024-10-20 19:37:38,537 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:38:05,626 ERROR ===> [Warning] Aborting epoch: 61
+2024-10-20 19:38:05,626 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:38:05,626 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:38:05,626 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:38:05,626 ERROR ===> [Warning] Skill params grad: [-3.8604313e+16  7.9086162e+16  5.3067341e+08 -9.5928653e+16
+  4.8656246e+09]
+2024-10-20 19:38:05,626 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.981788635253906, 'emd_loss': 27.836570739746094, 'total_loss': 23.981788635253906}
+2024-10-20 19:38:05,627 INFO =====> Epoch: 61
+2024-10-20 19:38:05,627 INFO =====> EMD Loss: nan
+2024-10-20 19:38:05,627 INFO =====> Height map loss: nan
+2024-10-20 19:38:05,627 INFO =====> Insertion loss: nan
+2024-10-20 19:38:05,627 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:38:05,627 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:38:05,627 INFO =====> Num. aborted data so far: 38
+2024-10-20 19:38:05,981 INFO ===> New TaichiEnv created.
+2024-10-20 19:38:05,981 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:38:33,110 ERROR ===> [Warning] Aborting epoch: 62
+2024-10-20 19:38:33,110 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:38:33,110 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:38:33,110 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246392  0.6904083  -0.42114428]
+2024-10-20 19:38:33,110 ERROR ===> [Warning] Skill params grad: [-2.0001206e+13  4.0969827e+13  3.3015050e+06 -4.9676716e+13
+  7.2371344e+05]
+2024-10-20 19:38:33,110 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.982267379760742, 'emd_loss': 27.836578369140625, 'total_loss': 23.982267379760742}
+2024-10-20 19:38:33,111 INFO =====> Epoch: 62
+2024-10-20 19:38:33,111 INFO =====> EMD Loss: nan
+2024-10-20 19:38:33,112 INFO =====> Height map loss: nan
+2024-10-20 19:38:33,112 INFO =====> Insertion loss: nan
+2024-10-20 19:38:33,112 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:38:33,112 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246391  0.6904083  -0.42114428]
+2024-10-20 19:38:33,112 INFO =====> Num. aborted data so far: 39
+2024-10-20 19:38:33,459 INFO ===> New TaichiEnv created.
+2024-10-20 19:38:33,459 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:39:01,153 ERROR ===> [Warning] Aborting epoch: 63
+2024-10-20 19:39:01,153 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:39:01,153 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:39:01,153 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246391  0.6904083  -0.42114428]
+2024-10-20 19:39:01,153 ERROR ===> [Warning] Skill params grad: [ 5.3679897e+16 -1.0990811e+17  5.3893043e+09  1.3227326e+17
+  1.1725866e+09]
+2024-10-20 19:39:01,153 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.981008529663086, 'emd_loss': 27.836769104003906, 'total_loss': 23.981008529663086}
+2024-10-20 19:39:01,154 INFO =====> Epoch: 63
+2024-10-20 19:39:01,154 INFO =====> EMD Loss: nan
+2024-10-20 19:39:01,154 INFO =====> Height map loss: nan
+2024-10-20 19:39:01,154 INFO =====> Insertion loss: nan
+2024-10-20 19:39:01,155 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:39:01,155 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246391  0.6904083  -0.42114428]
+2024-10-20 19:39:01,155 INFO =====> Num. aborted data so far: 40
+2024-10-20 19:39:01,511 INFO ===> New TaichiEnv created.
+2024-10-20 19:39:01,511 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:39:28,760 ERROR ===> [Warning] Aborting epoch: 64
+2024-10-20 19:39:28,760 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:39:28,760 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:39:28,760 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246391  0.6904083  -0.42114428]
+2024-10-20 19:39:28,760 ERROR ===> [Warning] Skill params grad: [ 2.1931007e+13 -4.4919754e+13 -1.2923351e+06  5.4454745e+13
+ -2.3304235e+06]
+2024-10-20 19:39:28,760 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.983806610107422, 'emd_loss': 27.83658218383789, 'total_loss': 23.983806610107422}
+2024-10-20 19:39:28,761 INFO =====> Epoch: 64
+2024-10-20 19:39:28,761 INFO =====> EMD Loss: nan
+2024-10-20 19:39:28,761 INFO =====> Height map loss: nan
+2024-10-20 19:39:28,761 INFO =====> Insertion loss: nan
+2024-10-20 19:39:28,761 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:39:28,761 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246391  0.6904083  -0.42114428]
+2024-10-20 19:39:28,761 INFO =====> Num. aborted data so far: 41
+2024-10-20 19:39:29,115 INFO ===> New TaichiEnv created.
+2024-10-20 19:39:29,115 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:39:56,460 ERROR ===> [Warning] Aborting epoch: 65
+2024-10-20 19:39:56,460 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:39:56,460 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:39:56,460 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246391  0.6904083  -0.42114428]
+2024-10-20 19:39:56,460 ERROR ===> [Warning] Skill params grad: [-2.2489327e+15  4.6074455e+15  1.5686608e+07 -6.9001731e+15
+  1.4420072e+08]
+2024-10-20 19:39:56,460 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.98122787475586, 'emd_loss': 27.83655548095703, 'total_loss': 23.98122787475586}
+2024-10-20 19:39:56,461 INFO =====> Epoch: 65
+2024-10-20 19:39:56,462 INFO =====> EMD Loss: nan
+2024-10-20 19:39:56,462 INFO =====> Height map loss: nan
+2024-10-20 19:39:56,462 INFO =====> Insertion loss: nan
+2024-10-20 19:39:56,462 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:39:56,462 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246391  0.6904083  -0.42114428]
+2024-10-20 19:39:56,462 INFO =====> Num. aborted data so far: 42
+2024-10-20 19:39:56,837 INFO ===> New TaichiEnv created.
+2024-10-20 19:39:56,837 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:40:24,039 ERROR ===> [Warning] Aborting epoch: 66
+2024-10-20 19:40:24,039 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:40:24,039 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:40:24,039 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246391  0.6904083  -0.42114428]
+2024-10-20 19:40:24,039 ERROR ===> [Warning] Skill params grad: [ 2.9835158e+14 -6.1101560e+14 -4.0124480e+07  7.4047062e+14
+  4.5349790e+06]
+2024-10-20 19:40:24,039 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.98326873779297, 'emd_loss': 27.836509704589844, 'total_loss': 23.98326873779297}
+2024-10-20 19:40:24,040 INFO =====> Epoch: 66
+2024-10-20 19:40:24,040 INFO =====> EMD Loss: nan
+2024-10-20 19:40:24,040 INFO =====> Height map loss: nan
+2024-10-20 19:40:24,040 INFO =====> Insertion loss: nan
+2024-10-20 19:40:24,041 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:40:24,041 INFO =====> Skill params: [-0.71599364 -0.6990064   0.02246391  0.6904083  -0.42114428]
+2024-10-20 19:40:24,041 INFO =====> Num. aborted data so far: 43
+2024-10-20 19:40:24,394 INFO ===> New TaichiEnv created.
+2024-10-20 19:40:24,395 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:40:51,966 ERROR ===> [Warning] Aborting epoch: 67
+2024-10-20 19:40:51,966 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:40:51,966 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:40:51,966 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.02246391  0.6904083  -0.42114428]
+2024-10-20 19:40:51,966 ERROR ===> [Warning] Skill params grad: [-2.709587e+12  5.550917e+12  8.232231e+04 -6.732685e+12  2.289953e+05]
+2024-10-20 19:40:51,967 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.98137855529785, 'emd_loss': 27.836442947387695, 'total_loss': 23.98137855529785}
+2024-10-20 19:40:51,968 INFO =====> Epoch: 67
+2024-10-20 19:40:51,968 INFO =====> EMD Loss: nan
+2024-10-20 19:40:51,968 INFO =====> Height map loss: nan
+2024-10-20 19:40:51,968 INFO =====> Insertion loss: nan
+2024-10-20 19:40:51,968 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:40:51,968 INFO =====> Skill params: [-0.71599364 -0.6990064   0.0224639   0.6904083  -0.42114428]
+2024-10-20 19:40:51,968 INFO =====> Num. aborted data so far: 44
+2024-10-20 19:40:52,321 INFO ===> New TaichiEnv created.
+2024-10-20 19:40:52,321 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:41:19,553 ERROR ===> [Warning] Aborting epoch: 68
+2024-10-20 19:41:19,553 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:41:19,553 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:41:19,553 ERROR ===> [Warning] Skill params: [-0.71599364 -0.6990064   0.0224639   0.6904083  -0.42114428]
+2024-10-20 19:41:19,554 ERROR ===> [Warning] Skill params grad: [-3.5190856e+13  7.2088795e+13  4.6784595e+06 -8.7421820e+13
+  1.5299710e+06]
+2024-10-20 19:41:19,554 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.9798641204834, 'emd_loss': 27.835845947265625, 'total_loss': 23.9798641204834}
+2024-10-20 19:41:19,555 INFO =====> Epoch: 68
+2024-10-20 19:41:19,555 INFO =====> EMD Loss: nan
+2024-10-20 19:41:19,555 INFO =====> Height map loss: nan
+2024-10-20 19:41:19,555 INFO =====> Insertion loss: nan
+2024-10-20 19:41:19,555 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:41:19,555 INFO =====> Skill params: [-0.71599364 -0.6990064   0.0224639   0.6904083  -0.42114428]
+2024-10-20 19:41:19,555 INFO =====> Num. aborted data so far: 45
+2024-10-20 19:41:19,937 INFO ===> New TaichiEnv created.
+2024-10-20 19:41:19,937 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:41:46,830 INFO =====> Epoch: 69
+2024-10-20 19:41:46,830 INFO =====> EMD Loss: 27.836318969726562
+2024-10-20 19:41:46,830 INFO =====> Height map loss: 23.981027603149414
+2024-10-20 19:41:46,830 INFO =====> Insertion loss: 0.0
+2024-10-20 19:41:46,831 INFO =====> Grad: [ 1.00238500e+05 -4.56316094e+05  1.85966119e-03 -1.01940375e+05
+ -2.49596816e-02]
+2024-10-20 19:41:46,831 INFO =====> Skill params: [-0.7160767  -0.69886726  0.02246097  0.6904404  -0.42093787]
+2024-10-20 19:41:46,831 INFO =====> Num. aborted data so far: 45
+2024-10-20 19:41:47,271 INFO ===> New TaichiEnv created.
+2024-10-20 19:41:47,271 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:42:14,806 ERROR ===> [Warning] Aborting epoch: 70
+2024-10-20 19:42:14,806 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:42:14,806 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:42:14,806 ERROR ===> [Warning] Skill params: [-0.7160767  -0.69886726  0.02246097  0.6904404  -0.42093787]
+2024-10-20 19:42:14,806 ERROR ===> [Warning] Skill params grad: [-2.8464584e+15  5.8336769e+15  3.9829030e+08 -8.7807487e+15
+  3.5455363e+08]
+2024-10-20 19:42:14,806 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.98491096496582, 'emd_loss': 27.834196090698242, 'total_loss': 23.98491096496582}
+2024-10-20 19:42:14,807 INFO =====> Epoch: 70
+2024-10-20 19:42:14,807 INFO =====> EMD Loss: nan
+2024-10-20 19:42:14,807 INFO =====> Height map loss: nan
+2024-10-20 19:42:14,807 INFO =====> Insertion loss: nan
+2024-10-20 19:42:14,807 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:42:14,807 INFO =====> Skill params: [-0.7160767  -0.69886726  0.02246097  0.6904404  -0.42093787]
+2024-10-20 19:42:14,807 INFO =====> Num. aborted data so far: 46
+2024-10-20 19:42:15,178 INFO ===> New TaichiEnv created.
+2024-10-20 19:42:15,179 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:42:42,206 ERROR ===> [Warning] Aborting epoch: 71
+2024-10-20 19:42:42,207 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:42:42,207 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:42:42,207 ERROR ===> [Warning] Skill params: [-0.7160767  -0.69886726  0.02246097  0.6904404  -0.42093787]
+2024-10-20 19:42:42,207 ERROR ===> [Warning] Skill params grad: [-3.3846732e+16  6.9315051e+16 -6.3874842e+08 -8.3472165e+16
+ -1.0903540e+09]
+2024-10-20 19:42:42,207 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.98550033569336, 'emd_loss': 27.83321762084961, 'total_loss': 23.98550033569336}
+2024-10-20 19:42:42,208 INFO =====> Epoch: 71
+2024-10-20 19:42:42,208 INFO =====> EMD Loss: nan
+2024-10-20 19:42:42,208 INFO =====> Height map loss: nan
+2024-10-20 19:42:42,208 INFO =====> Insertion loss: nan
+2024-10-20 19:42:42,208 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:42:42,208 INFO =====> Skill params: [-0.7160767  -0.69886726  0.02246097  0.6904404  -0.42093787]
+2024-10-20 19:42:42,208 INFO =====> Num. aborted data so far: 47
+2024-10-20 19:42:42,558 INFO ===> New TaichiEnv created.
+2024-10-20 19:42:42,558 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:43:09,755 ERROR ===> [Warning] Aborting epoch: 72
+2024-10-20 19:43:09,755 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:43:09,755 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:43:09,755 ERROR ===> [Warning] Skill params: [-0.7160767  -0.69886726  0.02246097  0.6904404  -0.42093787]
+2024-10-20 19:43:09,755 ERROR ===> [Warning] Skill params grad: [ 1.7431165e+18 -3.5703900e+18 -1.8617447e+11  4.3011622e+18
+  1.6037177e+10]
+2024-10-20 19:43:09,755 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.988069534301758, 'emd_loss': 27.837785720825195, 'total_loss': 23.988069534301758}
+2024-10-20 19:43:09,756 INFO =====> Epoch: 72
+2024-10-20 19:43:09,756 INFO =====> EMD Loss: nan
+2024-10-20 19:43:09,756 INFO =====> Height map loss: nan
+2024-10-20 19:43:09,756 INFO =====> Insertion loss: nan
+2024-10-20 19:43:09,757 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:43:09,757 INFO =====> Skill params: [-0.7160767  -0.69886726  0.02246097  0.6904404  -0.42093787]
+2024-10-20 19:43:09,757 INFO =====> Num. aborted data so far: 48
+2024-10-20 19:43:10,108 INFO ===> New TaichiEnv created.
+2024-10-20 19:43:10,108 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:43:37,433 ERROR ===> [Warning] Aborting epoch: 73
+2024-10-20 19:43:37,433 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:43:37,433 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:43:37,433 ERROR ===> [Warning] Skill params: [-0.7160767  -0.69886726  0.02246097  0.6904404  -0.42093787]
+2024-10-20 19:43:37,433 ERROR ===> [Warning] Skill params grad: [-1.5368440e+14  3.1525832e+14  6.0765790e+06 -4.7210472e+14
+  2.1183204e+07]
+2024-10-20 19:43:37,433 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.983015060424805, 'emd_loss': 27.831491470336914, 'total_loss': 23.983015060424805}
+2024-10-20 19:43:37,435 INFO =====> Epoch: 73
+2024-10-20 19:43:37,435 INFO =====> EMD Loss: nan
+2024-10-20 19:43:37,435 INFO =====> Height map loss: nan
+2024-10-20 19:43:37,435 INFO =====> Insertion loss: nan
+2024-10-20 19:43:37,435 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:43:37,435 INFO =====> Skill params: [-0.7160767  -0.69886726  0.02246096  0.6904404  -0.42093787]
+2024-10-20 19:43:37,435 INFO =====> Num. aborted data so far: 49
+2024-10-20 19:43:37,801 INFO ===> New TaichiEnv created.
+2024-10-20 19:43:37,801 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:44:04,907 ERROR ===> [Warning] Aborting epoch: 74
+2024-10-20 19:44:04,907 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:44:04,907 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:44:04,908 ERROR ===> [Warning] Skill params: [-0.7160767  -0.69886726  0.02246096  0.6904404  -0.42093787]
+2024-10-20 19:44:04,908 ERROR ===> [Warning] Skill params grad: [-1.3568988e+19  2.7790357e+19  8.3659574e+11 -3.3472701e+19
+ -4.4844666e+11]
+2024-10-20 19:44:04,908 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.98797035217285, 'emd_loss': 27.83706283569336, 'total_loss': 23.98797035217285}
+2024-10-20 19:44:04,909 INFO =====> Epoch: 74
+2024-10-20 19:44:04,909 INFO =====> EMD Loss: nan
+2024-10-20 19:44:04,909 INFO =====> Height map loss: nan
+2024-10-20 19:44:04,909 INFO =====> Insertion loss: nan
+2024-10-20 19:44:04,909 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:44:04,909 INFO =====> Skill params: [-0.7160767  -0.69886726  0.02246096  0.6904404  -0.42093787]
+2024-10-20 19:44:04,909 INFO =====> Num. aborted data so far: 50
+2024-10-20 19:44:05,271 INFO ===> New TaichiEnv created.
+2024-10-20 19:44:05,271 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:44:32,371 ERROR ===> [Warning] Aborting epoch: 75
+2024-10-20 19:44:32,371 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:44:32,371 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:44:32,371 ERROR ===> [Warning] Skill params: [-0.7160767  -0.69886726  0.02246096  0.6904404  -0.42093787]
+2024-10-20 19:44:32,371 ERROR ===> [Warning] Skill params grad: [-3.3486793e+13  6.8575943e+13  4.3181950e+06 -8.2568574e+13
+  8.7172744e+05]
+2024-10-20 19:44:32,371 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.984891891479492, 'emd_loss': 27.831905364990234, 'total_loss': 23.984891891479492}
+2024-10-20 19:44:32,372 INFO =====> Epoch: 75
+2024-10-20 19:44:32,372 INFO =====> EMD Loss: nan
+2024-10-20 19:44:32,372 INFO =====> Height map loss: nan
+2024-10-20 19:44:32,373 INFO =====> Insertion loss: nan
+2024-10-20 19:44:32,373 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:44:32,373 INFO =====> Skill params: [-0.7160767  -0.69886726  0.02246096  0.6904404  -0.42093787]
+2024-10-20 19:44:32,373 INFO =====> Num. aborted data so far: 51
+2024-10-20 19:44:32,734 INFO ===> New TaichiEnv created.
+2024-10-20 19:44:32,734 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:44:59,952 ERROR ===> [Warning] Aborting epoch: 76
+2024-10-20 19:44:59,952 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:44:59,952 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:44:59,952 ERROR ===> [Warning] Skill params: [-0.7160767  -0.69886726  0.02246096  0.6904404  -0.42093787]
+2024-10-20 19:44:59,953 ERROR ===> [Warning] Skill params grad: [-4.1315196e+19  8.4620535e+19 -2.3560315e+12 -1.0193028e+20
+  1.4687158e+12]
+2024-10-20 19:44:59,953 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.98668098449707, 'emd_loss': 27.83799171447754, 'total_loss': 23.98668098449707}
+2024-10-20 19:44:59,954 INFO =====> Epoch: 76
+2024-10-20 19:44:59,954 INFO =====> EMD Loss: nan
+2024-10-20 19:44:59,954 INFO =====> Height map loss: nan
+2024-10-20 19:44:59,954 INFO =====> Insertion loss: nan
+2024-10-20 19:44:59,954 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:44:59,954 INFO =====> Skill params: [-0.7160767  -0.69886726  0.02246096  0.6904404  -0.42093787]
+2024-10-20 19:44:59,954 INFO =====> Num. aborted data so far: 52
+2024-10-20 19:45:00,308 INFO ===> New TaichiEnv created.
+2024-10-20 19:45:00,308 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:45:27,698 ERROR ===> [Warning] Aborting epoch: 77
+2024-10-20 19:45:27,698 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:45:27,698 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:45:27,698 ERROR ===> [Warning] Skill params: [-0.7160767  -0.69886726  0.02246096  0.6904404  -0.42093787]
+2024-10-20 19:45:27,698 ERROR ===> [Warning] Skill params grad: [-1.5914566e+15  3.2600936e+15  1.2465331e+08 -3.9287244e+15
+  3.9583804e+07]
+2024-10-20 19:45:27,698 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.983896255493164, 'emd_loss': 27.833120346069336, 'total_loss': 23.983896255493164}
+2024-10-20 19:45:27,699 INFO =====> Epoch: 77
+2024-10-20 19:45:27,699 INFO =====> EMD Loss: nan
+2024-10-20 19:45:27,700 INFO =====> Height map loss: nan
+2024-10-20 19:45:27,700 INFO =====> Insertion loss: nan
+2024-10-20 19:45:27,700 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:45:27,700 INFO =====> Skill params: [-0.7160767  -0.69886726  0.02246096  0.6904404  -0.42093787]
+2024-10-20 19:45:27,700 INFO =====> Num. aborted data so far: 53
+2024-10-20 19:45:28,052 INFO ===> New TaichiEnv created.
+2024-10-20 19:45:28,052 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:45:55,910 ERROR ===> [Warning] Aborting epoch: 78
+2024-10-20 19:45:55,910 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:45:55,910 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:45:55,910 ERROR ===> [Warning] Skill params: [-0.7160767  -0.69886726  0.02246096  0.6904404  -0.42093787]
+2024-10-20 19:45:55,910 ERROR ===> [Warning] Skill params grad: [ 1.25033095e+17 -2.54303467e+17 -8.32646554e+09  2.99949040e+17
+  8.03067085e+09]
+2024-10-20 19:45:55,910 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.98513412475586, 'emd_loss': 27.833452224731445, 'total_loss': 23.98513412475586}
+2024-10-20 19:45:55,912 INFO =====> Epoch: 78
+2024-10-20 19:45:55,912 INFO =====> EMD Loss: nan
+2024-10-20 19:45:55,912 INFO =====> Height map loss: nan
+2024-10-20 19:45:55,912 INFO =====> Insertion loss: nan
+2024-10-20 19:45:55,912 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:45:55,912 INFO =====> Skill params: [-0.7160767  -0.69886726  0.02246095  0.6904404  -0.42093787]
+2024-10-20 19:45:55,912 INFO =====> Num. aborted data so far: 54
+2024-10-20 19:45:56,276 INFO ===> New TaichiEnv created.
+2024-10-20 19:45:56,276 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:46:23,779 ERROR ===> [Warning] Aborting epoch: 79
+2024-10-20 19:46:23,779 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:46:23,779 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:46:23,779 ERROR ===> [Warning] Skill params: [-0.7160767  -0.69886726  0.02246095  0.6904404  -0.42093787]
+2024-10-20 19:46:23,779 ERROR ===> [Warning] Skill params grad: [ 4.7606710e+16 -9.6838190e+16 -3.8626258e+09  1.1425735e+17
+ -9.0050643e+08]
+2024-10-20 19:46:23,779 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.984169006347656, 'emd_loss': 27.838594436645508, 'total_loss': 23.984169006347656}
+2024-10-20 19:46:23,781 INFO =====> Epoch: 79
+2024-10-20 19:46:23,781 INFO =====> EMD Loss: nan
+2024-10-20 19:46:23,781 INFO =====> Height map loss: nan
+2024-10-20 19:46:23,781 INFO =====> Insertion loss: nan
+2024-10-20 19:46:23,781 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:46:23,781 INFO =====> Skill params: [-0.7160767  -0.69886726  0.02246095  0.6904404  -0.42093787]
+2024-10-20 19:46:23,781 INFO =====> Num. aborted data so far: 55
+2024-10-20 19:46:24,207 INFO ===> New TaichiEnv created.
+2024-10-20 19:46:24,207 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:46:51,599 INFO =====> Epoch: 80
+2024-10-20 19:46:51,600 INFO =====> EMD Loss: 27.837055206298828
+2024-10-20 19:46:51,600 INFO =====> Height map loss: 23.983694076538086
+2024-10-20 19:46:51,600 INFO =====> Insertion loss: 0.0
+2024-10-20 19:46:51,600 INFO =====> Grad: [ 6.6098750e+04 -2.7693759e+05  6.2116515e-04  7.1554125e+04
+  7.7159628e-03]
+2024-10-20 19:46:51,600 INFO =====> Skill params: [-0.71617436 -0.6987166   0.0224592   0.6904001  -0.42105177]
+2024-10-20 19:46:51,600 INFO =====> Num. aborted data so far: 55
+2024-10-20 19:46:51,960 INFO ===> New TaichiEnv created.
+2024-10-20 19:46:51,960 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:47:19,291 ERROR ===> [Warning] Aborting epoch: 81
+2024-10-20 19:47:19,291 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:47:19,291 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:47:19,291 ERROR ===> [Warning] Skill params: [-0.71617436 -0.6987166   0.0224592   0.6904001  -0.42105177]
+2024-10-20 19:47:19,293 ERROR ===> [Warning] Skill params grad: [ 1.6239133e+18 -3.2996863e+18  2.4513987e+11  3.8663048e+18
+ -1.1053804e+11]
+2024-10-20 19:47:19,293 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.990802764892578, 'emd_loss': 27.835947036743164, 'total_loss': 23.990802764892578}
+2024-10-20 19:47:19,294 INFO =====> Epoch: 81
+2024-10-20 19:47:19,294 INFO =====> EMD Loss: nan
+2024-10-20 19:47:19,294 INFO =====> Height map loss: nan
+2024-10-20 19:47:19,294 INFO =====> Insertion loss: nan
+2024-10-20 19:47:19,294 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:47:19,294 INFO =====> Skill params: [-0.71617436 -0.6987166   0.0224592   0.6904001  -0.4210518 ]
+2024-10-20 19:47:19,294 INFO =====> Num. aborted data so far: 56
+2024-10-20 19:47:19,649 INFO ===> New TaichiEnv created.
+2024-10-20 19:47:19,649 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:47:47,424 ERROR ===> [Warning] Aborting epoch: 82
+2024-10-20 19:47:47,424 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:47:47,424 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:47:47,424 ERROR ===> [Warning] Skill params: [-0.71617436 -0.6987166   0.0224592   0.6904001  -0.4210518 ]
+2024-10-20 19:47:47,424 ERROR ===> [Warning] Skill params grad: [ 8.2236880e+11 -1.6933805e+12  3.3734586e+04  2.3452207e+12
+ -4.5705337e+03]
+2024-10-20 19:47:47,424 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.984853744506836, 'emd_loss': 27.8367919921875, 'total_loss': 23.984853744506836}
+2024-10-20 19:47:47,425 INFO =====> Epoch: 82
+2024-10-20 19:47:47,425 INFO =====> EMD Loss: nan
+2024-10-20 19:47:47,425 INFO =====> Height map loss: nan
+2024-10-20 19:47:47,425 INFO =====> Insertion loss: nan
+2024-10-20 19:47:47,425 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:47:47,425 INFO =====> Skill params: [-0.71617436 -0.6987166   0.0224592   0.6904001  -0.42105183]
+2024-10-20 19:47:47,425 INFO =====> Num. aborted data so far: 57
+2024-10-20 19:47:47,785 INFO ===> New TaichiEnv created.
+2024-10-20 19:47:47,785 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:48:15,188 ERROR ===> [Warning] Aborting epoch: 83
+2024-10-20 19:48:15,188 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:48:15,188 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:48:15,189 ERROR ===> [Warning] Skill params: [-0.71617436 -0.6987166   0.0224592   0.6904001  -0.42105183]
+2024-10-20 19:48:15,189 ERROR ===> [Warning] Skill params grad: [-4.9070166e+17  9.9723657e+17 -1.1167262e+11 -1.1691004e+18
+ -6.6585308e+09]
+2024-10-20 19:48:15,189 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 23.98325538635254, 'emd_loss': 27.82974624633789, 'total_loss': 23.98325538635254}
+2024-10-20 19:48:15,190 INFO =====> Epoch: 83
+2024-10-20 19:48:15,190 INFO =====> EMD Loss: nan
+2024-10-20 19:48:15,190 INFO =====> Height map loss: nan
+2024-10-20 19:48:15,190 INFO =====> Insertion loss: nan
+2024-10-20 19:48:15,190 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:48:15,190 INFO =====> Skill params: [-0.71617436 -0.6987166   0.02245919  0.6904001  -0.42105186]
+2024-10-20 19:48:15,190 INFO =====> Num. aborted data so far: 58
+2024-10-20 19:48:15,560 INFO ===> New TaichiEnv created.
+2024-10-20 19:48:15,560 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:48:42,940 INFO =====> Epoch: 84
+2024-10-20 19:48:42,941 INFO =====> EMD Loss: 27.83949089050293
+2024-10-20 19:48:42,941 INFO =====> Height map loss: 23.98219108581543
+2024-10-20 19:48:42,941 INFO =====> Insertion loss: 0.0
+2024-10-20 19:48:42,941 INFO =====> Grad: [ 5.9648615e+06 -1.2189827e+07  1.6436160e-01  1.6962802e+07
+  1.3871890e-01]
+2024-10-20 19:48:42,941 INFO =====> Skill params: [-0.7269031  -0.69059545  0.02188808  0.6788093  -0.4235781 ]
+2024-10-20 19:48:42,941 INFO =====> Num. aborted data so far: 58
+2024-10-20 19:48:43,322 INFO ===> New TaichiEnv created.
+2024-10-20 19:48:43,322 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:49:10,296 INFO =====> Epoch: 85
+2024-10-20 19:49:10,296 INFO =====> EMD Loss: 27.82118797302246
+2024-10-20 19:49:10,296 INFO =====> Height map loss: 24.211292266845703
+2024-10-20 19:49:10,296 INFO =====> Insertion loss: 0.0
+2024-10-20 19:49:10,296 INFO =====> Grad: [-3.3566947e+05  5.9772356e+05  6.7727454e-04 -4.8815125e+05
+  2.4488235e-02]
+2024-10-20 19:49:10,296 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188559  0.6791609  -0.4240482 ]
+2024-10-20 19:49:10,296 INFO =====> Num. aborted data so far: 58
+2024-10-20 19:49:10,658 INFO ===> New TaichiEnv created.
+2024-10-20 19:49:10,658 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:49:37,217 ERROR ===> [Warning] Aborting epoch: 86
+2024-10-20 19:49:37,217 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:49:37,217 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:49:37,217 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188559  0.6791609  -0.4240482 ]
+2024-10-20 19:49:37,217 ERROR ===> [Warning] Skill params grad: [ 6.2505873e+19 -1.3499513e+20  4.2992607e+12  1.5541588e+20
+ -3.0988527e+12]
+2024-10-20 19:49:37,217 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.193546295166016, 'emd_loss': 27.86056900024414, 'total_loss': 24.193546295166016}
+2024-10-20 19:49:37,218 INFO =====> Epoch: 86
+2024-10-20 19:49:37,219 INFO =====> EMD Loss: nan
+2024-10-20 19:49:37,219 INFO =====> Height map loss: nan
+2024-10-20 19:49:37,219 INFO =====> Insertion loss: nan
+2024-10-20 19:49:37,219 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:49:37,219 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188559  0.6791609  -0.42404822]
+2024-10-20 19:49:37,219 INFO =====> Num. aborted data so far: 59
+2024-10-20 19:49:37,570 INFO ===> New TaichiEnv created.
+2024-10-20 19:49:37,570 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:50:05,768 ERROR ===> [Warning] Aborting epoch: 87
+2024-10-20 19:50:05,768 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:50:05,768 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:50:05,768 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188559  0.6791609  -0.42404822]
+2024-10-20 19:50:05,768 ERROR ===> [Warning] Skill params grad: [-1.0710529e+15  2.3099738e+15 -3.3969472e+07 -2.6658577e+15
+  5.1847936e+07]
+2024-10-20 19:50:05,768 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.195226669311523, 'emd_loss': 27.856027603149414, 'total_loss': 24.195226669311523}
+2024-10-20 19:50:05,769 INFO =====> Epoch: 87
+2024-10-20 19:50:05,769 INFO =====> EMD Loss: nan
+2024-10-20 19:50:05,769 INFO =====> Height map loss: nan
+2024-10-20 19:50:05,769 INFO =====> Insertion loss: nan
+2024-10-20 19:50:05,769 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:50:05,769 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188559  0.6791609  -0.42404824]
+2024-10-20 19:50:05,769 INFO =====> Num. aborted data so far: 60
+2024-10-20 19:50:06,137 INFO ===> New TaichiEnv created.
+2024-10-20 19:50:06,137 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:50:33,081 ERROR ===> [Warning] Aborting epoch: 88
+2024-10-20 19:50:33,082 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:50:33,082 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:50:33,082 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188559  0.6791609  -0.42404824]
+2024-10-20 19:50:33,082 ERROR ===> [Warning] Skill params grad: [ 5.2313510e+19 -1.1280383e+20 -1.5940120e+13  1.2946259e+20
+ -6.0143745e+12]
+2024-10-20 19:50:33,082 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.19454002380371, 'emd_loss': 27.848161697387695, 'total_loss': 24.19454002380371}
+2024-10-20 19:50:33,083 INFO =====> Epoch: 88
+2024-10-20 19:50:33,083 INFO =====> EMD Loss: nan
+2024-10-20 19:50:33,083 INFO =====> Height map loss: nan
+2024-10-20 19:50:33,083 INFO =====> Insertion loss: nan
+2024-10-20 19:50:33,083 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:50:33,083 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188558  0.6791609  -0.42404827]
+2024-10-20 19:50:33,083 INFO =====> Num. aborted data so far: 61
+2024-10-20 19:50:33,448 INFO ===> New TaichiEnv created.
+2024-10-20 19:50:33,448 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:51:00,496 ERROR ===> [Warning] Aborting epoch: 89
+2024-10-20 19:51:00,496 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:51:00,496 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:51:00,496 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188558  0.6791609  -0.42404827]
+2024-10-20 19:51:00,497 ERROR ===> [Warning] Skill params grad: [-4.8298665e+19  1.0314243e+20  1.2071789e+13 -1.1600286e+20
+ -5.1128351e+12]
+2024-10-20 19:51:00,497 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.196033477783203, 'emd_loss': 27.85373306274414, 'total_loss': 24.196033477783203}
+2024-10-20 19:51:00,498 INFO =====> Epoch: 89
+2024-10-20 19:51:00,498 INFO =====> EMD Loss: nan
+2024-10-20 19:51:00,498 INFO =====> Height map loss: nan
+2024-10-20 19:51:00,498 INFO =====> Insertion loss: nan
+2024-10-20 19:51:00,498 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:51:00,498 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188558  0.6791609  -0.4240483 ]
+2024-10-20 19:51:00,498 INFO =====> Num. aborted data so far: 62
+2024-10-20 19:51:00,874 INFO ===> New TaichiEnv created.
+2024-10-20 19:51:00,874 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:51:27,722 ERROR ===> [Warning] Aborting epoch: 90
+2024-10-20 19:51:27,722 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:51:27,722 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:51:27,722 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188558  0.6791609  -0.4240483 ]
+2024-10-20 19:51:27,722 ERROR ===> [Warning] Skill params grad: [-3.1838414e+17  6.8635096e+17  7.0831374e+10 -7.8747744e+17
+ -4.1882616e+10]
+2024-10-20 19:51:27,722 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.196943283081055, 'emd_loss': 27.85582160949707, 'total_loss': 24.196943283081055}
+2024-10-20 19:51:27,724 INFO =====> Epoch: 90
+2024-10-20 19:51:27,724 INFO =====> EMD Loss: nan
+2024-10-20 19:51:27,724 INFO =====> Height map loss: nan
+2024-10-20 19:51:27,724 INFO =====> Insertion loss: nan
+2024-10-20 19:51:27,724 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:51:27,724 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188557  0.6791609  -0.42404833]
+2024-10-20 19:51:27,724 INFO =====> Num. aborted data so far: 63
+2024-10-20 19:51:28,077 INFO ===> New TaichiEnv created.
+2024-10-20 19:51:28,077 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:51:55,114 ERROR ===> [Warning] Aborting epoch: 91
+2024-10-20 19:51:55,114 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:51:55,114 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:51:55,114 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188557  0.6791609  -0.42404833]
+2024-10-20 19:51:55,114 ERROR ===> [Warning] Skill params grad: [-3.05007274e+19  6.51750515e+19  1.09456738e+13 -7.33849860e+19
+ -1.04516865e+12]
+2024-10-20 19:51:55,114 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.195831298828125, 'emd_loss': 27.8453369140625, 'total_loss': 24.195831298828125}
+2024-10-20 19:51:55,115 INFO =====> Epoch: 91
+2024-10-20 19:51:55,115 INFO =====> EMD Loss: nan
+2024-10-20 19:51:55,115 INFO =====> Height map loss: nan
+2024-10-20 19:51:55,115 INFO =====> Insertion loss: nan
+2024-10-20 19:51:55,115 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:51:55,116 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188557  0.6791609  -0.42404836]
+2024-10-20 19:51:55,116 INFO =====> Num. aborted data so far: 64
+2024-10-20 19:51:55,483 INFO ===> New TaichiEnv created.
+2024-10-20 19:51:55,483 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:52:23,419 ERROR ===> [Warning] Aborting epoch: 92
+2024-10-20 19:52:23,420 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:52:23,420 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:52:23,420 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188557  0.6791609  -0.42404836]
+2024-10-20 19:52:23,420 ERROR ===> [Warning] Skill params grad: [-4.79979794e+19  1.03617985e+20  1.24816825e+13 -1.19230627e+20
+  4.35352948e+12]
+2024-10-20 19:52:23,420 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.194580078125, 'emd_loss': 27.85826873779297, 'total_loss': 24.194580078125}
+2024-10-20 19:52:23,421 INFO =====> Epoch: 92
+2024-10-20 19:52:23,421 INFO =====> EMD Loss: nan
+2024-10-20 19:52:23,421 INFO =====> Height map loss: nan
+2024-10-20 19:52:23,421 INFO =====> Insertion loss: nan
+2024-10-20 19:52:23,421 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:52:23,421 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188556  0.6791609  -0.4240484 ]
+2024-10-20 19:52:23,421 INFO =====> Num. aborted data so far: 65
+2024-10-20 19:52:23,772 INFO ===> New TaichiEnv created.
+2024-10-20 19:52:23,772 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:52:50,735 ERROR ===> [Warning] Aborting epoch: 93
+2024-10-20 19:52:50,735 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:52:50,735 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:52:50,735 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188556  0.6791609  -0.4240484 ]
+2024-10-20 19:52:50,735 ERROR ===> [Warning] Skill params grad: [ 2.9890951e+19 -6.4559884e+19 -1.0898735e+13  7.4355336e+19
+ -1.9090413e+12]
+2024-10-20 19:52:50,735 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.191162109375, 'emd_loss': 27.855451583862305, 'total_loss': 24.191162109375}
+2024-10-20 19:52:50,736 INFO =====> Epoch: 93
+2024-10-20 19:52:50,736 INFO =====> EMD Loss: nan
+2024-10-20 19:52:50,736 INFO =====> Height map loss: nan
+2024-10-20 19:52:50,736 INFO =====> Insertion loss: nan
+2024-10-20 19:52:50,736 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:52:50,736 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188556  0.6791609  -0.42404842]
+2024-10-20 19:52:50,736 INFO =====> Num. aborted data so far: 66
+2024-10-20 19:52:51,090 INFO ===> New TaichiEnv created.
+2024-10-20 19:52:51,090 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:53:18,178 ERROR ===> [Warning] Aborting epoch: 94
+2024-10-20 19:53:18,178 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:53:18,178 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:53:18,178 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188556  0.6791609  -0.42404842]
+2024-10-20 19:53:18,178 ERROR ===> [Warning] Skill params grad: [-4.35071517e+19  9.26813096e+19  1.00703194e+13 -1.03234255e+20
+  5.48978295e+11]
+2024-10-20 19:53:18,178 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.196653366088867, 'emd_loss': 27.848602294921875, 'total_loss': 24.196653366088867}
+2024-10-20 19:53:18,180 INFO =====> Epoch: 94
+2024-10-20 19:53:18,180 INFO =====> EMD Loss: nan
+2024-10-20 19:53:18,180 INFO =====> Height map loss: nan
+2024-10-20 19:53:18,180 INFO =====> Insertion loss: nan
+2024-10-20 19:53:18,180 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:53:18,180 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188555  0.6791609  -0.42404845]
+2024-10-20 19:53:18,180 INFO =====> Num. aborted data so far: 67
+2024-10-20 19:53:18,540 INFO ===> New TaichiEnv created.
+2024-10-20 19:53:18,540 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:53:45,504 ERROR ===> [Warning] Aborting epoch: 95
+2024-10-20 19:53:45,505 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:53:45,505 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:53:45,505 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188555  0.6791609  -0.42404845]
+2024-10-20 19:53:45,505 ERROR ===> [Warning] Skill params grad: [-4.7380408e+18  1.0099406e+19  6.3412109e+11 -1.1254793e+19
+ -3.5789898e+11]
+2024-10-20 19:53:45,505 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.19208335876465, 'emd_loss': 27.856870651245117, 'total_loss': 24.19208335876465}
+2024-10-20 19:53:45,506 INFO =====> Epoch: 95
+2024-10-20 19:53:45,506 INFO =====> EMD Loss: nan
+2024-10-20 19:53:45,506 INFO =====> Height map loss: nan
+2024-10-20 19:53:45,506 INFO =====> Insertion loss: nan
+2024-10-20 19:53:45,506 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:53:45,506 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188555  0.6791609  -0.42404848]
+2024-10-20 19:53:45,506 INFO =====> Num. aborted data so far: 68
+2024-10-20 19:53:45,883 INFO ===> New TaichiEnv created.
+2024-10-20 19:53:45,883 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:54:13,042 ERROR ===> [Warning] Aborting epoch: 96
+2024-10-20 19:54:13,042 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:54:13,042 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:54:13,042 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188555  0.6791609  -0.42404848]
+2024-10-20 19:54:13,042 ERROR ===> [Warning] Skill params grad: [-7.0920688e+18  1.5297543e+19  7.7122588e+11 -1.7571048e+19
+ -2.8816812e+11]
+2024-10-20 19:54:13,042 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.192550659179688, 'emd_loss': 27.85909080505371, 'total_loss': 24.192550659179688}
+2024-10-20 19:54:13,043 INFO =====> Epoch: 96
+2024-10-20 19:54:13,043 INFO =====> EMD Loss: nan
+2024-10-20 19:54:13,043 INFO =====> Height map loss: nan
+2024-10-20 19:54:13,043 INFO =====> Insertion loss: nan
+2024-10-20 19:54:13,043 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:54:13,043 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188554  0.6791609  -0.4240485 ]
+2024-10-20 19:54:13,043 INFO =====> Num. aborted data so far: 69
+2024-10-20 19:54:13,477 INFO ===> New TaichiEnv created.
+2024-10-20 19:54:13,477 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:54:40,823 ERROR ===> [Warning] Aborting epoch: 97
+2024-10-20 19:54:40,823 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:54:40,823 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:54:40,823 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188554  0.6791609  -0.4240485 ]
+2024-10-20 19:54:40,823 ERROR ===> [Warning] Skill params grad: [-2.1653322e+19  4.6243498e+19  2.8279743e+12 -5.2019575e+19
+ -2.6247096e+10]
+2024-10-20 19:54:40,823 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.196575164794922, 'emd_loss': 27.856304168701172, 'total_loss': 24.196575164794922}
+2024-10-20 19:54:40,824 INFO =====> Epoch: 97
+2024-10-20 19:54:40,824 INFO =====> EMD Loss: nan
+2024-10-20 19:54:40,824 INFO =====> Height map loss: nan
+2024-10-20 19:54:40,824 INFO =====> Insertion loss: nan
+2024-10-20 19:54:40,824 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:54:40,824 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188553  0.6791609  -0.42404854]
+2024-10-20 19:54:40,824 INFO =====> Num. aborted data so far: 70
+2024-10-20 19:54:41,179 INFO ===> New TaichiEnv created.
+2024-10-20 19:54:41,179 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:55:08,201 ERROR ===> [Warning] Aborting epoch: 98
+2024-10-20 19:55:08,201 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:55:08,201 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:55:08,201 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188553  0.6791609  -0.42404854]
+2024-10-20 19:55:08,201 ERROR ===> [Warning] Skill params grad: [ 8.3396038e+14 -1.7989295e+15 -7.2244624e+07  2.0768819e+15
+ -5.6043155e+06]
+2024-10-20 19:55:08,201 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.19186782836914, 'emd_loss': 27.854949951171875, 'total_loss': 24.19186782836914}
+2024-10-20 19:55:08,202 INFO =====> Epoch: 98
+2024-10-20 19:55:08,202 INFO =====> EMD Loss: nan
+2024-10-20 19:55:08,202 INFO =====> Height map loss: nan
+2024-10-20 19:55:08,202 INFO =====> Insertion loss: nan
+2024-10-20 19:55:08,202 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:55:08,202 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188552  0.6791609  -0.42404857]
+2024-10-20 19:55:08,202 INFO =====> Num. aborted data so far: 71
+2024-10-20 19:55:08,562 INFO ===> New TaichiEnv created.
+2024-10-20 19:55:08,562 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:55:35,600 ERROR ===> [Warning] Aborting epoch: 99
+2024-10-20 19:55:35,601 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:55:35,601 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:55:35,601 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188552  0.6791609  -0.42404857]
+2024-10-20 19:55:35,601 ERROR ===> [Warning] Skill params grad: [ 4.0386707e+19 -8.6279205e+19 -2.8950911e+12  9.7123768e+19
+  2.2284990e+12]
+2024-10-20 19:55:35,601 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.19226837158203, 'emd_loss': 27.857961654663086, 'total_loss': 24.19226837158203}
+2024-10-20 19:55:35,602 INFO =====> Epoch: 99
+2024-10-20 19:55:35,602 INFO =====> EMD Loss: nan
+2024-10-20 19:55:35,602 INFO =====> Height map loss: nan
+2024-10-20 19:55:35,602 INFO =====> Insertion loss: nan
+2024-10-20 19:55:35,602 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:55:35,602 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188552  0.6791609  -0.4240486 ]
+2024-10-20 19:55:35,602 INFO =====> Num. aborted data so far: 72
+2024-10-20 19:55:36,045 INFO ===> New TaichiEnv created.
+2024-10-20 19:55:36,045 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:56:03,266 ERROR ===> [Warning] Aborting epoch: 100
+2024-10-20 19:56:03,266 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:56:03,266 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:56:03,266 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188552  0.6791609  -0.4240486 ]
+2024-10-20 19:56:03,266 ERROR ===> [Warning] Skill params grad: [ 6.5512740e+18 -1.3984313e+19 -8.4439761e+11  1.5712548e+19
+  2.0893503e+11]
+2024-10-20 19:56:03,266 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.190547943115234, 'emd_loss': 27.850921630859375, 'total_loss': 24.190547943115234}
+2024-10-20 19:56:03,268 INFO =====> Epoch: 100
+2024-10-20 19:56:03,268 INFO =====> EMD Loss: nan
+2024-10-20 19:56:03,268 INFO =====> Height map loss: nan
+2024-10-20 19:56:03,268 INFO =====> Insertion loss: nan
+2024-10-20 19:56:03,268 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:56:03,268 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188551  0.6791609  -0.42404863]
+2024-10-20 19:56:03,268 INFO =====> Num. aborted data so far: 73
+2024-10-20 19:56:03,645 INFO ===> New TaichiEnv created.
+2024-10-20 19:56:03,645 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:56:30,813 ERROR ===> [Warning] Aborting epoch: 101
+2024-10-20 19:56:30,813 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:56:30,813 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:56:30,813 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188551  0.6791609  -0.42404863]
+2024-10-20 19:56:30,814 ERROR ===> [Warning] Skill params grad: [-1.1877082e+19  2.5629126e+19 -1.6475554e+11 -2.9461777e+19
+  9.7222092e+11]
+2024-10-20 19:56:30,814 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.194005966186523, 'emd_loss': 27.858095169067383, 'total_loss': 24.194005966186523}
+2024-10-20 19:56:30,815 INFO =====> Epoch: 101
+2024-10-20 19:56:30,815 INFO =====> EMD Loss: nan
+2024-10-20 19:56:30,815 INFO =====> Height map loss: nan
+2024-10-20 19:56:30,815 INFO =====> Insertion loss: nan
+2024-10-20 19:56:30,815 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:56:30,815 INFO =====> Skill params: [-0.7262667  -0.6910152   0.0218855   0.6791609  -0.42404866]
+2024-10-20 19:56:30,815 INFO =====> Num. aborted data so far: 74
+2024-10-20 19:56:31,171 INFO ===> New TaichiEnv created.
+2024-10-20 19:56:31,171 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:56:58,202 ERROR ===> [Warning] Aborting epoch: 102
+2024-10-20 19:56:58,202 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:56:58,202 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:56:58,202 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.0218855   0.6791609  -0.42404866]
+2024-10-20 19:56:58,202 ERROR ===> [Warning] Skill params grad: [-5.33108372e+19  1.13800228e+20  1.72456988e+12 -1.27868496e+20
+ -1.05009244e+12]
+2024-10-20 19:56:58,202 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.196718215942383, 'emd_loss': 27.854839324951172, 'total_loss': 24.196718215942383}
+2024-10-20 19:56:58,204 INFO =====> Epoch: 102
+2024-10-20 19:56:58,204 INFO =====> EMD Loss: nan
+2024-10-20 19:56:58,204 INFO =====> Height map loss: nan
+2024-10-20 19:56:58,204 INFO =====> Insertion loss: nan
+2024-10-20 19:56:58,204 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:56:58,204 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188549  0.6791609  -0.42404872]
+2024-10-20 19:56:58,204 INFO =====> Num. aborted data so far: 75
+2024-10-20 19:56:58,558 INFO ===> New TaichiEnv created.
+2024-10-20 19:56:58,558 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:57:25,759 ERROR ===> [Warning] Aborting epoch: 103
+2024-10-20 19:57:25,759 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:57:25,759 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:57:25,759 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188549  0.6791609  -0.42404872]
+2024-10-20 19:57:25,759 ERROR ===> [Warning] Skill params grad: [ 5.5413007e+19 -1.1817346e+20 -4.8456888e+12  1.3187146e+20
+ -3.4417043e+12]
+2024-10-20 19:57:25,759 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.19641876220703, 'emd_loss': 27.855417251586914, 'total_loss': 24.19641876220703}
+2024-10-20 19:57:25,761 INFO =====> Epoch: 103
+2024-10-20 19:57:25,761 INFO =====> EMD Loss: nan
+2024-10-20 19:57:25,761 INFO =====> Height map loss: nan
+2024-10-20 19:57:25,761 INFO =====> Insertion loss: nan
+2024-10-20 19:57:25,761 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:57:25,761 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188548  0.6791609  -0.42404878]
+2024-10-20 19:57:25,761 INFO =====> Num. aborted data so far: 76
+2024-10-20 19:57:26,118 INFO ===> New TaichiEnv created.
+2024-10-20 19:57:26,119 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:57:53,460 ERROR ===> [Warning] Aborting epoch: 104
+2024-10-20 19:57:53,460 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:57:53,460 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:57:53,460 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188548  0.6791609  -0.42404878]
+2024-10-20 19:57:53,460 ERROR ===> [Warning] Skill params grad: [-4.4742871e+19  9.6460032e+19  7.8636730e+12 -1.1072118e+20
+ -3.9981251e+12]
+2024-10-20 19:57:53,460 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.194467544555664, 'emd_loss': 27.858318328857422, 'total_loss': 24.194467544555664}
+2024-10-20 19:57:53,461 INFO =====> Epoch: 104
+2024-10-20 19:57:53,461 INFO =====> EMD Loss: nan
+2024-10-20 19:57:53,461 INFO =====> Height map loss: nan
+2024-10-20 19:57:53,461 INFO =====> Insertion loss: nan
+2024-10-20 19:57:53,461 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:57:53,462 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188547  0.6791609  -0.42404884]
+2024-10-20 19:57:53,462 INFO =====> Num. aborted data so far: 77
+2024-10-20 19:57:53,827 INFO ===> New TaichiEnv created.
+2024-10-20 19:57:53,827 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:58:21,685 ERROR ===> [Warning] Aborting epoch: 105
+2024-10-20 19:58:21,685 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:58:21,685 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:58:21,686 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188547  0.6791609  -0.42404884]
+2024-10-20 19:58:21,686 ERROR ===> [Warning] Skill params grad: [-9.3936263e+14  2.0259802e+15 -8.8654464e+07 -2.3381729e+15
+  1.7257077e+08]
+2024-10-20 19:58:21,686 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.192794799804688, 'emd_loss': 27.858911514282227, 'total_loss': 24.192794799804688}
+2024-10-20 19:58:21,687 INFO =====> Epoch: 105
+2024-10-20 19:58:21,687 INFO =====> EMD Loss: nan
+2024-10-20 19:58:21,687 INFO =====> Height map loss: nan
+2024-10-20 19:58:21,687 INFO =====> Insertion loss: nan
+2024-10-20 19:58:21,687 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:58:21,687 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188546  0.6791609  -0.4240489 ]
+2024-10-20 19:58:21,687 INFO =====> Num. aborted data so far: 78
+2024-10-20 19:58:22,055 INFO ===> New TaichiEnv created.
+2024-10-20 19:58:22,055 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:58:49,069 ERROR ===> [Warning] Aborting epoch: 106
+2024-10-20 19:58:49,069 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:58:49,069 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:58:49,069 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188546  0.6791609  -0.4240489 ]
+2024-10-20 19:58:49,069 ERROR ===> [Warning] Skill params grad: [ 3.2253402e+19 -6.8688840e+19 -1.7487356e+12  7.6454779e+19
+  2.4729315e+12]
+2024-10-20 19:58:49,069 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.19613265991211, 'emd_loss': 27.856740951538086, 'total_loss': 24.19613265991211}
+2024-10-20 19:58:49,070 INFO =====> Epoch: 106
+2024-10-20 19:58:49,070 INFO =====> EMD Loss: nan
+2024-10-20 19:58:49,070 INFO =====> Height map loss: nan
+2024-10-20 19:58:49,070 INFO =====> Insertion loss: nan
+2024-10-20 19:58:49,070 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:58:49,070 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188545  0.6791609  -0.42404896]
+2024-10-20 19:58:49,070 INFO =====> Num. aborted data so far: 79
+2024-10-20 19:58:49,431 INFO ===> New TaichiEnv created.
+2024-10-20 19:58:49,431 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:59:16,978 ERROR ===> [Warning] Aborting epoch: 107
+2024-10-20 19:59:16,978 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:59:16,978 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:59:16,978 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188545  0.6791609  -0.42404896]
+2024-10-20 19:59:16,978 ERROR ===> [Warning] Skill params grad: [-4.6386210e+19  1.0003450e+20 -2.6832247e+11 -1.1482511e+20
+ -2.7411588e+12]
+2024-10-20 19:59:16,978 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.19289779663086, 'emd_loss': 27.85881233215332, 'total_loss': 24.19289779663086}
+2024-10-20 19:59:16,979 INFO =====> Epoch: 107
+2024-10-20 19:59:16,979 INFO =====> EMD Loss: nan
+2024-10-20 19:59:16,979 INFO =====> Height map loss: nan
+2024-10-20 19:59:16,979 INFO =====> Insertion loss: nan
+2024-10-20 19:59:16,979 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:59:16,979 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188544  0.6791609  -0.42404902]
+2024-10-20 19:59:16,979 INFO =====> Num. aborted data so far: 80
+2024-10-20 19:59:17,333 INFO ===> New TaichiEnv created.
+2024-10-20 19:59:17,333 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 19:59:44,637 ERROR ===> [Warning] Aborting epoch: 108
+2024-10-20 19:59:44,637 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 19:59:44,637 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 19:59:44,637 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188544  0.6791609  -0.42404902]
+2024-10-20 19:59:44,637 ERROR ===> [Warning] Skill params grad: [ 2.5146339e+19 -5.4244995e+19 -2.0149185e+12  6.2294463e+19
+ -2.0400036e+12]
+2024-10-20 19:59:44,637 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.192899703979492, 'emd_loss': 27.857736587524414, 'total_loss': 24.192899703979492}
+2024-10-20 19:59:44,638 INFO =====> Epoch: 108
+2024-10-20 19:59:44,638 INFO =====> EMD Loss: nan
+2024-10-20 19:59:44,638 INFO =====> Height map loss: nan
+2024-10-20 19:59:44,638 INFO =====> Insertion loss: nan
+2024-10-20 19:59:44,639 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 19:59:44,639 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188542  0.6791609  -0.42404908]
+2024-10-20 19:59:44,639 INFO =====> Num. aborted data so far: 81
+2024-10-20 19:59:44,999 INFO ===> New TaichiEnv created.
+2024-10-20 19:59:44,999 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:00:12,196 ERROR ===> [Warning] Aborting epoch: 109
+2024-10-20 20:00:12,196 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:00:12,196 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:00:12,196 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188542  0.6791609  -0.42404908]
+2024-10-20 20:00:12,197 ERROR ===> [Warning] Skill params grad: [ 1.4290015e+19 -3.0846339e+19  6.7019040e+11  3.5484957e+19
+ -2.7349869e+12]
+2024-10-20 20:00:12,197 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.195392608642578, 'emd_loss': 27.857940673828125, 'total_loss': 24.195392608642578}
+2024-10-20 20:00:12,198 INFO =====> Epoch: 109
+2024-10-20 20:00:12,198 INFO =====> EMD Loss: nan
+2024-10-20 20:00:12,198 INFO =====> Height map loss: nan
+2024-10-20 20:00:12,198 INFO =====> Insertion loss: nan
+2024-10-20 20:00:12,198 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:00:12,198 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188541  0.6791609  -0.42404914]
+2024-10-20 20:00:12,198 INFO =====> Num. aborted data so far: 82
+2024-10-20 20:00:12,563 INFO ===> New TaichiEnv created.
+2024-10-20 20:00:12,563 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:00:39,753 ERROR ===> [Warning] Aborting epoch: 110
+2024-10-20 20:00:39,753 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:00:39,753 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:00:39,753 ERROR ===> [Warning] Skill params: [-0.7262667  -0.6910152   0.02188541  0.6791609  -0.42404914]
+2024-10-20 20:00:39,753 ERROR ===> [Warning] Skill params grad: [ 1.5066294e+18 -3.2493688e+18 -6.3490294e+10  3.7315891e+18
+ -2.1109406e+11]
+2024-10-20 20:00:39,753 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.1938419342041, 'emd_loss': 27.85968780517578, 'total_loss': 24.1938419342041}
+2024-10-20 20:00:39,754 INFO =====> Epoch: 110
+2024-10-20 20:00:39,754 INFO =====> EMD Loss: nan
+2024-10-20 20:00:39,754 INFO =====> Height map loss: nan
+2024-10-20 20:00:39,754 INFO =====> Insertion loss: nan
+2024-10-20 20:00:39,754 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:00:39,754 INFO =====> Skill params: [-0.7262667 -0.6910152  0.0218854  0.6791609 -0.4240492]
+2024-10-20 20:00:39,754 INFO =====> Num. aborted data so far: 83
+2024-10-20 20:00:40,120 INFO ===> New TaichiEnv created.
+2024-10-20 20:00:40,120 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:01:07,308 ERROR ===> [Warning] Aborting epoch: 111
+2024-10-20 20:01:07,308 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:01:07,308 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:01:07,308 ERROR ===> [Warning] Skill params: [-0.7262667 -0.6910152  0.0218854  0.6791609 -0.4240492]
+2024-10-20 20:01:07,308 ERROR ===> [Warning] Skill params grad: [-3.4221769e+19  7.3837835e+19  1.1525150e+12 -8.4863527e+19
+ -8.2671534e+11]
+2024-10-20 20:01:07,308 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.193017959594727, 'emd_loss': 27.86052131652832, 'total_loss': 24.193017959594727}
+2024-10-20 20:01:07,309 INFO =====> Epoch: 111
+2024-10-20 20:01:07,309 INFO =====> EMD Loss: nan
+2024-10-20 20:01:07,309 INFO =====> Height map loss: nan
+2024-10-20 20:01:07,309 INFO =====> Insertion loss: nan
+2024-10-20 20:01:07,309 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:01:07,309 INFO =====> Skill params: [-0.7262667  -0.6910152   0.02188538  0.6791609  -0.4240493 ]
+2024-10-20 20:01:07,309 INFO =====> Num. aborted data so far: 84
+2024-10-20 20:01:07,683 INFO ===> New TaichiEnv created.
+2024-10-20 20:01:07,683 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:01:34,696 INFO =====> Epoch: 112
+2024-10-20 20:01:34,696 INFO =====> EMD Loss: 27.847545623779297
+2024-10-20 20:01:34,696 INFO =====> Height map loss: 24.19127082824707
+2024-10-20 20:01:34,696 INFO =====> Insertion loss: 0.0
+2024-10-20 20:01:34,696 INFO =====> Grad: [-2.1472500e+05  6.4470381e+05  3.0148029e-02 -8.2126181e+05
+ -2.1948949e-02]
+2024-10-20 20:01:34,696 INFO =====> Skill params: [-0.72457916 -0.69289184  0.02142748  0.6816121  -0.42230272]
+2024-10-20 20:01:34,696 INFO =====> Num. aborted data so far: 84
+2024-10-20 20:01:35,067 INFO ===> New TaichiEnv created.
+2024-10-20 20:01:35,067 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:02:01,959 INFO =====> Epoch: 113
+2024-10-20 20:02:01,959 INFO =====> EMD Loss: 27.799728393554688
+2024-10-20 20:02:01,959 INFO =====> Height map loss: 24.179523468017578
+2024-10-20 20:02:01,959 INFO =====> Insertion loss: 0.0
+2024-10-20 20:02:01,960 INFO =====> Grad: [ 2.4969645e+04 -5.1623945e+04  1.4626149e-04 -1.3190016e+04
+ -2.7558734e-03]
+2024-10-20 20:02:01,960 INFO =====> Skill params: [-0.724786   -0.69273347  0.02142514  0.68165356 -0.42207158]
+2024-10-20 20:02:01,960 INFO =====> Num. aborted data so far: 84
+2024-10-20 20:02:02,387 INFO ===> New TaichiEnv created.
+2024-10-20 20:02:02,387 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:02:30,072 INFO =====> Epoch: 114
+2024-10-20 20:02:30,072 INFO =====> EMD Loss: 27.843027114868164
+2024-10-20 20:02:30,072 INFO =====> Height map loss: 24.192161560058594
+2024-10-20 20:02:30,072 INFO =====> Insertion loss: 0.0
+2024-10-20 20:02:30,072 INFO =====> Grad: [-2.9921002e+04  2.6002545e+04  1.4657530e-03 -3.3339441e+04
+  2.4530739e-03]
+2024-10-20 20:02:30,072 INFO =====> Skill params: [-0.7245247  -0.69281757  0.0214004   0.6817641  -0.42228848]
+2024-10-20 20:02:30,072 INFO =====> Num. aborted data so far: 84
+2024-10-20 20:02:30,430 INFO ===> New TaichiEnv created.
+2024-10-20 20:02:30,430 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:02:57,727 INFO =====> Epoch: 115
+2024-10-20 20:02:57,727 INFO =====> EMD Loss: 27.81839370727539
+2024-10-20 20:02:57,727 INFO =====> Height map loss: 24.17820930480957
+2024-10-20 20:02:57,727 INFO =====> Insertion loss: 0.0
+2024-10-20 20:02:57,727 INFO =====> Grad: [-6.7779672e+04  7.9096836e+04  3.9581675e-03  9.5081070e+04
+ -1.7282591e-04]
+2024-10-20 20:02:57,728 INFO =====> Skill params: [-0.7239008  -0.6930872   0.02132999  0.6814318  -0.42227238]
+2024-10-20 20:02:57,728 INFO =====> Num. aborted data so far: 84
+2024-10-20 20:02:58,130 INFO ===> New TaichiEnv created.
+2024-10-20 20:02:58,130 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:03:25,587 INFO =====> Epoch: 116
+2024-10-20 20:03:25,587 INFO =====> EMD Loss: 27.812387466430664
+2024-10-20 20:03:25,587 INFO =====> Height map loss: 24.17551040649414
+2024-10-20 20:03:25,587 INFO =====> Insertion loss: 0.0
+2024-10-20 20:03:25,587 INFO =====> Grad: [ 4.4559260e+06  1.9197778e+07  9.1160707e+00 -1.2379297e+08
+  4.8564572e+00]
+2024-10-20 20:03:25,587 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798581  0.744078   -0.48496944]
+2024-10-20 20:03:25,587 INFO =====> Num. aborted data so far: 84
+2024-10-20 20:03:25,957 INFO ===> New TaichiEnv created.
+2024-10-20 20:03:25,957 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:03:53,716 ERROR ===> [Warning] Aborting epoch: 117
+2024-10-20 20:03:53,716 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:03:53,716 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:03:53,716 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798581  0.744078   -0.48496944]
+2024-10-20 20:03:53,716 ERROR ===> [Warning] Skill params grad: [-9.4501070e+15  1.9368980e+16  9.8494637e+08 -2.5364249e+16
+  9.1069984e+07]
+2024-10-20 20:03:53,716 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 25.014986038208008, 'emd_loss': 28.1849422454834, 'total_loss': 25.014986038208008}
+2024-10-20 20:03:53,717 INFO =====> Epoch: 117
+2024-10-20 20:03:53,717 INFO =====> EMD Loss: nan
+2024-10-20 20:03:53,717 INFO =====> Height map loss: nan
+2024-10-20 20:03:53,717 INFO =====> Insertion loss: nan
+2024-10-20 20:03:53,717 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:03:53,718 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798582  0.744078   -0.48496944]
+2024-10-20 20:03:53,718 INFO =====> Num. aborted data so far: 85
+2024-10-20 20:03:54,135 INFO ===> New TaichiEnv created.
+2024-10-20 20:03:54,135 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:04:21,720 ERROR ===> [Warning] Aborting epoch: 118
+2024-10-20 20:04:21,720 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:04:21,720 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:04:21,720 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798582  0.744078   -0.48496944]
+2024-10-20 20:04:21,720 ERROR ===> [Warning] Skill params grad: [-7.9897070e+13  1.6360695e+14 -6.9694320e+06 -2.1377451e+14
+ -2.1153520e+05]
+2024-10-20 20:04:21,720 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.992717742919922, 'emd_loss': 28.185901641845703, 'total_loss': 24.992717742919922}
+2024-10-20 20:04:21,722 INFO =====> Epoch: 118
+2024-10-20 20:04:21,722 INFO =====> EMD Loss: nan
+2024-10-20 20:04:21,722 INFO =====> Height map loss: nan
+2024-10-20 20:04:21,722 INFO =====> Insertion loss: nan
+2024-10-20 20:04:21,722 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:04:21,722 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798582  0.744078   -0.48496944]
+2024-10-20 20:04:21,722 INFO =====> Num. aborted data so far: 86
+2024-10-20 20:04:22,087 INFO ===> New TaichiEnv created.
+2024-10-20 20:04:22,087 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:04:50,268 ERROR ===> [Warning] Aborting epoch: 119
+2024-10-20 20:04:50,268 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:04:50,268 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:04:50,268 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798582  0.744078   -0.48496944]
+2024-10-20 20:04:50,268 ERROR ===> [Warning] Skill params grad: [ 2.9818515e+14 -6.1112237e+14  5.7545728e+07  8.0015744e+14
+ -5.6777775e+06]
+2024-10-20 20:04:50,268 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.99127960205078, 'emd_loss': 28.18825912475586, 'total_loss': 24.99127960205078}
+2024-10-20 20:04:50,269 INFO =====> Epoch: 119
+2024-10-20 20:04:50,269 INFO =====> EMD Loss: nan
+2024-10-20 20:04:50,269 INFO =====> Height map loss: nan
+2024-10-20 20:04:50,269 INFO =====> Insertion loss: nan
+2024-10-20 20:04:50,270 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:04:50,270 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798583  0.744078   -0.48496947]
+2024-10-20 20:04:50,270 INFO =====> Num. aborted data so far: 87
+2024-10-20 20:04:50,712 INFO ===> New TaichiEnv created.
+2024-10-20 20:04:50,713 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:05:18,425 ERROR ===> [Warning] Aborting epoch: 120
+2024-10-20 20:05:18,425 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:05:18,425 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:05:18,425 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798583  0.744078   -0.48496947]
+2024-10-20 20:05:18,425 ERROR ===> [Warning] Skill params grad: [-2.2518173e+14  4.6104377e+14 -2.1730050e+07 -6.0220642e+14
+  1.8289590e+07]
+2024-10-20 20:05:18,425 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.98744010925293, 'emd_loss': 28.18553924560547, 'total_loss': 24.98744010925293}
+2024-10-20 20:05:18,426 INFO =====> Epoch: 120
+2024-10-20 20:05:18,426 INFO =====> EMD Loss: nan
+2024-10-20 20:05:18,426 INFO =====> Height map loss: nan
+2024-10-20 20:05:18,426 INFO =====> Insertion loss: nan
+2024-10-20 20:05:18,426 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:05:18,427 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798584  0.744078   -0.4849695 ]
+2024-10-20 20:05:18,427 INFO =====> Num. aborted data so far: 88
+2024-10-20 20:05:18,795 INFO ===> New TaichiEnv created.
+2024-10-20 20:05:18,795 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:05:46,701 ERROR ===> [Warning] Aborting epoch: 121
+2024-10-20 20:05:46,701 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:05:46,701 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:05:46,701 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798584  0.744078   -0.4849695 ]
+2024-10-20 20:05:46,701 ERROR ===> [Warning] Skill params grad: [ 7.7006328e+14 -1.5763716e+15 -7.9703120e+07  2.0581149e+15
+ -6.0408744e+07]
+2024-10-20 20:05:46,701 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.987895965576172, 'emd_loss': 28.186466217041016, 'total_loss': 24.987895965576172}
+2024-10-20 20:05:46,702 INFO =====> Epoch: 121
+2024-10-20 20:05:46,702 INFO =====> EMD Loss: nan
+2024-10-20 20:05:46,703 INFO =====> Height map loss: nan
+2024-10-20 20:05:46,703 INFO =====> Insertion loss: nan
+2024-10-20 20:05:46,703 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:05:46,703 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798585  0.744078   -0.48496953]
+2024-10-20 20:05:46,703 INFO =====> Num. aborted data so far: 89
+2024-10-20 20:05:47,071 INFO ===> New TaichiEnv created.
+2024-10-20 20:05:47,071 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:06:14,647 ERROR ===> [Warning] Aborting epoch: 122
+2024-10-20 20:06:14,647 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:06:14,647 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:06:14,647 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798585  0.744078   -0.48496953]
+2024-10-20 20:06:14,647 ERROR ===> [Warning] Skill params grad: [-3.2729766e+15  6.7014536e+15 -1.8473616e+08 -8.7541645e+15
+ -1.1128132e+08]
+2024-10-20 20:06:14,647 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 25.01968002319336, 'emd_loss': 28.187265396118164, 'total_loss': 25.01968002319336}
+2024-10-20 20:06:14,648 INFO =====> Epoch: 122
+2024-10-20 20:06:14,648 INFO =====> EMD Loss: nan
+2024-10-20 20:06:14,648 INFO =====> Height map loss: nan
+2024-10-20 20:06:14,648 INFO =====> Insertion loss: nan
+2024-10-20 20:06:14,648 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:06:14,649 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798585  0.744078   -0.48496956]
+2024-10-20 20:06:14,649 INFO =====> Num. aborted data so far: 90
+2024-10-20 20:06:15,015 INFO ===> New TaichiEnv created.
+2024-10-20 20:06:15,015 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:06:42,367 ERROR ===> [Warning] Aborting epoch: 123
+2024-10-20 20:06:42,367 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:06:42,367 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:06:42,367 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798585  0.744078   -0.48496956]
+2024-10-20 20:06:42,367 ERROR ===> [Warning] Skill params grad: [ 7.8883334e+15 -1.6127343e+16  3.4870854e+08  2.0991575e+16
+ -4.0026339e+08]
+2024-10-20 20:06:42,367 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.988609313964844, 'emd_loss': 28.185205459594727, 'total_loss': 24.988609313964844}
+2024-10-20 20:06:42,368 INFO =====> Epoch: 123
+2024-10-20 20:06:42,368 INFO =====> EMD Loss: nan
+2024-10-20 20:06:42,368 INFO =====> Height map loss: nan
+2024-10-20 20:06:42,368 INFO =====> Insertion loss: nan
+2024-10-20 20:06:42,368 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:06:42,368 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798587  0.744078   -0.4849696 ]
+2024-10-20 20:06:42,368 INFO =====> Num. aborted data so far: 91
+2024-10-20 20:06:42,723 INFO ===> New TaichiEnv created.
+2024-10-20 20:06:42,723 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:07:10,922 ERROR ===> [Warning] Aborting epoch: 124
+2024-10-20 20:07:10,922 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:07:10,922 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:07:10,922 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798587  0.744078   -0.4849696 ]
+2024-10-20 20:07:10,922 ERROR ===> [Warning] Skill params grad: [-1.7574263e+15  3.5984691e+15  2.6616565e+08 -4.7011815e+15
+  1.3933277e+07]
+2024-10-20 20:07:10,922 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.99398422241211, 'emd_loss': 28.187379837036133, 'total_loss': 24.99398422241211}
+2024-10-20 20:07:10,923 INFO =====> Epoch: 124
+2024-10-20 20:07:10,923 INFO =====> EMD Loss: nan
+2024-10-20 20:07:10,923 INFO =====> Height map loss: nan
+2024-10-20 20:07:10,923 INFO =====> Insertion loss: nan
+2024-10-20 20:07:10,923 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:07:10,924 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798588  0.744078   -0.48496962]
+2024-10-20 20:07:10,924 INFO =====> Num. aborted data so far: 92
+2024-10-20 20:07:11,286 INFO ===> New TaichiEnv created.
+2024-10-20 20:07:11,287 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:07:38,856 ERROR ===> [Warning] Aborting epoch: 125
+2024-10-20 20:07:38,856 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:07:38,856 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:07:38,856 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798588  0.744078   -0.48496962]
+2024-10-20 20:07:38,856 ERROR ===> [Warning] Skill params grad: [-2.2610448e+14  4.6246899e+14  1.1810142e+07 -6.0158453e+14
+ -9.2020650e+05]
+2024-10-20 20:07:38,856 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.995948791503906, 'emd_loss': 28.187713623046875, 'total_loss': 24.995948791503906}
+2024-10-20 20:07:38,857 INFO =====> Epoch: 125
+2024-10-20 20:07:38,857 INFO =====> EMD Loss: nan
+2024-10-20 20:07:38,857 INFO =====> Height map loss: nan
+2024-10-20 20:07:38,858 INFO =====> Insertion loss: nan
+2024-10-20 20:07:38,858 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:07:38,858 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798589  0.744078   -0.48496965]
+2024-10-20 20:07:38,858 INFO =====> Num. aborted data so far: 93
+2024-10-20 20:07:39,262 INFO ===> New TaichiEnv created.
+2024-10-20 20:07:39,262 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:08:07,594 ERROR ===> [Warning] Aborting epoch: 126
+2024-10-20 20:08:07,594 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:08:07,594 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:08:07,594 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798589  0.744078   -0.48496965]
+2024-10-20 20:08:07,594 ERROR ===> [Warning] Skill params grad: [ 3.9292189e+15 -8.0485824e+15  9.8061530e+08  1.0542812e+16
+  3.6327338e+08]
+2024-10-20 20:08:07,594 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 25.0137882232666, 'emd_loss': 28.187957763671875, 'total_loss': 25.0137882232666}
+2024-10-20 20:08:07,595 INFO =====> Epoch: 126
+2024-10-20 20:08:07,595 INFO =====> EMD Loss: nan
+2024-10-20 20:08:07,596 INFO =====> Height map loss: nan
+2024-10-20 20:08:07,596 INFO =====> Insertion loss: nan
+2024-10-20 20:08:07,596 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:08:07,596 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.0379859   0.744078   -0.48496968]
+2024-10-20 20:08:07,596 INFO =====> Num. aborted data so far: 94
+2024-10-20 20:08:07,971 INFO ===> New TaichiEnv created.
+2024-10-20 20:08:07,971 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:08:35,641 ERROR ===> [Warning] Aborting epoch: 127
+2024-10-20 20:08:35,641 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:08:35,641 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:08:35,642 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.0379859   0.744078   -0.48496968]
+2024-10-20 20:08:35,642 ERROR ===> [Warning] Skill params grad: [ 1.05796495e+14 -2.16408403e+14  3.22640700e+07  2.81557252e+14
+  1.30762650e+06]
+2024-10-20 20:08:35,642 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.991193771362305, 'emd_loss': 28.187583923339844, 'total_loss': 24.991193771362305}
+2024-10-20 20:08:35,643 INFO =====> Epoch: 127
+2024-10-20 20:08:35,643 INFO =====> EMD Loss: nan
+2024-10-20 20:08:35,643 INFO =====> Height map loss: nan
+2024-10-20 20:08:35,643 INFO =====> Insertion loss: nan
+2024-10-20 20:08:35,643 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:08:35,643 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798591  0.744078   -0.4849697 ]
+2024-10-20 20:08:35,643 INFO =====> Num. aborted data so far: 95
+2024-10-20 20:08:36,006 INFO ===> New TaichiEnv created.
+2024-10-20 20:08:36,006 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:09:03,541 ERROR ===> [Warning] Aborting epoch: 128
+2024-10-20 20:09:03,541 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:09:03,541 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:09:03,541 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798591  0.744078   -0.4849697 ]
+2024-10-20 20:09:03,541 ERROR ===> [Warning] Skill params grad: [ 7.3566488e+14 -1.5064155e+15  1.1449003e+08  1.9716400e+15
+  8.8622176e+07]
+2024-10-20 20:09:03,541 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.997970581054688, 'emd_loss': 28.187406539916992, 'total_loss': 24.997970581054688}
+2024-10-20 20:09:03,542 INFO =====> Epoch: 128
+2024-10-20 20:09:03,542 INFO =====> EMD Loss: nan
+2024-10-20 20:09:03,542 INFO =====> Height map loss: nan
+2024-10-20 20:09:03,542 INFO =====> Insertion loss: nan
+2024-10-20 20:09:03,542 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:09:03,543 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798592  0.744078   -0.48496974]
+2024-10-20 20:09:03,543 INFO =====> Num. aborted data so far: 96
+2024-10-20 20:09:03,906 INFO ===> New TaichiEnv created.
+2024-10-20 20:09:03,906 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:09:31,708 ERROR ===> [Warning] Aborting epoch: 129
+2024-10-20 20:09:31,708 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:09:31,708 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:09:31,708 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798592  0.744078   -0.48496974]
+2024-10-20 20:09:31,708 ERROR ===> [Warning] Skill params grad: [-6.7142971e+15  1.3729407e+16  5.5808928e+08 -1.7877616e+16
+ -3.2533456e+08]
+2024-10-20 20:09:31,708 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 25.016048431396484, 'emd_loss': 28.187726974487305, 'total_loss': 25.016048431396484}
+2024-10-20 20:09:31,709 INFO =====> Epoch: 129
+2024-10-20 20:09:31,709 INFO =====> EMD Loss: nan
+2024-10-20 20:09:31,709 INFO =====> Height map loss: nan
+2024-10-20 20:09:31,709 INFO =====> Insertion loss: nan
+2024-10-20 20:09:31,709 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:09:31,709 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798593  0.744078   -0.48496976]
+2024-10-20 20:09:31,709 INFO =====> Num. aborted data so far: 97
+2024-10-20 20:09:32,078 INFO ===> New TaichiEnv created.
+2024-10-20 20:09:32,078 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:09:59,744 ERROR ===> [Warning] Aborting epoch: 130
+2024-10-20 20:09:59,744 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:09:59,744 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:09:59,744 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798593  0.744078   -0.48496976]
+2024-10-20 20:09:59,744 ERROR ===> [Warning] Skill params grad: [ 1.5851163e+13 -3.2417144e+13  4.2603110e+06  4.2155008e+13
+ -7.0546359e+04]
+2024-10-20 20:09:59,744 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 25.017719268798828, 'emd_loss': 28.185487747192383, 'total_loss': 25.017719268798828}
+2024-10-20 20:09:59,745 INFO =====> Epoch: 130
+2024-10-20 20:09:59,745 INFO =====> EMD Loss: nan
+2024-10-20 20:09:59,745 INFO =====> Height map loss: nan
+2024-10-20 20:09:59,745 INFO =====> Insertion loss: nan
+2024-10-20 20:09:59,746 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:09:59,746 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798595  0.744078   -0.4849698 ]
+2024-10-20 20:09:59,746 INFO =====> Num. aborted data so far: 98
+2024-10-20 20:10:00,165 INFO ===> New TaichiEnv created.
+2024-10-20 20:10:00,165 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:10:27,761 ERROR ===> [Warning] Aborting epoch: 131
+2024-10-20 20:10:27,761 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:10:27,761 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:10:27,761 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798595  0.744078   -0.4849698 ]
+2024-10-20 20:10:27,761 ERROR ===> [Warning] Skill params grad: [ 1.11779565e+17 -2.28616402e+17  2.68906496e+10  2.97339693e+17
+ -3.93413811e+09]
+2024-10-20 20:10:27,761 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.993133544921875, 'emd_loss': 28.186201095581055, 'total_loss': 24.993133544921875}
+2024-10-20 20:10:27,763 INFO =====> Epoch: 131
+2024-10-20 20:10:27,763 INFO =====> EMD Loss: nan
+2024-10-20 20:10:27,763 INFO =====> Height map loss: nan
+2024-10-20 20:10:27,763 INFO =====> Insertion loss: nan
+2024-10-20 20:10:27,763 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:10:27,763 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798596  0.744078   -0.48496982]
+2024-10-20 20:10:27,763 INFO =====> Num. aborted data so far: 99
+2024-10-20 20:10:28,178 INFO ===> New TaichiEnv created.
+2024-10-20 20:10:28,178 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:10:55,784 ERROR ===> [Warning] Aborting epoch: 132
+2024-10-20 20:10:55,785 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:10:55,785 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:10:55,785 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798596  0.744078   -0.48496982]
+2024-10-20 20:10:55,785 ERROR ===> [Warning] Skill params grad: [-3.8761633e+18  7.9401870e+18 -2.3541570e+11 -1.0401870e+19
+  4.1179985e+11]
+2024-10-20 20:10:55,785 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 25.01791763305664, 'emd_loss': 28.188020706176758, 'total_loss': 25.01791763305664}
+2024-10-20 20:10:55,786 INFO =====> Epoch: 132
+2024-10-20 20:10:55,786 INFO =====> EMD Loss: nan
+2024-10-20 20:10:55,786 INFO =====> Height map loss: nan
+2024-10-20 20:10:55,786 INFO =====> Insertion loss: nan
+2024-10-20 20:10:55,786 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:10:55,786 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798598  0.744078   -0.48496985]
+2024-10-20 20:10:55,786 INFO =====> Num. aborted data so far: 100
+2024-10-20 20:10:56,153 INFO ===> New TaichiEnv created.
+2024-10-20 20:10:56,153 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:11:23,749 ERROR ===> [Warning] Aborting epoch: 133
+2024-10-20 20:11:23,749 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:11:23,749 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:11:23,749 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798598  0.744078   -0.48496985]
+2024-10-20 20:11:23,749 ERROR ===> [Warning] Skill params grad: [-5.2876165e+19  1.0829448e+20 -7.6615726e+11 -1.4180092e+20
+  1.4166115e+12]
+2024-10-20 20:11:23,749 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 25.016651153564453, 'emd_loss': 28.185213088989258, 'total_loss': 25.016651153564453}
+2024-10-20 20:11:23,750 INFO =====> Epoch: 133
+2024-10-20 20:11:23,751 INFO =====> EMD Loss: nan
+2024-10-20 20:11:23,751 INFO =====> Height map loss: nan
+2024-10-20 20:11:23,751 INFO =====> Insertion loss: nan
+2024-10-20 20:11:23,751 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:11:23,751 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798599  0.744078   -0.48496988]
+2024-10-20 20:11:23,751 INFO =====> Num. aborted data so far: 101
+2024-10-20 20:11:24,188 INFO ===> New TaichiEnv created.
+2024-10-20 20:11:24,188 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:11:51,984 ERROR ===> [Warning] Aborting epoch: 134
+2024-10-20 20:11:51,984 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:11:51,984 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:11:51,984 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798599  0.744078   -0.48496988]
+2024-10-20 20:11:51,984 ERROR ===> [Warning] Skill params grad: [-2.1100339e+14  4.3158724e+14 -1.6232702e+07 -5.6334798e+14
+ -1.0803498e+07]
+2024-10-20 20:11:51,984 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.9830379486084, 'emd_loss': 28.187814712524414, 'total_loss': 24.9830379486084}
+2024-10-20 20:11:51,985 INFO =====> Epoch: 134
+2024-10-20 20:11:51,985 INFO =====> EMD Loss: nan
+2024-10-20 20:11:51,985 INFO =====> Height map loss: nan
+2024-10-20 20:11:51,985 INFO =====> Insertion loss: nan
+2024-10-20 20:11:51,985 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:11:51,985 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798601  0.744078   -0.4849699 ]
+2024-10-20 20:11:51,985 INFO =====> Num. aborted data so far: 102
+2024-10-20 20:11:52,356 INFO ===> New TaichiEnv created.
+2024-10-20 20:11:52,356 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:12:20,101 ERROR ===> [Warning] Aborting epoch: 135
+2024-10-20 20:12:20,101 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:12:20,101 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:12:20,102 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798601  0.744078   -0.4849699 ]
+2024-10-20 20:12:20,102 ERROR ===> [Warning] Skill params grad: [ 1.3102633e+18 -2.6782575e+18  1.4793759e+11  3.4844359e+18
+ -1.7086151e+11]
+2024-10-20 20:12:20,102 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 25.012788772583008, 'emd_loss': 28.186660766601562, 'total_loss': 25.012788772583008}
+2024-10-20 20:12:20,103 INFO =====> Epoch: 135
+2024-10-20 20:12:20,103 INFO =====> EMD Loss: nan
+2024-10-20 20:12:20,103 INFO =====> Height map loss: nan
+2024-10-20 20:12:20,103 INFO =====> Insertion loss: nan
+2024-10-20 20:12:20,103 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:12:20,103 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798603  0.744078   -0.48496994]
+2024-10-20 20:12:20,103 INFO =====> Num. aborted data so far: 103
+2024-10-20 20:12:20,465 INFO ===> New TaichiEnv created.
+2024-10-20 20:12:20,465 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:12:48,300 ERROR ===> [Warning] Aborting epoch: 136
+2024-10-20 20:12:48,300 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:12:48,300 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:12:48,300 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798603  0.744078   -0.48496994]
+2024-10-20 20:12:48,300 ERROR ===> [Warning] Skill params grad: [-6.2509883e+15  1.2778857e+16 -5.2039680e+06 -1.6630003e+16
+  1.1220023e+09]
+2024-10-20 20:12:48,301 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.99200439453125, 'emd_loss': 28.186185836791992, 'total_loss': 24.99200439453125}
+2024-10-20 20:12:48,302 INFO =====> Epoch: 136
+2024-10-20 20:12:48,302 INFO =====> EMD Loss: nan
+2024-10-20 20:12:48,302 INFO =====> Height map loss: nan
+2024-10-20 20:12:48,302 INFO =====> Insertion loss: nan
+2024-10-20 20:12:48,302 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:12:48,302 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798605  0.744078   -0.48496997]
+2024-10-20 20:12:48,302 INFO =====> Num. aborted data so far: 104
+2024-10-20 20:12:48,676 INFO ===> New TaichiEnv created.
+2024-10-20 20:12:48,676 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:13:16,348 ERROR ===> [Warning] Aborting epoch: 137
+2024-10-20 20:13:16,348 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:13:16,348 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:13:16,349 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798605  0.744078   -0.48496997]
+2024-10-20 20:13:16,349 ERROR ===> [Warning] Skill params grad: [ 7.6320106e+14 -1.5627724e+15  4.9789040e+07  2.0418075e+15
+ -3.5798284e+07]
+2024-10-20 20:13:16,349 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.9943904876709, 'emd_loss': 28.187360763549805, 'total_loss': 24.9943904876709}
+2024-10-20 20:13:16,350 INFO =====> Epoch: 137
+2024-10-20 20:13:16,350 INFO =====> EMD Loss: nan
+2024-10-20 20:13:16,350 INFO =====> Height map loss: nan
+2024-10-20 20:13:16,350 INFO =====> Insertion loss: nan
+2024-10-20 20:13:16,350 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:13:16,350 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798607  0.744078   -0.48497   ]
+2024-10-20 20:13:16,350 INFO =====> Num. aborted data so far: 105
+2024-10-20 20:13:16,733 INFO ===> New TaichiEnv created.
+2024-10-20 20:13:16,733 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:13:44,374 ERROR ===> [Warning] Aborting epoch: 138
+2024-10-20 20:13:44,374 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:13:44,374 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:13:44,374 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798607  0.744078   -0.48497   ]
+2024-10-20 20:13:44,374 ERROR ===> [Warning] Skill params grad: [ 4.2973410e+12 -8.7868152e+12 -1.1853447e+05  1.1420782e+13
+  1.6319219e+05]
+2024-10-20 20:13:44,374 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 25.01552963256836, 'emd_loss': 28.185176849365234, 'total_loss': 25.01552963256836}
+2024-10-20 20:13:44,375 INFO =====> Epoch: 138
+2024-10-20 20:13:44,375 INFO =====> EMD Loss: nan
+2024-10-20 20:13:44,375 INFO =====> Height map loss: nan
+2024-10-20 20:13:44,375 INFO =====> Insertion loss: nan
+2024-10-20 20:13:44,375 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:13:44,375 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798609  0.744078   -0.48497003]
+2024-10-20 20:13:44,375 INFO =====> Num. aborted data so far: 106
+2024-10-20 20:13:44,745 INFO ===> New TaichiEnv created.
+2024-10-20 20:13:44,746 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:14:12,642 ERROR ===> [Warning] Aborting epoch: 139
+2024-10-20 20:14:12,642 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:14:12,642 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:14:12,642 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798609  0.744078   -0.48497003]
+2024-10-20 20:14:12,643 ERROR ===> [Warning] Skill params grad: [ 9.8339572e+18 -2.0117575e+19  1.8169598e+12  2.6224672e+19
+ -3.8465140e+11]
+2024-10-20 20:14:12,643 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.993165969848633, 'emd_loss': 28.18665313720703, 'total_loss': 24.993165969848633}
+2024-10-20 20:14:12,644 INFO =====> Epoch: 139
+2024-10-20 20:14:12,644 INFO =====> EMD Loss: nan
+2024-10-20 20:14:12,644 INFO =====> Height map loss: nan
+2024-10-20 20:14:12,644 INFO =====> Insertion loss: nan
+2024-10-20 20:14:12,644 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:14:12,644 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798611  0.744078   -0.48497006]
+2024-10-20 20:14:12,644 INFO =====> Num. aborted data so far: 107
+2024-10-20 20:14:13,006 INFO ===> New TaichiEnv created.
+2024-10-20 20:14:13,006 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:14:40,934 ERROR ===> [Warning] Aborting epoch: 140
+2024-10-20 20:14:40,934 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:14:40,934 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:14:40,934 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798611  0.744078   -0.48497006]
+2024-10-20 20:14:40,934 ERROR ===> [Warning] Skill params grad: [-3.3111263e+19  6.7763566e+19 -6.7302887e+12 -8.8571036e+19
+  2.5452284e+12]
+2024-10-20 20:14:40,934 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 25.016611099243164, 'emd_loss': 28.186790466308594, 'total_loss': 25.016611099243164}
+2024-10-20 20:14:40,935 INFO =====> Epoch: 140
+2024-10-20 20:14:40,935 INFO =====> EMD Loss: nan
+2024-10-20 20:14:40,935 INFO =====> Height map loss: nan
+2024-10-20 20:14:40,935 INFO =====> Insertion loss: nan
+2024-10-20 20:14:40,935 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:14:40,936 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798613  0.744078   -0.48497012]
+2024-10-20 20:14:40,936 INFO =====> Num. aborted data so far: 108
+2024-10-20 20:14:41,311 INFO ===> New TaichiEnv created.
+2024-10-20 20:14:41,311 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:15:09,424 ERROR ===> [Warning] Aborting epoch: 141
+2024-10-20 20:15:09,424 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:15:09,424 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:15:09,425 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798613  0.744078   -0.48497012]
+2024-10-20 20:15:09,425 ERROR ===> [Warning] Skill params grad: [-5.4552967e+14  1.1174159e+15 -1.1893818e+08 -1.4610550e+15
+  6.1894972e+07]
+2024-10-20 20:15:09,425 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.993871688842773, 'emd_loss': 28.187339782714844, 'total_loss': 24.993871688842773}
+2024-10-20 20:15:09,426 INFO =====> Epoch: 141
+2024-10-20 20:15:09,426 INFO =====> EMD Loss: nan
+2024-10-20 20:15:09,426 INFO =====> Height map loss: nan
+2024-10-20 20:15:09,426 INFO =====> Insertion loss: nan
+2024-10-20 20:15:09,426 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:15:09,426 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798616  0.744078   -0.48497018]
+2024-10-20 20:15:09,426 INFO =====> Num. aborted data so far: 109
+2024-10-20 20:15:09,800 INFO ===> New TaichiEnv created.
+2024-10-20 20:15:09,800 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:15:37,550 ERROR ===> [Warning] Aborting epoch: 142
+2024-10-20 20:15:37,550 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:15:37,550 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:15:37,550 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798616  0.744078   -0.48497018]
+2024-10-20 20:15:37,550 ERROR ===> [Warning] Skill params grad: [ 6.2422385e+19 -1.2758882e+20 -5.5841810e+12  1.6569030e+20
+  1.1283601e+13]
+2024-10-20 20:15:37,550 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.9919376373291, 'emd_loss': 28.185110092163086, 'total_loss': 24.9919376373291}
+2024-10-20 20:15:37,552 INFO =====> Epoch: 142
+2024-10-20 20:15:37,552 INFO =====> EMD Loss: nan
+2024-10-20 20:15:37,552 INFO =====> Height map loss: nan
+2024-10-20 20:15:37,552 INFO =====> Insertion loss: nan
+2024-10-20 20:15:37,552 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:15:37,552 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798619  0.744078   -0.48497024]
+2024-10-20 20:15:37,552 INFO =====> Num. aborted data so far: 110
+2024-10-20 20:15:37,919 INFO ===> New TaichiEnv created.
+2024-10-20 20:15:37,919 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:16:05,614 ERROR ===> [Warning] Aborting epoch: 143
+2024-10-20 20:16:05,614 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:16:05,615 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:16:05,615 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798619  0.744078   -0.48497024]
+2024-10-20 20:16:05,615 ERROR ===> [Warning] Skill params grad: [ 5.7673626e+15 -1.1802613e+16 -5.7166438e+08  1.5372697e+16
+  1.7151319e+09]
+2024-10-20 20:16:05,615 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.997196197509766, 'emd_loss': 28.187480926513672, 'total_loss': 24.997196197509766}
+2024-10-20 20:16:05,616 INFO =====> Epoch: 143
+2024-10-20 20:16:05,616 INFO =====> EMD Loss: nan
+2024-10-20 20:16:05,616 INFO =====> Height map loss: nan
+2024-10-20 20:16:05,616 INFO =====> Insertion loss: nan
+2024-10-20 20:16:05,616 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:16:05,616 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798621  0.744078   -0.4849703 ]
+2024-10-20 20:16:05,616 INFO =====> Num. aborted data so far: 111
+2024-10-20 20:16:05,982 INFO ===> New TaichiEnv created.
+2024-10-20 20:16:05,982 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:16:34,380 ERROR ===> [Warning] Aborting epoch: 144
+2024-10-20 20:16:34,380 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:16:34,380 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:16:34,380 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798621  0.744078   -0.4849703 ]
+2024-10-20 20:16:34,380 ERROR ===> [Warning] Skill params grad: [-1.2846123e+16  2.6278199e+16  2.2546253e+08 -3.4192604e+16
+ -5.5031194e+08]
+2024-10-20 20:16:34,380 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 24.992265701293945, 'emd_loss': 28.18593406677246, 'total_loss': 24.992265701293945}
+2024-10-20 20:16:34,381 INFO =====> Epoch: 144
+2024-10-20 20:16:34,381 INFO =====> EMD Loss: nan
+2024-10-20 20:16:34,381 INFO =====> Height map loss: nan
+2024-10-20 20:16:34,381 INFO =====> Insertion loss: nan
+2024-10-20 20:16:34,381 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:16:34,381 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798624  0.744078   -0.48497036]
+2024-10-20 20:16:34,381 INFO =====> Num. aborted data so far: 112
+2024-10-20 20:16:34,762 INFO ===> New TaichiEnv created.
+2024-10-20 20:16:34,762 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:17:02,358 ERROR ===> [Warning] Aborting epoch: 145
+2024-10-20 20:17:02,358 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:17:02,358 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:17:02,358 ERROR ===> [Warning] Skill params: [-0.7595911  -0.73970723 -0.03798624  0.744078   -0.48497036]
+2024-10-20 20:17:02,358 ERROR ===> [Warning] Skill params grad: [ 3.2430251e+15 -6.6302731e+15  1.1358986e+08  8.6155777e+15
+ -1.0701952e+08]
+2024-10-20 20:17:02,358 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 25.015974044799805, 'emd_loss': 28.185302734375, 'total_loss': 25.015974044799805}
+2024-10-20 20:17:02,359 INFO =====> Epoch: 145
+2024-10-20 20:17:02,359 INFO =====> EMD Loss: nan
+2024-10-20 20:17:02,360 INFO =====> Height map loss: nan
+2024-10-20 20:17:02,360 INFO =====> Insertion loss: nan
+2024-10-20 20:17:02,360 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:17:02,360 INFO =====> Skill params: [-0.7595911  -0.73970723 -0.03798627  0.744078   -0.48497042]
+2024-10-20 20:17:02,360 INFO =====> Num. aborted data so far: 113
+2024-10-20 20:17:02,736 INFO ===> New TaichiEnv created.
+2024-10-20 20:17:02,736 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:17:30,475 INFO =====> Epoch: 146
+2024-10-20 20:17:30,476 INFO =====> EMD Loss: 28.18625831604004
+2024-10-20 20:17:30,476 INFO =====> Height map loss: 24.992612838745117
+2024-10-20 20:17:30,476 INFO =====> Insertion loss: 0.0
+2024-10-20 20:17:30,476 INFO =====> Grad: [ 3.6992709e+05 -7.2778519e+05  3.9065070e-02  1.0440200e+06
+ -5.3328067e-02]
+2024-10-20 20:17:30,476 INFO =====> Skill params: [-0.7736234  -0.7312013  -0.0392206   0.741514   -0.48163125]
+2024-10-20 20:17:30,476 INFO =====> Num. aborted data so far: 113
+2024-10-20 20:17:30,839 INFO ===> New TaichiEnv created.
+2024-10-20 20:17:30,839 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:17:58,480 ERROR ===> [Warning] Aborting epoch: 147
+2024-10-20 20:17:58,480 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:17:58,480 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:17:58,480 ERROR ===> [Warning] Skill params: [-0.7736234  -0.7312013  -0.0392206   0.741514   -0.48163125]
+2024-10-20 20:17:58,481 ERROR ===> [Warning] Skill params grad: [ 1.9980991e+14 -4.2967628e+14 -2.4671992e+07  5.0277280e+14
+ -1.9605934e+07]
+2024-10-20 20:17:58,481 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 25.11792755126953, 'emd_loss': 28.2237491607666, 'total_loss': 25.11792755126953}
+2024-10-20 20:17:58,482 INFO =====> Epoch: 147
+2024-10-20 20:17:58,482 INFO =====> EMD Loss: nan
+2024-10-20 20:17:58,482 INFO =====> Height map loss: nan
+2024-10-20 20:17:58,482 INFO =====> Insertion loss: nan
+2024-10-20 20:17:58,482 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:17:58,482 INFO =====> Skill params: [-0.7736234  -0.7312013  -0.03922063  0.741514   -0.4816313 ]
+2024-10-20 20:17:58,482 INFO =====> Num. aborted data so far: 114
+2024-10-20 20:17:58,846 INFO ===> New TaichiEnv created.
+2024-10-20 20:17:58,846 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:18:26,585 ERROR ===> [Warning] Aborting epoch: 148
+2024-10-20 20:18:26,586 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:18:26,586 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:18:26,587 ERROR ===> [Warning] Skill params: [-0.7736234  -0.7312013  -0.03922063  0.741514   -0.4816313 ]
+2024-10-20 20:18:26,587 ERROR ===> [Warning] Skill params grad: [-1.2069643e+12  6.7150663e+11  3.6944484e+04  8.3704191e+11
+ -1.4472481e+05]
+2024-10-20 20:18:26,587 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 25.119354248046875, 'emd_loss': 28.24773406982422, 'total_loss': 25.119354248046875}
+2024-10-20 20:18:26,588 INFO =====> Epoch: 148
+2024-10-20 20:18:26,588 INFO =====> EMD Loss: nan
+2024-10-20 20:18:26,588 INFO =====> Height map loss: nan
+2024-10-20 20:18:26,588 INFO =====> Insertion loss: nan
+2024-10-20 20:18:26,588 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:18:26,588 INFO =====> Skill params: [-0.7736234  -0.7312013  -0.03922067  0.741514   -0.48163137]
+2024-10-20 20:18:26,588 INFO =====> Num. aborted data so far: 115
+2024-10-20 20:18:27,092 INFO ===> New TaichiEnv created.
+2024-10-20 20:18:27,092 INFO ===> Specifications: horizon = 600, dt = 0.01, n_substeps = 20, dt_sub = 0.0005
+2024-10-20 20:18:54,852 ERROR ===> [Warning] Aborting epoch: 149
+2024-10-20 20:18:54,852 ERROR ===> [Warning] Particle has nan or inf: False
+2024-10-20 20:18:54,852 ERROR ===> [Warning] Strange loss or gradient.
+2024-10-20 20:18:54,852 ERROR ===> [Warning] Skill params: [-0.7736234  -0.7312013  -0.03922067  0.741514   -0.48163137]
+2024-10-20 20:18:54,852 ERROR ===> [Warning] Skill params grad: [-2.7800671e+13  5.9554709e+13  4.9623550e+06 -6.9227206e+13
+  3.6832552e+06]
+2024-10-20 20:18:54,852 ERROR ===> [Warning] Loss info: {'particle_has_naninf': False, 'height_map_loss': 25.118762969970703, 'emd_loss': 28.24052619934082, 'total_loss': 25.118762969970703}
+2024-10-20 20:18:54,853 INFO =====> Epoch: 149
+2024-10-20 20:18:54,853 INFO =====> EMD Loss: nan
+2024-10-20 20:18:54,853 INFO =====> Height map loss: nan
+2024-10-20 20:18:54,853 INFO =====> Insertion loss: nan
+2024-10-20 20:18:54,853 INFO =====> Grad: [1.e-06 1.e-06 1.e-06 1.e-06 1.e-06]
+2024-10-20 20:18:54,853 INFO =====> Skill params: [-0.7736234  -0.7312013  -0.03922071  0.741514   -0.48163143]
+2024-10-20 20:18:54,853 INFO =====> Num. aborted data so far: 116
+2024-10-20 20:18:54,855 INFO ====> Finished training.
+2024-10-20 20:18:54,855 INFO ====> Final EMD loss: nan
+2024-10-20 20:18:54,855 INFO ====> Final height map loss: nan
+2024-10-20 20:18:54,855 INFO ====> Final insertion loss: nan
+2024-10-20 20:18:54,856 INFO ====> Final skill params: [-0.7736234  -0.7312013  -0.03922071  0.741514   -0.48163143]
