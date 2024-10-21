@@ -215,7 +215,7 @@ def main(args):
 
                 # This is a trick that prevents faulty gradient computation
                 # It works for unknown reasons
-                _ = mpm_env.simulator.particle_param.grad[2].E
+                _ = mpm_env.simulator.particle_param.grad[SAND].E
 
             grad = np.array([mpm_env.simulator.particle_param.grad[SAND].E,
                              mpm_env.simulator.particle_param.grad[SAND].nu,
