@@ -40,6 +40,16 @@ def main(args):
         case += '-toi'
     if args['use_height_map_loss']:
         case += '-hm'
+
+    if args['grad_norm']:
+        case += '-gnorm'
+    elif args['grad_dy_scale']:
+        case += '-gdys'
+    elif args['grad_clip']:
+        case += '-gclip'
+    else:
+        case += '-gnone'
+
     result_path = os.path.join(script_path, '..', 'log-sys_id-rmsprop', case)
 
     if args['backend'] == 'opengl':
@@ -71,6 +81,15 @@ def main(args):
     elif args['toi_contact']:
         assert not args['soft_contact']
         env_cfg['collide_type'] = 'toi'
+
+    if args['grad_norm']:
+        env_cfg['grad_op'] = 'normalize'
+    elif args['grad_dy_scale']:
+        env_cfg['grad_op'] = 'dynamic-scale'
+    elif args['grad_clip']:
+        env_cfg['grad_op'] = 'clip'
+    else:
+        env_cfg['grad_op'] = 'none'
 
     loss_cfg = {
         'use_height_map_loss': args['use_height_map_loss'],
@@ -325,6 +344,9 @@ if __name__ == '__main__':
     parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False, help='Use height map loss')
     parser.add_argument('--soft-contact', dest='soft_contact', action='store_true', default=False, help='Use soft contact')
     parser.add_argument('--toi-contact', dest='toi_contact', action='store_true', default=False, help='Use time-of-impact contact')
+    parser.add_argument('--grad-clip', dest='grad_clip', action='store_true', default=False, help='Use gradient clipping')
+    parser.add_argument('--grad-norm', dest='grad_norm', action='store_true', default=False, help='Use gradient normalisation')
+    parser.add_argument('--grad-dy-scale', dest='grad_dy_scale', action='store_true', default=False, help='Use gradient dynamic scaling')
     parser.add_argument('--backend', dest='backend', default='cuda', type=str, help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
     parser.add_argument('--eval', dest='eval', action='store_true', default=False, help='Evaluate the model')
