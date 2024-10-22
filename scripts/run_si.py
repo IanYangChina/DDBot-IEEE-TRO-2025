@@ -93,12 +93,10 @@ def main(args):
 
     loss_cfg = {
         'use_height_map_loss': args['use_height_map_loss'],
-        'target_pcd_height_map_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
-                                                   f'pcd_{motion_id}_cropped_norm_z_aligned_height_map-res60-vdsize0.001.npy'),
         'target_pcd_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
                                         f'pcd_{motion_id}_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
-        'down_sample_voxel_size': 0.007,
+        'height_grid_res': 40,
     }
 
     E_range = (2.5e5, 1e6)

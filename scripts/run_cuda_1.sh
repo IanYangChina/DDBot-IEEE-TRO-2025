@@ -1,29 +1,20 @@
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 0 --soft-contact --grad-clip
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 1 --soft-contact --grad-clip
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 2 --soft-contact --grad-clip
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 3 --soft-contact --grad-clip
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 4 --soft-contact --grad-clip
+python assess_loss_si.py --ptcl_d 5e6 --cuda_GB 8 --res 10
+python assess_loss_si.py --ptcl_d 1e7 --cuda_GB 8 --res 10
+python assess_loss_si.py --ptcl_d 5e6 --cuda_GB 8 --res 20
+python assess_loss_si.py --ptcl_d 1e7 --cuda_GB 8 --res 20
+python assess_loss_si.py --ptcl_d 5e6 --cuda_GB 8 --res 30
+python assess_loss_si.py --ptcl_d 1e7 --cuda_GB 8 --res 30
 
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 0 --toi-contact --grad-clip
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 1 --toi-contact --grad-clip
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 2 --toi-contact --grad-clip
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 3 --toi-contact --grad-clip
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 4 --toi-contact --grad-clip
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 10 --grad-clip
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 20 --grad-clip
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 30 --grad-clip
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 40 --grad-clip
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 50 --grad-clip
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 60 --grad-clip
 
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 0 --grad-norm
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 1 --grad-norm
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 2 --grad-norm
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 3 --grad-norm
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 4 --grad-norm
-
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 0 --soft-contact --grad-norm
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 1 --soft-contact --grad-norm
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 2 --soft-contact --grad-norm
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 3 --soft-contact --grad-norm
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 4 --soft-contact --grad-norm
-
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 0 --toi-contact --grad-norm
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 1 --toi-contact --grad-norm
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 2 --toi-contact --grad-norm
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 3 --toi-contact --grad-norm
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --seed 4 --toi-contact --grad-norm
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 10 --grad-clip --substep
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 20 --grad-clip --substep
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 30 --grad-clip --substep
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 40 --grad-clip --substep
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 50 --grad-clip --substep
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 60 --grad-clip --substep

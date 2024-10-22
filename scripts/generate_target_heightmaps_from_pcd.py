@@ -21,7 +21,7 @@ def run(args):
     height_map_size = 0.24  # meter
     height_map_xy_offset = (0.2, 0.2)
     height_map_pixel_size = height_map_size / height_map_res
-    height_map_pcd_target = ti.field(dtype=DTYPE_TI, shape=(height_map_res, height_map_res), needs_grad=True)
+    height_map_pcd_target = ti.field(dtype=DTYPE_TI, shape=(height_map_res, height_map_res), needs_grad=False)
     down_sample_voxel_size = args['vds']
 
     @ti.func
@@ -32,8 +32,8 @@ def run(args):
 
     process = psutil.Process(os.getpid())
     script_path = os.path.dirname(os.path.realpath(__file__))
-    for data_ind in range(5):
-        data_path = os.path.join(script_path, '..', 'data', 'task_target_pcds')
+    for data_ind in range(2):
+        data_path = os.path.join(script_path, '..', 'data', 'sys_id_target_pcds')
         # hm = np.load(os.path.join(data_path, f'target_pcd_height_map-{data_ind}-res{str(height_map_res)}-vdsize{str(down_sample_voxel_size)}.npy'))
         # plt.imshow(hm, cmap='Greys')
         # plt.show()
@@ -46,7 +46,7 @@ def run(args):
         print(f'===> CPU memory occupied before create particles/points: {process.memory_percent()} %')
         print(f'===> GPU memory before create particles/points: {get_gpu_memory()}')
 
-        target_pcd = o3d.io.read_point_cloud(target_pcd_path).voxel_down_sample(voxel_size=down_sample_voxel_size)
+        target_pcd = o3d.io.read_point_cloud(target_pcd_path) #.voxel_down_sample(voxel_size=down_sample_voxel_size)
         target_pcd_points_np = np.asarray(target_pcd.points, dtype=DTYPE_NP) + pcd_offset
         n_target_pcd_points = target_pcd_points_np.shape[0]
         print(f'===>  {n_target_pcd_points:7d} target points loaded.')
@@ -64,18 +64,17 @@ def run(args):
         height_map_pcd = height_map_pcd_target.to_numpy()
         plt.imshow(height_map_pcd, cmap='YlOrBr')
         plt.show()
-        save = input("Save the height map? (y/n)")
-        if save == 'y':
-            np.save(
-                os.path.join(data_path, f'pcd_{data_ind}_cropped_norm_z_aligned_height_map-res{str(height_map_res)}-vdsize{str(down_sample_voxel_size)}.npy'), height_map_pcd)
-            print(f'height map saved as:\n'
-                  f'{os.path.join(data_path, f"pcd_{data_ind}_cropped_norm_z_aligned_height_map-res{str(height_map_res)}-vdsize{str(down_sample_voxel_size)}.npy")}')
+
+        np.save(
+            os.path.join(data_path, f'pcd_{data_ind}_cropped_norm_z_aligned_height_map-res{str(height_map_res)}.npy'), height_map_pcd)
+        print(f'height map saved as:\n'
+              f'{os.path.join(data_path, f"pcd_{data_ind}_cropped_norm_z_aligned_height_map-res{str(height_map_res)}.npy")}')
 
 
 if __name__ == '__main__':
     description = "This script generates target height maps from the fused point clouds."
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('--vds', dest='vds', default=0.001, type=float, help="Voxel down sample size")
-    parser.add_argument('--hmr', dest='hmr', default=60, type=int, help="Height map resolution")
+    parser.add_argument('--hmr', dest='hmr', default=10, type=int, help="Height map resolution")
     arguments = vars(parser.parse_args())
     run(arguments)

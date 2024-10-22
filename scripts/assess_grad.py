@@ -48,6 +48,8 @@ def main(args):
         case += '-gclip'
     else:
         case += '-gnone'
+
+    case += f'-res{args["res"]}'
     result_path = os.path.join(script_path, '..', 'log-grad-analysis', case)
     if args['substep']:
         result_path = os.path.join(script_path, '..', 'log-substep-grad-analysis', case)
@@ -90,12 +92,10 @@ def main(args):
 
     loss_cfg = {
         'use_height_map_loss': args['use_height_map_loss'],
-        'target_pcd_height_map_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
-                                                   f'pcd_{motion_id}_cropped_norm_z_aligned_height_map-res60-vdsize0.001.npy'),
         'target_pcd_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
                                         f'pcd_{motion_id}_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
-        'down_sample_voxel_size': 0.007,
+        'height_grid_res': args['res'],
     }
 
     E_range = (2.5e5, 1e6)
@@ -334,6 +334,7 @@ def main(args):
 
         for i in range(trajectory_length):
             mpm_env.step(trajectory_np[i])
+        loss_info = mpm_env.get_final_loss()
 
         """backward pass"""
         mpm_env.simulator.log_substep_grad = args['substep']
@@ -430,5 +431,6 @@ if __name__ == '__main__':
     parser.add_argument('--eval', dest='eval', action='store_true', default=False, help='Evaluate the model')
     parser.add_argument('--test', dest='test', action='store_true', default=False, help='Run test')
     parser.add_argument('--substep', dest='substep', action='store_true', default=False, help='Log substep grads')
+    parser.add_argument('--res', dest='res', default=60, type=int, help='Height map resolution')
     arguments = vars(parser.parse_args())
     main(arguments)
