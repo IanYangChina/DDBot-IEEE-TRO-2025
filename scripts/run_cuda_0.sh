@@ -1,9 +1,4 @@
-python assess_loss_si.py --ptcl_d 5e6 --cuda_GB 8 --res 50
-python assess_loss_si.py --ptcl_d 1e7 --cuda_GB 8 --res 50
-python assess_loss_si.py --ptcl_d 5e6 --cuda_GB 8 --res 60
-python assess_loss_si.py --ptcl_d 1e7 --cuda_GB 8 --res 60
-python assess_loss_si.py --ptcl_d 5e6 --cuda_GB 8 --res 40
-python assess_loss_si.py --ptcl_d 1e7 --cuda_GB 8 --res 40
+python assess_loss_si.py --ptcl_d 5e6 --cuda_GB 8
 
 python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 10
 python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 20
