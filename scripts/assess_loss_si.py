@@ -12,6 +12,7 @@ from doma.envs.planting_env import make_env
 from doma.engine.utils.misc import set_parameters
 from doma.engine.configs.macros import SAND, DTYPE_TI
 from scipy.optimize import linear_sum_assignment
+from doma.engine.loss_function.emd_loss_external import compute_emd_loss_with_res
 
 LINEAR_VELOCITY = 0.2  # m/s
 ANGULAR_VELOCITY = np.pi / 4  # rad/s
@@ -101,12 +102,10 @@ def main(args):
         hm_losses = [np.zeros((50, 50)) for _ in range(6)]
         for i in range(50):
             for j in range(50):
-
                 ti.reset()
                 ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True)
 
-                env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg,
-                                                    debug_grad=False, logger=logging)
+                env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
 
                 if param == '-ER':
                     E = np.asarray([E0 + i * dE])
@@ -134,9 +133,6 @@ def main(args):
                 print(f'=====> Iter {i}, {j}')
                 particles = mpm_env.simulator.get_x()
                 p_radius = mpm_env.loss.particle_radius
-                # obj_vec_2 = o3d.utility.Vector3dVector(particles)
-                # obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2)
-                # o3d.visualization.draw_geometries([obj_pcd_2], width=800, height=600)
                 ll = 0
                 for res in [10, 20, 30, 40, 50, 60]:
                     target_pcd = o3d.io.read_point_cloud(os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
@@ -147,11 +143,11 @@ def main(args):
 
                     ti.reset()
                     ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True)
+
                     n_particles = particles.shape[0]
                     x1 = ti.Vector.field(3, dtype=DTYPE_TI, shape=n_particles, needs_grad=False)
                     x1.from_numpy(particles)
                     height_map_1 = ti.field(dtype=DTYPE_TI, shape=(res, res), needs_grad=False)
-                    height_map_1.fill(0)
                     point_id_1 = ti.field(dtype=ti.i32, shape=res * res)
                     point_id_1.fill(-1)
 
@@ -180,8 +176,8 @@ def main(args):
                     @ti.func
                     def from_xy_to_uv(x: DTYPE_TI, y: DTYPE_TI):
                         # this does not need to be differentiable as the loss is connected to the z values of the particles/points
-                        u = (x - 0.2) / 0.24 + res / 2
-                        v = (y - 0.2) / 0.24 + res / 2
+                        u = (x - 0.2) / (0.24 / res) + res / 2
+                        v = (y - 0.2) / (0.24 / res) + res / 2
                         return ti.floor(u, ti.i32), ti.floor(v, ti.i32)
 
                     @ti.kernel
@@ -189,9 +185,10 @@ def main(args):
                         for ind in range(res * res):
                             q = point_id_1[ind]
                             for w in range(n_pcd_points):
-                                emd_distance_matrix[q, w] = compute_euclidean_distance(x1[q], x2[w])
+                                emd_distance_matrix[ind, w] = compute_euclidean_distance(x1[q], x2[w])
 
-                    def compute_emd_distance_bijection(mat):
+                    def compute_emd_distance_bijection():
+                        mat = emd_distance_matrix.to_numpy()
                         attempt = 0
                         done = False
                         while not done:
@@ -213,7 +210,7 @@ def main(args):
 
                     @ti.kernel
                     def compute_emd_euclidean_distance():
-                        for e in emd_ind_pairs:
+                        for e in range(res * res):
                             q = emd_ind_pairs[e][0]
                             w = emd_ind_pairs[e][1]
                             d = compute_euclidean_distance(x1[q], x2[w])
@@ -252,29 +249,27 @@ def main(args):
                             d = ti.sqrt((height_map_2[q, w] - height_map_1_radius[q, w]) ** 2)
                             height_map_loss[None] += d
 
+                    height_map_1.fill(0)
                     calculate_height_map()
-                    print(height_map_1)
                     compute_height_map_masks()
-                    print(point_id_1)
                     compute_emd_distance_matrix_with_ids()
-                    d_mat = emd_distance_matrix.to_numpy()
-                    compute_emd_distance_bijection(d_mat)
+                    compute_emd_distance_bijection()
                     compute_emd_euclidean_distance()
                     calculate_height_map_with_radius()
                     compute_height_map_loss()
 
-                    # fig, ax = plt.subplots(1, 3, figsize=(18, 6))
-                    # ax[0].imshow(height_map_1.to_numpy(),
-                    #              vmin=0.002, vmax=0.09)
-                    # ax[0].set_title('Height map')
-                    # ax[1].imshow(height_map_1_radius.to_numpy(),
-                    #              vmin=0.002, vmax=0.09)
-                    # ax[1].set_title('Height map radius')
-                    # ax[2].imshow(target_pcd_heightmap,
-                    #              vmin=0.002, vmax=0.09)
-                    # ax[2].set_title('Target height map')
-                    # plt.show()
-                    # plt.close()
+                    fig, ax = plt.subplots(1, 3, figsize=(18, 6))
+                    ax[0].imshow(height_map_1.to_numpy(),
+                                 vmin=0.002, vmax=0.09)
+                    ax[0].set_title('Height map')
+                    ax[1].imshow(height_map_1_radius.to_numpy(),
+                                 vmin=0.002, vmax=0.09)
+                    ax[1].set_title('Height map radius')
+                    ax[2].imshow(target_pcd_heightmap,
+                                 vmin=0.002, vmax=0.09)
+                    ax[2].set_title('Target height map')
+                    plt.show()
+                    plt.close()
 
                     print(f'=====> EMD Loss with res {res}:', emd_loss_ti[None])
                     print(f'=====> Height map loss with res {res}:', height_map_loss[None])
