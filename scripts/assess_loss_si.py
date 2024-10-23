@@ -103,8 +103,7 @@ def main(args):
             for j in range(50):
 
                 ti.reset()
-                ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True,
-                        random_seed=args['seed'])
+                ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True)
 
                 env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg,
                                                     debug_grad=False, logger=logging)
@@ -146,6 +145,8 @@ def main(args):
                     target_pcd_heightmap = np.load(os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
                                                                 f'pcd_{motion_id}_cropped_norm_z_aligned_height_map-res{res}.npy'))
 
+                    ti.reset()
+                    ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True)
                     n_particles = particles.shape[0]
                     x1 = ti.Vector.field(3, dtype=DTYPE_TI, shape=n_particles, needs_grad=False)
                     x1.from_numpy(particles)
@@ -220,13 +221,13 @@ def main(args):
 
                     @ti.kernel
                     def calculate_height_map():
-                        for p in x1:
+                        for p in range(n_particles):
                             u, v = from_xy_to_uv(x1[p][0], x1[p][1])
                             ti.atomic_max(height_map_1[u, v], x1[p][2])
 
                     @ti.kernel
                     def calculate_height_map_with_radius():
-                        for p in x1:
+                        for p in range(n_particles):
                             u, v = from_xy_to_uv(x1[p][0], x1[p][1])
                             u_0, v_0 = from_xy_to_uv(x1[p][0] - p_radius,
                                                      x1[p][1] - p_radius)
@@ -240,7 +241,7 @@ def main(args):
 
                     @ti.kernel
                     def compute_height_map_masks():
-                        for p in x1:
+                        for p in range(n_particles):
                             u, v = from_xy_to_uv(x1[p][0], x1[p][1])
                             if x1[p][2] >= height_map_1[u, v]:
                                 point_id_1[u * res + v] = p
@@ -252,7 +253,9 @@ def main(args):
                             height_map_loss[None] += d
 
                     calculate_height_map()
+                    print(height_map_1)
                     compute_height_map_masks()
+                    print(point_id_1)
                     compute_emd_distance_matrix_with_ids()
                     d_mat = emd_distance_matrix.to_numpy()
                     compute_emd_distance_bijection(d_mat)
