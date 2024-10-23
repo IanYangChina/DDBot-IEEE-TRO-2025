@@ -12,7 +12,6 @@ from doma.envs.planting_env import make_env
 from doma.engine.utils.misc import set_parameters
 from doma.engine.configs.macros import SAND, DTYPE_TI
 from scipy.optimize import linear_sum_assignment
-from doma.engine.loss_function.emd_loss_external import compute_emd_loss_with_res
 
 LINEAR_VELOCITY = 0.2  # m/s
 ANGULAR_VELOCITY = np.pi / 4  # rad/s
@@ -83,7 +82,7 @@ def main(args):
             'target_pcd_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
                                             f'pcd_{motion_id}_cropped_norm_z_aligned.ply'),
             'target_pcd_offset': [0.2, 0.2, 0],
-            'height_grid_res': 50,
+            'height_grid_res': 40,
         }
 
         E0 = 2.5e5
@@ -130,9 +129,21 @@ def main(args):
                 for n in range(trajectory.shape[0]):
                     mpm_env.step(trajectory[n])
 
+                loss_info = mpm_env.get_final_loss()
+                print('=====> EMD Loss:', loss_info['emd_loss'])
+                print('=====> Height map loss:', loss_info['height_map_loss'])
+
                 print(f'=====> Iter {i}, {j}')
                 particles = mpm_env.simulator.get_x()
                 p_radius = mpm_env.loss.particle_radius
+
+                @ti.func
+                def from_xy_to_uv(x: DTYPE_TI, y: DTYPE_TI, reso: ti.i32):
+                    # this does not need to be differentiable as the loss is connected to the z values of the particles/points
+                    u = (x - 0.2) / (0.24 / reso) + reso / 2
+                    v = (y - 0.2) / (0.24 / reso) + reso / 2
+                    return ti.round(u, ti.i32), ti.round(v, ti.i32)
+
                 ll = 0
                 for res in [10, 20, 30, 40, 50, 60]:
                     target_pcd = o3d.io.read_point_cloud(os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
@@ -141,44 +152,71 @@ def main(args):
                     target_pcd_heightmap = np.load(os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
                                                                 f'pcd_{motion_id}_cropped_norm_z_aligned_height_map-res{res}.npy'))
 
-                    ti.reset()
-                    ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True)
-
-                    n_particles = particles.shape[0]
-                    x1 = ti.Vector.field(3, dtype=DTYPE_TI, shape=n_particles, needs_grad=False)
+                    n_particles = int(particles.shape[0])
+                    x1 = ti.Vector.field(3, dtype=DTYPE_TI, shape=n_particles, needs_grad=True)
                     x1.from_numpy(particles)
-                    height_map_1 = ti.field(dtype=DTYPE_TI, shape=(res, res), needs_grad=False)
-                    point_id_1 = ti.field(dtype=ti.i32, shape=res * res)
-                    point_id_1.fill(-1)
+                    height_map_1 = ti.field(dtype=DTYPE_TI, shape=(res, res), needs_grad=True)
+                    point_id_1 = ti.field(dtype=ti.i32, shape=res * res, needs_grad=False)
+                    x1_surface = ti.Vector.field(3, dtype=DTYPE_TI, shape=(res*res), needs_grad=True)
 
                     n_pcd_points = pcd.shape[0]
                     x2 = ti.Vector.field(3, dtype=DTYPE_TI, shape=n_pcd_points, needs_grad=False)
                     x2.from_numpy(pcd)
 
-                    emd_loss_ti = ti.field(dtype=DTYPE_TI, shape=(), needs_grad=False)
-                    emd_loss_ti.fill(0)
+                    emd_loss_ti = ti.field(dtype=DTYPE_TI, shape=(), needs_grad=True)
                     emd_ind_pairs = ti.Vector.field(2, dtype=ti.i32, shape=res * res, needs_grad=False)
                     emd_distance_matrix = ti.field(dtype=DTYPE_TI, shape=(res * res, res * res), needs_grad=False)
-                    emd_ind_pairs.fill(-1)
-                    emd_distance_matrix.fill(10000.0)
 
-                    height_map_1_radius = ti.field(dtype=DTYPE_TI, shape=(res, res), needs_grad=False)
-                    height_map_1_radius.fill(0.0)
+                    height_map_1_radius = ti.field(dtype=DTYPE_TI, shape=(res, res), needs_grad=True)
                     height_map_2 = ti.field(dtype=DTYPE_TI, shape=(res, res), needs_grad=False)
                     height_map_2.from_numpy(target_pcd_heightmap)
-                    height_map_loss = ti.field(dtype=DTYPE_TI, shape=(), needs_grad=False)
-                    height_map_loss.fill(0)
+                    height_map_loss = ti.field(dtype=DTYPE_TI, shape=(), needs_grad=True)
 
                     @ti.func
                     def compute_euclidean_distance(a, b):
                         return ti.sqrt(((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2))
 
-                    @ti.func
-                    def from_xy_to_uv(x: DTYPE_TI, y: DTYPE_TI):
-                        # this does not need to be differentiable as the loss is connected to the z values of the particles/points
-                        u = (x - 0.2) / (0.24 / res) + res / 2
-                        v = (y - 0.2) / (0.24 / res) + res / 2
-                        return ti.floor(u, ti.i32), ti.floor(v, ti.i32)
+                    @ti.kernel
+                    def compute_emd_euclidean_distance():
+                        for e in range(res * res):
+                            q = point_id_1[emd_ind_pairs[e][0]]
+                            w = emd_ind_pairs[e][1]
+                            d = compute_euclidean_distance(x1[q], x2[w])
+                            emd_loss_ti[None] += d
+
+                    @ti.kernel
+                    def calculate_height_map():
+                        for p in range(n_particles):
+                            u, v = from_xy_to_uv(x1[p][0], x1[p][1], res)
+                            z = x1[p][2]
+                            ti.atomic_max(height_map_1[u, v], z)
+
+                    @ti.kernel
+                    def calculate_height_map_with_radius():
+                        for p in range(n_particles):
+                            u, v = from_xy_to_uv(x1[p][0], x1[p][1], res)
+                            u_0, v_0 = from_xy_to_uv(x1[p][0] - p_radius,
+                                                     x1[p][1] - p_radius, res)
+                            u_1, v_1 = from_xy_to_uv(x1[p][0] + p_radius,
+                                                     x1[p][1] + p_radius, res)
+                            ti.atomic_max(height_map_1_radius[u, v], (x1[p][2]))
+                            ti.atomic_max(height_map_1_radius[u_0, v_0], (x1[p][2]))
+                            ti.atomic_max(height_map_1_radius[u_1, v_1], (x1[p][2]))
+                            ti.atomic_max(height_map_1_radius[u_0, v_1], (x1[p][2]))
+                            ti.atomic_max(height_map_1_radius[u_1, v_0], (x1[p][2]))
+
+                    @ti.kernel
+                    def compute_height_map_masks():
+                        for p in range(n_particles):
+                            u, v = from_xy_to_uv(x1[p][0], x1[p][1], res)
+                            if x1[p][2] >= height_map_1[u, v]:
+                                point_id_1[u * res + v] = p
+
+                    @ti.kernel
+                    def gather_surface_particles():
+                        for q in range(res*res):
+                            p = point_id_1[q]
+                            x1_surface[q] = x1[p]
 
                     @ti.kernel
                     def compute_emd_distance_matrix_with_ids():
@@ -209,49 +247,23 @@ def main(args):
                             emd_ind_pairs.from_numpy(indexes)
 
                     @ti.kernel
-                    def compute_emd_euclidean_distance():
-                        for e in range(res * res):
-                            q = emd_ind_pairs[e][0]
-                            w = emd_ind_pairs[e][1]
-                            d = compute_euclidean_distance(x1[q], x2[w])
-                            emd_loss_ti[None] += d
-
-                    @ti.kernel
-                    def calculate_height_map():
-                        for p in range(n_particles):
-                            u, v = from_xy_to_uv(x1[p][0], x1[p][1])
-                            ti.atomic_max(height_map_1[u, v], x1[p][2])
-
-                    @ti.kernel
-                    def calculate_height_map_with_radius():
-                        for p in range(n_particles):
-                            u, v = from_xy_to_uv(x1[p][0], x1[p][1])
-                            u_0, v_0 = from_xy_to_uv(x1[p][0] - p_radius,
-                                                     x1[p][1] - p_radius)
-                            u_1, v_1 = from_xy_to_uv(x1[p][0] + p_radius,
-                                                     x1[p][1] + p_radius)
-                            ti.atomic_max(height_map_1_radius[u, v], (x1[p][2]))
-                            ti.atomic_max(height_map_1_radius[u_0, v_0], (x1[p][2]))
-                            ti.atomic_max(height_map_1_radius[u_1, v_1], (x1[p][2]))
-                            ti.atomic_max(height_map_1_radius[u_0, v_1], (x1[p][2]))
-                            ti.atomic_max(height_map_1_radius[u_1, v_0], (x1[p][2]))
-
-                    @ti.kernel
-                    def compute_height_map_masks():
-                        for p in range(n_particles):
-                            u, v = from_xy_to_uv(x1[p][0], x1[p][1])
-                            if x1[p][2] >= height_map_1[u, v]:
-                                point_id_1[u * res + v] = p
-
-                    @ti.kernel
                     def compute_height_map_loss():
                         for q, w in height_map_2:
                             d = ti.sqrt((height_map_2[q, w] - height_map_1_radius[q, w]) ** 2)
                             height_map_loss[None] += d
 
-                    height_map_1.fill(0)
+                    x1_surface.fill(0)
+                    height_map_1.fill(0.0001)
+                    point_id_1.fill(-1)
+                    emd_loss_ti.fill(0)
+                    emd_ind_pairs.fill(-1)
+                    emd_distance_matrix.fill(10000.0)
+                    height_map_1_radius.fill(0)
+                    height_map_loss.fill(0)
+
                     calculate_height_map()
                     compute_height_map_masks()
+                    gather_surface_particles()
                     compute_emd_distance_matrix_with_ids()
                     compute_emd_distance_bijection()
                     compute_emd_euclidean_distance()
@@ -270,6 +282,21 @@ def main(args):
                     ax[2].set_title('Target height map')
                     plt.show()
                     plt.close()
+
+                    frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
+                    cloud_array = x1_surface.to_numpy()
+                    obj_vec = o3d.utility.Vector3dVector(cloud_array)
+                    obj_pcd = o3d.geometry.PointCloud(obj_vec)
+                    cloud_array_2 = pcd.copy()
+                    cloud_array_2[:, 0] += 0.3
+                    obj_vec_2 = o3d.utility.Vector3dVector(cloud_array_2)
+                    obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2)
+                    cloud_array_3 = particles.copy()
+                    cloud_array_3[:, 0] += 0.6
+                    obj_vec_3 = o3d.utility.Vector3dVector(cloud_array_3)
+                    obj_pcd_3 = o3d.geometry.PointCloud(obj_vec_3)
+                    print(obj_pcd, obj_pcd_2)
+                    o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2, obj_pcd_3], width=800, height=600)
 
                     print(f'=====> EMD Loss with res {res}:', emd_loss_ti[None])
                     print(f'=====> Height map loss with res {res}:', height_map_loss[None])

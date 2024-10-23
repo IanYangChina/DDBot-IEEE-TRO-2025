@@ -4,6 +4,8 @@ import logging
 import argparse
 import numpy as np
 import taichi as ti
+import matplotlib.pyplot as plt
+import open3d as o3d
 from torch.utils.tensorboard import SummaryWriter
 script_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -335,6 +337,31 @@ def main(args):
         for i in range(trajectory_length):
             mpm_env.step(trajectory_np[i])
         loss_info = mpm_env.get_final_loss()
+
+        print('=====> EMD Loss:', loss_info['emd_loss'])
+        print('=====> Height map loss:', loss_info['height_map_loss'])
+        if args['test']:
+            fig, ax = plt.subplots(1, 2, figsize=(12, 6))
+            ax[0].imshow(mpm_env.loss.height_grid.to_numpy(),
+                         vmin=0.002, vmax=0.09)
+            ax[0].set_title('Height map')
+            ax[1].imshow(mpm_env.loss.height_map_pcd_target.to_numpy(),
+                         vmin=0.002, vmax=0.09)
+            ax[1].set_title('Target height map')
+            plt.show()
+            plt.close()
+
+            frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
+            cloud_array = mpm_env.loss.surface_particles.to_numpy()
+            obj_vec = o3d.utility.Vector3dVector(cloud_array)
+            obj_pcd = o3d.geometry.PointCloud(obj_vec)
+            cloud_array_2 = mpm_env.loss.target_pcd_original_points_np.copy()
+            cloud_array_2[:, 0] += 0.3
+            obj_vec_2 = o3d.utility.Vector3dVector(cloud_array_2)
+            obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2)
+            print(obj_pcd, obj_pcd_2)
+            o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2], width=800, height=600)
+            exit()
 
         """backward pass"""
         mpm_env.simulator.log_substep_grad = args['substep']

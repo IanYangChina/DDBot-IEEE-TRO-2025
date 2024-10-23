@@ -1,20 +1,13 @@
-python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --grad-clip
-python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --grad-norm
-python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --grad-dy-scale
-python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --substep --grad-clip
-python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --substep --grad-norm
-python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --substep --grad-dy-scale
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 10
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 20
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 30
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 40
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 50
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 60
 
-python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --soft-contact --grad-clip
-python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --soft-contact --grad-norm
-python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --soft-contact --grad-dy-scale
-python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --substep --grad-clip --soft-contact
-python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --substep --grad-norm --soft-contact
-python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --substep --grad-dy-scale --soft-contact
-
-python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --toi-contact --grad-clip
-python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --toi-contact --grad-norm
-python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --toi-contact --grad-dy-scale
-python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --substep --grad-clip --toi-contact
-python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --substep --grad-norm --toi-contact
-python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --substep --grad-dy-scale --toi-contact
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 10 --substep
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 20 --substep
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 30 --substep
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 40 --substep
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 50 --substep
+python assess_grad.py --ptcl_d 5e6 --cuda_GB 5 --res 60 --substep
