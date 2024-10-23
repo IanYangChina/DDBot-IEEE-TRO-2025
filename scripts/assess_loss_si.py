@@ -1,16 +1,18 @@
 import os
 import open3d as o3d
+import matplotlib.pyplot as plt
 import logging
 import argparse
 import numpy as np
 import taichi as ti
-import matplotlib.pyplot as plt
+
 script_path = os.path.dirname(os.path.realpath(__file__))
-from scipy.optimize import linear_sum_assignment
 
 from doma.envs.planting_env import make_env
 from doma.engine.utils.misc import set_parameters
-from doma.engine.configs.macros import DTYPE_NP, SAND, DTYPE_TI
+from doma.engine.configs.macros import SAND, DTYPE_TI
+from scipy.optimize import linear_sum_assignment
+
 LINEAR_VELOCITY = 0.2  # m/s
 ANGULAR_VELOCITY = np.pi / 4  # rad/s
 DT_GLOBAL = 0.01  # sec
@@ -101,7 +103,8 @@ def main(args):
             for j in range(50):
 
                 ti.reset()
-                ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True, random_seed=args['seed'])
+                ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True,
+                        random_seed=args['seed'])
 
                 env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg,
                                                     debug_grad=False, logger=logging)
@@ -129,19 +132,49 @@ def main(args):
                 for n in range(trajectory.shape[0]):
                     mpm_env.step(trajectory[n])
 
+                print(f'=====> Iter {i}, {j}')
+                particles = mpm_env.simulator.get_x()
+                p_radius = mpm_env.loss.particle_radius
+                # obj_vec_2 = o3d.utility.Vector3dVector(particles)
+                # obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2)
+                # o3d.visualization.draw_geometries([obj_pcd_2], width=800, height=600)
                 ll = 0
                 for res in [10, 20, 30, 40, 50, 60]:
                     target_pcd = o3d.io.read_point_cloud(os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
                                                                       f'pcd_{motion_id}_cropped_norm_z_aligned_res{res}.ply'))
-                    target_pcd_points = np.asarray(target_pcd.points)
-                    target_pcd_points[:, 0] += 0.2
-                    target_pcd_ti = ti.Vector.field(3, dtype=DTYPE_TI, shape=target_pcd_points.shape[0])
-                    target_pcd_ti.from_numpy(target_pcd_points)
+                    pcd = np.asarray(target_pcd.points, dtype=np.float32) + (0.2, 0.2, 0.0)
+                    target_pcd_heightmap = np.load(os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
+                                                                f'pcd_{motion_id}_cropped_norm_z_aligned_height_map-res{res}.npy'))
 
-                    height_map = ti.field(dtype=ti.f32, shape=(res, res), needs_grad=False)
-                    height_grid = ti.field(dtype=ti.f32, shape=(res, res), needs_grad=False)
-                    p_id = ti.field(dtype=ti.i32, shape=res*res, needs_grad=False)
-                    emd_distance_matrix = ti.field(dtype=ti.f32, shape=(res * res, res * res), needs_grad=False)
+                    n_particles = particles.shape[0]
+                    x1 = ti.Vector.field(3, dtype=DTYPE_TI, shape=n_particles, needs_grad=False)
+                    x1.from_numpy(particles)
+                    height_map_1 = ti.field(dtype=DTYPE_TI, shape=(res, res), needs_grad=False)
+                    height_map_1.fill(0)
+                    point_id_1 = ti.field(dtype=ti.i32, shape=res * res)
+                    point_id_1.fill(-1)
+
+                    n_pcd_points = pcd.shape[0]
+                    x2 = ti.Vector.field(3, dtype=DTYPE_TI, shape=n_pcd_points, needs_grad=False)
+                    x2.from_numpy(pcd)
+
+                    emd_loss_ti = ti.field(dtype=DTYPE_TI, shape=(), needs_grad=False)
+                    emd_loss_ti.fill(0)
+                    emd_ind_pairs = ti.Vector.field(2, dtype=ti.i32, shape=res * res, needs_grad=False)
+                    emd_distance_matrix = ti.field(dtype=DTYPE_TI, shape=(res * res, res * res), needs_grad=False)
+                    emd_ind_pairs.fill(-1)
+                    emd_distance_matrix.fill(10000.0)
+
+                    height_map_1_radius = ti.field(dtype=DTYPE_TI, shape=(res, res), needs_grad=False)
+                    height_map_1_radius.fill(0.0)
+                    height_map_2 = ti.field(dtype=DTYPE_TI, shape=(res, res), needs_grad=False)
+                    height_map_2.from_numpy(target_pcd_heightmap)
+                    height_map_loss = ti.field(dtype=DTYPE_TI, shape=(), needs_grad=False)
+                    height_map_loss.fill(0)
+
+                    @ti.func
+                    def compute_euclidean_distance(a, b):
+                        return ti.sqrt(((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2))
 
                     @ti.func
                     def from_xy_to_uv(x: DTYPE_TI, y: DTYPE_TI):
@@ -151,67 +184,13 @@ def main(args):
                         return ti.floor(u, ti.i32), ti.floor(v, ti.i32)
 
                     @ti.kernel
-                    def calculate_height_map(f: ti.i32):
-                        for p in range(mpm_env.loss.n_particles):
-                            if mpm_env.loss.particle_mat[p] == mpm_env.loss.matching_mat:
-                                u, v = from_xy_to_uv(mpm_env.loss.particle_x[f, p][0], mpm_env.loss.particle_x[f, p][1])
-                                u_0, v_0 = from_xy_to_uv(mpm_env.loss.particle_x[f, p][0] - mpm_env.loss.particle_radius,
-                                                         mpm_env.loss.particle_x[f, p][1] - mpm_env.loss.particle_radius)
-                                u_1, v_1 = from_xy_to_uv(mpm_env.loss.particle_x[f, p][0] + mpm_env.loss.particle_radius,
-                                                         mpm_env.loss.particle_x[f, p][1] + mpm_env.loss.particle_radius)
-                                ti.atomic_max(height_map[u, v], (mpm_env.loss.particle_x[f, p][2]))
-                                ti.atomic_max(height_map[u_0, v_0], (mpm_env.loss.particle_x[f, p][2]))
-                                ti.atomic_max(height_map[u_1, v_1], (mpm_env.loss.particle_x[f, p][2]))
-                                ti.atomic_max(height_map[u_0, v_1], (mpm_env.loss.particle_x[f, p][2]))
-                                ti.atomic_max(height_map[u_1, v_0], (mpm_env.loss.particle_x[f, p][2]))
+                    def compute_emd_distance_matrix_with_ids():
+                        for ind in range(res * res):
+                            q = point_id_1[ind]
+                            for w in range(n_pcd_points):
+                                emd_distance_matrix[q, w] = compute_euclidean_distance(x1[q], x2[w])
 
-                    height_map.fill(0.0)
-                    calculate_height_map(mpm_env.simulator.cur_substep_local)
-
-                    @ti.kernel
-                    def calculate_height_grid(f: ti.i32):
-                        for p in range(mpm_env.loss.n_particles):
-                            if mpm_env.loss.particle_mat[p] == mpm_env.loss.matching_mat:
-                                u, v = from_xy_to_uv(mpm_env.loss.particle_x[f, p][0], mpm_env.loss.particle_x[f, p][1])
-                                ti.atomic_max(height_grid[u, v], (mpm_env.loss.particle_x[f, p][2]))
-
-                    height_grid.fill(0.0)
-                    calculate_height_grid(mpm_env.simulator.cur_substep_local)
-
-                    @ti.kernel
-                    def compute_height_grid_masks(f: ti.i32):
-                        for p in range(mpm_env.loss.n_particles):
-                            if mpm_env.loss.particle_mat[p] == mpm_env.loss.matching_mat:
-                                u, v = from_xy_to_uv(mpm_env.loss.particle_x[f, p][0], mpm_env.loss.particle_x[f, p][1])
-                                if mpm_env.loss.particle_x[f, p][2] >= height_grid[u, v]:
-                                    p_id[u * res + v] = p
-
-                    p_id.fill(-1)
-                    compute_height_grid_masks(mpm_env.simulator.cur_substep_local)
-
-                    @ti.kernel
-                    def compute_emd_distance_matrix(f: ti.i32):
-                        for u in range(res * res):
-                            for v in range(res * res):
-                                p = p_id[u]
-                                if mpm_env.loss.particle_mat[u] == mpm_env.loss.matching_mat:
-                                    emd_distance_matrix[u, v] = compute_euclidean_distance(
-                                        mpm_env.loss.particle_x[f, p],
-                                        target_pcd_points[v])
-
-                    emd_distance_matrix.fill(10000.0)
-                    p_id_np = p_id.to_numpy()
-                    compute_emd_distance_matrix(mpm_env.simulator.cur_substep_local)
-
-                    @ti.func
-                    def compute_euclidean_distance(a, b):
-                        return ti.sqrt(((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2))
-
-                    linear_assignment_failed = False
-                    emd_ind_pairs = ti.Vector.field(2, dtype=ti.i32, shape=res * res, needs_grad=False)
-
-                    def compute_emd_distance_bijection():
-                        mat = emd_distance_matrix.to_numpy()
+                    def compute_emd_distance_bijection(mat):
                         attempt = 0
                         done = False
                         while not done:
@@ -225,70 +204,102 @@ def main(args):
                                 print(f'D mat shape: {mat.shape}')
                                 print(
                                     f'D mat NaN: {np.isnan(mat).any()}, Inf: {np.isinf(mat).any()}, Max: {np.max(mat)}, Min: {np.min(mat)}')
-
                             if attempt > 5:
                                 print('Linear assignment failed for 5 times, exiting calculation.')
                                 done = True
-                                linear_assignment_failed = True
                         if done:
                             emd_ind_pairs.from_numpy(indexes)
 
-                    emd_ind_pairs.fill(-1)
-                    compute_emd_distance_bijection()
-
-                    emd_loss = ti.field(dtype=DTYPE_TI, shape=(), needs_grad=False)
+                    @ti.kernel
+                    def compute_emd_euclidean_distance():
+                        for e in emd_ind_pairs:
+                            q = emd_ind_pairs[e][0]
+                            w = emd_ind_pairs[e][1]
+                            d = compute_euclidean_distance(x1[q], x2[w])
+                            emd_loss_ti[None] += d
 
                     @ti.kernel
-                    def compute_emd_euclidean_distance(f: ti.i32):
-                        for q in range(res * res):
-                            w = emd_ind_pairs[q][0]
-                            e = emd_ind_pairs[q][1]
-                            p = p_id[w]
-                            d = compute_euclidean_distance(target_pcd_points[e],
-                                                           mpm_env.loss.particle_x[f, p])
-                            emd_loss[None] += d
+                    def calculate_height_map():
+                        for p in x1:
+                            u, v = from_xy_to_uv(x1[p][0], x1[p][1])
+                            ti.atomic_max(height_map_1[u, v], x1[p][2])
 
-                    emd_loss.fill(0.0)
-                    compute_emd_euclidean_distance(mpm_env.simulator.cur_substep_local)
+                    @ti.kernel
+                    def calculate_height_map_with_radius():
+                        for p in x1:
+                            u, v = from_xy_to_uv(x1[p][0], x1[p][1])
+                            u_0, v_0 = from_xy_to_uv(x1[p][0] - p_radius,
+                                                     x1[p][1] - p_radius)
+                            u_1, v_1 = from_xy_to_uv(x1[p][0] + p_radius,
+                                                     x1[p][1] + p_radius)
+                            ti.atomic_max(height_map_1_radius[u, v], (x1[p][2]))
+                            ti.atomic_max(height_map_1_radius[u_0, v_0], (x1[p][2]))
+                            ti.atomic_max(height_map_1_radius[u_1, v_1], (x1[p][2]))
+                            ti.atomic_max(height_map_1_radius[u_0, v_1], (x1[p][2]))
+                            ti.atomic_max(height_map_1_radius[u_1, v_0], (x1[p][2]))
 
-                    target_pcd_heightmap = np.load(os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
-                                                                f'pcd_{motion_id}_cropped_norm_z_aligned_height_map-res{res}.npy'))
-                    target_pcd_heightmap_ti = ti.field(dtype=ti.f32, shape=(res, res), needs_grad=False)
-                    target_pcd_heightmap_ti.from_numpy(target_pcd_heightmap)
-                    height_map_loss = ti.field(dtype=ti.f32, shape=(), needs_grad=False)
+                    @ti.kernel
+                    def compute_height_map_masks():
+                        for p in x1:
+                            u, v = from_xy_to_uv(x1[p][0], x1[p][1])
+                            if x1[p][2] >= height_map_1[u, v]:
+                                point_id_1[u * res + v] = p
 
                     @ti.kernel
                     def compute_height_map_loss():
-                        for q, e in target_pcd_heightmap_ti:
-                            d = ti.sqrt((target_pcd_heightmap_ti[q, e] - height_map[q, e]) ** 2)
+                        for q, w in height_map_2:
+                            d = ti.sqrt((height_map_2[q, w] - height_map_1_radius[q, w]) ** 2)
                             height_map_loss[None] += d
 
-                    height_map_loss.fill(0.0)
+                    calculate_height_map()
+                    compute_height_map_masks()
+                    compute_emd_distance_matrix_with_ids()
+                    d_mat = emd_distance_matrix.to_numpy()
+                    compute_emd_distance_bijection(d_mat)
+                    compute_emd_euclidean_distance()
+                    calculate_height_map_with_radius()
                     compute_height_map_loss()
 
-                    print(f'=====> EMD Loss with res {res}:', emd_loss[None])
+                    # fig, ax = plt.subplots(1, 3, figsize=(18, 6))
+                    # ax[0].imshow(height_map_1.to_numpy(),
+                    #              vmin=0.002, vmax=0.09)
+                    # ax[0].set_title('Height map')
+                    # ax[1].imshow(height_map_1_radius.to_numpy(),
+                    #              vmin=0.002, vmax=0.09)
+                    # ax[1].set_title('Height map radius')
+                    # ax[2].imshow(target_pcd_heightmap,
+                    #              vmin=0.002, vmax=0.09)
+                    # ax[2].set_title('Target height map')
+                    # plt.show()
+                    # plt.close()
+
+                    print(f'=====> EMD Loss with res {res}:', emd_loss_ti[None])
                     print(f'=====> Height map loss with res {res}:', height_map_loss[None])
 
-                    emd_losses[ll][i, j] = emd_loss[None]
+                    emd_losses[ll][i, j] = emd_loss_ti[None]
                     hm_losses[ll][i, j] = height_map_loss[None]
 
                     ll += 1
                 mpm_env.simulator.clear_ckpt()
 
         ll = 0
-        for res in [10, 20, 30, 40, 50, 60]:
-            np.save(os.path.join(result_path, f'emd_losses-res{res}-{param}.npy'), emd_losses[ll])
-            np.save(os.path.join(result_path, f'hm_losses-res{res}-{param}.npy'), hm_losses[ll])
+        for resolution in [10, 20, 30, 40, 50, 60]:
+            np.save(os.path.join(result_path, f'emd_losses-res{resolution}-{param}.npy'), emd_losses[ll])
+            np.save(os.path.join(result_path, f'hm_losses-res{resolution}-{param}.npy'), hm_losses[ll])
             ll += 1
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="System identification for soil")
     parser.add_argument('--seed', dest='seed', type=int, default=-1, help='Random seed')
-    parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default=5e6, help='Particle density, use scientific notation like \'5e6\'.')
-    parser.add_argument('--soft-contact', dest='soft_contact', action='store_true', default=False, help='Use soft contact')
-    parser.add_argument('--toi-contact', dest='toi_contact', action='store_true', default=False, help='Use time-of-impact contact')
-    parser.add_argument('--backend', dest='backend', default='cuda', type=str, help='Computation backend: cuda, opengl, or cpu')
+    parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default=5e6,
+                        help='Particle density, use scientific notation like \'5e6\'.')
+    parser.add_argument('--soft-contact', dest='soft_contact', action='store_true', default=False,
+                        help='Use soft contact')
+    parser.add_argument('--toi-contact', dest='toi_contact', action='store_true', default=False,
+                        help='Use time-of-impact contact')
+    parser.add_argument('--backend', dest='backend', default='cuda', type=str,
+                        help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
     parser.add_argument('--test', dest='test', action='store_true', default=False, help='test')
     arguments = vars(parser.parse_args())
