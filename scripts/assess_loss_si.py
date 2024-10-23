@@ -130,8 +130,9 @@ def main(args):
                     mpm_env.step(trajectory[n])
 
                 loss_info = mpm_env.get_final_loss()
-                print('=====> EMD Loss:', loss_info['emd_loss'])
-                print('=====> Height map loss:', loss_info['height_map_loss'])
+                if args['test']:
+                    print('=====> EMD Loss:', loss_info['emd_loss'])
+                    print('=====> Height map loss:', loss_info['height_map_loss'])
 
                 print(f'=====> Iter {i}, {j}')
                 particles = mpm_env.simulator.get_x()
@@ -270,33 +271,34 @@ def main(args):
                     calculate_height_map_with_radius()
                     compute_height_map_loss()
 
-                    fig, ax = plt.subplots(1, 3, figsize=(18, 6))
-                    ax[0].imshow(height_map_1.to_numpy(),
-                                 vmin=0.002, vmax=0.09)
-                    ax[0].set_title('Height map')
-                    ax[1].imshow(height_map_1_radius.to_numpy(),
-                                 vmin=0.002, vmax=0.09)
-                    ax[1].set_title('Height map radius')
-                    ax[2].imshow(target_pcd_heightmap,
-                                 vmin=0.002, vmax=0.09)
-                    ax[2].set_title('Target height map')
-                    plt.show()
-                    plt.close()
+                    if args['test']:
+                        fig, ax = plt.subplots(1, 3, figsize=(18, 6))
+                        ax[0].imshow(height_map_1.to_numpy(),
+                                     vmin=0.002, vmax=0.09)
+                        ax[0].set_title('Height map')
+                        ax[1].imshow(height_map_1_radius.to_numpy(),
+                                     vmin=0.002, vmax=0.09)
+                        ax[1].set_title('Height map radius')
+                        ax[2].imshow(target_pcd_heightmap,
+                                     vmin=0.002, vmax=0.09)
+                        ax[2].set_title('Target height map')
+                        plt.show()
+                        plt.close()
 
-                    frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
-                    cloud_array = x1_surface.to_numpy()
-                    obj_vec = o3d.utility.Vector3dVector(cloud_array)
-                    obj_pcd = o3d.geometry.PointCloud(obj_vec)
-                    cloud_array_2 = pcd.copy()
-                    cloud_array_2[:, 0] += 0.3
-                    obj_vec_2 = o3d.utility.Vector3dVector(cloud_array_2)
-                    obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2)
-                    cloud_array_3 = particles.copy()
-                    cloud_array_3[:, 0] += 0.6
-                    obj_vec_3 = o3d.utility.Vector3dVector(cloud_array_3)
-                    obj_pcd_3 = o3d.geometry.PointCloud(obj_vec_3)
-                    print(obj_pcd, obj_pcd_2)
-                    o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2, obj_pcd_3], width=800, height=600)
+                        frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
+                        cloud_array = x1_surface.to_numpy()
+                        obj_vec = o3d.utility.Vector3dVector(cloud_array)
+                        obj_pcd = o3d.geometry.PointCloud(obj_vec)
+                        cloud_array_2 = pcd.copy()
+                        cloud_array_2[:, 0] += 0.3
+                        obj_vec_2 = o3d.utility.Vector3dVector(cloud_array_2)
+                        obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2)
+                        cloud_array_3 = particles.copy()
+                        cloud_array_3[:, 0] += 0.6
+                        obj_vec_3 = o3d.utility.Vector3dVector(cloud_array_3)
+                        obj_pcd_3 = o3d.geometry.PointCloud(obj_vec_3)
+                        print(obj_pcd, obj_pcd_2)
+                        o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2, obj_pcd_3], width=800, height=600)
 
                     print(f'=====> EMD Loss with res {res}:', emd_loss_ti[None])
                     print(f'=====> Height map loss with res {res}:', height_map_loss[None])
