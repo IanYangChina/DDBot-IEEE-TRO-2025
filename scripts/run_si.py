@@ -11,7 +11,6 @@ from time import time
 from torch.utils.tensorboard import SummaryWriter
 script_path = os.path.dirname(os.path.realpath(__file__))
 
-from doma.optimiser.adam import Adam
 from doma.optimiser.rmsprop import RMSprop
 from doma.envs.planting_env import make_env
 from doma.engine.utils.misc import set_parameters, reset_logging
@@ -50,7 +49,8 @@ def main(args):
     else:
         case += '-gnone'
 
-    result_path = os.path.join(script_path, '..', 'log-sys_id-rmsprop', case)
+    case += f'-res{args["res"]}'
+    result_path = os.path.join(script_path, '..', 'log-sys_id', case)
 
     if args['backend'] == 'opengl':
         backend = ti.opengl
@@ -96,8 +96,10 @@ def main(args):
         'target_pcd_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
                                         f'pcd_{motion_id}_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
-        'height_grid_res': 40,
+        'height_grid_res': args["res"],
     }
+    if args['eval']:
+        loss_cfg['height_grid_res'] = 60
 
     E_range = (2.5e5, 1e6)
     rho_range = (1200, 2200)
@@ -131,7 +133,7 @@ def main(args):
             # rho = np.asarray(params['rho'][epoch])
             # sand_angle = np.asarray(params['sand_angle'][epoch])
 
-            with open(os.path.join(script_path, '..', 'log-sys_id-rmsprop', f'{case}-best_params.json')) as f:
+            with open(result_path+'-best_params.json') as f:
                 best_params = json.load(f)[arguments['ptcl_density']]["Parameters"]
             E = np.asarray(best_params['E'])
             nu = np.asarray(best_params['nu'])
@@ -175,7 +177,7 @@ def main(args):
         start_time_sec = time()
         n_aborted_data = 0
         """===========Training==========="""
-        loss_names = ['height_map_loss', 'emd_loss', 'total_loss']
+        loss_names = ['height_map_loss', 'emd_loss']
         loss_info = {}
         for n in range(n_epoch):
             ti.reset()
@@ -345,6 +347,7 @@ if __name__ == '__main__':
     parser.add_argument('--grad-clip', dest='grad_clip', action='store_true', default=False, help='Use gradient clipping')
     parser.add_argument('--grad-norm', dest='grad_norm', action='store_true', default=False, help='Use gradient normalisation')
     parser.add_argument('--grad-dy-scale', dest='grad_dy_scale', action='store_true', default=False, help='Use gradient dynamic scaling')
+    parser.add_argument('--res', dest='res', default=60, type=int, help='Height map resolution')
     parser.add_argument('--backend', dest='backend', default='cuda', type=str, help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
     parser.add_argument('--eval', dest='eval', action='store_true', default=False, help='Evaluate the model')
