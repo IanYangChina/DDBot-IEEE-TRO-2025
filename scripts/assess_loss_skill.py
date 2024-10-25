@@ -279,6 +279,7 @@ def main(args):
 
             """forward pass"""
             mpm_env.set_state(init_state['state'], grad_enabled=False)
+            skill_params_np[p] = -1.0 + (2/200) * i
             skill_params_ti.from_numpy(skill_params_np.copy())
             reset_vars()
             abstraction_two_skill()

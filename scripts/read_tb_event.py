@@ -262,30 +262,43 @@ def find_best_skill_parameters(ins=False, hm=False, main_folder_suffix='', lr=''
 
 
 def show_heightmaps(loss_type='emd', param='ER'):
-
-    if param == 'ER':
-        X = np.arange(2.5e5, 1e6, 1.5e4)
-        Y = np.arange(1200, 2200, 20)
+    if 'skill' not in param:
+        if param == 'ER':
+            X = np.arange(2.5e5, 1e6, 1.5e4)
+            Y = np.arange(1200, 2200, 20)
+        else:
+            X = np.arange(0.1, 0.4, (0.4-0.1)/50)
+            Y = np.arange(10, 40, (40-10)/50)
+        X, Y = np.meshgrid(X, Y)
+        res = [10, 20, 30, 40, 50, 60]
+        for i in range(6):
+            fig = plt.figure()
+            ax = plt.axes(projection='3d')
+            ax.view_init(44, 58)
+            ax.set_xlabel('Young\'s Modulus')
+            ax.set_ylabel('Material Density')
+            ax.set_zlabel(f'{loss_type.upper()} Loss')
+            ax.set_title(f'{loss_type.upper()} loss landscape with height grid resolution {res[i]}')
+            hm = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
+                                      f'{loss_type}_losses-res{res[i]}--{param}.npy'))
+            surf = ax.plot_surface(X, Y, hm, rstride=1, cstride=1,
+                                   cmap='viridis', edgecolor='none')
+            fig.colorbar(surf)
+            plt.show()
+            plt.close()
     else:
-        X = np.arange(0.1, 0.4, (0.4-0.1)/50)
-        Y = np.arange(10, 40, (40-10)/50)
-    X, Y = np.meshgrid(X, Y)
-    res = [10, 20, 30, 40, 50, 60]
-    for i in range(6):
-        fig = plt.figure()
-        ax = plt.axes(projection='3d')
-        ax.view_init(44, 58)
-        ax.set_xlabel('Young\'s Modulus')
-        ax.set_ylabel('Material Density')
-        ax.set_zlabel(f'{loss_type.upper()} Loss')
-        ax.set_title(f'{loss_type.upper()} loss landscape with height grid resolution {res[i]}')
-        hm = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
-                                  f'{loss_type}_losses-res{res[i]}--{param}.npy'))
-        surf = ax.plot_surface(X, Y, hm, rstride=1, cstride=1,
-                               cmap='viridis', edgecolor='none')
-        fig.colorbar(surf)
+        fig, ax = plt.subplots(2, 3, figsize=(18, 12))
+        res = [10, 20, 30, 40, 50, 60]
+        for i in range(6):
+            loss = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
+                                        f'{loss_type}_losses-res{res[i]}--{param}.npy'))
+            ax[i//3, i % 3].plot(loss)
+            ax[i//3, i % 3].set_title(f'{loss_type.upper()} loss with resolution {res[i]}')
+            ax[i//3, i % 3].set_xlabel(f'{param}')
+            ax[i//3, i % 3].set_ylabel(f'{loss_type.upper()} loss')
+            ax[i//3, i % 3].set_xticks(np.arange(-1, 1, 2/200))
         plt.show()
         plt.close()
 
 
-show_heightmaps(loss_type='emd', param='ER')
+show_heightmaps(loss_type='emd', param='skill-0')
