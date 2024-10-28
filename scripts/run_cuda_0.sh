@@ -1,8 +1,8 @@
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --grad-clip --res 10
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --grad-clip --res 20
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --grad-clip --res 30
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --grad-clip --res 40
-python run_si.py --ptcl_d 5e6 --cuda_GB 8 --grad-clip --res 50
+#python run_si.py --ptcl_d 5e6 --cuda_GB 8 --grad-clip --res 10
+#python run_si.py --ptcl_d 5e6 --cuda_GB 8 --grad-clip --res 20
+#python run_si.py --ptcl_d 5e6 --cuda_GB 8 --grad-clip --res 30
+#python run_si.py --ptcl_d 5e6 --cuda_GB 8 --grad-clip --res 40
+#python run_si.py --ptcl_d 5e6 --cuda_GB 8 --grad-clip --res 50
 python run_si.py --ptcl_d 5e6 --cuda_GB 8 --grad-clip --res 60
 
 python run_si.py --ptcl_d 5e6 --cuda_GB 8 --grad-clip --res 10 --hm
