@@ -49,6 +49,9 @@ def main(args):
     else:
         case += '-gnone'
 
+    if args['line_search']:
+        case += '-ls'
+
     case += f'-res{args["res"]}'
     result_path = os.path.join(script_path, '..', 'log-sys_id', case)
 
@@ -179,6 +182,8 @@ def main(args):
         """===========Training==========="""
         loss_names = ['height_map_loss', 'emd_loss']
         loss_info = {}
+        last_loss = 1000000
+        five_loss_improvements = []
         for n in range(n_epoch):
             ti.reset()
             ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True, random_seed=args['seed'])
@@ -196,6 +201,25 @@ def main(args):
                 if args['eval']:
                     mpm_env.render('human')
             loss_info = mpm_env.get_final_loss()
+            loss_improvement = loss_info['height_map_loss'] - last_loss
+            if len(five_loss_improvements) < 5:
+                if loss_improvement < 0:
+                    five_loss_improvements.append(0)
+                else:
+                    five_loss_improvements.append(1)
+            else:
+                five_loss_improvements.pop(0)
+                if loss_improvement < 0:
+                    five_loss_improvements.append(0)
+                else:
+                    five_loss_improvements.append(1)
+
+            last_loss = loss_info['height_map_loss']
+            if sum(five_loss_improvements) == 5:
+                print(f'===> [Info] Early stopping at epoch {n} due to no loss improvement in five epochs')
+                logging.info(f'===> [Info] Early stopping at epoch {n} due to no loss improvement in five epochs')
+                break
+
             if args['eval']:
                 print('=====> EMD Loss:', loss_info['emd_loss'])
                 print('=====> Height map loss:', loss_info['height_map_loss'])
@@ -285,6 +309,54 @@ def main(args):
             else:
                 for loss_name in loss_names:
                     logger.add_scalar(tag=f'Loss/{loss_name}', scalar_value=loss_info[loss_name], global_step=n)
+
+                if args['line_search']:
+                    best_loss_tmp = +np.inf
+                    best_alpha = 1.0
+                    for alpha in [0.01, 0.05, 0.1, 0.5, 1.0, 1.5, 2.0]:
+                        optim_E.lr = training_config['lr_E'] * alpha
+                        optim_nu.lr = training_config['lr_nu'] * alpha
+                        optim_rho.lr = training_config['lr_rho'] * alpha
+                        optim_sand_angle.lr = training_config['lr_sand_angle'] * alpha
+                        E_ = optim_E.step(E.copy(), grad[0])
+                        E_ = np.clip(E_, E_range[0], E_range[1])
+                        nu_ = optim_nu.step(nu.copy(), grad[1])
+                        nu_ = np.clip(nu_, nu_range[0], nu_range[1])
+                        rho_ = optim_rho.step(rho.copy(), grad[2])
+                        rho_ = np.clip(rho_, rho_range[0], rho_range[1])
+                        sand_angle_ = optim_sand_angle.step(sand_angle.copy(), grad[3])
+                        sand_angle_ = np.clip(sand_angle_, sand_angle_range[0], sand_angle_range[1])
+
+                        mpm_env.simulator.clear_ckpt()
+
+                        ti.reset()
+                        ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True,
+                                random_seed=args['seed'])
+                        env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False,
+                                                            logger=logging)
+                        set_parameters(mpm_env, material_id=SAND, e=E_.copy(), nu=nu_.copy(), rho=rho_.copy(),
+                                       sand_friction_angle=sand_angle_.copy(),
+                                       manipulator_friction=0.5, container_friction=0.5)
+
+                        """forward pass"""
+                        mpm_env.set_state(init_state['state'], grad_enabled=True)
+                        for i in range(mpm_env.horizon):
+                            mpm_env.step(trajectory[i])
+                        loss_info = mpm_env.get_final_loss()
+                        if loss_info['height_map_loss'] < best_loss_tmp:
+                            best_loss_tmp = loss_info['height_map_loss']
+                            best_alpha = alpha
+
+                        optim_E.reverse_normaliser()
+                        optim_nu.reverse_normaliser()
+                        optim_rho.reverse_normaliser()
+                        optim_sand_angle.reverse_normaliser()
+
+                    optim_E.lr = training_config['lr_E'] * best_alpha
+                    optim_nu.lr = training_config['lr_nu'] * best_alpha
+                    optim_rho.lr = training_config['lr_rho'] * best_alpha
+                    optim_sand_angle.lr = training_config['lr_sand_angle'] * best_alpha
+
                 E = optim_E.step(E.copy(), grad[0])
                 E = np.clip(E, E_range[0], E_range[1])
                 nu = optim_nu.step(nu.copy(), grad[1])
@@ -347,6 +419,7 @@ if __name__ == '__main__':
     parser.add_argument('--grad-clip', dest='grad_clip', action='store_true', default=False, help='Use gradient clipping')
     parser.add_argument('--grad-norm', dest='grad_norm', action='store_true', default=False, help='Use gradient normalisation')
     parser.add_argument('--grad-dy-scale', dest='grad_dy_scale', action='store_true', default=False, help='Use gradient dynamic scaling')
+    parser.add_argument('--line-search', dest='line_search', action='store_true', default=False, help='Use line search')
     parser.add_argument('--res', dest='res', default=60, type=int, help='Height map resolution')
     parser.add_argument('--backend', dest='backend', default='cuda', type=str, help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
