@@ -311,6 +311,8 @@ def main(args):
                     logger.add_scalar(tag=f'Loss/{loss_name}', scalar_value=loss_info[loss_name], global_step=n)
 
                 if args['line_search']:
+                    print(f'=====> Performing line search for epoch {n}......')
+                    logging.info(f'=====> Performing line search for epoch {n}......')
                     best_loss_tmp = +np.inf
                     best_alpha = 1.0
                     for alpha in [0.01, 0.05, 0.1, 0.5, 1.0, 1.5, 2.0]:
@@ -343,6 +345,10 @@ def main(args):
                         for i in range(mpm_env.horizon):
                             mpm_env.step(trajectory[i])
                         loss_info = mpm_env.get_final_loss()
+                        print(f'=====> alpha: {alpha}')
+                        logging.info(f'=====> alpha: {alpha}')
+                        print(f'=====> Loss info: {loss_info}')
+                        logging.info(f'=====> Loss info: {loss_info}')
                         if loss_info['height_map_loss'] < best_loss_tmp:
                             best_loss_tmp = loss_info['height_map_loss']
                             best_alpha = alpha
