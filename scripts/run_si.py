@@ -307,6 +307,11 @@ def main(args):
                 logging.error(f'===> [Warning] Loss info: {loss_info}')
                 n_aborted_data += 1
             else:
+                print(f'=====> Epoch: {n}')
+                print(f'=====> Loss info: {loss_info}')
+                logging.info(f'=====> Epoch: {n}')
+                logging.info(f'=====> Loss info: {loss_info}')
+
                 for loss_name in loss_names:
                     logger.add_scalar(tag=f'Loss/{loss_name}', scalar_value=loss_info[loss_name], global_step=n)
 
@@ -315,7 +320,8 @@ def main(args):
                     logging.info(f'=====> Performing line search for epoch {n}......')
                     best_loss_tmp = +np.inf
                     best_alpha = 1.0
-                    for alpha in [0.01, 0.05, 0.1, 0.5, 1.0, 1.5, 2.0]:
+                    best_loss_info = loss_info
+                    for alpha in [0.01, 0.1, 0.5, 1.0, 1.01, 1.1, 1.5]:
                         optim_E.lr = training_config['lr_E'] * alpha
                         optim_nu.lr = training_config['lr_nu'] * alpha
                         optim_rho.lr = training_config['lr_rho'] * alpha
@@ -352,6 +358,7 @@ def main(args):
                         if loss_info['height_map_loss'] < best_loss_tmp:
                             best_loss_tmp = loss_info['height_map_loss']
                             best_alpha = alpha
+                            best_loss_info = loss_info
 
                         optim_E.reverse_normaliser()
                         optim_nu.reverse_normaliser()
@@ -372,13 +379,13 @@ def main(args):
                 sand_angle = optim_sand_angle.step(sand_angle.copy(), grad[3])
                 sand_angle = np.clip(sand_angle, sand_angle_range[0], sand_angle_range[1])
 
-                print(f'=====> Epoch: {n}')
-                print(f'=====> Loss info: {loss_info}')
+                # print(f'=====> Epoch: {n}')
+                print(f'=====> Best alpha: {best_alpha}, Best loss info: {best_loss_info}')
                 print(f'=====> Param: E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}')
                 print(f'=====> Grad: {grad}')
                 print(f"=====> Num. aborted data so far: {n_aborted_data}")
-                logging.info(f'=====> Epoch: {n}')
-                logging.info(f'=====> Loss info: {loss_info}')
+                # logging.info(f'=====> Epoch: {n}')
+                logging.info(f'=====> Best alpha: {best_alpha}, Best loss info: {best_loss_info}')
                 logging.info(f'=====> Param: E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}')
                 logging.info(f'=====> Grad: {grad}')
                 logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
