@@ -398,6 +398,7 @@ def main(args):
                 logger.add_scalar(tag='Grad/rho', scalar_value=grad[2], global_step=n)
                 logger.add_scalar(tag='Param/sand_angle', scalar_value=sand_angle, global_step=n)
                 logger.add_scalar(tag='Grad/sand_angle', scalar_value=grad[3], global_step=n)
+                logger.add_scalar(tag='Grad/best_alpha', scalar_value=best_alpha, global_step=n)
 
                 mpm_env.simulator.clear_ckpt()
 
