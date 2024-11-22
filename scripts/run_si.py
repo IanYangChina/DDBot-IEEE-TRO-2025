@@ -108,7 +108,7 @@ def main(args):
     rho_range = (1200, 2200)
     nu_range = (0.1, 0.4)
     sand_angle_range = (10, 40)
-    n_epoch = 150
+    n_epoch = 70
     if args['seed'] != -1:
         seeds = [args['seed']]
     else:
