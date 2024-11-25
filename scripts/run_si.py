@@ -111,7 +111,7 @@ def main(args):
         'height_grid_res': 60,
     }
 
-    E_range = (2.5e5, 1e6)
+    E_range = (5e4, 2e5)
     rho_range = (1200, 2200)
     nu_range = (0.1, 0.4)
     sand_angle_range = (10, 40)
@@ -121,7 +121,7 @@ def main(args):
     else:
         seeds = [0, 1, 2, 3, 4]
     training_config = {
-        'lr_E': 2e4,
+        'lr_E': 1e4,
         'lr_nu': 0.01,
         'lr_rho': 50,
         'lr_sand_angle': 1,
@@ -423,6 +423,7 @@ def main(args):
                     optim_nu.lr = training_config['lr_nu'] * best_alpha
                     optim_rho.lr = training_config['lr_rho'] * best_alpha
                     optim_sand_angle.lr = training_config['lr_sand_angle'] * best_alpha
+                    logger.add_scalar(tag='Grad/best_alpha', scalar_value=best_alpha, global_step=n)
 
                 E = optim_E.step(E.copy(), grad[0])
                 E = np.clip(E, E_range[0], E_range[1])
@@ -449,7 +450,6 @@ def main(args):
                 logger.add_scalar(tag='Grad/rho', scalar_value=grad[2], global_step=n)
                 logger.add_scalar(tag='Param/sand_angle', scalar_value=sand_angle, global_step=n)
                 logger.add_scalar(tag='Grad/sand_angle', scalar_value=grad[3], global_step=n)
-                logger.add_scalar(tag='Grad/best_alpha', scalar_value=best_alpha, global_step=n)
 
             mpm_env.simulator.clear_ckpt()
 
