@@ -1,6 +1,6 @@
 import os
 import json
-import logging
+# import logging
 import argparse
 import numpy as np
 import taichi as ti
@@ -13,7 +13,7 @@ script_path = os.path.dirname(os.path.realpath(__file__))
 
 from doma.optimiser.rmsprop import RMSprop
 from doma.envs.planting_env import make_env
-from doma.engine.utils.misc import set_parameters, reset_logging
+from doma.engine.utils.misc import set_parameters  #, reset_logging
 from doma.engine.configs.macros import DTYPE_NP, DTYPE_TI, SAND
 cam_cfg = {
     'pos': (0.2, 0.8, 0.7),
@@ -145,21 +145,21 @@ def main(args):
             print("Loaded parameters: ", E, nu, rho, sand_angle)
         else:
             os.makedirs(log_dir, exist_ok=True)
-            reset_logging(logging)
-            log_file_name = os.path.join(log_dir, 'optimisation.log')
-            if os.path.isfile(log_file_name):
-                filemode = "a"
-            else:
-                filemode = "w"
-            logging.basicConfig(level=logging.NOTSET, filemode=filemode,
-                                filename=log_file_name,
-                                format="%(asctime)s %(levelname)s %(message)s")
+            # reset_logging(logging)
+            # log_file_name = os.path.join(log_dir, 'optimisation.log')
+            # if os.path.isfile(log_file_name):
+            #     filemode = "a"
+            # else:
+            #     filemode = "w"
+            # logging.basicConfig(level=logging.NOTSET, filemode=filemode,
+            #                     filename=log_file_name,
+            #                     format="%(asctime)s %(levelname)s %(message)s")
             logger = SummaryWriter(log_dir=log_dir)
             start_time = dt.datetime.now()
             print(f"===> Start system identification optimisation at: {start_time.year}-{start_time.month}-{start_time.day} "
                   f"{start_time.hour}:{start_time.minute}:{start_time.second}")
-            logging.info(f"===> Start grad computation at:, {start_time.year}-{start_time.month}-{start_time.day} "
-                         f"{start_time.hour}:{start_time.minute}:{start_time.second}")
+            # logging.info(f"===> Start grad computation at:, {start_time.year}-{start_time.month}-{start_time.day} "
+            #              f"{start_time.hour}:{start_time.minute}:{start_time.second}")
 
             # Initialising parameters
             E = np.asarray(np.random.uniform(E_range[0], E_range[1]), dtype=DTYPE_NP).reshape((1,))  # Young's modulus
@@ -194,7 +194,7 @@ def main(args):
             ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True, random_seed=args['seed'])
             env_cfg['horizon'] = trajectory_valid.shape[0]
             env, mpm_env, init_state = make_env(env_cfg, loss_cfg_valid,
-                                                cam_cfg=cam_cfg, debug_grad=False, logger=logging)
+                                                cam_cfg=cam_cfg, debug_grad=False)
             set_parameters(mpm_env, material_id=SAND, e=E.copy(), nu=nu.copy(), rho=rho.copy(),
                            sand_friction_angle=sand_angle.copy(),
                            manipulator_friction=0.5, container_friction=0.5)
@@ -214,11 +214,11 @@ def main(args):
             print('=====> EMD Loss eval:', loss_info_validation['emd_loss_eval'])
             print('=====> Height map loss:', loss_info_validation['height_map_loss'])
             print('=====> Height map eval loss:', loss_info_validation['height_map_loss_eval'])
-            logging.info(f'===========> Epoch: {n} validation losses')
-            logging.info('=====> EMD Loss:', loss_info_validation['emd_loss'])
-            logging.info('=====> EMD Loss eval:', loss_info_validation['emd_loss_eval'])
-            logging.info('=====> Height map loss:', loss_info_validation['height_map_loss'])
-            logging.info('=====> Height map eval loss:', loss_info_validation['height_map_loss_eval'])
+            # logging.info(f'===========> Epoch: {n} validation losses')
+            # logging.info('=====> EMD Loss:', loss_info_validation['emd_loss'])
+            # logging.info('=====> EMD Loss eval:', loss_info_validation['emd_loss_eval'])
+            # logging.info('=====> Height map loss:', loss_info_validation['height_map_loss'])
+            # logging.info('=====> Height map eval loss:', loss_info_validation['height_map_loss_eval'])
             for loss_name in loss_names:
                 logger.add_scalar(tag=f'Validation Loss/{loss_name}', scalar_value=loss_info_validation[loss_name], global_step=n)
 
@@ -233,7 +233,7 @@ def main(args):
             last_loss = loss_info_validation['height_map_loss']
             if sum(five_loss_improvements) == 3:
                 print(f'=========> [Info] Early stopping at epoch {n} due to no loss improvement in five epochs')
-                logging.info(f'=========> [Info] Early stopping at epoch {n} due to no loss improvement in five epochs')
+                # logging.info(f'=========> [Info] Early stopping at epoch {n} due to no loss improvement in five epochs')
                 break
 
             if args['eval']:
@@ -268,11 +268,13 @@ def main(args):
                 o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2], width=800, height=600)
                 exit()
 
+            mpm_env.simulator.clear_ckpt()
+
             """======================================Optimisation"""
             ti.reset()
             ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True, random_seed=args['seed'])
             env_cfg['horizon'] = trajectory.shape[0]
-            env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
+            env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False)
             set_parameters(mpm_env, material_id=SAND, e=E.copy(), nu=nu.copy(), rho=rho.copy(),
                            sand_friction_angle=sand_angle.copy(),
                            manipulator_friction=0.5, container_friction=0.5)
@@ -337,12 +339,12 @@ def main(args):
                 print(f'===> [Warning] E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}')
                 print(f'===> [Warning] Grad: {grad}')
                 print(f'===> [Warning] Loss info: {loss_info}')
-                logging.error(f'===> [Warning] Aborting epoch: {n}')
-                logging.error(f'===> [Warning] Particle has nan or inf: {particle_has_naninf}')
-                logging.error(f'===> [Warning] Strange loss or gradient.')
-                logging.error(f'===> [Warning] E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}')
-                logging.error(f'===> [Warning] Grad: {grad}')
-                logging.error(f'===> [Warning] Loss info: {loss_info}')
+                # logging.error(f'===> [Warning] Aborting epoch: {n}')
+                # logging.error(f'===> [Warning] Particle has nan or inf: {particle_has_naninf}')
+                # logging.error(f'===> [Warning] Strange loss or gradient.')
+                # logging.error(f'===> [Warning] E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}')
+                # logging.error(f'===> [Warning] Grad: {grad}')
+                # logging.error(f'===> [Warning] Loss info: {loss_info}')
                 n_aborted_data += 1
             else:
                 print(f'===========> Epoch: {n} optimisation losses')
@@ -350,18 +352,18 @@ def main(args):
                 print('=====> EMD Loss eval:', loss_info['emd_loss_eval'])
                 print('=====> Height map loss:', loss_info['height_map_loss'])
                 print('=====> Height map eval loss:', loss_info['height_map_loss_eval'])
-                logging.info(f'===========> Epoch: {n} optimisation losses')
-                logging.info('=====> EMD Loss:', loss_info['emd_loss'])
-                logging.info('=====> EMD Loss eval:', loss_info['emd_loss_eval'])
-                logging.info('=====> Height map loss:', loss_info['height_map_loss'])
-                logging.info('=====> Height map eval loss:', loss_info['height_map_loss_eval'])
+                # logging.info(f'===========> Epoch: {n} optimisation losses')
+                # logging.info('=====> EMD Loss:', loss_info['emd_loss'])
+                # logging.info('=====> EMD Loss eval:', loss_info['emd_loss_eval'])
+                # logging.info('=====> Height map loss:', loss_info['height_map_loss'])
+                # logging.info('=====> Height map eval loss:', loss_info['height_map_loss_eval'])
 
                 for loss_name in loss_names:
                     logger.add_scalar(tag=f'Loss/{loss_name}', scalar_value=loss_info[loss_name], global_step=n)
 
                 if args['line_search']:
                     print(f'===========> Performing line search for epoch {n}......')
-                    logging.info(f'===========> Performing line search for epoch {n}......')
+                    # logging.info(f'===========> Performing line search for epoch {n}......')
                     best_loss_tmp = +np.inf
                     best_alpha = 1.0
                     best_loss_info = loss_info
@@ -384,8 +386,7 @@ def main(args):
                         ti.reset()
                         ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True,
                                 random_seed=args['seed'])
-                        env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False,
-                                                            logger=logging)
+                        env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False)
                         set_parameters(mpm_env, material_id=SAND, e=E_.copy(), nu=nu_.copy(), rho=rho_.copy(),
                                        sand_friction_angle=sand_angle_.copy(),
                                        manipulator_friction=0.5, container_friction=0.5)
@@ -396,15 +397,15 @@ def main(args):
                             mpm_env.step(trajectory[i])
                         loss_info = mpm_env.get_final_loss()
                         print(f'=====> alpha: {alpha}')
-                        logging.info(f'=====> alpha: {alpha}')
+                        # logging.info(f'=====> alpha: {alpha}')
                         print('==> EMD Loss:', loss_info['emd_loss'])
                         print('==> EMD Loss eval:', loss_info['emd_loss_eval'])
                         print('==> Height map loss:', loss_info['height_map_loss'])
                         print('==> Height map eval loss:', loss_info['height_map_loss_eval'])
-                        logging.info('==> EMD Loss:', loss_info['emd_loss'])
-                        logging.info('==> EMD Loss eval:', loss_info['emd_loss_eval'])
-                        logging.info('==> Height map loss:', loss_info['height_map_loss'])
-                        logging.info('==> Height map eval loss:', loss_info['height_map_loss_eval'])
+                        # logging.info('==> EMD Loss:', loss_info['emd_loss'])
+                        # logging.info('==> EMD Loss eval:', loss_info['emd_loss_eval'])
+                        # logging.info('==> Height map loss:', loss_info['height_map_loss'])
+                        # logging.info('==> Height map eval loss:', loss_info['height_map_loss_eval'])
                         if loss_info['height_map_loss'] < best_loss_tmp:
                             best_loss_tmp = loss_info['height_map_loss']
                             best_alpha = alpha
@@ -414,6 +415,8 @@ def main(args):
                         optim_nu.reverse_normaliser()
                         optim_rho.reverse_normaliser()
                         optim_sand_angle.reverse_normaliser()
+
+                        mpm_env.simulator.clear_ckpt()
 
                     optim_E.lr = training_config['lr_E'] * best_alpha
                     optim_nu.lr = training_config['lr_nu'] * best_alpha
@@ -433,10 +436,10 @@ def main(args):
                 print(f'==> Param: E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}')
                 print(f'==> Grad: {grad}')
                 print(f"==> Num. aborted data so far: {n_aborted_data}")
-                logging.info(f'==> Best alpha: {best_alpha}, Best loss info: {best_loss_info}')
-                logging.info(f'==> Param: E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}')
-                logging.info(f'===> Grad: {grad}')
-                logging.info(f"==> Num. aborted data so far: {n_aborted_data}")
+                # logging.info(f'==> Best alpha: {best_alpha}, Best loss info: {best_loss_info}')
+                # logging.info(f'==> Param: E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}')
+                # logging.info(f'===> Grad: {grad}')
+                # logging.info(f"==> Num. aborted data so far: {n_aborted_data}")
 
                 logger.add_scalar(tag='Param/E', scalar_value=E, global_step=n)
                 logger.add_scalar(tag='Grad/E', scalar_value=grad[0], global_step=n)
@@ -448,7 +451,7 @@ def main(args):
                 logger.add_scalar(tag='Grad/sand_angle', scalar_value=grad[3], global_step=n)
                 logger.add_scalar(tag='Grad/best_alpha', scalar_value=best_alpha, global_step=n)
 
-                mpm_env.simulator.clear_ckpt()
+            mpm_env.simulator.clear_ckpt()
 
         logger.close()
         print('===========> Finished training.')
@@ -459,13 +462,13 @@ def main(args):
               f"{end_time.hour}:{end_time.minute}:{end_time.second}")
         print(f"===> Total time taken: {time() - start_time_sec} seconds")
         print(f"===> Number of aborted data: {n_aborted_data}")
-        logging.info('===========> Finished training.')
-        logging.info('====> Final validation loss: ', loss_info_validation)
-        logging.info(f'====> Final params: E {E}, nu {nu}, rho {rho}, sand_angle {sand_angle}')
-        logging.info(f"===> End grad computation at:, {end_time.year}-{end_time.month}-{end_time.day} "
-                     f"{end_time.hour}:{end_time.minute}:{end_time.second}")
-        logging.info(f"===> Total time taken: {time() - start_time_sec} seconds")
-        logging.info(f"===> Number of aborted data: {n_aborted_data}")
+        # logging.info('===========> Finished training.')
+        # logging.info('====> Final validation loss: ', loss_info_validation)
+        # logging.info(f'====> Final params: E {E}, nu {nu}, rho {rho}, sand_angle {sand_angle}')
+        # logging.info(f"===> End grad computation at:, {end_time.year}-{end_time.month}-{end_time.day} "
+        #              f"{end_time.hour}:{end_time.minute}:{end_time.second}")
+        # logging.info(f"===> Total time taken: {time() - start_time_sec} seconds")
+        # logging.info(f"===> Number of aborted data: {n_aborted_data}")
 
         np.save(os.path.join(log_dir, 'final_params.npy'),
                 np.array([E, nu, rho, sand_angle], dtype=DTYPE_NP))
