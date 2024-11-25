@@ -52,6 +52,9 @@ def main(args):
     if args['line_search']:
         case += '-ls'
 
+    if args['init_guess']:
+        case += '-man-init'
+
     case += f'-res{args["res"]}'
     result_path = os.path.join(script_path, '..', 'log-sys_id', case)
 
