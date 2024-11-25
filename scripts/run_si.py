@@ -418,6 +418,7 @@ def main(args):
 
                         mpm_env.simulator.clear_ckpt()
 
+                    print(f'=====> Best alpha: {best_alpha}, Best loss info: {best_loss_info}')
                     optim_E.lr = training_config['lr_E'] * best_alpha
                     optim_nu.lr = training_config['lr_nu'] * best_alpha
                     optim_rho.lr = training_config['lr_rho'] * best_alpha
@@ -432,7 +433,6 @@ def main(args):
                 sand_angle = optim_sand_angle.step(sand_angle.copy(), grad[3])
                 sand_angle = np.clip(sand_angle, sand_angle_range[0], sand_angle_range[1])
 
-                print(f'=====> Best alpha: {best_alpha}, Best loss info: {best_loss_info}')
                 print(f'==> Param: E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}')
                 print(f'==> Grad: {grad}')
                 print(f"==> Num. aborted data so far: {n_aborted_data}")
