@@ -7,6 +7,7 @@ import taichi as ti
 import datetime as dt
 import open3d as o3d
 import matplotlib.pyplot as plt
+from copy import deepcopy as dcp
 from time import time
 from torch.utils.tensorboard import SummaryWriter
 script_path = os.path.dirname(os.path.realpath(__file__))
@@ -102,17 +103,16 @@ def main(args):
     loss_cfg = {
         'use_height_map_loss': args['use_height_map_loss'],
         'target_pcd_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
-                                        f'pcd_{motion_id}_cropped_norm_z_aligned.ply'),
+                                        f'pcd_0_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
         'height_grid_res': args["res"],
     }
-    loss_cfg_valid = {
-        'use_height_map_loss': False,
-        'target_pcd_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
-                                        f'pcd_1_cropped_norm_z_aligned.ply'),
-        'target_pcd_offset': [0.2, 0.2, 0],
-        'height_grid_res': 60,
-    }
+    loss_cfg_eval = dcp(loss_cfg)
+    loss_cfg_eval['height_grid_res'] = 60
+    loss_cfg_valid = dcp(loss_cfg)
+    loss_cfg_valid['target_pcd_path'] = os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
+                                                        f'pcd_1_cropped_norm_z_aligned.ply')
+    loss_cfg_valid['height_grid_res'] = 60
 
     E_range = (5e4, 2e5)
     rho_range = (1200, 2200)
@@ -148,21 +148,10 @@ def main(args):
             print("Loaded parameters: ", E, nu, rho, sand_angle)
         else:
             os.makedirs(log_dir, exist_ok=True)
-            # reset_logging(logging)
-            # log_file_name = os.path.join(log_dir, 'optimisation.log')
-            # if os.path.isfile(log_file_name):
-            #     filemode = "a"
-            # else:
-            #     filemode = "w"
-            # logging.basicConfig(level=logging.NOTSET, filemode=filemode,
-            #                     filename=log_file_name,
-            #                     format="%(asctime)s %(levelname)s %(message)s")
             logger = SummaryWriter(log_dir=log_dir)
             start_time = dt.datetime.now()
             print(f"===> Start system identification optimisation at: {start_time.year}-{start_time.month}-{start_time.day} "
                   f"{start_time.hour}:{start_time.minute}:{start_time.second}")
-            # logging.info(f"===> Start grad computation at:, {start_time.year}-{start_time.month}-{start_time.day} "
-            #              f"{start_time.hour}:{start_time.minute}:{start_time.second}")
 
             # Initialising parameters
             E = np.asarray(np.random.uniform(E_range[0], E_range[1]), dtype=DTYPE_NP).reshape((1,))  # Young's modulus
@@ -186,8 +175,7 @@ def main(args):
 
         start_time_sec = time()
         n_aborted_data = 0
-        loss_names = ['height_map_loss', 'emd_loss', 'height_map_loss_eval', 'emd_loss_eval']
-        loss_info = {}
+        loss_names = ['height_map_loss', 'emd_loss']
         loss_info_validation = {}
         last_loss = 1000000
         five_loss_improvements = []
@@ -203,7 +191,7 @@ def main(args):
                            manipulator_friction=0.5, container_friction=0.5)
 
             """forward pass"""
-            mpm_env.set_state(init_state['state'], grad_enabled=True)
+            mpm_env.set_state(init_state['state'], grad_enabled=False)
             if args['eval']:
                 mpm_env.render('human')
             for i in range(mpm_env.horizon):
@@ -214,14 +202,7 @@ def main(args):
 
             print(f'===========> Epoch: {n} validation losses')
             print('=====> EMD Loss:', loss_info_validation['emd_loss'])
-            print('=====> EMD Loss eval:', loss_info_validation['emd_loss_eval'])
             print('=====> Height map loss:', loss_info_validation['height_map_loss'])
-            print('=====> Height map eval loss:', loss_info_validation['height_map_loss_eval'])
-            # logging.info(f'===========> Epoch: {n} validation losses')
-            # logging.info('=====> EMD Loss:', loss_info_validation['emd_loss'])
-            # logging.info('=====> EMD Loss eval:', loss_info_validation['emd_loss_eval'])
-            # logging.info('=====> Height map loss:', loss_info_validation['height_map_loss'])
-            # logging.info('=====> Height map eval loss:', loss_info_validation['height_map_loss_eval'])
             for loss_name in loss_names:
                 logger.add_scalar(tag=f'Validation Loss/{loss_name}', scalar_value=loss_info_validation[loss_name], global_step=n)
 
@@ -241,16 +222,13 @@ def main(args):
 
             if args['eval']:
                 print(mpm_env.loss.height_map.shape)
-                print(mpm_env.loss.height_map_eval.shape)
                 print('=====> EMD Loss:', loss_info_validation['emd_loss'])
-                print('=====> EMD Loss eval:', loss_info_validation['emd_loss_eval'])
                 print('=====> Height map loss:', loss_info_validation['height_map_loss'])
-                print('=====> Height map eval loss:', loss_info_validation['height_map_loss_eval'])
                 fig, ax = plt.subplots(1, 2, figsize=(12, 6))
-                ax[0].imshow(mpm_env.loss.height_map_eval.to_numpy(),
+                ax[0].imshow(mpm_env.loss.height_map.to_numpy(),
                              vmin=0.002, vmax=0.09)
                 ax[0].set_title('Height map')
-                ax[1].imshow(mpm_env.loss.height_map_pcd_target_eval.to_numpy(),
+                ax[1].imshow(mpm_env.loss.height_map_pcd_target.to_numpy(),
                              vmin=0.002, vmax=0.09)
                 ax[1].set_title('Target height map')
                 plt.show()
@@ -270,6 +248,34 @@ def main(args):
                 obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2).voxel_down_sample(0.007)
                 o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2], width=800, height=600)
                 exit()
+
+            mpm_env.simulator.clear_ckpt()
+
+            """======================================Evaluation"""
+            ti.reset()
+            ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True, random_seed=args['seed'])
+            env_cfg['horizon'] = trajectory.shape[0]
+            env, mpm_env, init_state = make_env(env_cfg, loss_cfg_eval, cam_cfg=cam_cfg, debug_grad=False)
+            set_parameters(mpm_env, material_id=SAND, e=E.copy(), nu=nu.copy(), rho=rho.copy(),
+                           sand_friction_angle=sand_angle.copy(),
+                           manipulator_friction=0.5, container_friction=0.5)
+
+            """forward pass"""
+            mpm_env.set_state(init_state['state'], grad_enabled=True)
+            if args['eval']:
+                mpm_env.render('human')
+            for i in range(mpm_env.horizon):
+                mpm_env.step(trajectory[i])
+                if args['eval']:
+                    mpm_env.render('human')
+            loss_info_eval = mpm_env.get_final_loss()
+
+            print(f'===========> Epoch: {n} evaluation losses')
+            print('=====> EMD Loss:', loss_info_eval['emd_loss'])
+            print('=====> Height map loss:', loss_info_eval['height_map_loss'])
+
+            for loss_name in loss_names:
+                logger.add_scalar(tag=f'Evaluation Loss/{loss_name}', scalar_value=loss_info_eval[loss_name], global_step=n)
 
             mpm_env.simulator.clear_ckpt()
 
@@ -352,21 +358,14 @@ def main(args):
             else:
                 print(f'===========> Epoch: {n} optimisation losses')
                 print('=====> EMD Loss:', loss_info['emd_loss'])
-                print('=====> EMD Loss eval:', loss_info['emd_loss_eval'])
                 print('=====> Height map loss:', loss_info['height_map_loss'])
-                print('=====> Height map eval loss:', loss_info['height_map_loss_eval'])
-                # logging.info(f'===========> Epoch: {n} optimisation losses')
-                # logging.info('=====> EMD Loss:', loss_info['emd_loss'])
-                # logging.info('=====> EMD Loss eval:', loss_info['emd_loss_eval'])
-                # logging.info('=====> Height map loss:', loss_info['height_map_loss'])
-                # logging.info('=====> Height map eval loss:', loss_info['height_map_loss_eval'])
 
                 for loss_name in loss_names:
                     logger.add_scalar(tag=f'Loss/{loss_name}', scalar_value=loss_info[loss_name], global_step=n)
 
                 if args['line_search']:
                     print(f'===========> Performing line search for epoch {n}......')
-                    # logging.info(f'===========> Performing line search for epoch {n}......')
+                    loss_to_optimise = 'height_map_loss' if args['use_height_map_loss'] else 'emd_loss'
                     best_loss_tmp = +np.inf
                     best_alpha = 1.0
                     best_loss_info = loss_info
@@ -400,17 +399,10 @@ def main(args):
                             mpm_env.step(trajectory[i])
                         loss_info = mpm_env.get_final_loss()
                         print(f'=====> alpha: {alpha}')
-                        # logging.info(f'=====> alpha: {alpha}')
                         print('==> EMD Loss:', loss_info['emd_loss'])
-                        print('==> EMD Loss eval:', loss_info['emd_loss_eval'])
                         print('==> Height map loss:', loss_info['height_map_loss'])
-                        print('==> Height map eval loss:', loss_info['height_map_loss_eval'])
-                        # logging.info('==> EMD Loss:', loss_info['emd_loss'])
-                        # logging.info('==> EMD Loss eval:', loss_info['emd_loss_eval'])
-                        # logging.info('==> Height map loss:', loss_info['height_map_loss'])
-                        # logging.info('==> Height map eval loss:', loss_info['height_map_loss_eval'])
-                        if loss_info['height_map_loss'] < best_loss_tmp:
-                            best_loss_tmp = loss_info['height_map_loss']
+                        if loss_info[loss_to_optimise] < best_loss_tmp:
+                            best_loss_tmp = loss_info[loss_to_optimise]
                             best_alpha = alpha
                             best_loss_info = loss_info
 
@@ -440,10 +432,6 @@ def main(args):
                 print(f'==> Param: E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}')
                 print(f'==> Grad: {grad}')
                 print(f"==> Num. aborted data so far: {n_aborted_data}")
-                # logging.info(f'==> Best alpha: {best_alpha}, Best loss info: {best_loss_info}')
-                # logging.info(f'==> Param: E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}')
-                # logging.info(f'===> Grad: {grad}')
-                # logging.info(f"==> Num. aborted data so far: {n_aborted_data}")
 
                 logger.add_scalar(tag='Param/E', scalar_value=E, global_step=n)
                 logger.add_scalar(tag='Grad/E', scalar_value=grad[0], global_step=n)
