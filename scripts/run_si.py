@@ -34,10 +34,6 @@ cam_cfg = {
 def main(args):
     d_str = args['ptcl_density']
     case = f'd{d_str}'
-    if args['soft_contact']:
-        case += '-soft'
-    if args['toi_contact']:
-        case += '-toi'
     if args['use_height_map_loss']:
         case += '-hm'
 
@@ -68,7 +64,6 @@ def main(args):
     else:
         backend = ti.cpu
 
-    motion_id = 0
     dt_global = 0.01
     trajectory = np.load(os.path.join(script_path, '..', 'data',
                                       'moveit_trajectories', f'sys_id_sim_0_pos-dt_{dt_global}.npy'))
@@ -84,12 +79,6 @@ def main(args):
         'agent_init_pos': (0.2, 0.2, 0.205),
         'agent_init_euler': (0, 180, 90),
     }
-    if args['soft_contact']:
-        assert not args['toi_contact']
-        env_cfg['collide_type'] = 'soft'
-    elif args['toi_contact']:
-        assert not args['soft_contact']
-        env_cfg['collide_type'] = 'toi'
 
     if args['grad_norm']:
         env_cfg['grad_op'] = 'normalize'
@@ -217,7 +206,6 @@ def main(args):
             last_loss = loss_info_validation['height_map_loss']
             if sum(five_loss_improvements) == 3:
                 print(f'=========> [Info] Early stopping at epoch {n} due to no loss improvement in five epochs')
-                # logging.info(f'=========> [Info] Early stopping at epoch {n} due to no loss improvement in five epochs')
                 break
 
             if args['eval']:
@@ -348,12 +336,6 @@ def main(args):
                 print(f'===> [Warning] E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}')
                 print(f'===> [Warning] Grad: {grad}')
                 print(f'===> [Warning] Loss info: {loss_info}')
-                # logging.error(f'===> [Warning] Aborting epoch: {n}')
-                # logging.error(f'===> [Warning] Particle has nan or inf: {particle_has_naninf}')
-                # logging.error(f'===> [Warning] Strange loss or gradient.')
-                # logging.error(f'===> [Warning] E: {E}, nu: {nu}, rho: {rho}, sand_angle: {sand_angle}')
-                # logging.error(f'===> [Warning] Grad: {grad}')
-                # logging.error(f'===> [Warning] Loss info: {loss_info}')
                 n_aborted_data += 1
             else:
                 print(f'===========> Epoch: {n} optimisation losses')
@@ -365,7 +347,7 @@ def main(args):
 
                 if args['line_search']:
                     print(f'===========> Performing line search for epoch {n}......')
-                    loss_to_optimise = 'height_map_loss' if args['use_height_map_loss'] else 'emd_loss'
+                    loss_to_optimise = 'height_map_loss'
                     best_loss_tmp = +np.inf
                     best_alpha = 1.0
                     best_loss_info = loss_info
@@ -398,6 +380,7 @@ def main(args):
                         for i in range(mpm_env.horizon):
                             mpm_env.step(trajectory[i])
                         loss_info = mpm_env.get_final_loss()
+
                         print(f'=====> alpha: {alpha}')
                         print('==> EMD Loss:', loss_info['emd_loss'])
                         print('==> Height map loss:', loss_info['height_map_loss'])
@@ -453,13 +436,6 @@ def main(args):
               f"{end_time.hour}:{end_time.minute}:{end_time.second}")
         print(f"===> Total time taken: {time() - start_time_sec} seconds")
         print(f"===> Number of aborted data: {n_aborted_data}")
-        # logging.info('===========> Finished training.')
-        # logging.info('====> Final validation loss: ', loss_info_validation)
-        # logging.info(f'====> Final params: E {E}, nu {nu}, rho {rho}, sand_angle {sand_angle}')
-        # logging.info(f"===> End grad computation at:, {end_time.year}-{end_time.month}-{end_time.day} "
-        #              f"{end_time.hour}:{end_time.minute}:{end_time.second}")
-        # logging.info(f"===> Total time taken: {time() - start_time_sec} seconds")
-        # logging.info(f"===> Number of aborted data: {n_aborted_data}")
 
         np.save(os.path.join(log_dir, 'final_params.npy'),
                 np.array([E, nu, rho, sand_angle], dtype=DTYPE_NP))
@@ -470,8 +446,6 @@ if __name__ == '__main__':
     parser.add_argument('--seed', dest='seed', type=int, default=-1, help='Random seed')
     parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default='5e6', help='Particle density, use scientific notation like \'5e6\'.')
     parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False, help='Use height map loss')
-    parser.add_argument('--soft-contact', dest='soft_contact', action='store_true', default=False, help='Use soft contact')
-    parser.add_argument('--toi-contact', dest='toi_contact', action='store_true', default=False, help='Use time-of-impact contact')
     parser.add_argument('--grad-clip', dest='grad_clip', action='store_true', default=False, help='Use gradient clipping')
     parser.add_argument('--grad-norm', dest='grad_norm', action='store_true', default=False, help='Use gradient normalisation')
     parser.add_argument('--grad-dy-scale', dest='grad_dy_scale', action='store_true', default=False, help='Use gradient dynamic scaling')
