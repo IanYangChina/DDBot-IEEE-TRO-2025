@@ -2,9 +2,22 @@ import os
 import json
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 from tensorflow.python.summary.summary_iterator import summary_iterator
+from drl_implementation.agent.utils import plot as plot
 script_path = os.path.dirname(os.path.realpath(__file__))
 script_path = os.path.join(script_path, '..')
+fig_path = os.path.join(script_path, '..', 'figs')
+os.makedirs(fig_path, exist_ok=True)
+
+colour_pool = ['#dbc6e0', '#d9e8f4', '#fee281', '#c8d9a6', '#dd6e60', '#80a5d0', '#f7e1bd']
+plt.rcParams['pdf.fonttype'] = 42
+plt.rcParams['ps.fonttype'] = 42
+plt.rcParams['font.family'] = 'serif'
+plt.rcParams["mathtext.fontset"] = "stix"
+plt.rcParams['font.serif'] = ['Times New Roman'] + plt.rcParams['font.serif']
+plt.rcParams["font.weight"] = "normal"
+
 
 def read_and_save_data(substep=False):
     d = "5e6"
@@ -135,4 +148,30 @@ def read_and_save_data(substep=False):
 
                 json.dump(data_dict, open(os.path.join(seed_folder, 'raw_data.json'), 'w'))
 
-read_and_save_data()
+
+def plot_grads(data=('action', '0_max')):
+    save_dir = os.path.join(fig_path, 'grads')
+    os.makedirs(save_dir, exist_ok=True)
+    d = "5e6"
+    for res in ['10', '20', '30', '40', '50', '60']:
+        # one fig each res
+        grad_datas = []
+        for grad_op in ['gnone', 'gclip', 'gdys', 'gnorm']:
+            case_folder = os.path.join(script_path, '..', 'log-grad-analysis', f'd{d}-{grad_op}-res{res}')
+            grad_data = []
+            for seed in range(5):
+                seed_folder = os.path.join(case_folder, f'seed-{seed}')
+                data_dict = json.load(open(os.path.join(seed_folder, 'raw_data.json'), 'r'))
+                grad_data.append(data_dict[data[0]][data[1]])
+            grad_data = np.log(np.abs(np.mean(grad_data, axis=0)))
+            grad_data = np.nan_to_num(grad_data, nan=100, neginf=-100, posinf=100)
+            grad_datas.append(grad_data)
+
+        file_name = os.path.join(save_dir, f'{data[0]}-{data[1]}-res{res}.pdf')
+        plot.smoothed_plot_multi_line(file_name, grad_datas, colour_pool[:4],
+                                      legend=['None', 'Clip', 'D-scale', 'Norm'],
+                                      x_label='Global timestep (reverse)', y_label='Gradient (log-scale)')
+
+
+# read_and_save_data()
+plot_grads(('action', '1_min'))
