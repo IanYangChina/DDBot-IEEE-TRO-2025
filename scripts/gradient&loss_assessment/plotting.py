@@ -3,8 +3,9 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+from matplotlib.lines import Line2D
 from tensorflow.python.summary.summary_iterator import summary_iterator
-# from drl_implementation.agent.utils import plot as plot
+from drl_implementation.agent.utils import plot as plot
 script_path = os.path.dirname(os.path.realpath(__file__))
 script_path = os.path.join(script_path, '..')
 fig_path = os.path.join(script_path, '..', 'figs')
@@ -299,5 +300,19 @@ def plot_grads():
         plt.savefig(file_name, format='pdf', bbox_inches='tight', pad_inches=0.01, dpi=300)
 
 
+def plot_legends():
+    legends = ['No operation', 'Clipping', 'Dynamic scaling', 'Normalization']
+    plt.rcParams.update({'font.size': 40})
+    handles = [Line2D([0], [0], color=colour_pool[i], linewidth=15) for i in range(len(legends))]
+    legend_plot = plt.legend(handles, legends, handlelength=2,
+                                 title=None, loc="upper right", labelspacing=0.15,
+                                 bbox_to_anchor=(1.6, 1.7), ncol=4, frameon=False)
+    fig = legend_plot.figure
+    fig.canvas.draw()
+    bbox = legend_plot.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
+    fig.savefig(os.path.join(fig_path, 'grads', 'legend.pdf'), dpi=500, bbox_inches=bbox)
+    plt.close()
+
+
 # read_and_save_data()
-plot_grads()
+plot_legends()
