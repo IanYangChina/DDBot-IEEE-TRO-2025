@@ -97,11 +97,11 @@ def main(args):
         'height_grid_res': args["res"],
     }
     loss_cfg_eval = dcp(loss_cfg)
-    loss_cfg_eval['height_grid_res'] = 60
+    # loss_cfg_eval['height_grid_res'] = 60
     loss_cfg_valid = dcp(loss_cfg)
     loss_cfg_valid['target_pcd_path'] = os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
                                                         f'pcd_1_cropped_norm_z_aligned.ply')
-    loss_cfg_valid['height_grid_res'] = 60
+    # loss_cfg_valid['height_grid_res'] = 60
 
     E_range = (5e4, 2e5)
     rho_range = (1200, 2200)
