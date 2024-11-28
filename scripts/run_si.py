@@ -166,8 +166,6 @@ def main(args):
         n_aborted_data = 0
         loss_names = ['height_map_loss', 'emd_loss']
         loss_info_validation = {}
-        last_loss = 1000000
-        five_loss_improvements = []
         for n in range(n_epoch):
             """======================================Validation"""
             ti.reset()
@@ -194,19 +192,6 @@ def main(args):
             print('=====> Height map loss:', loss_info_validation['height_map_loss'])
             for loss_name in loss_names:
                 logger.add_scalar(tag=f'Validation Loss/{loss_name}', scalar_value=loss_info_validation[loss_name], global_step=n)
-
-            is_improved = (loss_info_validation['height_map_loss'] > last_loss)
-            if is_improved:
-                five_loss_improvements.append(0)
-            else:
-                five_loss_improvements.append(1)
-            if len(five_loss_improvements) > 3:
-                five_loss_improvements.pop(0)
-
-            last_loss = loss_info_validation['height_map_loss']
-            if sum(five_loss_improvements) == 3:
-                print(f'=========> [Info] Early stopping at epoch {n} due to no loss improvement in five epochs')
-                break
 
             if args['eval']:
                 print(mpm_env.loss.height_map.shape)

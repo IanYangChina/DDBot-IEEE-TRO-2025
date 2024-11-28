@@ -5,18 +5,22 @@ import matplotlib.pyplot as plt
 from tensorflow.python.summary.summary_iterator import summary_iterator
 script_path = os.path.dirname(os.path.realpath(__file__))
 script_path = os.path.join(script_path, '..')
+colour_pool = ['#dbc6e0', '#d9e8f4', '#fee281', '#c8d9a6', '#dd6e60', '#80a5d0', '#f7e1bd']
+plt.rcParams['pdf.fonttype'] = 42
+plt.rcParams['ps.fonttype'] = 42
+plt.rcParams['font.family'] = 'serif'
+plt.rcParams["mathtext.fontset"] = "stix"
+plt.rcParams['font.serif'] = ['Times New Roman'] + plt.rcParams['font.serif']
+plt.rcParams["font.weight"] = "normal"
 
 
-def find_best_parameters(hm=False, soft=False,
-                         grad_norm=False, grad_dy_scale=False, grad_clip=False,
-                         line_search=False,
+def find_best_parameters(hm=False, grad_norm=False, grad_dy_scale=False, grad_clip=False,
+                         line_search=False, man_init=False,
                          resolutions=[10, 20, 30, 40, 50, 60]):
     """generate mean and deviation data from tensorboard logs"""
     best_params = {"5e6": None}
     for d in ["5e6"]:
         case = f'd{d}'
-        if soft:
-            case += '-soft'
         if hm:
             case += '-hm'
 
@@ -31,6 +35,8 @@ def find_best_parameters(hm=False, soft=False,
 
         if line_search:
             case += '-ls'
+        if man_init:
+            case += '-man-init'
 
         for res in resolutions:
             case_folder = os.path.join(script_path, '..', 'log-sys_id', case+f'-res{res}')
@@ -38,6 +44,10 @@ def find_best_parameters(hm=False, soft=False,
                 folder = os.path.join(case_folder, f'seed-{seed}')
                 data_dict = {
                     'Loss': {
+                        'emd_loss': [],
+                        'height_map_loss': [],
+                    },
+                    'Validation Loss': {
                         'emd_loss': [],
                         'height_map_loss': [],
                     },
@@ -60,6 +70,11 @@ def find_best_parameters(hm=False, soft=False,
                                         data_dict['Loss']['height_map_loss'].append(v.simple_value)
                                     else:
                                         pass
+                                elif v.tag[:16] == 'Validation Loss/':
+                                    if v.tag[16:] == 'emd_loss':
+                                        data_dict['Validation Loss']['emd_loss'].append(v.simple_value)
+                                    elif v.tag[16:] == 'height_map_loss':
+                                        data_dict['Validation Loss']['height_map_loss'].append(v.simple_value)
                                 elif v.tag[:6] == 'Param/':
                                     if v.tag[6:] == 'E':
                                         data_dict['Parameters']['E'].append(v.simple_value)
@@ -75,12 +90,16 @@ def find_best_parameters(hm=False, soft=False,
                                     pass
 
                 json.dump(data_dict, open(os.path.join(folder, 'raw_data.json'), 'w'))
-                min_heightmap_id = np.argmin(data_dict['Loss']['height_map_loss'])
+                min_heightmap_id = np.argmin(data_dict['Validation Loss']['height_map_loss']) - 1
                 json.dump({
                     'Step': float(min_heightmap_id),
                     'Loss': {
                         'emd_loss': data_dict['Loss']['emd_loss'][min_heightmap_id],
                         'height_map_loss': data_dict['Loss']['height_map_loss'][min_heightmap_id],
+                    },
+                    'Validation Loss': {
+                        'emd_loss': data_dict['Validation Loss']['emd_loss'][min_heightmap_id],
+                        'height_map_loss': data_dict['Validation Loss']['height_map_loss'][min_heightmap_id],
                     },
                     'Parameters': {
                         'E': data_dict['Parameters']['E'][min_heightmap_id],
@@ -141,9 +160,48 @@ def find_best_parameters(hm=False, soft=False,
             # open(os.path.join(script_path, '..', 'log-sys_id'+folder_suffix, f'{case}-best_params.json'), 'w').write(json.dumps(best_params))
 
 
-# find_best_parameters(soft=True, hm=True)
-# find_best_parameters(soft=True)
+# find_best_parameters(grad_clip=True, line_search=False, resolutions=[10, 20, 30, 40, 50, 60])
+# find_best_parameters(grad_clip=True, line_search=False, hm=True, resolutions=[10, 20, 30, 40, 50, 60])
+# find_best_parameters(grad_clip=True, line_search=True, resolutions=[10, 20, 30, 40, 50, 60])
+# find_best_parameters(grad_clip=True, line_search=True, hm=True, resolutions=[10, 20, 30, 40, 50, 60])
+# find_best_parameters(grad_clip=True, line_search=True, man_init=True,
+#                      resolutions=[10, 20, 30, 40, 50, 60])
+# find_best_parameters(grad_clip=True, line_search=True, hm=True, man_init=True,
+#                      resolutions=[10, 20, 30, 40, 50, 60])
 # exit()
+
+
+def plot_scatter():
+    x = np.arange(6*6)
+    cases = ['gclip', 'gclip-ls', 'hm-gclip', 'hm-gclip-ls',
+             'gclip-ls-man-init', 'hm-gclip-ls-man-init']
+    x_labels = []
+    for case_id in range(len(cases)):
+        y = []
+        y_std = []
+        case = cases[case_id]
+        for res in [10, 20, 30, 40, 50, 60]:
+            case_folder = os.path.join(script_path, '..', 'log-sys_id', f'd5e6-{case}-res{res}')
+            best_loss = []
+            for seed in range(5):
+                folder = os.path.join(case_folder, f'seed-{seed}')
+                with open(os.path.join(folder, 'best_heightmap_loss.json')) as f:
+                    data = json.load(f)
+                    best_loss.append(data['Validation Loss']['height_map_loss'])
+            y.append(np.mean(best_loss))
+            y_std.append(np.std(best_loss))
+            x_labels.append(f'{case}-{res}')
+        plt.errorbar(x[case_id*6:(case_id+1)*6], y, label=case, color=colour_pool[case_id], yerr=y_std, fmt='o')
+    plt.legend()
+    plt.xticks(x, x_labels)
+    plt.xticks(rotation=70)
+    plt.xlabel('Case-Resolution')
+    plt.ylabel('Best validation heightmap loss')
+    plt.tight_layout()
+    plt.show()
+
+
+plot_scatter()
 
 
 def find_best_skill_parameters(ins=False, hm=False, main_folder_suffix='', lr='',
@@ -350,6 +408,3 @@ def show_heightmaps(param='ER'):
             plt.close()
 
 
-find_best_parameters(grad_clip=True, line_search=False, resolutions=[10, 20, 30, 40, 50, 60])
-find_best_parameters(grad_clip=True, line_search=False, hm=True, resolutions=[10, 20, 30, 40, 50, 60])
-find_best_parameters(grad_clip=True, line_search=True, resolutions=[10, 20, 30, 40, 50, 60])
