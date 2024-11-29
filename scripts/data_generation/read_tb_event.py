@@ -2,6 +2,7 @@ import os
 import json
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 from tensorflow.python.summary.summary_iterator import summary_iterator
 script_path = os.path.dirname(os.path.realpath(__file__))
 script_path = os.path.join(script_path, '..')
@@ -141,7 +142,7 @@ def find_best_parameters(hm=False, grad_norm=False, grad_dy_scale=False, grad_cl
 
 
 def plot_scatter():
-    plt.figure(figsize=(3.5, 5))
+    plt.figure(figsize=(3.5, 4))
     cases = ['gclip', 'gclip-ls', 'gnorm-ls', 'gdys-ls', 'hm-gclip', 'hm-gclip-ls',
              'gclip-ls-man-init', 'hm-gclip-ls-man-init']
     casenames = ['ClipGrad', 'ClipGrad-LS', 'NormGrad-LS', 'DyScaleGrad\n-LS', 'ClipGrad-HM', 'ClipGrad\n-LS-HM',
@@ -177,27 +178,30 @@ def plot_scatter():
     plt.xticks([0.024, 0.025, 0.026, 0.027, 0.028, 0.029, 0.030], rotation=60)
     plt.yticks(np.arange(len(cases)), casenames)
     plt.xlabel('Best validation loss across 5 seeds')
-    plt.savefig(os.path.join(script_path, '..', 'figs', 'sys_id.pdf'), dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(script_path, '..', 'figs', 'sys_id.pdf'),
+                dpi=300, bbox_inches='tight', pad_inches=0.05)
 
 
-# plot_scatter()
+plot_scatter()
 
 
 def plot_loss_curve():
-    plt.figure(figsize=(5, 5))
-    cases = [#'gclip',
+    plt.rcParams.update({'font.size': 11})
+    fig, ax = plt.subplots(1, 8, figsize=(16, 2))
+    plt.subplots_adjust(wspace=0, hspace=0.1)
+    cases = ['gclip',
              'gclip-ls',
-             #'gnorm-ls',
-             #'gdys-ls',
+             'gnorm-ls',
+             'gdys-ls',
              'hm-gclip', 'hm-gclip-ls',
              'gclip-ls-man-init', 'hm-gclip-ls-man-init'
              ]
-    casenames = [#'ClipGrad',
+    casenames = ['ClipGrad',
                  'ClipGrad-LS',
-                 #'NormGrad-LS',
-                 #'DyScaleGrad-LS',
+                 'NormGrad-LS',
+                 'DyScaleGrad-LS',
                  'ClipGrad-HM', 'ClipGrad-LS-HM',
-                 'ClipGrad-LS-ManInit', 'ClipGrad-LS-HM-ManInit'
+                 'ClipGrad-LS\n-ManInit', 'ClipGrad-LS-HM\n-ManInit'
                  ]
     window = 2
     for case_id in range(len(cases)):
@@ -219,19 +223,48 @@ def plot_loss_curve():
             running_avg = np.empty(mean_loss.shape[0])
             for n in range(mean_loss.shape[0]):
                 running_avg[n] = np.mean(mean_loss[max(0, n - window):(n + 1)])
-            plt.plot(running_avg, label=casenames[case_id], color=colour_pool[case_id], linewidth=2)
+            xs = np.arange(len(running_avg))
+            ax[case_id].plot(xs, running_avg, label=casenames[case_id], color=colour_pool[case_id], linewidth=2)
             for l in losses:
                 running_avg_l = np.empty(l.shape[0])
                 for n in range(l.shape[0]):
                     running_avg_l[n] = np.mean(l[max(0, n - window):(n + 1)])
-                plt.plot(running_avg_l, color=colour_pool[case_id], linestyle='--', linewidth=1)
-    plt.legend()
-    plt.grid(True)
-    plt.xticks([0, 4, 9, 14, 19], ['1', '5', '10', '15', '20'])
-    plt.xlabel('Epoch')
-    plt.ylabel('Validation loss')
-    plt.tight_layout()
-    plt.show()
+                ax[case_id].plot(xs, running_avg_l, color=colour_pool[case_id], linestyle='--', linewidth=1)
+
+            ax[case_id].set_ylim([0.0235, 0.033])
+            ax[case_id].set_xlim([-2, 22])
+            ax[case_id].set_xticks([0, 4, 9, 14, 19])
+            ax[case_id].set_xticklabels(['1', '5', '10', '15', '20'])
+            ax[case_id].grid(True)
+            if case_id == 0:
+                ax[case_id].set_ylabel('Validation loss')
+                ax[case_id].spines[['right']].set_visible(False)
+            elif case_id == len(cases) - 1:
+                for tick in ax[case_id].yaxis.get_major_ticks():
+                    tick.tick1line.set_visible(False)
+                    tick.tick2line.set_visible(False)
+                    tick.label1.set_visible(False)
+                    tick.label2.set_visible(False)
+            else:
+                ax[case_id].spines[['right']].set_visible(False)
+                for tick in ax[case_id].yaxis.get_major_ticks():
+                    tick.tick1line.set_visible(False)
+                    tick.tick2line.set_visible(False)
+                    tick.label1.set_visible(False)
+                    tick.label2.set_visible(False)
+            ax[case_id].set_xlabel('Epoch')
+
+            handle = Line2D([0], [0], color=colour_pool[case_id], linewidth=5)
+            if case_id < 6:
+                ax[case_id].legend([handle], [casenames[case_id]], loc='upper left', fontsize=10, bbox_to_anchor=(-0.04, 1.23),
+                                   handlelength=0.1, frameon=False)
+            else:
+                ax[case_id].legend([handle], [casenames[case_id]], loc='upper left', fontsize=10,
+                                   bbox_to_anchor=(-0.04, 1.28),
+                                   handlelength=0.1, frameon=False)
+
+    plt.savefig(os.path.join(script_path, '..', 'figs', 'sys_id_loss_curve.pdf'),
+                dpi=300, bbox_inches='tight', pad_inches=0.05)
 
 
 plot_loss_curve()
