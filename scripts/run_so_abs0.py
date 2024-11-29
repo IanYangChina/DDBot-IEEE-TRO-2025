@@ -35,7 +35,10 @@ DT_GLOBAL = 0.01  # sec
 
 def main(args):
     seed = args['seed']
-    # np_rng = np.random.default_rng(seed=seed)
+    if seed == -1:
+        seeds = [0, 1, 2, 3, 4]
+    else:
+        seeds = [seed]
     task_id = args['task_id']
     ptcl_d = arguments['ptcl_density']
     subfix = ''
@@ -43,23 +46,11 @@ def main(args):
         subfix += '-hm'
     if args['demon']:
         subfix += '-demo'
-    if args['mini_batch']:
-        subfix += '-batch'
+    learning_rate = args['lr']
+    subfix += f'-lr{learning_rate}'
 
-    log_dir = os.path.join(script_path, '..', 'log-abs0-adam', f'd{ptcl_d}-task-{task_id}{subfix}', f'seed-{seed}')
-    os.makedirs(log_dir, exist_ok=True)
-    os.makedirs(os.path.join(log_dir, 'ckpts'), exist_ok=True)
-
-    if not args['eval'] and not args['eval_specific']:
-        log_file_name = os.path.join(log_dir, 'optimisation.log')
-        if os.path.isfile(log_file_name):
-            filemode = "a"
-        else:
-            filemode = "w"
-        logging.basicConfig(level=logging.NOTSET, filemode=filemode,
-                            filename=log_file_name,
-                            format="%(asctime)s %(levelname)s %(message)s")
-        logger = SummaryWriter(log_dir=log_dir)
+    case = f'd{ptcl_d}-task-{task_id}{subfix}'
+    result_path = os.path.join(script_path, '..', 'log-abs0')
 
     if args['backend'] == 'opengl':
         backend = ti.opengl
@@ -71,8 +62,8 @@ def main(args):
         backend = ti.cpu
 
     horizon = 300
-    with open(os.path.join(script_path, '..', 'log-sys_id', 'best_params.json')) as f:
-        best_params = json.load(f)[arguments['ptcl_density']]["Parameters"]
+    with open(os.path.join(script_path, '..', 'log-sys_id', f'd{ptcl_d}-hm-gclip-ls-res40', 'best_params.json')) as f:
+        best_params = json.load(f)["Parameters"]
 
     env_cfg = {
         'p_density': float(args['ptcl_density']),
@@ -83,13 +74,14 @@ def main(args):
         'n_substeps': 20,
         'agent_init_pos': (0.2, 0.2, 0.205),
         'agent_init_euler': (0, 180, 90),
+        'grad_op': 'clip'
     }
     loss_cfg = {
         'use_height_map_loss': args['use_height_map_loss'],
         'target_pcd_path': os.path.join(script_path, '..', 'data', 'task_target_pcds',
                                         f'pcd_{task_id}_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
-        'down_sample_voxel_size': 0.007,
+        'height_grid_res': 40,
     }
 
     def abstraction_two_skill(skill_params, dt):
@@ -147,42 +139,46 @@ def main(args):
 
         return trajectory[:n_step + n_step_insert + n_step_push + n_step_return, :]
 
-    trajectory_np = np.zeros((horizon, 6), dtype=DTYPE_NP)
-    if args['eval']:
-        with open(os.path.join(script_path, '..', 'log-abs0-adam',
-                               f'best_tr-task-{task_id}{subfix}.json')) as f:
-            trajectory_np = json.load(f)[ptcl_d]["Trajectory"]
-        if args['view_demon']:
-            trajectory_demon = abstraction_two_skill(np.asarray([1.0, 0.45, 0.8, 0.0, -0.1], dtype=DTYPE_NP), DT_GLOBAL)
-            trajectory_length = trajectory_demon.shape[0]
-            trajectory_np[:trajectory_length] = trajectory_demon[:trajectory_length]
-        print("===> Loaded trajectory.")
-    elif args['eval_specific']:
-        seed = 0
-        epoch = 46
-        trajectory_np = np.load(os.path.join(script_path, '..', 'log-abs0-adam', f'd{ptcl_d}-task-{task_id}{subfix}',
-                                             f'seed-{seed}', 'ckpts', f'trajectory_{epoch}.npy'))
-    else:
-        if args['demon']:
-            trajectory_demon = abstraction_two_skill(np.asarray([1.0, 0.45, 0.8, 0.0, -0.1], dtype=DTYPE_NP), DT_GLOBAL)
-            trajectory_length = trajectory_demon.shape[0]
-            trajectory_np[:trajectory_length] = trajectory_demon[:trajectory_length]
+    for seed in seeds:
+        log_dir = os.path.join(result_path, case, f'seed-{seed}')
+        os.makedirs(log_dir, exist_ok=True)
+        os.makedirs(os.path.join(log_dir, 'ckpts'), exist_ok=True)
 
-    n_epoch = 150
-    n_aborted_data = 0
-    emd_loss = 0.0
-    height_map_loss = 0.0
-    tr_optim = RMSprop(parameters_shape=trajectory_np.shape, cfg={'lr': 0.0005, 'beta': 0.9})
-
-    for n in range(n_epoch):
-        grads = []
-        emd_losses = []
-        height_map_losses = []
-        if args['mini_batch']:
-            n_inner_epoch = 3
+        if not args['eval'] and not args['eval_specific']:
+            log_file_name = os.path.join(log_dir, 'optimisation.log')
+            if os.path.isfile(log_file_name):
+                filemode = "a"
+            else:
+                filemode = "w"
+            logging.basicConfig(level=logging.NOTSET, filemode=filemode,
+                                filename=log_file_name,
+                                format="%(asctime)s %(levelname)s %(message)s")
+            logger = SummaryWriter(log_dir=log_dir)
+        trajectory_np = np.zeros((horizon, 6), dtype=DTYPE_NP)
+        if args['eval']:
+            with open(os.path.join(result_path, f'best_tr-task-{task_id}{subfix}.json')) as f:
+                trajectory_np = json.load(f)[ptcl_d]["Trajectory"]
+            if args['view_demon']:
+                trajectory_demon = abstraction_two_skill(np.asarray([1.0, 0.45, 0.8, 0.0, -0.1], dtype=DTYPE_NP), DT_GLOBAL)
+                trajectory_length = trajectory_demon.shape[0]
+                trajectory_np[:trajectory_length] = trajectory_demon[:trajectory_length]
+            print("===> Loaded trajectory.")
+        elif args['eval_specific']:
+            seed = 0
+            epoch = 46
+            trajectory_np = np.load(os.path.join(result_path, case, f'seed-{seed}', 'ckpts', f'trajectory_{epoch}.npy'))
         else:
-            n_inner_epoch = 1
-        for k in range(n_inner_epoch):
+            if args['demon']:
+                trajectory_demon = abstraction_two_skill(np.asarray([1.0, 0.45, 0.8, 0.0, -0.1], dtype=DTYPE_NP), DT_GLOBAL)
+                trajectory_length = trajectory_demon.shape[0]
+                trajectory_np[:trajectory_length] = trajectory_demon[:trajectory_length]
+
+        n_epoch = 50
+        n_aborted_data = 0
+        tr_optim = RMSprop(parameters_shape=trajectory_np.shape,
+                           cfg={'lr': learning_rate, 'beta': 0.9})
+
+        for n in range(n_epoch):
             ti.reset()
             ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=DTYPE_TI,
                     fast_math=True, random_seed=args['seed'])
@@ -205,6 +201,8 @@ def main(args):
                 if args['eval'] or args['eval_specific']:
                     mpm_env.render(mode='human')
             loss_info = mpm_env.get_final_loss()
+            logger.add_scalar(tag='loss/EMD', scalar_value=loss_info["emd_loss"], global_step=n)
+            logger.add_scalar(tag='loss/Heightmap', scalar_value=loss_info['height_map_loss'], global_step=n)
 
             if args['eval'] or args['eval_specific']:
                 print('===> Loss info:', loss_info)
@@ -275,62 +273,111 @@ def main(args):
                 logging.error(f'===> [Warning] Trajectory grad mean: {trajectory_grads_np.mean()}')
                 logging.error(f'===> [Warning] Loss info: {loss_info}')
                 n_aborted_data += 1
-                grads.append(np.ones_like(trajectory_grads_np)*1e-6)
             else:
-                grads.append(trajectory_grads_np)
-                emd_losses.append(loss_info['emd_loss'])
-                height_map_losses.append(loss_info['height_map_loss'])
+                print(f'=====> Epoch: {n}')
+                print(f'=====> EMD Loss: %f' % loss_info["emd_loss"])
+                print(f'=====> Height map loss: %f' % loss_info['height_map_loss'])
+                print(f"=====> Num. aborted data so far: {n_aborted_data}")
+                logging.info(f'=====> Epoch: {n}')
+                logging.info(f'=====> EMD Loss: %f' % loss_info["emd_loss"])
+                logging.info(f'=====> Height map loss:  %f' % loss_info['height_map_loss'])
+                logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
 
-            mpm_env.simulator.clear_ckpt()
+                mpm_env.simulator.clear_ckpt()
 
-        grad = np.mean(grads, axis=0)
-        emd_loss = np.mean(emd_losses)
-        height_map_loss = np.mean(height_map_losses)
+                if args['line_search']:
+                    print(f'===========> Performing line search for epoch {n}......')
+                    loss_to_optimise = 'height_map_loss'
+                    best_loss_tmp = +np.inf
+                    best_alpha = 1.0
+                    best_loss_info = loss_info
+                    for alpha in [0.1, 0.5, 1.0, 1.5, 2.0]:
+                        tr_optim.lr = learning_rate * alpha
+                        trajectory_tmp = tr_optim.step(trajectory_np, trajectory_grads_np[:trajectory_np.shape[0]])
 
-        trajectory_np = tr_optim.step(trajectory_np, grad[:trajectory_np.shape[0]])
-        trajectory_np[:, :3] = np.clip(trajectory_np[:, :3], -0.004, 0.004)
-        trajectory_np[:, 3:] = np.clip(trajectory_np[:, 3:], -0.0157, 0.0157)
+                        ti.reset()
+                        ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=DTYPE_TI,
+                                fast_math=True, random_seed=args['seed'])
 
-        np.save(os.path.join(log_dir, 'ckpts', f'grad_{n}.npy'), grad)
-        np.save(os.path.join(log_dir, 'ckpts', f'trajectory_{n}.npy'), trajectory_np)
-        print(f'=====> Epoch: {n}')
-        print(f'=====> EMD Loss: {emd_loss}')
-        print(f'=====> Height map loss: {height_map_loss}')
-        print(f'=====> Trajectory grad mean: {grad.mean()}')
-        print(f"=====> Num. aborted data so far: {n_aborted_data}")
-        logging.info(f'=====> Epoch: {n}')
-        logging.info(f'=====> EMD Loss: {emd_loss}')
-        logging.info(f'=====> Height map loss: {height_map_loss}')
-        logging.info(f'=====> Trajectory grad mean: {grad.mean()}')
-        logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
+                        env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
 
-        logger.add_scalar(tag='loss/EMD', scalar_value=emd_loss, global_step=n)
-        logger.add_scalar(tag='loss/Heightmap', scalar_value=height_map_loss, global_step=n)
+                        set_parameters(mpm_env, SAND,
+                                       e=best_params['E'],
+                                       nu=best_params['nu'],
+                                       rho=best_params['rho'],
+                                       sand_friction_angle=best_params['sand_angle'])
 
-    logger.close()
-    np.save(os.path.join(log_dir, 'final_trajectory.npy'), trajectory_np)
-    print('====> Finished training.')
-    print('====> Final EMD loss: ', emd_loss)
-    print('====> Final height map loss: ', height_map_loss)
-    logging.info('====> Finished training.')
-    logging.info(f'====> Final EMD loss: {emd_loss}')
-    logging.info(f'====> Final height map loss: {height_map_loss}')
+                        """forward pass"""
+                        mpm_env.set_state(init_state['state'], grad_enabled=True)
+                        for i in range(horizon):
+                            mpm_env.step(trajectory_tmp[i])
+                        loss_info = mpm_env.get_final_loss()
+
+                        print(f'=====> alpha: {alpha}')
+                        print(f'==> EMD Loss: %f' % loss_info["emd_loss"])
+                        print(f'==> Height map loss: %f' % loss_info['height_map_loss'])
+                        logging.info(f'==> EMD Loss: %f' % loss_info["emd_loss"])
+                        logging.info(f'==> Height map loss:  %f' % loss_info['height_map_loss'])
+                        if loss_info[loss_to_optimise] < best_loss_tmp:
+                            best_loss_tmp = loss_info[loss_to_optimise]
+                            best_alpha = alpha
+                            best_loss_info = loss_info
+
+                        tr_optim.reverse_normaliser()
+
+                    print(f'=====> Best alpha: {best_alpha}, Best loss info: {best_loss_info}')
+                    logging.info(f'=====> Best alpha: {best_alpha}, Best loss info: {best_loss_info}')
+                    tr_optim.lr = learning_rate * best_alpha
+                    logger.add_scalar(tag='Grad/best_alpha', scalar_value=best_alpha, global_step=n)
+
+                trajectory_np = tr_optim.step(trajectory_np, trajectory_grads_np[:trajectory_np.shape[0]])
+                trajectory_np = np.clip(trajectory_np, -0.004, 0.004)
+
+                np.save(os.path.join(log_dir, 'ckpts', f'grad_{n}.npy'), grad)
+                np.save(os.path.join(log_dir, 'ckpts', f'trajectory_{n}.npy'), trajectory_np)
+
+        ti.reset()
+        ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=DTYPE_TI,
+                fast_math=True, random_seed=args['seed'])
+
+        env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False, logger=logging)
+
+        set_parameters(mpm_env, SAND,
+                       e=best_params['E'],
+                       nu=best_params['nu'],
+                       rho=best_params['rho'],
+                       sand_friction_angle=best_params['sand_angle'])
+
+        """forward pass"""
+        mpm_env.set_state(init_state['state'], grad_enabled=True)
+        for i in range(horizon):
+            mpm_env.step(trajectory_np[i])
+        loss_info = mpm_env.get_final_loss()
+
+        logger.add_scalar(tag='loss/EMD', scalar_value=loss_info["emd_loss"], global_step=n_epoch)
+        logger.add_scalar(tag='loss/Heightmap', scalar_value=loss_info['height_map_loss'], global_step=n_epoch)
+        print('===========> Finished training.')
+        print('====> Final EMD loss: %f' % loss_info["emd_loss"])
+        print('====> Final height map loss: %f' % loss_info['height_map_loss'])
+        logging.info('===========> Finished training.')
+        logging.info(f'====> Final EMD loss: %f' % loss_info["emd_loss"])
+        logging.info(f'====> Final height map loss: %f' % loss_info['height_map_loss'])
+        logger.close()
+        np.save(os.path.join(log_dir, 'final_trajectory.npy'), trajectory_np)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Gradient-based trajectory optimisation")
     parser.add_argument('--seed', dest='seed', type=int, default=0, help='Random seed')
-    parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default="5e6",
-                        help='Particle density, use scientific notation like \'5e6\'.')
-    parser.add_argument('--backend', dest='backend', default='cuda', type=str,
-                        help='Computation backend: cuda, opengl, or cpu')
+    parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default="5e6", help='Particle density, use scientific notation like \'5e6\'.')
+    parser.add_argument('--backend', dest='backend', default='cuda', type=str, help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
     parser.add_argument('--task-id', dest='task_id', type=int, default=0, help='task id')
     parser.add_argument('--demon', dest='demon', action='store_true', default=False, help='Use demonstration')
-    parser.add_argument('--mini-batch', dest='mini_batch', action='store_true', default=False, help='Use mini-batch')
     parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False, help='Use height map loss')
     parser.add_argument('--eval', dest='eval', action='store_true', default=False, help='Evaluate the model')
     parser.add_argument('--eval-specific', dest='eval_specific', action='store_true', default=False, help='Evaluate the model with specific epoch')
     parser.add_argument('--view-demon', dest='view_demon', action='store_true', default=False, help='View demonstration')
+    parser.add_argument('--lr', dest='lr', type=float, default=0.001, help='Learning rate')
     arguments = vars(parser.parse_args())
     main(arguments)

@@ -40,6 +40,8 @@ def find_best_parameters(hm=False, grad_norm=False, grad_dy_scale=False, grad_cl
 
         for res in resolutions:
             case_folder = os.path.join(script_path, '..', 'log-sys_id', case+f'-res{res}')
+            best_loss = np.inf
+            best_loss_info = {}
             for seed in range(5):
                 folder = os.path.join(case_folder, f'seed-{seed}')
                 data_dict = {
@@ -109,66 +111,32 @@ def find_best_parameters(hm=False, grad_norm=False, grad_dy_scale=False, grad_cl
                     }},
                     open(os.path.join(folder, 'best_heightmap_loss.json'), 'w'))
 
-            #     min_emd_id = np.argmin(data_dict['Loss']['emd_loss'])
-            #     json.dump({
-            #         'Step': float(min_emd_id),
-            #         'Loss': {
-            #             'emd_loss': data_dict['Loss']['emd_loss'][min_emd_id],
-            #             'height_map_loss': data_dict['Loss']['height_map_loss'][min_emd_id],
-            #         },
-            #         'Parameters': {
-            #             'E': data_dict['Parameters']['E'][min_emd_id],
-            #             'nu': data_dict['Parameters']['nu'][min_emd_id],
-            #             'rho': data_dict['Parameters']['rho'][min_emd_id],
-            #             'sand_angle': data_dict['Parameters']['sand_angle'][min_emd_id],
-            #         }},
-            #         open(os.path.join(folder, 'best_emd_loss.json'), 'w'))
-            #
-            # best_heightmap_loss = 1000
-            # seed_0 = 0
-            # best_emd_loss = 1000
-            # seed_1 = 0
-            # for seed in range(5):
-            #     with open(os.path.join(case_folder, f'seed-{seed}',
-            #                            'best_heightmap_loss.json')) as f:
-            #         data_0 = json.load(f)
-            #         if data_0['Loss']['height_map_loss'] < best_heightmap_loss:
-            #             best_heightmap_loss = data_0['Loss']['height_map_loss']
-            #             seed_0 = seed
-            #
-            #     with open(os.path.join(case_folder, f'seed-{seed}',
-            #                            'best_emd_loss.json')) as f:
-            #         data_1 = json.load(f)
-            #         if data_1['Loss']['emd_loss'] < best_emd_loss:
-            #             best_emd_loss = data_1['Loss']['emd_loss']
-            #             seed_1 = seed
-            #
-            # with open(os.path.join(case_folder, f'seed-{seed_0}',
-            #                        'best_heightmap_loss.json')) as f:
-            #     data_0 = json.load(f)
-            #     print(f'case-{case}\n',
-            #           f'seed-{seed_0}',
-            #           data_0['Step'],
-            #           data_0['Loss']['height_map_loss'],
-            #           '&', data_0['Loss']['emd_loss'],
-            #           '&', data_0['Parameters']['E'],
-            #           '&', data_0['Parameters']['nu'],
-            #           '&', data_0['Parameters']['rho'],
-            #           '&', data_0['Parameters']['sand_angle'])
-            #     best_params[d] = data_0
-            #
-            # open(os.path.join(script_path, '..', 'log-sys_id'+folder_suffix, f'{case}-best_params.json'), 'w').write(json.dumps(best_params))
+                if data_dict['Validation Loss']['height_map_loss'][min_heightmap_id] < best_loss:
+                    best_loss_info = {
+                    'Step': float(min_heightmap_id),
+                    'Loss': {
+                        'emd_loss': data_dict['Loss']['emd_loss'][min_heightmap_id],
+                        'height_map_loss': data_dict['Loss']['height_map_loss'][min_heightmap_id],
+                    },
+                    'Validation Loss': {
+                        'emd_loss': data_dict['Validation Loss']['emd_loss'][min_heightmap_id],
+                        'height_map_loss': data_dict['Validation Loss']['height_map_loss'][min_heightmap_id],
+                    },
+                    'Parameters': {
+                        'E': data_dict['Parameters']['E'][min_heightmap_id],
+                        'nu': data_dict['Parameters']['nu'][min_heightmap_id],
+                        'rho': data_dict['Parameters']['rho'][min_heightmap_id],
+                        'sand_angle': data_dict['Parameters']['sand_angle'][min_heightmap_id],
+                    }}
+
+            open(os.path.join(case_folder, 'best_params.json'), 'w').write(json.dumps(best_loss_info))
 
 
-# find_best_parameters(grad_clip=True, line_search=False, resolutions=[10, 20, 30, 40, 50, 60])
-# find_best_parameters(grad_clip=True, line_search=False, hm=True, resolutions=[10, 20, 30, 40, 50, 60])
-# find_best_parameters(grad_clip=True, line_search=True, resolutions=[10, 20, 30, 40, 50, 60])
-# find_best_parameters(grad_clip=True, line_search=True, hm=True, resolutions=[10, 20, 30, 40, 50, 60])
-# find_best_parameters(grad_clip=True, line_search=True, man_init=True,
-#                      resolutions=[10, 20, 30, 40, 50, 60])
-# find_best_parameters(grad_clip=True, line_search=True, hm=True, man_init=True,
-#                      resolutions=[10, 20, 30, 40, 50, 60])
-# exit()
+find_best_parameters(grad_clip=True, line_search=True, resolutions=[40])
+find_best_parameters(grad_clip=True, line_search=True, hm=True, resolutions=[40])
+find_best_parameters(grad_clip=True, line_search=True, man_init=True, resolutions=[40])
+find_best_parameters(grad_clip=True, line_search=True, hm=True, man_init=True, resolutions=[40])
+exit()
 
 
 def plot_scatter():
