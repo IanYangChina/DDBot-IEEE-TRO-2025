@@ -5,13 +5,14 @@ import matplotlib.pyplot as plt
 from tensorflow.python.summary.summary_iterator import summary_iterator
 script_path = os.path.dirname(os.path.realpath(__file__))
 script_path = os.path.join(script_path, '..')
-colour_pool = ['#dbc6e0', '#d9e8f4', '#fee281', '#c8d9a6', '#dd6e60', '#80a5d0', '#f7e1bd']
+colour_pool = ['#a42423', '#ff8a00', '#003153', '#436850', '#7cc2c0', '#b7bc56', '#7a81fc', '#7f4a88']
 plt.rcParams['pdf.fonttype'] = 42
 plt.rcParams['ps.fonttype'] = 42
 plt.rcParams['font.family'] = 'serif'
 plt.rcParams["mathtext.fontset"] = "stix"
 plt.rcParams['font.serif'] = ['Times New Roman'] + plt.rcParams['font.serif']
 plt.rcParams["font.weight"] = "normal"
+plt.rcParams.update({'font.size': 10})
 
 
 def find_best_parameters(hm=False, grad_norm=False, grad_dy_scale=False, grad_clip=False,
@@ -132,44 +133,108 @@ def find_best_parameters(hm=False, grad_norm=False, grad_dy_scale=False, grad_cl
             open(os.path.join(case_folder, 'best_params.json'), 'w').write(json.dumps(best_loss_info))
 
 
-find_best_parameters(grad_clip=True, line_search=True, resolutions=[40])
-find_best_parameters(grad_clip=True, line_search=True, hm=True, resolutions=[40])
-find_best_parameters(grad_clip=True, line_search=True, man_init=True, resolutions=[40])
-find_best_parameters(grad_clip=True, line_search=True, hm=True, man_init=True, resolutions=[40])
-exit()
+# find_best_parameters(grad_norm=True, line_search=True, resolutions=[40])
+# find_best_parameters(grad_dy_scale=True, line_search=True, resolutions=[40])
+# find_best_parameters(grad_clip=True, line_search=True, man_init=True, resolutions=[40])
+# find_best_parameters(grad_clip=True, line_search=True, hm=True, man_init=True, resolutions=[40])
+# exit()
 
 
 def plot_scatter():
-    x = np.arange(6*6)
-    cases = ['gclip', 'gclip-ls', 'hm-gclip', 'hm-gclip-ls',
+    plt.figure(figsize=(3.5, 5))
+    cases = ['gclip', 'gclip-ls', 'gnorm-ls', 'gdys-ls', 'hm-gclip', 'hm-gclip-ls',
              'gclip-ls-man-init', 'hm-gclip-ls-man-init']
-    x_labels = []
+    casenames = ['ClipGrad', 'ClipGrad-LS', 'NormGrad-LS', 'DyScaleGrad\n-LS', 'ClipGrad-HM', 'ClipGrad\n-LS-HM',
+                 'ClipGrad-LS\n-ManInit', 'ClipGrad-LS\n-HM-ManInit']
     for case_id in range(len(cases)):
+        x = []
+        x_std = []
         y = []
         y_std = []
         case = cases[case_id]
-        for res in [10, 20, 30, 40, 50, 60]:
+        for res in [40]:
             case_folder = os.path.join(script_path, '..', 'log-sys_id', f'd5e6-{case}-res{res}')
             best_loss = []
+            earliest_epoch = []
             for seed in range(5):
                 folder = os.path.join(case_folder, f'seed-{seed}')
                 with open(os.path.join(folder, 'best_heightmap_loss.json')) as f:
                     data = json.load(f)
-                    best_loss.append(data['Validation Loss']['height_map_loss'])
+                    earliest_epoch.append(data['Step'])
+                    if case == 'gclip' or case == 'hm-gclip':
+                        best_loss.append(data['Validation Loss']['height_map_loss'] / (60*60) + data['Validation Loss']['emd_loss'] / (60*60))
+                    else:
+                        best_loss.append(data['Validation Loss']['height_map_loss'] / (40*40) + data['Validation Loss']['emd_loss'] / (40*40))
             y.append(np.mean(best_loss))
             y_std.append(np.std(best_loss))
-            x_labels.append(f'{case}-{res}')
-        plt.errorbar(x[case_id*6:(case_id+1)*6], y, label=case, color=colour_pool[case_id], yerr=y_std, fmt='o')
+            x.append(np.mean(earliest_epoch))
+            x_std.append(np.std(earliest_epoch))
+        plt.errorbar(y, len(cases)-case_id-1, label=casenames[case_id], color=colour_pool[case_id], xerr=y_std, fmt='h',
+                     capsize=5, markersize=8, elinewidth=2, capthick=2)
+
+    plt.grid(True, axis='x')
+    casenames.reverse()
+    plt.xticks([0.024, 0.025, 0.026, 0.027, 0.028, 0.029, 0.030], rotation=60)
+    plt.yticks(np.arange(len(cases)), casenames)
+    plt.xlabel('Best validation loss across 5 seeds')
+    plt.savefig(os.path.join(script_path, '..', 'figs', 'sys_id.pdf'), dpi=300, bbox_inches='tight')
+
+
+# plot_scatter()
+
+
+def plot_loss_curve():
+    plt.figure(figsize=(5, 5))
+    cases = [#'gclip',
+             'gclip-ls',
+             #'gnorm-ls',
+             #'gdys-ls',
+             'hm-gclip', 'hm-gclip-ls',
+             'gclip-ls-man-init', 'hm-gclip-ls-man-init'
+             ]
+    casenames = [#'ClipGrad',
+                 'ClipGrad-LS',
+                 #'NormGrad-LS',
+                 #'DyScaleGrad-LS',
+                 'ClipGrad-HM', 'ClipGrad-LS-HM',
+                 'ClipGrad-LS-ManInit', 'ClipGrad-LS-HM-ManInit'
+                 ]
+    window = 2
+    for case_id in range(len(cases)):
+        case = cases[case_id]
+        for res in [40]:
+            case_folder = os.path.join(script_path, '..', 'log-sys_id', f'd5e6-{case}-res{res}')
+            losses = []
+            for seed in range(5):
+                folder = os.path.join(case_folder, f'seed-{seed}')
+                with open(os.path.join(folder, 'raw_data.json')) as f:
+                    data = json.load(f)
+                    if case == 'gclip' or case == 'hm-gclip':
+                        losses.append(np.asarray(data['Validation Loss']['height_map_loss']) / (60*60) +
+                                      np.asarray(data['Validation Loss']['emd_loss']) / (60*60))
+                    else:
+                        losses.append(np.asarray(data['Validation Loss']['height_map_loss']) / (40*40) +
+                                      np.asarray(data['Validation Loss']['emd_loss']) / (40*40))
+            mean_loss = np.mean(losses, axis=0)
+            running_avg = np.empty(mean_loss.shape[0])
+            for n in range(mean_loss.shape[0]):
+                running_avg[n] = np.mean(mean_loss[max(0, n - window):(n + 1)])
+            plt.plot(running_avg, label=casenames[case_id], color=colour_pool[case_id], linewidth=2)
+            for l in losses:
+                running_avg_l = np.empty(l.shape[0])
+                for n in range(l.shape[0]):
+                    running_avg_l[n] = np.mean(l[max(0, n - window):(n + 1)])
+                plt.plot(running_avg_l, color=colour_pool[case_id], linestyle='--', linewidth=1)
     plt.legend()
-    plt.xticks(x, x_labels)
-    plt.xticks(rotation=70)
-    plt.xlabel('Case-Resolution')
-    plt.ylabel('Best validation heightmap loss')
+    plt.grid(True)
+    plt.xticks([0, 4, 9, 14, 19], ['1', '5', '10', '15', '20'])
+    plt.xlabel('Epoch')
+    plt.ylabel('Validation loss')
     plt.tight_layout()
     plt.show()
 
 
-plot_scatter()
+plot_loss_curve()
 
 
 def find_best_skill_parameters(ins=False, hm=False, main_folder_suffix='', lr='',
