@@ -2,6 +2,7 @@ import os
 import yaml
 import json
 import argparse
+import logging
 import numpy as np
 import taichi as ti
 import matplotlib.pyplot as plt
@@ -439,6 +440,10 @@ def main(args):
             print(f'=====> Skill params: {skill_params_np}')
             print(f'=====> Grad: {skill_params_grad_np}')
             print(f"=====> Num. aborted data so far: {n_aborted_data}")
+            logging.info(f'=====> Skill params: {skill_params_np}')
+            logging.info(f'=====> Grad: {skill_params_grad_np}')
+            logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
+
 
             logger.add_scalar(tag='loss/EMD', scalar_value=loss_info['emd_loss'], global_step=n)
             logger.add_scalar(tag='loss/Heightmap', scalar_value=loss_info['height_map_loss'], global_step=n)
@@ -731,10 +736,10 @@ def main(args):
                         print(f'=====> alpha: {alpha}')
                         print(f'==> EMD Loss: %f' % loss_info["emd_loss"])
                         print(f'==> Height map loss: %f' % loss_info['height_map_loss'])
-                        print('==> Insertion loss:', insertion_loss_ti[None])
+                        print('==> Insertion loss: %f' % insertion_loss_ti[None])
                         logging.info(f'==> EMD Loss: %f' % loss_info["emd_loss"])
                         logging.info(f'==> Height map loss:  %f' % loss_info['height_map_loss'])
-                        logging.info('==> Insertion loss:', insertion_loss_ti[None])
+                        logging.info('==> Insertion loss: %f' % insertion_loss_ti[None])
 
                         total_loss = loss_info['height_map_loss']
                         if args['use_insertion_loss']:
