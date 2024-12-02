@@ -17,7 +17,7 @@ def run(args):
             default_fp=DTYPE_TI, default_ip=ti.i32,
             fast_math=False, random_seed=1)
 
-    height_map_res = 60
+    height_map_res = args['hmr']
     height_map_size = 0.24  # meter
     height_map_xy_offset = (0.2, 0.2)
     height_map_pixel_size = height_map_size / height_map_res
@@ -33,8 +33,8 @@ def run(args):
     process = psutil.Process(os.getpid())
     script_path = os.path.dirname(os.path.realpath(__file__))
     script_path = os.path.join(script_path, '..')
-    for data_ind in [1]:
-        data_path = os.path.join(script_path, '..', 'data', 'sys_id_target_pcds')
+    for data_ind in [0, 1, 2, 3, 4]:
+        data_path = os.path.join(script_path, '..', 'data', 'task_target_pcds')
         # hm = np.load(os.path.join(data_path, f'target_pcd_height_map-{data_ind}-res{str(height_map_res)}-vdsize{str(down_sample_voxel_size)}.npy'))
         # plt.imshow(hm, cmap='Greys')
         # plt.show()
@@ -84,8 +84,9 @@ def run(args):
         target_pcd_downed = o3d.geometry.PointCloud()
         target_pcd_downed.points = o3d.utility.Vector3dVector(target_pcd_points_downed.to_numpy())
         target_pcd_downed.translate(-np.array(pcd_offset))
+        print(target_pcd_downed)
         frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
-        o3d.visualization.draw_geometries([frame, target_pcd_downed], width=800, height=600)
+        # o3d.visualization.draw_geometries([frame, target_pcd_downed], width=800, height=600)
         o3d.io.write_point_cloud(os.path.join(data_path, f'pcd_{data_ind}_cropped_norm_z_aligned_res{height_map_res}.ply'),
                                  target_pcd_downed)
 
