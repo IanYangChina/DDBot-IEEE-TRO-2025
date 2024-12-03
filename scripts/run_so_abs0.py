@@ -379,6 +379,8 @@ if __name__ == '__main__':
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
     parser.add_argument('--task-id', dest='task_id', type=int, default=0, help='task id')
     parser.add_argument('--demon', dest='demon', action='store_true', default=False, help='Use demonstration')
+    parser.add_argument('--line-search', dest='line_search', action='store_true', default=False, help='Use line search')
+    parser.add_argument('--zero-init', dest='zero_init', action='store_true', default=False, help='Initialise parameters to zero')
     parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False, help='Use height map loss')
     parser.add_argument('--eval', dest='eval', action='store_true', default=False, help='Evaluate the model')
     parser.add_argument('--eval-specific', dest='eval_specific', action='store_true', default=False, help='Evaluate the model with specific epoch')

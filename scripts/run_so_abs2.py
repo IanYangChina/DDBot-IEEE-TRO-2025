@@ -42,7 +42,7 @@ SOIL_HEIGHT = 0.085 + 0.005
 def main(args):
     seed = args['seed']
     if seed == -1:
-        seeds = [0, 1, 2, 3, 4]
+        seeds = [1, 2, 3, 4]
     else:
         seeds = [seed]
 
@@ -982,12 +982,13 @@ def main(args):
         print('====> Final EMD Loss: %f' % loss_info['emd_loss'])
         print('====> Final Height map loss: %f' % loss_info['height_map_loss'])
         print('====> Final Insertion loss: %f' % insertion_loss_ti[None])
-        print('====> Final skill params: %f' % skill_params_np)
+        print(f'====> Final skill params: {skill_params_np}')
         logging.info('===========> Finished training.')
         logging.info('====> Final EMD Loss: %f' % loss_info['emd_loss'])
         logging.info('====> Final Height map loss: %f' % loss_info['height_map_loss'])
         logging.info('====> Final Insertion loss: %f' % insertion_loss_ti[None])
-        logging.info('====> Final skill params: %f' % skill_params_np)
+        logging.info(f'====> Final skill params: {skill_params_np}')
+        mpm_env.simulator.clear_ckpt()
         logger.close()
 
 
