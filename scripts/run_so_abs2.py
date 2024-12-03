@@ -46,6 +46,15 @@ def main(args):
     else:
         seeds = [seed]
 
+    if args['backend'] == 'opengl':
+        backend = ti.opengl
+    elif args['backend'] == 'cuda':
+        backend = ti.cuda
+    elif args['backend'] == 'vulkan':
+        backend = ti.vulkan
+    else:
+        backend = ti.cpu
+
     task_id = args['task_id']
     ptcl_d = arguments['ptcl_density']
     subfix = ''
@@ -59,15 +68,6 @@ def main(args):
         subfix += '-demo'
     if args['zero_init']:
         subfix += '-0init'
-
-    if args['backend'] == 'opengl':
-        backend = ti.opengl
-    elif args['backend'] == 'cuda':
-        backend = ti.cuda
-    elif args['backend'] == 'vulkan':
-        backend = ti.vulkan
-    else:
-        backend = ti.cpu
 
     learning_rate = args['lr']
     subfix += f'-lr{learning_rate}'
@@ -448,7 +448,6 @@ def main(args):
             logging.info(f'=====> Skill params: {skill_params_np}')
             logging.info(f'=====> Grad: {skill_params_grad_np}')
             logging.info(f"=====> Num. aborted data so far: {n_aborted_data}")
-
 
             logger.add_scalar(tag='loss/EMD', scalar_value=loss_info['emd_loss'], global_step=n)
             logger.add_scalar(tag='loss/Heightmap', scalar_value=loss_info['height_map_loss'], global_step=n)

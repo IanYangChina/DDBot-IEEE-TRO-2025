@@ -35,18 +35,18 @@ def main(args):
         'target_pcd_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
                                         f'pcd_{sys_id_motion}_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
-        'height_grid_res': 30,
+        'height_grid_res': 40,
     }
 
     cam_cfg = {
-        'pos': (0.2, 1.2, 0.8),
+        'pos': (0.2, 0.8, 0.7),
         'lookat': (0.2, 0.2, 0.03),
         'euler': (180 + np.rad2deg(np.arctan(1.0 / (0.9 - 0.03))), 0, 180),
         'focal_length': 0.3,
         'fov': 30,
-        'lights': [{'pos': (1.2, 0.25, 0.2), 'color': (0.6, 0.6, 0.6)},
-                   {'pos': (1.2, 0.5, 1.0), 'color': (0.6, 0.6, 0.6)},
-                   {'pos': (1.2, 0.0, 1.0), 'color': (0.8, 0.8, 0.8)}],
+        'lights': [{'pos': (1.2, 0.2, 1.0), 'color': (0.95, 0.95, 0.95)},
+                   {'pos': (0.2, 0.5, 1.0), 'color': (0.95, 0.95, 0.95)},
+                   {'pos': (0.2, 0.2, 1.0), 'color': (0.95, 0.95, 0.95)}],
         'particle_radius': 0.001,
         'res': (800, 800),
         'pcd_gen_res': 150
@@ -56,11 +56,16 @@ def main(args):
     ti.init(arch=ti.cuda, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True, random_seed=1)
     env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg)
     print("Number of particles:", mpm_env.simulator.n_particles)
+    with open(os.path.join(script_path, '..', 'log-sys_id',
+                           'd5e6-hm-gclip-ls-man-init-res40',
+                           'best_params.json'), 'r') as f:
+        best_params = json.load(f)['Parameters']
+
     set_parameters(mpm_env, SAND,
-                   e=80000,
-                   nu=0.15,
-                   rho=1800,
-                   sand_friction_angle=15)
+                   e=best_params['E'],
+                   nu=best_params['nu'],
+                   rho=best_params['rho'],
+                   sand_friction_angle=best_params['sand_angle'],)
     mpm_env.set_state(init_state['state'], grad_enabled=False)
     if args['render']:
         mpm_env.render(mode='human')
@@ -69,7 +74,7 @@ def main(args):
         if args['render']:
             mpm_env.render(mode='human')
     loss_info = mpm_env.get_final_loss()
-    print('===> Loss info:', loss_info)
+    print('===> Validation loss:', loss_info['height_map_loss'] / (40 * 40) + loss_info['emd_loss'] / (40 * 40))
 
     if args['render']:
         fig, ax = plt.subplots(1, 2, figsize=(12, 6))
