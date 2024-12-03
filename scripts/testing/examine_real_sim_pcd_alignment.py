@@ -35,8 +35,8 @@ x = env.render(mode='point_cloud')
 sim_particles = o3d.utility.Vector3dVector(x)
 sim_particles = o3d.geometry.PointCloud(sim_particles).paint_uniform_color([1.0, 0.0, 0.0])
 
-pcd_id = 0
-pcd_path = os.path.join(data_path, 'task_target_pcds', f'pcd_{pcd_id}_cropped_norm_z_aligned.ply')
+pcd_id = 1
+pcd_path = os.path.join(data_path, 'sys_id_target_pcds_sand', f'pcd_{pcd_id}_cropped_norm_z_aligned_res40.ply')
 pcd_in_cam_frame = o3d.io.read_point_cloud(pcd_path)
 pcd_in_cam_frame.translate([0.2, 0.2, 0.0])
 pcd_in_cam_frame.paint_uniform_color([0.0, 0.0, 1.0])
