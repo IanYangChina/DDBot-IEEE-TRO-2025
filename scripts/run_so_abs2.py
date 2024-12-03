@@ -16,7 +16,7 @@ from doma.optimiser.adam import Adam, GD
 from doma.optimiser.rmsprop import RMSprop
 from doma.envs.planting_env import make_env
 from doma.engine.configs.macros import DTYPE_NP, DTYPE_TI, SAND
-from doma.engine.utils.misc import set_parameters
+from doma.engine.utils.misc import set_parameters, reset_logging
 
 cam_cfg = {
     'pos': (0.2, 1.2, 0.9),
@@ -99,6 +99,7 @@ def main(args):
     }
 
     for seed in seeds:
+        reset_logging(logging)
         np_rng = np.random.default_rng(seed=seed)
         log_dir = os.path.join(result_path, case, f'seed-{seed}')
         os.makedirs(log_dir, exist_ok=True)

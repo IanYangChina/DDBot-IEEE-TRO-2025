@@ -13,7 +13,7 @@ script_path = os.path.dirname(os.path.realpath(__file__))
 from doma.optimiser.rmsprop import RMSprop
 from doma.envs.planting_env import make_env
 from doma.engine.configs.macros import DTYPE_NP, DTYPE_TI, SAND
-from doma.engine.utils.misc import set_parameters
+from doma.engine.utils.misc import set_parameters, reset_logging
 cam_cfg = {
     'pos': (0.2, 1.2, 0.9),
     'lookat': (0.2, 0.2, 0.03),
@@ -44,8 +44,12 @@ def main(args):
     subfix = ''
     if args['use_height_map_loss']:
         subfix += '-hm'
+    if args['line_search']:
+        subfix += '-ls'
     if args['demon']:
         subfix += '-demo'
+    if args['zero_init']:
+        subfix += '-0init'
     learning_rate = args['lr']
     subfix += f'-lr{learning_rate}'
 
@@ -140,6 +144,7 @@ def main(args):
         return trajectory[:n_step + n_step_insert + n_step_push + n_step_return, :]
 
     for seed in seeds:
+        reset_logging(logging)
         log_dir = os.path.join(result_path, case, f'seed-{seed}')
         os.makedirs(log_dir, exist_ok=True)
         os.makedirs(os.path.join(log_dir, 'ckpts'), exist_ok=True)
