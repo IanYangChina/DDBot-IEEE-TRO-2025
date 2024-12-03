@@ -53,8 +53,12 @@ def main(args):
         subfix += '-ins'
     if args['use_height_map_loss']:
         subfix += '-hm'
+    if args['line_search']:
+        subfix += '-ls'
     if args['demon']:
         subfix += '-demo'
+    if args['zero_init']:
+        subfix += '-0init'
 
     if args['backend'] == 'opengl':
         backend = ti.opengl
@@ -147,7 +151,7 @@ def main(args):
                 if args['zero_init']:
                     skill_params_np *= 0.0
 
-        n_epoch = 50
+        n_epoch = 20
         n_aborted_data = 0
         optimiser = RMSprop(parameters_shape=(5,),
                             cfg={'lr': learning_rate, 'beta': 0.9})
@@ -978,12 +982,12 @@ def main(args):
         print('====> Final EMD Loss: %f' % loss_info['emd_loss'])
         print('====> Final Height map loss: %f' % loss_info['height_map_loss'])
         print('====> Final Insertion loss: %f' % insertion_loss_ti[None])
-        print('====> Final skill params: ', skill_params_np)
+        print('====> Final skill params: %f' % skill_params_np)
         logging.info('===========> Finished training.')
         logging.info('====> Final EMD Loss: %f' % loss_info['emd_loss'])
         logging.info('====> Final Height map loss: %f' % loss_info['height_map_loss'])
         logging.info('====> Final Insertion loss: %f' % insertion_loss_ti[None])
-        logging.info('====> Final skill params: ', skill_params_np)
+        logging.info('====> Final skill params: %f' % skill_params_np)
         logger.close()
 
 
