@@ -11,7 +11,7 @@ script_path = os.path.join(script_path, '..')
 fig_path = os.path.join(script_path, '..', 'figs')
 os.makedirs(fig_path, exist_ok=True)
 
-colour_pool = ['#839dd1', '#f1766d', '#fcbb44', '#36600e', '#80a5d0', '#f7e1bd']
+colour_pool = ['#a42423', '#ff8a00', '#003153', '#436850', '#7cc2c0', '#b7bc56', '#7a81fc', '#7f4a88']
 plt.rcParams['pdf.fonttype'] = 42
 plt.rcParams['ps.fonttype'] = 42
 plt.rcParams['font.family'] = 'serif'
@@ -19,6 +19,7 @@ plt.rcParams["mathtext.fontset"] = "stix"
 plt.rcParams['font.serif'] = ['Times New Roman'] + plt.rcParams['font.serif']
 plt.rcParams["font.weight"] = "normal"
 plt.rcParams.update({'font.size': 10})
+mpl.use('Agg')
 
 
 def read_and_save_data(substep=False):
@@ -152,44 +153,67 @@ def read_and_save_data(substep=False):
 
 
 def plot_grads():
+    plt.rcParams.update({'font.size': 8})
     save_dir = os.path.join(fig_path, 'grads')
     os.makedirs(save_dir, exist_ok=True)
     d = "5e6"
     res = '40'
     params = ['E', 'nu', 'rho', 'sand_angle']
+    params_labels = [r'$\mathbf{\nabla E}$',
+                     r'$\mathbf{\nabla \nu}$',
+                     r'$\mathbf{\nabla \rho}$',
+                     r'$\mathbf{\nabla\phi_f}$']
     p_vars = ['F', 'v', 'x']
+    p_vars_labels = [r'$\mathbf{\nabla F_p}$',
+                     r'$\mathbf{\nabla v_p}$',
+                     r'$\mathbf{\nabla x_p}$']
     grid_vars = ['mass', 'v_in', 'v_out']
+    grid_vars_labels = [r'$\mathbf{\nabla m_{grid}}$',
+                        r'$\mathbf{\nabla v_{grid}}$',
+                        r'$\mathbf{\nabla v^{\prime}_{grid}}$']
     action_vars = ['0', '1', '2', '3', '4', '5']
+    action_vars_labels = [r'$\mathbf{\nabla a[0]}$',
+                          r'$\mathbf{\nabla a[1]}$',
+                          r'$\mathbf{\nabla a[2]}$',
+                          r'$\mathbf{\nabla a[3]}$',
+                          r'$\mathbf{\nabla a[4]}$',
+                          r'$\mathbf{\nabla a[5]}$']
 
-    subfig_height = 10/4
+    subfig_height = 1.1
 
     for var_name in ['grid', 'p', 'action', 'params']:
+        y_lim_margin = 5
         n_global_steps = 200
         x = [i for i in range(n_global_steps+1)]
-        tick_interval = 40
+        tick_interval = 50
         x_ticks = np.arange(0, n_global_steps+1, tick_interval)
         x_tick_labels = [str(i) for i in x_ticks]
-        y_ticks = [-25, -5, 0, 5, 25]
+        x_tick_labels.reverse()
+        y_ticks = [-25, -10, 0, 10, 25]
         y_tick_labels = ['-Inf', '-5', '0', '5', 'NaN/Inf']
-        ylims = [-27, 27]
+        ylims = [y_ticks[0] - y_lim_margin, y_ticks[-1] + y_lim_margin]
         if var_name == 'grid':
             vars_to_plot = grid_vars
+            var_names = grid_vars_labels
         elif var_name == 'p':
             vars_to_plot = p_vars
+            var_names = p_vars_labels
             y_ticks = [0, 5, 20, 25]
             y_tick_labels = ['0', '5', '20', 'NaN/Inf']
-            ylims = [-2, 27]
+            ylims = [y_ticks[0] - y_lim_margin, y_ticks[-1] + y_lim_margin]
         elif var_name == 'params':
             vars_to_plot = params
-            y_ticks = [-5, 0, 5, 25]
+            var_names = params_labels
+            y_ticks = [-5, 0, 10, 25]
             y_tick_labels = ['-5', '0', '5', 'NaN/Inf']
-            ylims = [-7, 27]
+            ylims = [y_ticks[0] - y_lim_margin, y_ticks[-1] + y_lim_margin]
         else:
             vars_to_plot = action_vars
+            var_names = action_vars_labels
 
         grad_ops = ['gnone', 'gclip', 'gdys', 'gnorm']
-        fig, ax = plt.subplots(len(vars_to_plot), 2, figsize=(7, subfig_height*len(vars_to_plot)))
-        plt.subplots_adjust(wspace=0.18, hspace=0.02)
+        fig, ax = plt.subplots(len(vars_to_plot), 2, figsize=(3, subfig_height*len(vars_to_plot)))
+        plt.subplots_adjust(wspace=0.27, hspace=0)
         for i in range(len(vars_to_plot)):
             for j in range(len(grad_ops)):
                 grad_op = grad_ops[j]
@@ -213,12 +237,14 @@ def plot_grads():
                     grad_data_ = np.mean(grad_data_, axis=0)
                     grad_data_ = np.nan_to_num(grad_data_, nan=25, neginf=-25, posinf=25)
                     ax[i, 0].plot(x, grad_data_[:n_global_steps+1], colour_pool[j], linewidth=1, linestyle='--')
-                ax[i, 0].set_ylabel(f'Gradient of {vars_to_plot[i]}')
+                ax[i, 0].set_ylabel(var_names[i], rotation=0, loc='bottom', fontsize=9)
+                ax[i, 0].yaxis.set_label_coords(-0.5, 0.45, transform=None)
                 ax[i, 0].grid(True)
                 ax[i, 0].set_xticks(x_ticks)
                 ax[i, 0].set_yticks(y_ticks)
                 ax[i, 0].set_yticklabels(y_tick_labels)
                 ax[i, 0].set_ylim(ylims[0], ylims[1])
+                ax[i, 0].set_xlim(-5, n_global_steps+5)
                 if vars_to_plot[i] == 'v_out':
                     ax[i, 0].set_yticks([-25, -10, -5])
                     ax[i, 0].set_yticklabels(['       -Inf', '-10', '-5'])
@@ -227,6 +253,7 @@ def plot_grads():
                     ax[i, 0].set_xlabel('Global timestep (reverse)')
                     ax[i, 0].set_xticklabels(x_tick_labels)
                 else:
+                    ax[i, 0].spines[['bottom']].set_visible(False)
                     for tick in ax[i, 0].xaxis.get_major_ticks():
                         tick.tick1line.set_visible(False)
                         tick.tick2line.set_visible(False)
@@ -235,25 +262,26 @@ def plot_grads():
 
         n_global_steps = 98
         x = [i for i in range(n_global_steps)]
-        tick_interval = 20
+        tick_interval = 25
         x_ticks = np.arange(0, 101, tick_interval)
         x_tick_labels = [str(i) for i in x_ticks]
+        x_tick_labels.reverse()
         if var_name == 'params':
             y_ticks = [-5, 0, 5, 15]
             y_tick_labels = ['-5', '0', '5', '15']
-            ylims = [-7, 17]
+            ylims = [y_ticks[0] - y_lim_margin, y_ticks[-1] + y_lim_margin]
         elif var_name == 'p':
-            y_ticks = [0, 5, 10, 15, 20]
-            y_tick_labels = ['0', '5', '10', '15', '20']
-            ylims = [-2, 23]
+            y_ticks = [0, 5, 20]
+            y_tick_labels = ['0', '5', '20']
+            ylims = [y_ticks[0] - y_lim_margin, y_ticks[-1] + y_lim_margin]
         elif var_name == 'grid':
             y_ticks = [0, 5, 20]
             y_tick_labels = ['0', '5', '20']
-            ylims = [-3, 25]
+            ylims = [y_ticks[0] - y_lim_margin, y_ticks[-1] + y_lim_margin]
         else:
             y_ticks = [-25, -5, 0, 10]
             y_tick_labels = ['-Inf', '-5', '0', '10']
-            ylims = [-27, 12]
+            ylims = [y_ticks[0] - y_lim_margin, y_ticks[-1] + y_lim_margin]
         for i in range(len(vars_to_plot)):
             for j in range(len(grad_ops)):
                 grad_op = grad_ops[j]
@@ -282,14 +310,16 @@ def plot_grads():
                 ax[i, 1].set_yticks(y_ticks)
                 ax[i, 1].set_yticklabels(y_tick_labels)
                 ax[i, 1].set_ylim(ylims[0], ylims[1])
+                ax[i, 1].set_xlim(-5, n_global_steps+5)
                 if vars_to_plot[i] == 'v_out':
                     ax[i, 1].set_yticks([-25, -5, 0, 5])
                     ax[i, 1].set_yticklabels(['-Inf', '-5', '0', '5'])
                     ax[i, 1].set_ylim(-27, 7)
                 if i == len(vars_to_plot) - 1:
-                    ax[i, 1].set_xlabel('Substep (reverse)')
+                    ax[i, 1].set_xlabel('Last 100 substeps (reverse)')
                     ax[i, 1].set_xticklabels(x_tick_labels)
                 else:
+                    ax[i, 1].spines[['bottom']].set_visible(False)
                     for tick in ax[i, 1].xaxis.get_major_ticks():
                         tick.tick1line.set_visible(False)
                         tick.tick2line.set_visible(False)
@@ -297,6 +327,12 @@ def plot_grads():
                         tick.label2.set_visible(False)
 
         file_name = os.path.join(save_dir, f'{var_name}-res{res}.pdf')
+        if var_name == 'params':
+            legends = ['No operation', 'Clipping', 'Dynamic scaling', 'Normalization']
+            handles = [Line2D([0], [0], color=colour_pool[i], linewidth=4) for i in range(len(legends))]
+            plt.legend(handles, legends, handlelength=2, fontsize=10,
+                                     title=None, loc="upper left", labelspacing=0.2,
+                                     bbox_to_anchor=(-1.35, 5), ncol=1, frameon=False)
         plt.savefig(file_name, format='pdf', bbox_inches='tight', pad_inches=0.01, dpi=300)
 
 
@@ -304,9 +340,9 @@ def plot_legends():
     legends = ['No operation', 'Clipping', 'Dynamic scaling', 'Normalization']
     plt.rcParams.update({'font.size': 40})
     handles = [Line2D([0], [0], color=colour_pool[i], linewidth=15) for i in range(len(legends))]
-    legend_plot = plt.legend(handles, legends, handlelength=2,
+    legend_plot = plt.legend(handles, legends, handlelength=1,
                                  title=None, loc="upper right", labelspacing=0.15,
-                                 bbox_to_anchor=(1.6, 1.7), ncol=4, frameon=False)
+                                 bbox_to_anchor=(2, 2), ncol=1, frameon=False)
     fig = legend_plot.figure
     fig.canvas.draw()
     bbox = legend_plot.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
@@ -315,4 +351,5 @@ def plot_legends():
 
 
 # read_and_save_data()
-plot_legends()
+# plot_legends()
+plot_grads()

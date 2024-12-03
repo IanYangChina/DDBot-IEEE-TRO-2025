@@ -2,10 +2,15 @@ import os
 import json
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 from tensorflow.python.summary.summary_iterator import summary_iterator
 script_path = os.path.dirname(os.path.realpath(__file__))
 script_path = os.path.join(script_path, '..')
-colour_pool = ['#a42423', '#ff8a00', '#003153', '#436850', '#7cc2c0', '#b7bc56', '#7a81fc', '#7f4a88']
+colour_pool = ['#a42423', '#e89da0',
+               '#a55d35', '#efbf6a',
+               '#566d40', '#abde70',
+               '#22326f', '#4296d2',
+               '#662d5e', '#ad3bad']
 plt.rcParams['pdf.fonttype'] = 42
 plt.rcParams['ps.fonttype'] = 42
 plt.rcParams['font.family'] = 'serif'
@@ -16,136 +21,143 @@ plt.rcParams.update({'font.size': 10})
 
 
 def find_best_parameters(hm=False, grad_norm=False, grad_dy_scale=False, grad_clip=False,
-                         line_search=False, man_init=False,
+                         line_search=False, man_init=False, ptcl='5e6',
                          resolutions=[10, 20, 30, 40, 50, 60]):
     """generate mean and deviation data from tensorboard logs"""
-    best_params = {"5e6": None}
-    for d in ["5e6"]:
-        case = f'd{d}'
-        if hm:
-            case += '-hm'
+    case = f'd{ptcl}'
+    if hm:
+        case += '-hm'
 
-        if grad_norm:
-            case += '-gnorm'
-        elif grad_dy_scale:
-            case += '-gdys'
-        elif grad_clip:
-            case += '-gclip'
-        else:
-            case += '-gnone'
+    if grad_norm:
+        case += '-gnorm'
+    elif grad_dy_scale:
+        case += '-gdys'
+    elif grad_clip:
+        case += '-gclip'
+    else:
+        case += '-gnone'
 
-        if line_search:
-            case += '-ls'
-        if man_init:
-            case += '-man-init'
+    if line_search:
+        case += '-ls'
+    if man_init:
+        case += '-man-init'
 
-        for res in resolutions:
-            case_folder = os.path.join(script_path, '..', 'log-sys_id', case+f'-res{res}')
-            best_loss = np.inf
-            best_loss_info = {}
-            for seed in range(5):
-                folder = os.path.join(case_folder, f'seed-{seed}')
-                data_dict = {
-                    'Loss': {
-                        'emd_loss': [],
-                        'height_map_loss': [],
-                    },
-                    'Validation Loss': {
-                        'emd_loss': [],
-                        'height_map_loss': [],
-                    },
-                    'Parameters': {
-                        'E': [],
-                        'nu': [],
-                        'rho': [],
-                        'sand_angle': [],
-                    }
+    for res in resolutions:
+        case_folder = os.path.join(script_path, '..', 'log-sys_id', case+f'-res{res}')
+        best_loss = np.inf
+        best_loss_info = {}
+        for seed in range(5):
+            folder = os.path.join(case_folder, f'seed-{seed}')
+            data_dict = {
+                'Loss': {
+                    'emd_loss': [],
+                    'height_map_loss': [],
+                },
+                'Validation Loss': {
+                    'emd_loss': [],
+                    'height_map_loss': [],
+                },
+                'Parameters': {
+                    'E': [],
+                    'nu': [],
+                    'rho': [],
+                    'sand_angle': [],
                 }
+            }
 
-                for filename in os.listdir(folder):
-                    if filename[:5] == 'event':
-                        for event in summary_iterator(os.path.join(folder, filename)):
-                            for v in event.summary.value:
-                                if v.tag[:5] == 'Loss/':
-                                    if v.tag[5:] == 'emd_loss':
-                                        data_dict['Loss']['emd_loss'].append(v.simple_value)
-                                    elif v.tag[5:] == 'height_map_loss':
-                                        data_dict['Loss']['height_map_loss'].append(v.simple_value)
-                                    else:
-                                        pass
-                                elif v.tag[:16] == 'Validation Loss/':
-                                    if v.tag[16:] == 'emd_loss':
-                                        data_dict['Validation Loss']['emd_loss'].append(v.simple_value)
-                                    elif v.tag[16:] == 'height_map_loss':
-                                        data_dict['Validation Loss']['height_map_loss'].append(v.simple_value)
-                                elif v.tag[:6] == 'Param/':
-                                    if v.tag[6:] == 'E':
-                                        data_dict['Parameters']['E'].append(v.simple_value)
-                                    elif v.tag[6:] == 'nu':
-                                        data_dict['Parameters']['nu'].append(v.simple_value)
-                                    elif v.tag[6:] == 'rho':
-                                        data_dict['Parameters']['rho'].append(v.simple_value)
-                                    elif v.tag[6:] == 'sand_angle':
-                                        data_dict['Parameters']['sand_angle'].append(v.simple_value)
-                                    else:
-                                        pass
+            for filename in os.listdir(folder):
+                if filename[:5] == 'event':
+                    for event in summary_iterator(os.path.join(folder, filename)):
+                        for v in event.summary.value:
+                            if v.tag[:5] == 'Loss/':
+                                if v.tag[5:] == 'emd_loss':
+                                    data_dict['Loss']['emd_loss'].append(v.simple_value)
+                                elif v.tag[5:] == 'height_map_loss':
+                                    data_dict['Loss']['height_map_loss'].append(v.simple_value)
                                 else:
                                     pass
+                            elif v.tag[:16] == 'Validation Loss/':
+                                if v.tag[16:] == 'emd_loss':
+                                    data_dict['Validation Loss']['emd_loss'].append(v.simple_value)
+                                elif v.tag[16:] == 'height_map_loss':
+                                    data_dict['Validation Loss']['height_map_loss'].append(v.simple_value)
+                            elif v.tag[:6] == 'Param/':
+                                if v.tag[6:] == 'E':
+                                    data_dict['Parameters']['E'].append(v.simple_value)
+                                elif v.tag[6:] == 'nu':
+                                    data_dict['Parameters']['nu'].append(v.simple_value)
+                                elif v.tag[6:] == 'rho':
+                                    data_dict['Parameters']['rho'].append(v.simple_value)
+                                elif v.tag[6:] == 'sand_angle':
+                                    data_dict['Parameters']['sand_angle'].append(v.simple_value)
+                                else:
+                                    pass
+                            else:
+                                pass
 
-                json.dump(data_dict, open(os.path.join(folder, 'raw_data.json'), 'w'))
-                min_heightmap_id = np.argmin(data_dict['Validation Loss']['height_map_loss']) - 1
-                json.dump({
-                    'Step': float(min_heightmap_id),
-                    'Loss': {
-                        'emd_loss': data_dict['Loss']['emd_loss'][min_heightmap_id],
-                        'height_map_loss': data_dict['Loss']['height_map_loss'][min_heightmap_id],
-                    },
-                    'Validation Loss': {
-                        'emd_loss': data_dict['Validation Loss']['emd_loss'][min_heightmap_id],
-                        'height_map_loss': data_dict['Validation Loss']['height_map_loss'][min_heightmap_id],
-                    },
-                    'Parameters': {
-                        'E': data_dict['Parameters']['E'][min_heightmap_id],
-                        'nu': data_dict['Parameters']['nu'][min_heightmap_id],
-                        'rho': data_dict['Parameters']['rho'][min_heightmap_id],
-                        'sand_angle': data_dict['Parameters']['sand_angle'][min_heightmap_id],
-                    }},
-                    open(os.path.join(folder, 'best_heightmap_loss.json'), 'w'))
+            json.dump(data_dict, open(os.path.join(folder, 'raw_data.json'), 'w'))
+            min_heightmap_id = np.argmin(data_dict['Validation Loss']['height_map_loss']) - 1
+            json.dump({
+                'Step': float(min_heightmap_id),
+                'Loss': {
+                    'emd_loss': data_dict['Loss']['emd_loss'][min_heightmap_id],
+                    'height_map_loss': data_dict['Loss']['height_map_loss'][min_heightmap_id],
+                },
+                'Validation Loss': {
+                    'emd_loss': data_dict['Validation Loss']['emd_loss'][min_heightmap_id],
+                    'height_map_loss': data_dict['Validation Loss']['height_map_loss'][min_heightmap_id],
+                },
+                'Parameters': {
+                    'E': data_dict['Parameters']['E'][min_heightmap_id],
+                    'nu': data_dict['Parameters']['nu'][min_heightmap_id],
+                    'rho': data_dict['Parameters']['rho'][min_heightmap_id],
+                    'sand_angle': data_dict['Parameters']['sand_angle'][min_heightmap_id],
+                }},
+                open(os.path.join(folder, 'best_heightmap_loss.json'), 'w'))
 
-                if data_dict['Validation Loss']['height_map_loss'][min_heightmap_id] < best_loss:
-                    best_loss_info = {
-                    'Step': float(min_heightmap_id),
-                    'Loss': {
-                        'emd_loss': data_dict['Loss']['emd_loss'][min_heightmap_id],
-                        'height_map_loss': data_dict['Loss']['height_map_loss'][min_heightmap_id],
-                    },
-                    'Validation Loss': {
-                        'emd_loss': data_dict['Validation Loss']['emd_loss'][min_heightmap_id],
-                        'height_map_loss': data_dict['Validation Loss']['height_map_loss'][min_heightmap_id],
-                    },
-                    'Parameters': {
-                        'E': data_dict['Parameters']['E'][min_heightmap_id],
-                        'nu': data_dict['Parameters']['nu'][min_heightmap_id],
-                        'rho': data_dict['Parameters']['rho'][min_heightmap_id],
-                        'sand_angle': data_dict['Parameters']['sand_angle'][min_heightmap_id],
-                    }}
+            if data_dict['Validation Loss']['height_map_loss'][min_heightmap_id] < best_loss:
+                best_loss_info = {
+                'Step': float(min_heightmap_id),
+                'Loss': {
+                    'emd_loss': data_dict['Loss']['emd_loss'][min_heightmap_id],
+                    'height_map_loss': data_dict['Loss']['height_map_loss'][min_heightmap_id],
+                },
+                'Validation Loss': {
+                    'emd_loss': data_dict['Validation Loss']['emd_loss'][min_heightmap_id],
+                    'height_map_loss': data_dict['Validation Loss']['height_map_loss'][min_heightmap_id],
+                },
+                'Parameters': {
+                    'E': data_dict['Parameters']['E'][min_heightmap_id],
+                    'nu': data_dict['Parameters']['nu'][min_heightmap_id],
+                    'rho': data_dict['Parameters']['rho'][min_heightmap_id],
+                    'sand_angle': data_dict['Parameters']['sand_angle'][min_heightmap_id],
+                }}
 
-            open(os.path.join(case_folder, 'best_params.json'), 'w').write(json.dumps(best_loss_info))
+        open(os.path.join(case_folder, 'best_params.json'), 'w').write(json.dumps(best_loss_info))
 
 
-# find_best_parameters(grad_norm=True, line_search=True, resolutions=[40])
-# find_best_parameters(grad_dy_scale=True, line_search=True, resolutions=[40])
-# find_best_parameters(grad_clip=True, line_search=True, man_init=True, resolutions=[40])
-# find_best_parameters(grad_clip=True, line_search=True, hm=True, man_init=True, resolutions=[40])
+# find_best_parameters(ptcl='1e7', grad_clip=True, line_search=True, man_init=True, hm=True, resolutions=[40])
+# find_best_parameters(ptcl='2e7', grad_clip=True, line_search=True, man_init=True, hm=True, resolutions=[40])
+# find_best_parameters(grad_norm=True, line_search=True, man_init=True, hm=True, resolutions=[40])
+# find_best_parameters(grad_norm=True, line_search=True, man_init=True, hm=False, resolutions=[40])
+# find_best_parameters(grad_dy_scale=True, line_search=True, man_init=True, hm=True, resolutions=[40])
+# find_best_parameters(grad_dy_scale=True, line_search=True, man_init=True, hm=False, resolutions=[40])
 # exit()
 
 
 def plot_scatter():
-    plt.figure(figsize=(3.5, 5))
-    cases = ['gclip', 'gclip-ls', 'gnorm-ls', 'gdys-ls', 'hm-gclip', 'hm-gclip-ls',
-             'gclip-ls-man-init', 'hm-gclip-ls-man-init']
-    casenames = ['ClipGrad', 'ClipGrad-LS', 'NormGrad-LS', 'DyScaleGrad\n-LS', 'ClipGrad-HM', 'ClipGrad\n-LS-HM',
-                 'ClipGrad-LS\n-ManInit', 'ClipGrad-LS\n-HM-ManInit']
+    plt.figure(figsize=(2, 4))
+    plt.rcParams.update({'font.size': 11})
+    cases = ['gclip', 'hm-gclip',
+             'gclip-ls', 'hm-gclip-ls',
+             'gclip-ls-man-init', 'hm-gclip-ls-man-init',
+             'gnorm-ls-man-init', 'hm-gnorm-ls-man-init',
+             'gdys-ls-man-init', 'hm-gdys-ls-man-init']
+    casenames = ['ClipGrad', 'ClipGrad-HM',
+                 'ClipGrad-LS', 'ClipGrad-LS-HM',
+                 'ClipGrad-LS-ManInit', 'ClipGrad-LS-HM-ManInit',
+                 'NormGrad-LS-ManInit', 'NormGrad-LS-HM-ManInit',
+                 'DyScaleGrad-LS-ManInit', 'DyScaleGrad-LS-HM-ManInit']
     for case_id in range(len(cases)):
         x = []
         x_std = []
@@ -170,38 +182,44 @@ def plot_scatter():
             x.append(np.mean(earliest_epoch))
             x_std.append(np.std(earliest_epoch))
         plt.errorbar(y, len(cases)-case_id-1, label=casenames[case_id], color=colour_pool[case_id], xerr=y_std, fmt='h',
-                     capsize=5, markersize=8, elinewidth=2, capthick=2)
+                     capsize=4, markersize=6, elinewidth=1, capthick=1)
 
     plt.grid(True, axis='x')
     casenames.reverse()
-    plt.xticks([0.024, 0.025, 0.026, 0.027, 0.028, 0.029, 0.030], rotation=60)
-    plt.yticks(np.arange(len(cases)), casenames)
-    plt.xlabel('Best validation loss across 5 seeds')
-    plt.savefig(os.path.join(script_path, '..', 'figs', 'sys_id.pdf'), dpi=300, bbox_inches='tight')
+    plt.xticks([0.025, 0.027, 0.029, 0.031])
+    plt.yticks([])
+    plt.xlabel('Best validation loss')
+    plt.savefig(os.path.join(script_path, '..', 'figs', 'sys_id.pdf'),
+                dpi=300, bbox_inches='tight', pad_inches=0.01)
 
 
 # plot_scatter()
 
 
 def plot_loss_curve():
-    plt.figure(figsize=(5, 5))
-    cases = [#'gclip',
-             'gclip-ls',
-             #'gnorm-ls',
-             #'gdys-ls',
-             'hm-gclip', 'hm-gclip-ls',
-             'gclip-ls-man-init', 'hm-gclip-ls-man-init'
-             ]
-    casenames = [#'ClipGrad',
-                 'ClipGrad-LS',
-                 #'NormGrad-LS',
-                 #'DyScaleGrad-LS',
-                 'ClipGrad-HM', 'ClipGrad-LS-HM',
-                 'ClipGrad-LS-ManInit', 'ClipGrad-LS-HM-ManInit'
-                 ]
+    plt.rcParams.update({'font.size': 11})
+    fig, ax = plt.subplots(2, 5, figsize=(12, 4))
+    plt.subplots_adjust(wspace=0, hspace=0)
+    cases = ['gclip', 'hm-gclip',
+             'gclip-ls', 'hm-gclip-ls',
+             'gclip-ls-man-init', 'hm-gclip-ls-man-init',
+             'gnorm-ls-man-init', 'hm-gnorm-ls-man-init',
+             'gdys-ls-man-init', 'hm-gdys-ls-man-init']
+    casenames = ['ClipGrad', 'ClipGrad-HM',
+                 'ClipGrad-LS', 'ClipGrad-LS-HM',
+                 'ClipGrad-LS-ManInit', 'ClipGrad-LS-HM-ManInit',
+                 'NormGrad-LS-ManInit', 'NormGrad-LS-HM-ManInit',
+                 'DyScaleGrad-LS-ManInit', 'DyScaleGrad-LS-HM-ManInit']
     window = 2
     for case_id in range(len(cases)):
         case = cases[case_id]
+        if 'hm' in case:
+            row = 1
+            column = int((case_id - 1) / 2)
+        else:
+            row = 0
+            column = int(case_id / 2)
+
         for res in [40]:
             case_folder = os.path.join(script_path, '..', 'log-sys_id', f'd5e6-{case}-res{res}')
             losses = []
@@ -219,19 +237,65 @@ def plot_loss_curve():
             running_avg = np.empty(mean_loss.shape[0])
             for n in range(mean_loss.shape[0]):
                 running_avg[n] = np.mean(mean_loss[max(0, n - window):(n + 1)])
-            plt.plot(running_avg, label=casenames[case_id], color=colour_pool[case_id], linewidth=2)
+            xs = np.arange(len(running_avg))
+            ax[row, column].plot(xs, running_avg, label=casenames[case_id], color=colour_pool[case_id], linewidth=2)
             for l in losses:
                 running_avg_l = np.empty(l.shape[0])
                 for n in range(l.shape[0]):
                     running_avg_l[n] = np.mean(l[max(0, n - window):(n + 1)])
-                plt.plot(running_avg_l, color=colour_pool[case_id], linestyle='--', linewidth=1)
-    plt.legend()
-    plt.grid(True)
-    plt.xticks([0, 4, 9, 14, 19], ['1', '5', '10', '15', '20'])
-    plt.xlabel('Epoch')
-    plt.ylabel('Validation loss')
-    plt.tight_layout()
-    plt.show()
+                ax[row, column].plot(xs, running_avg_l, color=colour_pool[case_id], linestyle='--', linewidth=1)
+
+            ax[row, column].set_ylim([0.0225, 0.0335])
+            ax[row, column].set_yticks([0.024, 0.026, 0.028, 0.030, 0.032])
+            ax[row, column].set_xlim([-2, 21])
+            ax[row, column].set_xticks([0, 4, 9, 14, 19])
+            ax[row, column].set_xticklabels(['1', '5', '10', '15', '20'])
+            ax[row, column].grid(True)
+            if column == 0:
+                ax[row, column].set_ylabel('Validation loss')
+                ax[row, column].spines[['right']].set_visible(False)
+            elif column == 4:
+                for tick in ax[row, column].yaxis.get_major_ticks():
+                    tick.tick1line.set_visible(False)
+                    tick.tick2line.set_visible(False)
+                    tick.label1.set_visible(False)
+                    tick.label2.set_visible(False)
+            else:
+                ax[row, column].spines[['right']].set_visible(False)
+                for tick in ax[row, column].yaxis.get_major_ticks():
+                    tick.tick1line.set_visible(False)
+                    tick.tick2line.set_visible(False)
+                    tick.label1.set_visible(False)
+                    tick.label2.set_visible(False)
+            if row == 0:
+                ax[row, column].spines[['bottom']].set_visible(False)
+                for tick in ax[row, column].xaxis.get_major_ticks():
+                    tick.tick1line.set_visible(False)
+                    tick.tick2line.set_visible(False)
+                    tick.label1.set_visible(False)
+                    tick.label2.set_visible(False)
+
+            ax[row, column].set_xlabel('Epoch')
+            handle = Line2D([0], [0], color=colour_pool[case_id], linewidth=5)
+            ax[row, column].legend([handle], [casenames[case_id]], loc='upper left', fontsize=9,
+                                   handlelength=0.1, frameon=True)
+
+            # handle = Line2D([0], [0], color=colour_pool[case_id], linewidth=5)
+            # if row == 0:
+            #     bbox_h = 0.18
+            # else:
+            #     bbox_h = 1.0
+            # if case_id < 3:
+            #     ax[row, column].legend([handle], [casenames[case_id]], loc='upper left', fontsize=10,
+            #                            bbox_to_anchor=(-0.04, 1.23 + bbox_h),
+            #                            handlelength=0.1, frameon=False)
+            # else:
+            #     ax[row, column].legend([handle], [casenames[case_id]], loc='upper left', fontsize=10,
+            #                            bbox_to_anchor=(-0.04, 1.28 + bbox_h),
+            #                            handlelength=0.1, frameon=False)
+
+    plt.savefig(os.path.join(script_path, '..', 'figs', 'sys_id_loss_curve.pdf'),
+                dpi=300, bbox_inches='tight', pad_inches=0.01)
 
 
 plot_loss_curve()
