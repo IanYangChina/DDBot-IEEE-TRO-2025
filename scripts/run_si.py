@@ -53,7 +53,13 @@ def main(args):
         case += '-man-init'
 
     case += f'-res{args["res"]}'
-    result_path = os.path.join(script_path, '..', 'log-sys_id', case)
+
+    if args['sand']:
+        mat = '_sand'
+    else:
+        mat = ''
+
+    result_path = os.path.join(script_path, '..', f'log-sys_id{mat}', case)
 
     if args['backend'] == 'opengl':
         backend = ti.opengl
@@ -91,17 +97,14 @@ def main(args):
 
     loss_cfg = {
         'use_height_map_loss': args['use_height_map_loss'],
-        'target_pcd_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
+        'target_pcd_path': os.path.join(script_path, '..', 'data', f'sys_id_target_pcds{mat}',
                                         f'pcd_0_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
         'height_grid_res': args["res"],
     }
-    loss_cfg_eval = dcp(loss_cfg)
-    # loss_cfg_eval['height_grid_res'] = 60
     loss_cfg_valid = dcp(loss_cfg)
-    loss_cfg_valid['target_pcd_path'] = os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
+    loss_cfg_valid['target_pcd_path'] = os.path.join(script_path, '..', 'data', f'sys_id_target_pcds{mat}',
                                                         f'pcd_1_cropped_norm_z_aligned.ply')
-    # loss_cfg_valid['height_grid_res'] = 60
 
     E_range = (5e4, 2e5)
     rho_range = (1200, 2200)
@@ -228,7 +231,7 @@ def main(args):
             ti.reset()
             ti.init(arch=backend, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True, random_seed=args['seed'])
             env_cfg['horizon'] = trajectory.shape[0]
-            env, mpm_env, init_state = make_env(env_cfg, loss_cfg_eval, cam_cfg=cam_cfg, debug_grad=False)
+            env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg, debug_grad=False)
             set_parameters(mpm_env, material_id=SAND, e=E.copy(), nu=nu.copy(), rho=rho.copy(),
                            sand_friction_angle=sand_angle.copy(),
                            manipulator_friction=0.5, container_friction=0.5)
@@ -440,5 +443,6 @@ if __name__ == '__main__':
     parser.add_argument('--backend', dest='backend', default='cuda', type=str, help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
     parser.add_argument('--eval', dest='eval', action='store_true', default=False, help='Evaluate the model')
+    parser.add_argument('--sand', dest='sand', action='store_true', default=False, help='Use sand')
     arguments = vars(parser.parse_args())
     main(arguments)

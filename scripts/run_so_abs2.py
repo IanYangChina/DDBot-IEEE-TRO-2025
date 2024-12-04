@@ -42,7 +42,7 @@ SOIL_HEIGHT = 0.085 + 0.005
 def main(args):
     seed = args['seed']
     if seed == -1:
-        seeds = [1, 2, 3, 4]
+        seeds = [0, 1, 2, 3, 4]
     else:
         seeds = [seed]
 
@@ -71,13 +71,18 @@ def main(args):
 
     learning_rate = args['lr']
     subfix += f'-lr{learning_rate}'
-    case = f'd{ptcl_d}-task-{task_id}{subfix}'
-    result_path = os.path.join(script_path, '..', f'log-abs2')
 
-    horizon = 600
-    with open(os.path.join(script_path, '..', 'log-sys_id', f'd{ptcl_d}-hm-gclip-ls-res40', 'best_params.json')) as f:
+    if args['sand']:
+        mat = '_sand'
+    else:
+        mat = ''
+
+    case = f'd{ptcl_d}-task-{task_id}{subfix}'
+    result_path = os.path.join(script_path, '..', f'log-abs2{mat}')
+    with open(os.path.join(script_path, '..', f'log-sys_id{mat}', f'd{ptcl_d}-hm-gclip-ls-res40', 'best_params.json')) as f:
         best_params = json.load(f)["Parameters"]
 
+    horizon = 600
     env_cfg = {
         'p_density': float(args['ptcl_density']),
         'material_id': SAND,
@@ -92,7 +97,7 @@ def main(args):
 
     loss_cfg = {
         'use_height_map_loss': args['use_height_map_loss'],
-        'target_pcd_path': os.path.join(script_path, '..', 'data', 'task_target_pcds',
+        'target_pcd_path': os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
                                         f'pcd_{task_id}_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
         'height_grid_res': 40,
@@ -1008,5 +1013,6 @@ if __name__ == '__main__':
     parser.add_argument('--eval-spec', dest='eval_specific', action='store_true', default=False, help='Evaluate the model with specific epoch')
     parser.add_argument('--view-demon', dest='view_demon', action='store_true', default=False, help='View demonstration')
     parser.add_argument('--lr', dest='lr', type=float, default=0.02, help='Learning rate')
+    parser.add_argument('--sand', dest='sand', action='store_true', default=False, help='Use sand')
     arguments = vars(parser.parse_args())
     main(arguments)

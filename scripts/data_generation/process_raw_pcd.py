@@ -31,11 +31,11 @@ soil_box_frame_in_world = o3d.geometry.TriangleMesh.create_coordinate_frame(size
 transform_world_to_cam = np.load(os.path.join(data_path, 'cam_extrinsics_fine_tuned.npy'))
 transform_cam_to_world = np.linalg.inv(transform_world_to_cam)
 
-task = 'sys_id'
-mat = '_sand'
-test = False
+task = 'task'
+mat = ''
+test = True
 pcd_folder_path = os.path.join(data_path, f'{task}_target_pcds{mat}')
-for pcd_id in [1]:
+for pcd_id in [0, 1, 2, 3]:
     frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
     pcd_path = os.path.join(pcd_folder_path, f'pcd_{pcd_id}.ply')
     pcd_in_cam_frame = o3d.io.read_point_cloud(pcd_path)
@@ -44,11 +44,11 @@ for pcd_id in [1]:
     # ], width=800, height=600)
     #
     pcd_in_world_frame = pcd_in_cam_frame.transform(transform_world_to_cam)
-    o3d.visualization.draw_geometries([
-        frame, table_surface, soil_box_frame_in_world,
-        workspace_bounding_box,
-        pcd_in_world_frame,
-    ], width=800, height=600)
+    # o3d.visualization.draw_geometries([
+    #     frame, table_surface, soil_box_frame_in_world,
+    #     workspace_bounding_box,
+    #     pcd_in_world_frame,
+    # ], width=800, height=600)
     if not test:
         crop_pcd_in_world_frame = pcd_in_world_frame.crop(workspace_bounding_box)
         points = np.asarray(crop_pcd_in_world_frame.points)
