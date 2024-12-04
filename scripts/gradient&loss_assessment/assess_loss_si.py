@@ -22,7 +22,7 @@ SOIL_HEIGHT = 0.085 + 0.005
 
 
 def main(args):
-    for param in ['-ER', '-NS']:
+    for param in ['-ER']:
         d_str = args['ptcl_density']
         case = f'd{d_str}'
         if args['soft_contact']:
@@ -86,9 +86,9 @@ def main(args):
             'height_grid_res': 40,
         }
 
-        E0 = 2.5e5
-        dE = (1e6 - 2.5e5) / 50
-        # E_range = (2.5e5, 1e6)
+        E0 = 5e4
+        dE = (5e4 - 2e5) / 50
+        # E_range = (5e4, 2e5)
         rho0 = 1200
         drho = (2200 - 1200) / 50
         # rho_range = (1200, 2200)
@@ -319,7 +319,6 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="System identification for soil")
-    parser.add_argument('--seed', dest='seed', type=int, default=-1, help='Random seed')
     parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default=5e6,
                         help='Particle density, use scientific notation like \'5e6\'.')
     parser.add_argument('--soft-contact', dest='soft_contact', action='store_true', default=False,

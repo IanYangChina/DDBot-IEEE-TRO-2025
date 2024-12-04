@@ -352,4 +352,77 @@ def plot_legends():
 
 # read_and_save_data()
 # plot_legends()
-plot_grads()
+# plot_grads()
+
+
+def show_heightmaps(param='ER'):
+    if 'skill' not in param:
+        if param == 'ER':
+            X = np.arange(2.5e5, 1e6, 1.5e4)
+            Y = np.arange(1200, 2200, 20)
+        else:
+            X = np.arange(0.1, 0.4, (0.4 - 0.1) / 50)
+            Y = np.arange(10, 40, (40 - 10) / 50)
+        X, Y = np.meshgrid(X, Y)
+        res = [10, 20, 30, 40, 50, 60]
+        for i in range(6):
+            loss_type = 'emd'
+            fig = plt.figure()
+            ax = plt.axes(projection='3d')
+            ax.view_init(44, 58)
+            ax.set_xlabel('Young\'s Modulus')
+            ax.set_ylabel('Material Density')
+            ax.set_zlabel(f'{loss_type.upper()} Loss')
+            ax.set_title(f'{loss_type.upper()} loss landscape with height grid resolution {res[i]}')
+            hm = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
+                                      f'{loss_type}_losses-res{res[i]}-{param}.npy'))
+            hm /= (res[i] ** 2)
+            surf = ax.plot_surface(X, Y, hm, rstride=1, cstride=1,
+                                   cmap='viridis', edgecolor='none')
+            fig.colorbar(surf)
+            plt.show()
+            plt.close()
+
+            loss_type = 'hm'
+            fig = plt.figure()
+            ax = plt.axes(projection='3d')
+            ax.view_init(44, 58)
+            ax.set_xlabel('Young\'s Modulus')
+            ax.set_ylabel('Material Density')
+            ax.set_zlabel(f'{loss_type.upper()} Loss')
+            ax.set_title(f'{loss_type.upper()} loss landscape with height grid resolution {res[i]}')
+            hm = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
+                                      f'{loss_type}_losses-res{res[i]}-{param}.npy'))
+            hm /= (res[i] ** 2)
+            surf = ax.plot_surface(X, Y, hm, rstride=1, cstride=1,
+                                   cmap='viridis', edgecolor='none')
+            fig.colorbar(surf)
+            plt.show()
+            plt.close()
+    else:
+        res = [10, 20, 30, 40, 50, 60]
+        for n in range(5):
+            fig, ax = plt.subplots(4, 3, figsize=(18, 12))
+            loss_type = 'emd'
+            for i in range(6):
+                loss = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
+                                            f'{loss_type}_losses-res{res[i]}-skill-{n}.npy'))
+                loss /= (res[i] ** 2)
+                ax[i // 3, i % 3].plot(loss)
+                ax[i // 3, i % 3].set_title(f'Resolution {res[i]} ({int(res[i] ** 2)} points)')
+                ax[i // 3, i % 3].set_ylabel(f'Avg. {loss_type.upper()} loss (m)')
+                ax[i // 3, i % 3].set_xticks([])
+            loss_type = 'hm'
+            for i in range(6, 12):
+                loss = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
+                                            f'{loss_type}_losses-res{res[i - 6]}-skill-{n}.npy'))
+                loss /= (res[i - 6] ** 2)
+                ax[i // 3, i % 3].plot(loss)
+                ax[i // 3, i % 3].set_title(f'Resolution {res[i - 6]}')
+                ax[i // 3, i % 3].set_ylabel(f'Avg. {loss_type.upper()} loss (m)')
+                ax[i // 3, i % 3].set_xticks([])
+                if i >= 9:
+                    ax[i // 3, i % 3].set_xlabel('Skill parameter')
+                    ax[i // 3, i % 3].set_xticks([0, 50, 100, 150, 200], ['-1.0', '-0.5', '0.0', '0.5', '1.0'])
+            plt.show()
+            plt.close()
