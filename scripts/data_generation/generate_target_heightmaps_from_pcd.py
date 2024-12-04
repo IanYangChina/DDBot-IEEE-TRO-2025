@@ -31,8 +31,8 @@ def run(args):
 
     script_path = os.path.dirname(os.path.realpath(__file__))
     script_path = os.path.join(script_path, '..')
-    for data_ind in [1]:
-        data_path = os.path.join(script_path, '..', 'data', 'sys_id_target_pcds_sand')
+    for data_ind in [0, 1, 2, 3]:
+        data_path = os.path.join(script_path, '..', 'data', 'task_target_pcds')
 
         target_pcd_path = os.path.join(data_path, f'pcd_{data_ind}_cropped_norm_z_aligned.ply')
         pcd_offset = (0.2, 0.2, 0.0)
@@ -77,14 +77,15 @@ def run(args):
         print(target_pcd_downed)
         frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
         # o3d.visualization.draw_geometries([frame, target_pcd_downed], width=800, height=600)
-        o3d.io.write_point_cloud(os.path.join(data_path, f'pcd_{data_ind}_cropped_norm_z_aligned_res{height_map_res}.ply'),
-                                 target_pcd_downed)
+        # o3d.io.write_point_cloud(os.path.join(data_path, f'pcd_{data_ind}_cropped_norm_z_aligned_res{height_map_res}.ply'),
+        #                          target_pcd_downed)
 
-        # plt.imshow(height_map_pcd, cmap='YlOrBr')
-        # plt.show()
+        height_map_pcd_np = height_map_pcd_target.to_numpy()
+        plt.imshow(height_map_pcd_np, cmap='YlOrBr')
+        plt.show()
         #
-        # np.save(
-        #     os.path.join(data_path, f'pcd_{data_ind}_cropped_norm_z_aligned_height_map-res{str(height_map_res)}.npy'), height_map_pcd)
+        np.save(
+            os.path.join(data_path, f'pcd_{data_ind}_cropped_norm_z_aligned_height_map-res{str(height_map_res)}.npy'), height_map_pcd_np)
         # print(f'height map saved as:\n'
         #       f'{os.path.join(data_path, f"pcd_{data_ind}_cropped_norm_z_aligned_height_map-res{str(height_map_res)}.npy")}')
 
