@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib.lines import Line2D
+from matplotlib.ticker import LinearLocator
 from tensorflow.python.summary.summary_iterator import summary_iterator
 from drl_implementation.agent.utils import plot as plot
 script_path = os.path.dirname(os.path.realpath(__file__))
@@ -19,7 +20,6 @@ plt.rcParams["mathtext.fontset"] = "stix"
 plt.rcParams['font.serif'] = ['Times New Roman'] + plt.rcParams['font.serif']
 plt.rcParams["font.weight"] = "normal"
 plt.rcParams.update({'font.size': 10})
-mpl.use('Agg')
 
 
 def read_and_save_data(substep=False):
@@ -356,6 +356,9 @@ def plot_legends():
 
 
 def show_heightmaps(param='ER'):
+    plt.rcParams.update({'font.size': 16})
+    cmap = 'PuBu'
+    mpl.use('Agg')
     if 'skill' not in param:
         if param == 'ER':
             X = np.arange(2.5e5, 1e6, 1.5e4)
@@ -365,40 +368,67 @@ def show_heightmaps(param='ER'):
             Y = np.arange(10, 40, (40 - 10) / 50)
         X, Y = np.meshgrid(X, Y)
         res = [10, 20, 30, 40, 50, 60]
+        fig = plt.figure(figsize=(18, 6))
+        plt.subplots_adjust(wspace=0.12, hspace=-0.01)
         for i in range(6):
             loss_type = 'emd'
-            fig = plt.figure()
-            ax = plt.axes(projection='3d')
-            ax.view_init(44, 58)
-            ax.set_xlabel('Young\'s Modulus')
-            ax.set_ylabel('Material Density')
-            ax.set_zlabel(f'{loss_type.upper()} Loss')
-            ax.set_title(f'{loss_type.upper()} loss landscape with height grid resolution {res[i]}')
+            ax = fig.add_subplot(2, 6, i+1, projection='3d')
+            ax.view_init(30, 120)
+            if param == 'ER':
+                ax.set_xlabel(r'$E$')
+                ax.set_ylabel(r'$\rho$')
+            else:
+                ax.set_xlabel('\n'+r'$\nu$', linespacing=-1.5)
+                ax.set_xticks([0.1, 0.2, 0.3, 0.4])
+                ax.set_xticklabels(['\n0.1', '\n0.2', '\n0.3', '\n0.4'], linespacing=-1.5)
+                ax.set_ylabel('\n'+r'$\phi_f$', linespacing=-1.5)
+                ax.set_yticks([10, 20, 30, 40])
+                ax.set_yticklabels(['\n10', '\n20', '\n30', '\n40'], linespacing=-1.5)
+            tmp_planes = ax.zaxis._PLANES
+            ax.zaxis._PLANES = (tmp_planes[2], tmp_planes[3],
+                                tmp_planes[0], tmp_planes[1],
+                                tmp_planes[4], tmp_planes[5])
+            if i == 0:
+                ax.set_zlabel('\n'+f'{loss_type.upper()} Loss', linespacing=-3)
+            ax.set_zticks([])
+            # ax.set_title(f'{res[i]}x{res[i]}')
             hm = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
                                       f'{loss_type}_losses-res{res[i]}-{param}.npy'))
             hm /= (res[i] ** 2)
+            hm -= np.mean(hm)
             surf = ax.plot_surface(X, Y, hm, rstride=1, cstride=1,
-                                   cmap='viridis', edgecolor='none')
-            fig.colorbar(surf)
-            plt.show()
-            plt.close()
+                                   cmap=cmap, edgecolor='none')
 
             loss_type = 'hm'
-            fig = plt.figure()
-            ax = plt.axes(projection='3d')
-            ax.view_init(44, 58)
-            ax.set_xlabel('Young\'s Modulus')
-            ax.set_ylabel('Material Density')
-            ax.set_zlabel(f'{loss_type.upper()} Loss')
-            ax.set_title(f'{loss_type.upper()} loss landscape with height grid resolution {res[i]}')
+            ax = fig.add_subplot(2, 6, i+7, projection='3d')
+            ax.view_init(30, 120)
+            if param == 'ER':
+                ax.set_xlabel(r'$E$')
+                ax.set_ylabel(r'$\rho$')
+            else:
+                ax.set_xlabel('\n'+r'$\nu$', linespacing=-1.5)
+                ax.set_xticks([0.1, 0.2, 0.3, 0.4])
+                ax.set_xticklabels(['\n0.1', '\n0.2', '\n0.3', '\n0.4'], linespacing=-1.5)
+                ax.set_ylabel('\n'+r'$\phi_f$', linespacing=-1.5)
+                ax.set_yticks([10, 20, 30, 40])
+                ax.set_yticklabels(['\n10', '\n20', '\n30', '\n40'], linespacing=-1.5)
+            tmp_planes = ax.zaxis._PLANES
+            ax.zaxis._PLANES = (tmp_planes[2], tmp_planes[3],
+                                tmp_planes[0], tmp_planes[1],
+                                tmp_planes[4], tmp_planes[5])
+            if i == 0:
+                ax.set_zlabel('\n'+f'{loss_type.upper()} Loss', linespacing=-3)
+            ax.set_zticks([])
             hm = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
                                       f'{loss_type}_losses-res{res[i]}-{param}.npy'))
             hm /= (res[i] ** 2)
+            hm -= np.mean(hm)
             surf = ax.plot_surface(X, Y, hm, rstride=1, cstride=1,
-                                   cmap='viridis', edgecolor='none')
-            fig.colorbar(surf)
-            plt.show()
-            plt.close()
+                                   cmap=cmap, edgecolor='none')
+        plt.savefig(os.path.join(fig_path, f'{param}-losses.pdf'),
+                    format='pdf', bbox_inches='tight', pad_inches=0.01, dpi=300)
+        # plt.tight_layout()
+        # plt.show()
     else:
         res = [10, 20, 30, 40, 50, 60]
         for n in range(5):
@@ -426,3 +456,6 @@ def show_heightmaps(param='ER'):
                     ax[i // 3, i % 3].set_xticks([0, 50, 100, 150, 200], ['-1.0', '-0.5', '0.0', '0.5', '1.0'])
             plt.show()
             plt.close()
+
+
+show_heightmaps('NS')
