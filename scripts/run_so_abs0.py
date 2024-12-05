@@ -36,7 +36,7 @@ DT_GLOBAL = 0.01  # sec
 def main(args):
     seed = args['seed']
     if seed == -1:
-        seeds = [1, 2, 3, 4]
+        seeds = [0, 1, 2, 3, 4]
     else:
         seeds = [seed]
     task_id = args['task_id']

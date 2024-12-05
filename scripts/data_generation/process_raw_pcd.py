@@ -9,14 +9,14 @@ data_path = os.path.join(script_path, '..', 'data')
 
 # Create bounding box of the inner space of the real soil box
 workspace_bounding_box_array = np.array([
- [-0.104,  0.45,  -0.002],
- [ 0.163,  0.45,  -0.002],
- [ 0.163,  0.71,  -0.002],
- [-0.104,  0.71,  -0.002],
- [-0.104,  0.45,   0.12],
- [ 0.163,  0.45,   0.12],
- [ 0.163,  0.71,   0.12],
- [-0.104,  0.71,   0.12]])
+ [-0.11,  0.45,  -0.002],
+ [ 0.156,  0.45,  -0.002],
+ [ 0.156,  0.71,  -0.002],
+ [-0.11,  0.71,  -0.002],
+ [-0.11,  0.45,   0.12],
+ [ 0.156,  0.45,   0.12],
+ [ 0.156,  0.71,   0.12],
+ [-0.11,  0.71,   0.12]])
 workspace_bounding_box_array = o3d.utility.Vector3dVector(workspace_bounding_box_array)
 workspace_bounding_box = o3d.geometry.OrientedBoundingBox.create_from_points(points=workspace_bounding_box_array)
 workspace_bounding_box.color = (0, 1, 0)
@@ -31,11 +31,11 @@ soil_box_frame_in_world = o3d.geometry.TriangleMesh.create_coordinate_frame(size
 transform_world_to_cam = np.load(os.path.join(data_path, 'cam_extrinsics_fine_tuned.npy'))
 transform_cam_to_world = np.linalg.inv(transform_world_to_cam)
 
-task = 'sys_id'
-mat = '_sand'
+task = 'task'
+mat = ''
 test = True
 pcd_folder_path = os.path.join(data_path, f'{task}_target_pcds{mat}')
-for pcd_id in [0]:
+for pcd_id in [0, 1, 2]:
     frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
     pcd_path = os.path.join(pcd_folder_path, f'pcd_{pcd_id}.ply')
     pcd_in_cam_frame = o3d.io.read_point_cloud(pcd_path)
