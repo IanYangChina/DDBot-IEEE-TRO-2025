@@ -356,27 +356,39 @@ def plot_legends():
 
 
 def show_heightmaps(param='ER'):
-    plt.rcParams.update({'font.size': 16})
-    cmap = 'PuBu'
+    plt.rcParams.update({'font.size': 15})
+    cmap = 'hot'
     mpl.use('Agg')
     if 'skill' not in param:
         if param == 'ER':
-            X = np.arange(2.5e5, 1e6, 1.5e4)
-            Y = np.arange(1200, 2200, 20)
+            X = np.arange(50000, 200000, (2e5-5e4)/50)
+            Y = np.arange(1200, 2200, (2200 - 1200) / 50)
+            view = (30, -20)
         else:
             X = np.arange(0.1, 0.4, (0.4 - 0.1) / 50)
             Y = np.arange(10, 40, (40 - 10) / 50)
+            view = (30, 120)
         X, Y = np.meshgrid(X, Y)
         res = [10, 20, 30, 40, 50, 60]
-        fig = plt.figure(figsize=(18, 6))
+        fig = plt.figure(figsize=(3*len(res), 3*2))
         plt.subplots_adjust(wspace=0.12, hspace=-0.01)
-        for i in range(6):
+        for i in range(len(res)):
             loss_type = 'emd'
-            ax = fig.add_subplot(2, 6, i+1, projection='3d')
-            ax.view_init(30, 120)
+            ax = fig.add_subplot(
+                2, len(res), i+1,
+               projection='3d'
+            )
             if param == 'ER':
-                ax.set_xlabel(r'$E$')
-                ax.set_ylabel(r'$\rho$')
+                ax.set_xlabel('\n'+r'$E$', linespacing=0.)
+                ax.set_xticks([80000, 120000, 160000])
+                ax.set_xticklabels(['\n8e5 ', '\n1.2e5 ', '\n1.6e5 '], linespacing=-1.5)
+                ax.set_ylabel('\n'+r'$\rho$', linespacing=-3.5)
+                ax.set_yticks([1300, 1700, 2100])
+                ax.set_yticklabels(['\n1300', '\n1700', '\n2100'], linespacing=-1.5)
+                # ax.set_yticks([1200, 1350, 1500])
+                # ax.set_yticklabels(['\n1200', '\n1350', '\n1500'], linespacing=-1.5)
+                # ax.set_yticks([1600, 1850, 2100])
+                # ax.set_yticklabels(['\n1600', '\n1850', '\n2100'], linespacing=-1.9)
             else:
                 ax.set_xlabel('\n'+r'$\nu$', linespacing=-1.5)
                 ax.set_xticks([0.1, 0.2, 0.3, 0.4])
@@ -384,34 +396,18 @@ def show_heightmaps(param='ER'):
                 ax.set_ylabel('\n'+r'$\phi_f$', linespacing=-1.5)
                 ax.set_yticks([10, 20, 30, 40])
                 ax.set_yticklabels(['\n10', '\n20', '\n30', '\n40'], linespacing=-1.5)
-            tmp_planes = ax.zaxis._PLANES
-            ax.zaxis._PLANES = (tmp_planes[2], tmp_planes[3],
-                                tmp_planes[0], tmp_planes[1],
-                                tmp_planes[4], tmp_planes[5])
-            if i == 0:
-                ax.set_zlabel('\n'+f'{loss_type.upper()} Loss', linespacing=-3)
-            ax.set_zticks([])
             # ax.set_title(f'{res[i]}x{res[i]}')
             hm = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
                                       f'{loss_type}_losses-res{res[i]}-{param}.npy'))
             hm /= (res[i] ** 2)
             hm -= np.mean(hm)
-            surf = ax.plot_surface(X, Y, hm, rstride=1, cstride=1,
-                                   cmap=cmap, edgecolor='none')
+            # ax.imshow(hm, cmap=cmap)
+            # ax.set_xlabel(None)
+            # ax.set_ylabel(None)
+            # ax.set_xticks([])
+            # ax.set_yticks([])
 
-            loss_type = 'hm'
-            ax = fig.add_subplot(2, 6, i+7, projection='3d')
-            ax.view_init(30, 120)
-            if param == 'ER':
-                ax.set_xlabel(r'$E$')
-                ax.set_ylabel(r'$\rho$')
-            else:
-                ax.set_xlabel('\n'+r'$\nu$', linespacing=-1.5)
-                ax.set_xticks([0.1, 0.2, 0.3, 0.4])
-                ax.set_xticklabels(['\n0.1', '\n0.2', '\n0.3', '\n0.4'], linespacing=-1.5)
-                ax.set_ylabel('\n'+r'$\phi_f$', linespacing=-1.5)
-                ax.set_yticks([10, 20, 30, 40])
-                ax.set_yticklabels(['\n10', '\n20', '\n30', '\n40'], linespacing=-1.5)
+            ax.view_init(view[0], view[1])
             tmp_planes = ax.zaxis._PLANES
             ax.zaxis._PLANES = (tmp_planes[2], tmp_planes[3],
                                 tmp_planes[0], tmp_planes[1],
@@ -419,12 +415,61 @@ def show_heightmaps(param='ER'):
             if i == 0:
                 ax.set_zlabel('\n'+f'{loss_type.upper()} Loss', linespacing=-3)
             ax.set_zticks([])
+            surf = ax.plot_surface(X, Y, hm, rstride=1, cstride=1,
+                                   cmap=cmap, edgecolor='none')
+            # surf = ax.plot_surface(X[:17, :], Y[:17, :], hm[:17, :], rstride=1, cstride=1,
+            #                        cmap=cmap, edgecolor='none')
+            # surf = ax.plot_surface(X[17:, :], Y[17:, :], hm[17:, :], rstride=1, cstride=1,
+            #                        cmap=cmap, edgecolor='none')
+
+            loss_type = 'hm'
+            ax = fig.add_subplot(
+                2, len(res), i+len(res)+1,
+               projection='3d'
+            )
+            if param == 'ER':
+                ax.set_xlabel('\n'+r'$E$', linespacing=0.)
+                ax.set_xticks([80000, 120000, 160000])
+                ax.set_xticklabels(['\n8e5 ', '\n1.2e5 ', '\n1.6e5 '], linespacing=-1.5)
+                ax.set_ylabel('\n'+r'$\rho$', linespacing=-3.5)
+                ax.set_yticks([1300, 1700, 2100])
+                ax.set_yticklabels(['\n1300', '\n1700', '\n2100'], linespacing=-1.5)
+                # ax.set_yticks([1200, 1350, 1500])
+                # ax.set_yticklabels(['\n1200', '\n1350', '\n1500'], linespacing=-1.5)
+                # ax.set_yticks([1600, 1850, 2100])
+                # ax.set_yticklabels(['\n1600', '\n1850', '\n2100'], linespacing=-1.9)
+            else:
+                ax.set_xlabel('\n'+r'$\nu$', linespacing=-1.5)
+                ax.set_xticks([0.1, 0.2, 0.3, 0.4])
+                ax.set_xticklabels(['\n0.1', '\n0.2', '\n0.3', '\n0.4'], linespacing=-1.5)
+                ax.set_ylabel('\n'+r'$\phi_f$', linespacing=-1.5)
+                ax.set_yticks([10, 20, 30, 40])
+                ax.set_yticklabels(['\n10', '\n20', '\n30', '\n40'], linespacing=-1.5)
             hm = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
                                       f'{loss_type}_losses-res{res[i]}-{param}.npy'))
             hm /= (res[i] ** 2)
+            hm = np.nan_to_num(hm, nan=0.06)
             hm -= np.mean(hm)
+            # ax.imshow(hm, cmap=cmap)
+            # ax.set_xlabel(None)
+            # ax.set_ylabel(None)
+            # ax.set_xticks([])
+            # ax.set_yticks([])
+
+            ax.view_init(view[0], view[1])
+            tmp_planes = ax.zaxis._PLANES
+            ax.zaxis._PLANES = (tmp_planes[2], tmp_planes[3],
+                                tmp_planes[0], tmp_planes[1],
+                                tmp_planes[4], tmp_planes[5])
+            if i == 0:
+                ax.set_zlabel('\n'+f'{loss_type.upper()} Loss', linespacing=-3)
+            ax.set_zticks([])
             surf = ax.plot_surface(X, Y, hm, rstride=1, cstride=1,
                                    cmap=cmap, edgecolor='none')
+            # surf = ax.plot_surface(X[:18, :], Y[:18, :], hm[:18, :], rstride=1, cstride=1,
+            #                        cmap=cmap, edgecolor='none')
+            # surf = ax.plot_surface(X[17:, :], Y[17:, :], hm[17:, :], rstride=1, cstride=1,
+            #                        cmap=cmap, edgecolor='none')
         plt.savefig(os.path.join(fig_path, f'{param}-losses.pdf'),
                     format='pdf', bbox_inches='tight', pad_inches=0.01, dpi=300)
         # plt.tight_layout()
@@ -458,4 +503,4 @@ def show_heightmaps(param='ER'):
             plt.close()
 
 
-show_heightmaps('NS')
+show_heightmaps('ER')
