@@ -22,7 +22,7 @@ SOIL_HEIGHT = 0.085 + 0.005
 
 
 def main(args):
-    for param in ['-ER', '-NS']:
+    for param in ['-NS']:
         d_str = args['ptcl_density']
         case = f'd{d_str}'
 
@@ -104,8 +104,8 @@ def main(args):
                     sand_angle = np.asarray([15])
                 else:
                     # param == '-NS'
-                    E = np.asarray([6e5])
-                    rho = np.asarray([1800])
+                    E = np.asarray([1e5])
+                    rho = np.asarray([1350])
                     nu = np.asarray([nu0 + i * dnu])
                     sand_angle = np.asarray([sand_angle0 + j * dsand_angle])
 
