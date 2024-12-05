@@ -338,7 +338,7 @@ def main(args):
                 trajectory_np = tr_optim.step(trajectory_np, trajectory_grads_np[:trajectory_np.shape[0]])
                 trajectory_np = np.clip(trajectory_np, -0.004, 0.004)
 
-                np.save(os.path.join(log_dir, 'ckpts', f'grad_{n}.npy'), grad)
+                np.save(os.path.join(log_dir, 'ckpts', f'grad_{n}.npy'), trajectory_grads_np[:trajectory_np.shape[0]])
                 np.save(os.path.join(log_dir, 'ckpts', f'trajectory_{n}.npy'), trajectory_np)
 
         ti.reset()
