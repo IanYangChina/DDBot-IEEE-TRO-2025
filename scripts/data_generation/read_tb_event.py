@@ -402,9 +402,13 @@ def find_best_skill_parameters(ins=False, hm=False, demo=False, line_search=Fals
         open(os.path.join(p_folder, 'best_loss.json'), 'w').write(json.dumps(best_loss_info))
 
 
-find_best_skill_parameters(line_search=False, hm=False, demo=False, ins=False, task_id=0, lr='0.01')
-find_best_skill_parameters(line_search=False, hm=False, demo=True, ins=False, task_id=0, lr='0.01')
-find_best_skill_parameters(line_search=True, hm=False, demo=False, ins=False, task_id=0, lr='0.01')
-find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=0, lr='0.01')
-find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=0, lr='0.02')
-find_best_skill_parameters(line_search=True, hm=False, demo=False, ins=False, zero_init=True, task_id=0, lr='0.01')
+find_best_skill_parameters(line_search=False, hm=False, demo=False, ins=False, task_id=0, lr='0.02')
+find_best_skill_parameters(line_search=False, hm=False, demo=True, ins=False, task_id=0, lr='0.02')
+find_best_skill_parameters(line_search=True, hm=False, demo=False, ins=False, task_id=0, lr='0.02')
+find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=0, lr='0.03')
+find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=0, lr='0.005')
+find_best_skill_parameters(line_search=True, hm=False, demo=False, ins=False, zero_init=True, task_id=0, lr='0.02')
+find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=1, lr='0.02')
+find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=2, lr='0.02')
+find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=3, lr='0.02')
+

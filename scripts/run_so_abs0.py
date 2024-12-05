@@ -36,7 +36,7 @@ DT_GLOBAL = 0.01  # sec
 def main(args):
     seed = args['seed']
     if seed == -1:
-        seeds = [0, 1, 2, 3, 4]
+        seeds = [1, 2, 3, 4]
     else:
         seeds = [seed]
     task_id = args['task_id']
@@ -373,7 +373,7 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Gradient-based trajectory optimisation")
-    parser.add_argument('--seed', dest='seed', type=int, default=0, help='Random seed')
+    parser.add_argument('--seed', dest='seed', type=int, default=-1, help='Random seed')
     parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default="5e6", help='Particle density, use scientific notation like \'5e6\'.')
     parser.add_argument('--backend', dest='backend', default='cuda', type=str, help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')

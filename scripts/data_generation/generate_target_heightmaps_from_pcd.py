@@ -21,7 +21,6 @@ def run(args):
     height_map_xy_offset = (0.2, 0.2)
     height_map_pixel_size = height_map_size / height_map_res
     height_map_pcd_target = ti.field(dtype=DTYPE_TI, shape=(height_map_res, height_map_res), needs_grad=False)
-    down_sample_voxel_size = args['vds']
 
     @ti.func
     def from_xy_to_uv(x, y):
@@ -31,8 +30,8 @@ def run(args):
 
     script_path = os.path.dirname(os.path.realpath(__file__))
     script_path = os.path.join(script_path, '..')
-    for data_ind in [0, 1, 2, 3]:
-        data_path = os.path.join(script_path, '..', 'data', 'task_target_pcds')
+    for data_ind in [0, 1]:
+        data_path = os.path.join(script_path, '..', 'data', 'sys_id_target_pcds_sand')
 
         target_pcd_path = os.path.join(data_path, f'pcd_{data_ind}_cropped_norm_z_aligned.ply')
         pcd_offset = (0.2, 0.2, 0.0)

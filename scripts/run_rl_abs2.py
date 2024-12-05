@@ -80,7 +80,7 @@ def abstraction_two_skill(skill_params, dt):
         move_up_delta_z = move_up_distance / n_step_return
         for i in range(n_step + n_step_insert + n_step_push, n_step + n_step_insert + n_step_push + n_step_return):
             trajectory[i][3] = rotate_delta_x_back
-            trajectory[i][5] = move_up_delta_z
+            trajectory[i][2] = move_up_delta_z
 
     return trajectory[:n_step + n_step_insert + n_step_push + n_step_return, :]
 

@@ -22,13 +22,9 @@ SOIL_HEIGHT = 0.085 + 0.005
 
 
 def main(args):
-    for param in ['-ER']:
+    for param in ['-ER', '-NS']:
         d_str = args['ptcl_density']
         case = f'd{d_str}'
-        if args['soft_contact']:
-            case += '-soft'
-        if args['toi_contact']:
-            case += '-toi'
 
         result_path = os.path.join(script_path, '..', 'log-loss-analysis', case)
         if not args['test']:
@@ -71,12 +67,6 @@ def main(args):
             'agent_init_pos': (0.2, 0.2, 0.205),
             'agent_init_euler': (0, 180, 90),
         }
-        if args['soft_contact']:
-            assert not args['toi_contact']
-            env_cfg['collide_type'] = 'soft'
-        elif args['toi_contact']:
-            assert not args['soft_contact']
-            env_cfg['collide_type'] = 'toi'
 
         loss_cfg = {
             'use_height_map_loss': True,
@@ -312,19 +302,15 @@ def main(args):
 
         ll = 0
         for resolution in [10, 20, 30, 40, 50, 60]:
-            np.save(os.path.join(result_path, f'emd_losses-res{resolution}-{param}.npy'), emd_losses[ll])
-            np.save(os.path.join(result_path, f'hm_losses-res{resolution}-{param}.npy'), hm_losses[ll])
+            np.save(os.path.join(result_path, f'emd_losses-res{resolution}{param}.npy'), emd_losses[ll])
+            np.save(os.path.join(result_path, f'hm_losses-res{resolution}{param}.npy'), hm_losses[ll])
             ll += 1
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="System identification for soil")
-    parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default=5e6,
+    parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default='5e6',
                         help='Particle density, use scientific notation like \'5e6\'.')
-    parser.add_argument('--soft-contact', dest='soft_contact', action='store_true', default=False,
-                        help='Use soft contact')
-    parser.add_argument('--toi-contact', dest='toi_contact', action='store_true', default=False,
-                        help='Use time-of-impact contact')
     parser.add_argument('--backend', dest='backend', default='cuda', type=str,
                         help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
