@@ -22,7 +22,7 @@ plt.rcParams.update({'font.size': 10})
 
 
 def find_best_parameters(hm=False, grad_norm=False, grad_dy_scale=False, grad_clip=False,
-                         line_search=False, man_init=False, ptcl='5e6',
+                         line_search=False, man_init=False, ptcl='5e6', mat='',
                          resolutions=[10, 20, 30, 40, 50, 60]):
     """generate mean and deviation data from tensorboard logs"""
     case = f'd{ptcl}'
@@ -44,7 +44,7 @@ def find_best_parameters(hm=False, grad_norm=False, grad_dy_scale=False, grad_cl
         case += '-man-init'
 
     for res in resolutions:
-        case_folder = os.path.join(script_path, '..', 'log-sys_id', case + f'-res{res}')
+        case_folder = os.path.join(script_path, '..', f'log-sys_id{mat}', case + f'-res{res}')
         best_loss = np.inf
         best_loss_info = {}
         for seed in range(5):
@@ -145,6 +145,8 @@ def find_best_parameters(hm=False, grad_norm=False, grad_dy_scale=False, grad_cl
 
 # find_best_parameters(ptcl='1e7', grad_clip=True, line_search=True, man_init=True, hm=True, resolutions=[40])
 # find_best_parameters(ptcl='2e7', grad_clip=True, line_search=True, man_init=True, hm=True, resolutions=[40])
+# find_best_parameters(grad_clip=True, line_search=True, man_init=False, hm=True, resolutions=[40])  # validation res 60
+# find_best_parameters(grad_clip=True, line_search=True, man_init=False, hm=False, resolutions=[40])  # validation res 60
 # find_best_parameters(grad_clip=True, line_search=False, man_init=False, hm=True, resolutions=[40])  # validation res 60
 # find_best_parameters(grad_clip=True, line_search=False, man_init=False, hm=False, resolutions=[40])  # validation res 60
 # find_best_parameters(grad_clip=True, line_search=True, man_init=True, hm=True, resolutions=[40])
@@ -156,7 +158,7 @@ def find_best_parameters(hm=False, grad_norm=False, grad_dy_scale=False, grad_cl
 # exit()
 
 
-def plot_scatter():
+def plot_scatter(mat='_sand'):
     plt.figure(figsize=(2, 4))
     plt.rcParams.update({'font.size': 11})
     cases = ['gclip', 'hm-gclip',
@@ -176,7 +178,7 @@ def plot_scatter():
         y_std = []
         case = cases[case_id]
         for res in [40]:
-            case_folder = os.path.join(script_path, '..', 'log-sys_id', f'd5e6-{case}-res{res}')
+            case_folder = os.path.join(script_path, '..', f'log-sys_id{mat}', f'd5e6-{case}-res{res}')
             best_loss = []
             earliest_epoch = []
             for seed in range(5):
@@ -195,18 +197,18 @@ def plot_scatter():
 
     plt.grid(True, axis='x')
     casenames.reverse()
-    plt.xlim(0.0235, 0.0295)
-    plt.xticks([0.0245, 0.0265, 0.0285])
+    # plt.xlim(0.0235, 0.0295)
+    # plt.xticks([0.0245, 0.0265, 0.0285])
     plt.yticks([])
     plt.xlabel('Best validation loss')
-    plt.savefig(os.path.join(script_path, '..', 'figs', 'sys_id.pdf'),
+    plt.savefig(os.path.join(script_path, '..', 'figs', f'sys_id{mat}.pdf'),
                 dpi=300, bbox_inches='tight', pad_inches=0.01)
 
 
 # plot_scatter()
 
 
-def plot_loss_curve():
+def plot_loss_curve(mat='_sand'):
     plt.rcParams.update({'font.size': 11})
     fig, ax = plt.subplots(2, 5, figsize=(12, 4))
     plt.subplots_adjust(wspace=0, hspace=0)
@@ -231,7 +233,7 @@ def plot_loss_curve():
             column = int(case_id / 2)
 
         for res in [40]:
-            case_folder = os.path.join(script_path, '..', 'log-sys_id', f'd5e6-{case}-res{res}')
+            case_folder = os.path.join(script_path, '..', f'log-sys_id{mat}', f'd5e6-{case}-res{res}')
             losses = []
             for seed in range(5):
                 folder = os.path.join(case_folder, f'seed-{seed}')
@@ -250,8 +252,8 @@ def plot_loss_curve():
                     running_avg_l[n] = np.mean(l[max(0, n - window):(n + 1)])
                 ax[row, column].plot(xs, running_avg_l, color=colour_pool[case_id], linestyle='--', linewidth=1)
 
-            ax[row, column].set_ylim([0.0225, 0.0335])
-            ax[row, column].set_yticks([0.024, 0.026, 0.028, 0.030, 0.032])
+            ax[row, column].set_ylim([0.0215, 0.0245])
+            ax[row, column].set_yticks([0.022, 0.023, 0.024])
             ax[row, column].set_xlim([-2, 21])
             ax[row, column].set_xticks([0, 4, 9, 14, 19])
             ax[row, column].set_xticklabels(['1', '5', '10', '15', '20'])
@@ -285,11 +287,11 @@ def plot_loss_curve():
             ax[row, column].legend([handle], [casenames[case_id]], loc='upper left', fontsize=9,
                                    handlelength=0.1, frameon=True)
 
-    plt.savefig(os.path.join(script_path, '..', 'figs', 'sys_id_loss_curve.pdf'),
+    plt.savefig(os.path.join(script_path, '..', 'figs', f'sys_id_loss_curve{mat}.pdf'),
                 dpi=300, bbox_inches='tight', pad_inches=0.01)
 
 
-# plot_loss_curve()
+plot_loss_curve()
 
 
 def find_best_skill_parameters(ins=False, hm=False, demo=False, line_search=False, zero_init=False,
@@ -402,13 +404,78 @@ def find_best_skill_parameters(ins=False, hm=False, demo=False, line_search=Fals
         open(os.path.join(p_folder, 'best_loss.json'), 'w').write(json.dumps(best_loss_info))
 
 
-find_best_skill_parameters(line_search=False, hm=False, demo=False, ins=False, task_id=0, lr='0.02')
-find_best_skill_parameters(line_search=False, hm=False, demo=True, ins=False, task_id=0, lr='0.02')
-find_best_skill_parameters(line_search=True, hm=False, demo=False, ins=False, task_id=0, lr='0.02')
-find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=0, lr='0.03')
-find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=0, lr='0.005')
-find_best_skill_parameters(line_search=True, hm=False, demo=False, ins=False, zero_init=True, task_id=0, lr='0.02')
-find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=1, lr='0.02')
-find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=2, lr='0.02')
-find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=3, lr='0.02')
+# find_best_skill_parameters(line_search=False, hm=False, demo=False, ins=False, task_id=0, lr='0.02')
+# find_best_skill_parameters(line_search=False, hm=False, demo=True, ins=False, task_id=0, lr='0.02')
+# find_best_skill_parameters(line_search=True, hm=False, demo=False, ins=False, task_id=0, lr='0.02')
+# find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=0, lr='0.03')
+# find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=0, lr='0.005')
+# find_best_skill_parameters(line_search=True, hm=False, demo=False, ins=False, zero_init=True, task_id=0, lr='0.02')
+# find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=1, lr='0.02')
+# find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=2, lr='0.02')
+# find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=3, lr='0.02')
 
+
+def plot_task_pcds():
+    data_path = os.path.join(script_path, '..', 'data')
+    plt.rcParams.update({'font.size': 11})
+    fig, ax = plt.subplots(4, 4, figsize=(2*4, 2*4))
+    plt.subplots_adjust(wspace=0, hspace=-0.6)
+    for mat in ['soil', 'sand']:
+        if mat == 'soil':
+            path_subfix = ''
+            pcd_row = 0
+            real_row = 1
+        else:
+            path_subfix = '_sand'
+            pcd_row = 2
+            real_row = 3
+        for task_id in range(3):
+            pcd_img_path = os.path.join(data_path, f'task_target_pcds{path_subfix}',
+                                        f't{task_id}-{mat}.png')
+            real_img_path = os.path.join(data_path, f'task_target_pcds{path_subfix}',
+                                         f't{task_id}-{mat}.JPG')
+            pcd_img = plt.imread(pcd_img_path)
+            real_img = plt.imread(real_img_path)
+            ax[pcd_row, task_id].imshow(pcd_img)
+            ax[pcd_row, task_id].set_xticks([])
+            ax[pcd_row, task_id].set_yticks([])
+            ax[pcd_row, task_id].spines[['right', 'top', 'bottom', 'left']].set_visible(False)
+            ax[real_row, task_id].imshow(real_img)
+            ax[real_row, task_id].set_xticks([])
+            ax[real_row, task_id].set_yticks([])
+            ax[real_row, task_id].spines[['right', 'top', 'bottom', 'left']].set_visible(False)
+
+    mt0_pcd_soil = plt.imread(os.path.join(data_path, 'task_target_pcds', 'mt0-soil.png'))
+    mt0_real_soil = plt.imread(os.path.join(data_path, 'task_target_pcds', 'mt0-soil.JPG'))
+    mt0_pcd_sand = plt.imread(os.path.join(data_path, 'task_target_pcds_sand', 'mt0-sand.png'))
+    mt0_real_sand = plt.imread(os.path.join(data_path, 'task_target_pcds_sand', 'mt0-sand.JPG'))
+    ax[0, 3].imshow(mt0_pcd_soil)
+    ax[0, 3].set_xticks([])
+    ax[0, 3].set_yticks([])
+    ax[0, 3].spines[['right', 'top', 'bottom', 'left']].set_visible(False)
+    ax[1, 3].imshow(mt0_real_soil)
+    ax[1, 3].set_xticks([])
+    ax[1, 3].set_yticks([])
+    ax[1, 3].spines[['right', 'top', 'bottom', 'left']].set_visible(False)
+    ax[2, 3].imshow(mt0_pcd_sand)
+    ax[2, 3].set_xticks([])
+    ax[2, 3].set_yticks([])
+    ax[2, 3].spines[['right', 'top', 'bottom', 'left']].set_visible(False)
+    ax[3, 3].imshow(mt0_real_sand)
+    ax[3, 3].set_xticks([])
+    ax[3, 3].set_yticks([])
+    ax[3, 3].spines[['right', 'top', 'bottom', 'left']].set_visible(False)
+
+    for i in range(3):
+        ax[0, i].set_title(f'Task {i+1}')
+    ax[0, 3].set_title(f'Multi-skill Task')
+    ax[0, 0].set_ylabel('Soil PCD', labelpad=0)
+    ax[2, 0].set_ylabel('Sand PCD', labelpad=0)
+    ax[1, 0].set_ylabel('Soil Real', labelpad=0)
+    ax[3, 0].set_ylabel('Sand Real', labelpad=0)
+
+    plt.savefig(os.path.join(script_path, '..', 'figs', 'task_pcds.pdf'),
+                dpi=200, bbox_inches='tight', pad_inches=0.01)
+
+
+# plot_task_pcds()

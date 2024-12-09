@@ -159,6 +159,7 @@ def main(args):
         mpm_env.step(trajectory[i])
         if args['render']:
             mpm_env.render(mode='human')
+        # input('Press Enter to continue...')
     loss_info = mpm_env.get_final_loss()
     print('===> Validation loss:', loss_info['height_map_loss'] / (40 * 40) + loss_info['emd_loss'] / (40 * 40))
 

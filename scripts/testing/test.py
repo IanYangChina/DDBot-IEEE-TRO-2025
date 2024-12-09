@@ -1,9 +1,7 @@
-import numpy as np
+from vedo import Points, show, Mesh
+import os
+from doma.assets import asset_mesh_dir
 
-a = np.asarray([1])
-
-b = np.asarray([1, 2, 3])
-
-a = 0.2 * a + 0.8 * b * b
-
-print(a)
+mesh_path = os.path.join(asset_mesh_dir, 'raw', 'ShovelEEF.obj')
+mesh = Mesh(mesh_path)
+show([mesh], __doc__, axes=True).close()

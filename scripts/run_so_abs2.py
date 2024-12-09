@@ -79,7 +79,8 @@ def main(args):
 
     case = f'd{ptcl_d}-task-{task_id}{subfix}'
     result_path = os.path.join(script_path, '..', f'log-abs2{mat}')
-    with open(os.path.join(script_path, '..', f'log-sys_id{mat}', f'd{ptcl_d}-hm-gclip-ls-res40', 'best_params.json')) as f:
+    with open(os.path.join(script_path, '..', f'log-sys_id{mat}',
+                           f'd{ptcl_d}-hm-gclip-ls-man-init-res40', 'best_params.json')) as f:
         best_params = json.load(f)["Parameters"]
 
     horizon = 600
@@ -1000,7 +1001,7 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Gradient-based skill parameter optimisation")
     parser.add_argument('--seed', dest='seed', type=int, default=-1, help='Random seed')
-    parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default="5e6", help='Particle density, use scientific notation like \'5e6\'.')
+    parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default="5e6", help='Particle density.')
     parser.add_argument('--backend', dest='backend', default='cuda', type=str, help='Computation backend: cuda, opengl, or cpu')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
     parser.add_argument('--task-id', dest='task_id', type=int, default=0, help='task id')
