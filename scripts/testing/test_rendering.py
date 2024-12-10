@@ -5,6 +5,8 @@ import numpy as np
 import open3d as o3d
 import matplotlib.pyplot as plt
 import taichi as ti
+from PIL import Image
+import imageio
 from doma.envs.planting_env import make_env
 from doma.engine.utils.misc import set_parameters
 from doma.engine.configs.macros import DTYPE_NP, SAND
@@ -74,7 +76,9 @@ def abstraction_two_skill(skill_params, dt):
 def main(args):
     saving_folder = os.path.join(script_path, '..', 'render_test')
     os.makedirs(saving_folder, exist_ok=True)
-    sys_id_motion = 1
+    if args['save_img']:
+        os.makedirs(os.path.join(saving_folder, 'imgs'), exist_ok=True)
+    sys_id_motion = 0
     task_id = args['task_id']
     dt_sim = 0.01
     if args['sys_id']:
@@ -82,7 +86,7 @@ def main(args):
                                           'moveit_trajectories',
                                           f'sys_id_sim_{sys_id_motion}_pos-dt_{dt_sim}.npy'))
         target_pcd_path = os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
-                                        f'pcd_{sys_id_motion}_cropped_norm_z_aligned.ply')
+                                       f'pcd_{sys_id_motion}_cropped_norm_z_aligned.ply')
     else:
         assert task_id >= 0, 'Task ID should be provided'
         target_pcd_path = os.path.join(script_path, '..', 'data', 'task_target_pcds',
@@ -124,8 +128,8 @@ def main(args):
     }
 
     cam_cfg = {
-        'pos': (0.2, 0.8, 0.7),
-        'lookat': (0.2, 0.2, 0.03),
+        'pos': (0.2, 0.58, 0.51),
+        'lookat': (0.2, 0.18, 0.03),
         'euler': (180 + np.rad2deg(np.arctan(1.0 / (0.9 - 0.03))), 0, 180),
         'focal_length': 0.3,
         'fov': 30,
@@ -133,7 +137,7 @@ def main(args):
                    {'pos': (0.2, 0.5, 1.0), 'color': (0.95, 0.95, 0.95)},
                    {'pos': (0.2, 0.2, 1.0), 'color': (0.95, 0.95, 0.95)}],
         'particle_radius': 0.001,
-        'res': (800, 800),
+        'res': (800, 600),
         'pcd_gen_res': 150
     }
 
@@ -141,7 +145,8 @@ def main(args):
     ti.init(arch=ti.cuda, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True, random_seed=1)
     env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg)
 
-    with open(os.path.join(script_path, '..', 'log-sys_id',
+    mat = ''
+    with open(os.path.join(script_path, '..', f'log-sys_id{mat}',
                            'd5e6-hm-gclip-ls-man-init-res40',
                            'best_params.json'), 'r') as f:
         best_params = json.load(f)['Parameters']
@@ -153,25 +158,62 @@ def main(args):
                    sand_friction_angle=best_params['sand_angle'],)
 
     mpm_env.set_state(init_state['state'], grad_enabled=False)
+    frames_for_gifs = []
     if args['render']:
         mpm_env.render(mode='human')
+    if args['save_video']:
+        img = mpm_env.render(mode='rgb_array')
+        frames_for_gifs.append(img)
+    # input('Press Enter to continue...')
     for i in range(mpm_env.horizon):
         mpm_env.step(trajectory[i])
         if args['render']:
             mpm_env.render(mode='human')
-        # input('Press Enter to continue...')
+        if args['save_img']:
+            img = mpm_env.render(mode='rgb_array')
+            Image.fromarray(img).save(os.path.join(saving_folder, 'imgs',
+                                                   f'img{mat}_{i}.png'))
+        if args['save_video']:
+            if i % 5 == 0:
+                img = mpm_env.render(mode='rgb_array')
+                frames_for_gifs.append(img)
     loss_info = mpm_env.get_final_loss()
     print('===> Validation loss:', loss_info['height_map_loss'] / (40 * 40) + loss_info['emd_loss'] / (40 * 40))
 
-    if args['render']:
-        fig, ax = plt.subplots(1, 2, figsize=(12, 6))
-        ax[0].imshow(mpm_env.loss.height_map.to_numpy(),
+    if args['render_hm']:
+        fig, ax = plt.subplots(2, 1, figsize=(3, 6))
+        plt.subplots_adjust(wspace=0, hspace=0.2)
+
+        ax[0].imshow(np.rot90(mpm_env.loss.height_map.to_numpy()),
                      vmin=0.002, vmax=0.09)
-        ax[0].set_title('Height map')
-        ax[1].imshow(mpm_env.loss.height_map_pcd_target.to_numpy(),
+        ax[0].axis('off')
+        # ax[0].set_title('Height map')
+        ax[1].imshow(np.rot90(mpm_env.loss.height_map_pcd_target.to_numpy()),
                      vmin=0.002, vmax=0.09)
-        ax[1].set_title('Target height map')
-        plt.show()
+        ax[1].axis('off')
+        # ax[1].set_title('Target height map')
+        plt.savefig(os.path.join(saving_folder, f'height_map{mat}.png'))
+
+    if args['render_pcd']:
+        x = mpm_env.loss.surface_particles.to_numpy()
+        x[:, 1] += 0.3
+        sim_particles = o3d.utility.Vector3dVector(x)
+        sim_particles = o3d.geometry.PointCloud(sim_particles)
+        # o3d.visualization.draw_geometries([sim_particles],
+        #                                   window_name='Simulated point cloud',
+        #                                   width=800, height=600)
+
+        x = mpm_env.loss.target_pcd_original_points_np
+        target_particles = o3d.utility.Vector3dVector(x)
+        target_particles = o3d.geometry.PointCloud(target_particles)
+        o3d.visualization.draw_geometries([target_particles, sim_particles],
+                                            window_name='Target point cloud',
+                                            width=800, height=600)
+
+    if args['save_video']:
+        with imageio.get_writer(os.path.join(saving_folder, f'video{mat}.gif'), mode='I') as writer:
+            for i in range(len(frames_for_gifs)):
+                writer.append_data(frames_for_gifs[i])
 
 
 if __name__ == '__main__':
@@ -179,6 +221,10 @@ if __name__ == '__main__':
     parser.add_argument('--ptcl_d', dest='ptcl_density', type=str, default=5e6, help='Particle density')
     parser.add_argument('--cuda_GB', dest='cuda_GB', type=float, default=5, help='CUDA memory in GB')
     parser.add_argument('--r', dest='render', default=False, action='store_true', help='Render the simulation')
+    parser.add_argument('--rp', dest='render_pcd', default=False, action='store_true', help='Render the point cloud')
+    parser.add_argument('--rhm', dest='render_hm', default=False, action='store_true', help='Render the height map')
+    parser.add_argument('--simg', dest='save_img', default=False, action='store_true', help='Save video')
+    parser.add_argument('--sv', dest='save_video', default=False, action='store_true', help='Save video')
     parser.add_argument('--sysid', dest='sys_id', default=False, action='store_true', help='Run system identification')
     parser.add_argument('--skill', dest='skill', default=False, action='store_true', help='Run skill')
     parser.add_argument('--task-id', dest='task_id', type=int, default=-1, help='Run task')

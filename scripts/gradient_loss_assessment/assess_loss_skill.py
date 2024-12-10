@@ -85,9 +85,9 @@ def main(args):
         'height_grid_res': 40,
     }
 
-    E = np.asarray([6e5])
+    E = np.asarray([8e4])
     rho = np.asarray([1800])
-    nu = np.asarray([0.3])
+    nu = np.asarray([0.15])
     sand_angle = np.asarray([15])
     for p in range(5):
         skill_params_np = np.asarray([1.0, 0.45, 0.8, 0.0, -0.1]).astype(DTYPE_NP)

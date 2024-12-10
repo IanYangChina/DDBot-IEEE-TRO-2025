@@ -356,198 +356,222 @@ def plot_legends():
 
 
 def show_heightmaps(param='ER'):
-    plt.rcParams.update({'font.size': 17})
-    cmap = 'RdYlBu'
-    # cmao = 'OrRd'
+    plt.rcParams.update({'font.size': 20})
+    cmap = 'RdBu'
+    cmap_loss = 'RdBu'
     mpl.use('Agg')
     if 'skill' not in param:
-        grad_ax = 1
         if param == 'ER':
             X = np.arange(50000, 200000, (2e5-5e4)/50)
             Y = np.arange(1200, 2200, (2200 - 1200) / 50)
-            view = (30, -20)
         else:
             X = np.arange(0.1, 0.4, (0.4 - 0.1) / 50)
             Y = np.arange(10, 40, (40 - 10) / 50)
-            view = (30, 120)
         X, Y = np.meshgrid(X, Y)
-        res = [10, 20, 30, 40, 50, 60]
-        fig = plt.figure(figsize=(3*len(res), 3*2))
-        # plt.subplots_adjust(wspace=0.12, hspace=-0.01)
+        res = [20, 40, 60]
+        fig, ax = plt.subplots(5, 2*len(res)+1,
+                               figsize=(3*len(res)*2+1.6, 3*3+0.4),
+                               gridspec_kw={'width_ratios': [3, 3, 3, 1.6, 3, 3, 3],
+                                            'height_ratios': [0.1, 0.3, 1, 1, 1]})
         plt.subplots_adjust(wspace=0.01, hspace=0.01)
+        y_coords = [-0.28, 0.5]
+        y_linespacing = 1.3
         for i in range(len(res)):
             loss_type = 'emd'
-            ax = fig.add_subplot(
-                2, len(res), i+1,
-                # projection='3d'
-            )
-            if param == 'ER':
-                ax.set_xlabel('\n'+r'$E$', linespacing=0.)
-                ax.set_xticks([80000, 120000, 160000])
-                ax.set_xticklabels(['\n8e5 ', '\n1.2e5 ', '\n1.6e5 '], linespacing=-1.5)
-                ax.set_ylabel('\n'+r'$\rho$', linespacing=-3.5)
-                ax.set_yticks([1300, 1700, 2100])
-                ax.set_yticklabels(['\n1300', '\n1700', '\n2100'], linespacing=-1.5)
-            else:
-                ax.set_xlabel('\n'+r'$\nu$', linespacing=-1.5)
-                ax.set_xticks([0.1, 0.2, 0.3, 0.4])
-                ax.set_xticklabels(['\n0.1', '\n0.2', '\n0.3', '\n0.4'], linespacing=-1.5)
-                ax.set_ylabel('\n'+r'$\phi_f$', linespacing=-1.5)
-                ax.set_yticks([10, 20, 30, 40])
-                ax.set_yticklabels(['\n10', '\n20', '\n30', '\n40'], linespacing=-1.5)
-            ax.set_title(f'{res[i]}x{res[i]}')
+            #     ax.set_xlabel('\n'+r'$\nu$', linespacing=-1.5)
+            #     ax.set_xticks([0.1, 0.2, 0.3, 0.4])
+            #     ax.set_xticklabels(['\n0.1', '\n0.2', '\n0.3', '\n0.4'], linespacing=-1.5)
+            #     ax.set_ylabel('\n'+r'$\phi_f$', linespacing=-1.5)
+            #     ax.set_yticks([10, 20, 30, 40])
+            #     ax.set_yticklabels(['\n10', '\n20', '\n30', '\n40'], linespacing=-1.5)
+            # ax.set_title(f'{res[i]}x{res[i]}')
             hm = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
                                       f'{loss_type}_losses-res{res[i]}-{param}.npy'))
             hm /= (res[i] ** 2)
             hm -= np.mean(hm)
-            hm = np.gradient(hm)[grad_ax]
-            ax.imshow(hm, cmap=cmap, vmin=-0.001, vmax=0.001)
-            ax.set_xlabel(None)
-            ax.set_ylabel(None)
-            ax.set_xticks([])
-            ax.set_yticks([])
-
-            # ax.view_init(view[0], view[1])
-            # tmp_planes = ax.zaxis._PLANES
-            # ax.zaxis._PLANES = (tmp_planes[2], tmp_planes[3],
-            #                     tmp_planes[0], tmp_planes[1],
-            #                     tmp_planes[4], tmp_planes[5])
+            ax[2, i].imshow(hm, cmap=cmap_loss)
+            ax[2, i].set_title(f'Resolution {res[i]}')
+            ax[2, i].set_xlabel(None)
+            ax[2, i].set_xticks([])
             if i == 0:
-                # ax.set_zlabel('\n'+f'{loss_type.upper()} Loss', linespacing=-3)
-                if grad_ax == 0:
-                    ax.set_ylabel(r'$\partial d_{EMD}/\partial\mathbf{E}$'+'\n'+r'$E$')
-                else:
-                    ax.set_ylabel(r'$\partial d_{EMD}/\partial\mathbf{\rho}$'+'\n'+r'$E$')
-            # ax.set_zticks([])
-            # ax.plot_surface(X, Y, hm, rstride=1, cstride=1,
-            #                 cmap=cmap, edgecolor='none')
+                ax[2, i].set_ylabel('EMD loss' + '\n' + r'$E$', linespacing=y_linespacing)
+                ax[2, i].yaxis.set_label_coords(y_coords[0], y_coords[1], transform=None)
+                ax[2, i].set_yticks([10, 25, 40])
+                ax[2, i].set_yticklabels(['1400', '1700', '2000'])
+            else:
+                ax[2, i].set_yticks([])
+            hm = np.gradient(hm)
+
+            ax[3, i].imshow(hm[0], cmap=cmap, vmin=-0.001, vmax=0.001)
+            ax[3, i].set_xlabel(None)
+            ax[3, i].set_xticks([])
+            if i == 0:
+                ax[3, i].set_ylabel(r'$\partial d_{EMD}/\partial\mathbf{E}$' + '\n' + r'$E$', linespacing=y_linespacing)
+                ax[3, i].yaxis.set_label_coords(y_coords[0], y_coords[1], transform=None)
+                ax[3, i].set_yticks([10, 25, 40])
+                ax[3, i].set_yticklabels(['1400', '1700', '2000'])
+            else:
+                ax[3, i].set_yticks([])
+
+            ax[4, i].imshow(hm[1], cmap=cmap, vmin=-0.001, vmax=0.001)
+            ax[4, i].set_xlabel(r'$\rho$')
+            ax[4, i].set_ylabel(None)
+            ax[4, i].set_xticks([10, 25, 40])
+            ax[4, i].set_xticklabels(['8e5', '1.2e5', '1.7e5'])
+            if i == 0:
+                ax[4, i].set_ylabel(r'$\partial d_{EMD}/\partial\mathbf{\rho}$' + '\n' + r'$E$', linespacing=y_linespacing)
+                ax[4, i].yaxis.set_label_coords(y_coords[0], y_coords[1], transform=None)
+                ax[4, i].set_yticks([10, 25, 40])
+                ax[4, i].set_yticklabels(['1400', '1700', '2000'])
+            else:
+                ax[4, i].set_yticks([])
 
             loss_type = 'hm'
-            ax = fig.add_subplot(
-                2, len(res), i+len(res)+1,
-                # projection='3d'
-            )
-            if param == 'ER':
-                ax.set_xlabel('\n'+r'$E$', linespacing=0.)
-                ax.set_xticks([80000, 120000, 160000])
-                ax.set_xticklabels(['\n8e5 ', '\n1.2e5 ', '\n1.6e5 '], linespacing=-1.5)
-                ax.set_ylabel('\n'+r'$\rho$', linespacing=-3.5)
-                ax.set_yticks([1300, 1700, 2100])
-                ax.set_yticklabels(['\n1300', '\n1700', '\n2100'], linespacing=-1.5)
-            else:
-                ax.set_xlabel('\n'+r'$\nu$', linespacing=-1.5)
-                ax.set_xticks([0.1, 0.2, 0.3, 0.4])
-                ax.set_xticklabels(['\n0.1', '\n0.2', '\n0.3', '\n0.4'], linespacing=-1.5)
-                ax.set_ylabel('\n'+r'$\phi_f$', linespacing=-1.5)
-                ax.set_yticks([10, 20, 30, 40])
-                ax.set_yticklabels(['\n10', '\n20', '\n30', '\n40'], linespacing=-1.5)
             hm = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
                                       f'{loss_type}_losses-res{res[i]}-{param}.npy'))
             hm /= (res[i] ** 2)
             hm = np.nan_to_num(hm, nan=0.06)
             hm -= np.mean(hm)
-            hm = np.gradient(hm)[grad_ax]
-            ax.imshow(hm, cmap=cmap, vmin=-0.001, vmax=0.001)
-            if param == 'ER':
-                ax.set_xlabel(r'$\rho$')
-            else:
-                ax.set_xlabel(r'$\phi_f$')
-            ax.set_ylabel(None)
-            ax.set_xticks([])
-            ax.set_yticks([])
-
-            # ax.view_init(view[0], view[1])
-            # tmp_planes = ax.zaxis._PLANES
-            # ax.zaxis._PLANES = (tmp_planes[2], tmp_planes[3],
-            #                     tmp_planes[0], tmp_planes[1],
-            #                     tmp_planes[4], tmp_planes[5])
+            ax[2, i+len(res)+1].imshow(hm, cmap=cmap_loss)
+            ax[2, i+len(res)+1].set_title(f'Resolution {res[i]}')
+            ax[2, i+len(res)+1].set_xlabel(None)
+            ax[2, i+len(res)+1].set_ylabel(None)
+            ax[2, i+len(res)+1].set_xticks([])
             if i == 0:
-                # ax.set_zlabel('\n'+f'{loss_type.upper()} Loss', linespacing=-3)
-                if grad_ax == 0:
-                    ax.set_ylabel(r'$\partial d_{HMD}/\partial\mathbf{E}$'+'\n'+r'$E$')
-                else:
-                    ax.set_ylabel(r'$\partial d_{HMD}/\partial\mathbf{\rho}$'+'\n'+r'$E$')
+                ax[2, i+len(res)+1].set_ylabel('HMD loss' + '\n' + r'$E$', linespacing=y_linespacing)
+                ax[2, i+len(res)+1].yaxis.set_label_coords(y_coords[0], y_coords[1], transform=None)
+                ax[2, i+len(res)+1].set_yticks([10, 25, 40])
+                ax[2, i+len(res)+1].set_yticklabels(['1400', '1700', '2000'])
+            else:
+                ax[2, i+len(res)+1].set_yticks([])
 
-            # ax.set_zticks([])
-            # ax.plot_surface(X, Y, hm, rstride=1, cstride=1,
-            #                 cmap=cmap, edgecolor='none')
+            hm = np.gradient(hm)
+            ax[3, i+len(res)+1].imshow(hm[0], cmap=cmap, vmin=-0.001, vmax=0.001)
+            ax[3, i+len(res)+1].set_xlabel(None)
+            ax[3, i+len(res)+1].set_ylabel(None)
+            ax[3, i+len(res)+1].set_xticks([])
+            if i == 0:
+                ax[3, i+len(res)+1].set_ylabel(r'$\partial d_{HMD}/\partial\mathbf{E}$' + '\n' + r'$E$', linespacing=y_linespacing)
+                ax[3, i+len(res)+1].yaxis.set_label_coords(y_coords[0], y_coords[1], transform=None)
+                ax[3, i+len(res)+1].set_yticks([10, 25, 40])
+                ax[3, i+len(res)+1].set_yticklabels(['1400', '1700', '2000'])
+            else:
+                ax[3, i+len(res)+1].set_yticks([])
 
-        plt.savefig(os.path.join(fig_path, f'{param}-losses-grad-{grad_ax}.pdf'),
+            ax[4, i+len(res)+1].imshow(hm[1], cmap=cmap, vmin=-0.001, vmax=0.001)
+            ax[4, i+len(res)+1].set_xlabel(r'$\rho$')
+            ax[4, i+len(res)+1].set_ylabel(None)
+            ax[4, i+len(res)+1].set_xticks([10, 25, 40])
+            ax[4, i+len(res)+1].set_xticklabels(['8e5', '1.2e5', '1.7e5'])
+            if i == 0:
+                ax[4, i+len(res)+1].set_ylabel(r'$\partial d_{HMD}/\partial\mathbf{\rho}$' + '\n' + r'$E$', linespacing=y_linespacing)
+                ax[4, i+len(res)+1].yaxis.set_label_coords(y_coords[0], y_coords[1], transform=None)
+                ax[4, i+len(res)+1].set_yticks([10, 25, 40])
+                ax[4, i+len(res)+1].set_yticklabels(['1400', '1700', '2000'])
+            else:
+                ax[4, i+len(res)+1].set_yticks([])
+
+        for i in range(7):
+            ax[0, i].axis('off')
+            ax[1, i].axis('off')
+        ax[2, 3].axis('off')
+        ax[3, 3].axis('off')
+        ax[4, 3].axis('off')
+
+        norm = mpl.colors.Normalize(vmin=-1, vmax=1)
+        gs = ax[0, 1].get_gridspec()
+        for i in range(7):
+            ax[0, i].remove()
+        ax_cbar = fig.add_subplot(gs[0, 1:6])
+        cbar = fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap),
+                            ticks=[-0.9, 0, 0.9], shrink=0.8,
+                            cax=ax_cbar, orientation='horizontal', label=None)
+        cbar.ax.set_xticklabels(['-', '0', '+'])
+
+        plt.savefig(os.path.join(fig_path, f'{param}-losses-grad.pdf'),
                     format='pdf', bbox_inches='tight', pad_inches=0.01, dpi=300)
     else:
-        y_labels = [r'$\mathbf{a[0]}$', r'$\mathbf{a[1]}$',
-                    r'$\mathbf{a[2]}$', r'$\mathbf{a[3]}$',
-                    r'$\mathbf{a[4]}$']
-        res = [10, 20, 30, 40, 50, 60]
-        n_dimension = 2
-        fig, ax = plt.subplots(n_dimension*4, 6,
-                               figsize=(3.5*6,
-                                        n_dimension*2*2+n_dimension*2*1),
-                               gridspec_kw={'height_ratios': [2, 1, 2, 1]*n_dimension})
-        for n in range(n_dimension):
+        y_labels = [r'$\mathbf{\theta[0]}$', r'$\mathbf{\theta[1]}$',
+                    r'$\mathbf{\theta[2]}$', r'$\mathbf{\theta[3]}$',
+                    r'$\mathbf{\theta[4]}$']
+        res = [20, 40, 60]
+        n_skills = 3
+        n_skill_offset = 2
+        height_ratio = [2, 1, 0.05]*n_skills
+        height_ratio.pop(-1)
+        fig, ax = plt.subplots(n_skills*2 + n_skills-1, len(res)*2,
+                               figsize=(3.5*len(res)*2,
+                                        n_skills*2+n_skills*1+(n_skills-1)*0.05),
+                               gridspec_kw={'height_ratios': height_ratio})
+        for n in range(n_skills):
             plt.subplots_adjust(wspace=0.0, hspace=0.02)
             loss_type = 'emd'
             emd_grad_min = 100
             emd_grad_max = -100
-            for i in range(6):
+            for i in range(len(res)):
                 loss = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
-                                            f'{loss_type}_losses-res{res[i]}-skill-{n}.npy'))
+                                            f'{loss_type}_losses-res{res[i]}-skill-{n+n_skill_offset}.npy'))
                 loss /= (res[i] ** 2)
                 loss -= np.mean(loss)
-                ax[n*4, i].plot(loss, c=colour_pool[0], alpha=0.4)
+                ax[n*3, i].plot(loss, c=colour_pool[0], alpha=0.4)
 
                 if n == 0:
-                    ax[n*4, i].set_title(f'Resolution {res[i]}')
+                    ax[n*3, i].set_title(f'Resolution {res[i]}')
                 if i == 0:
-                    ax[n*4, i].set_ylabel(y_labels[n])
-                    ax[n*4, i].yaxis.set_label_coords(-0.01, -0.6)
-                ax[+n*4, i].set_xticks([])
-                ax[n*4, i].set_yticks([])
-                # ax[n*4, i].spines[['bottom']].set_visible(False)
+                    ax[n*3, i].set_ylabel(y_labels[n+n_skill_offset])
+                    ax[n*3, i].yaxis.set_label_coords(-0.01, 0.2)
+                ax[+n*3, i].set_xticks([])
+                ax[n*3, i].set_yticks([])
 
                 grad = np.gradient(loss)
-                grad /= np.max(np.abs(grad))
+                grad /= np.sqrt(np.sum(grad ** 2))
                 emd_grad_min = min(emd_grad_min, np.min(grad))
                 emd_grad_max = max(emd_grad_max, np.max(grad))
-                ax[n*4+1, i].plot(grad, c=colour_pool[0])
-                ax[n*4+1, i].axline((0, 0), slope=0, color='black',
+                ax[n*3+1, i].plot(grad, c=colour_pool[0])
+                ax[n*3+1, i].axline((0, 0), slope=0, color='black',
                                     linestyle='--', linewidth=2)
-                ax[n*4+1, i].set_xticks([])
-                ax[n*4+1, i].set_yticks([])
-                ax[n*4+1, i].spines[['top']].set_visible(False)
+                ax[n*3+1, i].set_xticks([])
+                ax[n*3+1, i].set_yticks([])
+                ax[n*3+1, i].spines[['top']].set_visible(False)
+                if n == n_skills-1:
+                    ax[n*3+1, i].set_xlabel('Skill parameter')
+                    ax[n*3+1, i].set_xticks([20, 100, 180], ['-0.8', '0.0', '0.8'])
 
             loss_type = 'hm'
             hm_grad_min = 100
             hm_grad_max = -100
-            for i in range(6):
+            for i in range(len(res)):
                 loss = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
-                                            f'{loss_type}_losses-res{res[i - 6]}-skill-{n}.npy'))
+                                            f'{loss_type}_losses-res{res[i]}-skill-{n+n_skill_offset}.npy'))
                 loss /= (res[i] ** 2)
                 loss -= np.mean(loss)
-                ax[n*4+2, i].plot(loss, c=colour_pool[2], alpha=0.4)
+                ax[n*3, i+len(res)].plot(loss, c=colour_pool[2], alpha=0.4)
 
-                ax[n*4+2, i].set_yticks([])
-                ax[n*4+2, i].set_xticks([])
-                ax[n*4+2, i].spines[['top']].set_visible(False)
-                # ax[n*4+2, i].spines[['bottom']].set_visible(False)
+                if n == 0:
+                    ax[n*3, i+len(res)].set_title(f'Resolution {res[i]}')
+                ax[n*3, i+len(res)].set_yticks([])
+                ax[n*3, i+len(res)].set_xticks([])
 
                 grad = np.gradient(loss)
-                grad /= np.max(np.abs(grad))
+                grad /= np.sqrt(np.sum(grad ** 2))
                 hm_grad_min = min(hm_grad_min, np.min(grad))
                 hm_grad_max = max(hm_grad_max, np.max(grad))
-                ax[n*4+3, i].plot(grad, c=colour_pool[2])
-                ax[n*4+3, i].axline((0, 0), slope=0, color='black',
+                ax[n*3+1, i+len(res)].plot(grad, c=colour_pool[2])
+                ax[n*3+1, i+len(res)].axline((0, 0), slope=0, color='black',
                                     linestyle=':', linewidth=3)
-                ax[n*4+3, i].set_yticks([])
-                ax[n*4+3, i].set_xticks([])
-                ax[n*4+3, i].set_xlabel('Skill parameter')
-                ax[n*4+3, i].spines[['top']].set_visible(False)
-                if n == 1:
-                    ax[n * 4 + 3, i].set_xticks([20, 100, 180], ['-0.8', '0.0', '0.8'])
+                ax[n*3+1, i+len(res)].set_yticks([])
+                ax[n*3+1, i+len(res)].set_xticks([])
+                ax[n*3+1, i+len(res)].spines[['top']].set_visible(False)
+                if n == n_skills-1:
+                    ax[n*3+1, i+len(res)].set_xlabel('Skill parameter')
+                    ax[n*3+1, i+len(res)].set_xticks([20, 100, 180], ['-0.8', '0.0', '0.8'])
 
-            for i in range(6):
-                ax[n*4+1, i].set_ylim(emd_grad_min, emd_grad_max)
-                ax[n*4+3, i].set_ylim(hm_grad_min, hm_grad_max)
+            for i in range(len(res)):
+                if n < n_skills - 1:
+                    ax[n*3+2, i].axis('off')
+                    ax[n*3+2, i+len(res)].axis('off')
+                ax[n*3+1, i+len(res)].set_ylim(emd_grad_min, emd_grad_max)
+                ax[n*3+1, i+len(res)].set_ylim(hm_grad_min, hm_grad_max)
         legends = ['EMD loss curve (centralised)',
                    'HMD loss curve (centralised)',
                    'EMD loss gradient (normalised)',
@@ -561,10 +585,11 @@ def show_heightmaps(param='ER'):
             Line2D([0], [0], color='black', linewidth=8, linestyle=':')]
         plt.legend(handles, legends, handlelength=2, fontsize=19,
                    title=None, loc="upper left", labelspacing=0.2,
-                   bbox_to_anchor=(-5.05, 13.8), ncol=3, frameon=False)
+                   # bbox_to_anchor=(-5.05, 7.8) for 2 skills
+                   bbox_to_anchor=(-5.05, 10.8), ncol=3, frameon=False)
 
-        plt.savefig(os.path.join(fig_path, 'skill-losses.pdf'),
+        plt.savefig(os.path.join(fig_path, 'skill-losses_.pdf'),
                     format='pdf', bbox_inches='tight', pad_inches=0.01, dpi=300)
 
 
-show_heightmaps('ER')
+show_heightmaps('skill')

@@ -158,7 +158,7 @@ def find_best_parameters(hm=False, grad_norm=False, grad_dy_scale=False, grad_cl
 # exit()
 
 
-def plot_scatter(mat='_sand'):
+def plot_si_scatter(mat='_sand'):
     plt.figure(figsize=(2, 4))
     plt.rcParams.update({'font.size': 11})
     cases = ['gclip', 'hm-gclip',
@@ -205,10 +205,10 @@ def plot_scatter(mat='_sand'):
                 dpi=300, bbox_inches='tight', pad_inches=0.01)
 
 
-# plot_scatter()
+# plot_si_scatter()
 
 
-def plot_loss_curve(mat='_sand'):
+def plot_si_loss_curve(mat='_sand'):
     plt.rcParams.update({'font.size': 11})
     fig, ax = plt.subplots(2, 5, figsize=(12, 4))
     plt.subplots_adjust(wspace=0, hspace=0)
@@ -291,128 +291,7 @@ def plot_loss_curve(mat='_sand'):
                 dpi=300, bbox_inches='tight', pad_inches=0.01)
 
 
-plot_loss_curve()
-
-
-def find_best_skill_parameters(ins=False, hm=False, demo=False, line_search=False, zero_init=False,
-                               lr='', seeds=None, task_id=0):
-    subfix = ''
-    if ins:
-        subfix += '-ins'
-    if hm:
-        subfix += '-hm'
-    if line_search:
-        subfix += '-ls'
-    if demo:
-        subfix += '-demo'
-    if zero_init:
-        subfix += '-0init'
-    if lr is not '':
-        subfix += f'-lr{lr}'
-    if seeds is None:
-        seeds = [0, 1, 2, 3, 4]
-    for d in ["5e6"]:
-        p_folder = os.path.join(script_path, '..', f'log-abs2',
-                                f'd{d}-task-{task_id}{subfix}')
-        best_loss = np.inf
-        best_loss_info = {}
-        for seed in seeds:
-            folder = os.path.join(p_folder, f'seed-{seed}')
-            data_dict = {
-                'Loss': {
-                    'emd_loss': [],
-                    'height_map_loss': [],
-                    'insertion_loss': [],
-                    'total_loss': [],
-                },
-                'Parameters': {
-                    'skill_params_0': [],
-                    'skill_params_1': [],
-                    'skill_params_2': [],
-                    'skill_params_3': [],
-                    'skill_params_4': [],
-                }
-            }
-            for filename in os.listdir(folder):
-                if filename[:5] == 'event':
-                    for event in summary_iterator(os.path.join(folder, filename)):
-                        for v in event.summary.value:
-                            if v.tag[:5] == 'loss/':
-                                if v.tag[5:] == 'EMD':
-                                    data_dict['Loss']['emd_loss'].append(v.simple_value)
-                                elif v.tag[5:] == 'Heightmap':
-                                    data_dict['Loss']['height_map_loss'].append(v.simple_value)
-                                elif v.tag[5:] == 'Insertion':
-                                    data_dict['Loss']['insertion_loss'].append(v.simple_value)
-                                else:
-                                    pass
-                            elif v.tag[:6] == 'param/':
-                                if v.tag[6] == '0':
-                                    data_dict['Parameters']['skill_params_0'].append([v.simple_value])
-                                elif v.tag[6] == '1':
-                                    data_dict['Parameters']['skill_params_1'].append([v.simple_value])
-                                elif v.tag[6] == '2':
-                                    data_dict['Parameters']['skill_params_2'].append([v.simple_value])
-                                elif v.tag[6] == '3':
-                                    data_dict['Parameters']['skill_params_3'].append([v.simple_value])
-                                elif v.tag[6] == '4':
-                                    data_dict['Parameters']['skill_params_4'].append([v.simple_value])
-                                else:
-                                    pass
-                            else:
-                                pass
-
-            data_dict['Loss']['total_loss'] = (
-                        np.asarray(data_dict['Loss']['height_map_loss']) / (40 * 40) +
-                        np.asarray(data_dict['Loss']['emd_loss']) / (40 * 40)).tolist()
-            json.dump(data_dict, open(os.path.join(folder, 'raw_data.json'), 'w'))
-            min_loss_id = np.argmin(data_dict['Loss']['total_loss'][:20])
-            json.dump({
-                'Step': float(min_loss_id),
-                'Loss': {
-                    'emd_loss': data_dict['Loss']['emd_loss'][min_loss_id],
-                    'height_map_loss': data_dict['Loss']['height_map_loss'][min_loss_id],
-                    'insertion_loss': data_dict['Loss']['insertion_loss'][min_loss_id],
-                    'total_loss': data_dict['Loss']['total_loss'][min_loss_id],
-                },
-                'Parameters': {
-                    'skill_params_0': data_dict['Parameters']['skill_params_0'][min_loss_id],
-                    'skill_params_1': data_dict['Parameters']['skill_params_1'][min_loss_id],
-                    'skill_params_2': data_dict['Parameters']['skill_params_2'][min_loss_id],
-                    'skill_params_3': data_dict['Parameters']['skill_params_3'][min_loss_id],
-                    'skill_params_4': data_dict['Parameters']['skill_params_4'][min_loss_id],
-                }},
-                open(os.path.join(folder, 'best_loss.json'), 'w'))
-
-            if data_dict['Loss']['total_loss'][min_loss_id] < best_loss:
-                best_loss_info = {
-                    'Step': float(min_loss_id),
-                    'Loss': {
-                        'emd_loss': data_dict['Loss']['emd_loss'][min_loss_id],
-                        'height_map_loss': data_dict['Loss']['height_map_loss'][min_loss_id],
-                        'insertion_loss': data_dict['Loss']['insertion_loss'][min_loss_id],
-                        'total_loss': data_dict['Loss']['total_loss'][min_loss_id],
-                    },
-                    'Parameters': {
-                        'skill_params_0': data_dict['Parameters']['skill_params_0'][min_loss_id],
-                        'skill_params_1': data_dict['Parameters']['skill_params_1'][min_loss_id],
-                        'skill_params_2': data_dict['Parameters']['skill_params_2'][min_loss_id],
-                        'skill_params_3': data_dict['Parameters']['skill_params_3'][min_loss_id],
-                        'skill_params_4': data_dict['Parameters']['skill_params_4'][min_loss_id],
-                }}
-
-        open(os.path.join(p_folder, 'best_loss.json'), 'w').write(json.dumps(best_loss_info))
-
-
-# find_best_skill_parameters(line_search=False, hm=False, demo=False, ins=False, task_id=0, lr='0.02')
-# find_best_skill_parameters(line_search=False, hm=False, demo=True, ins=False, task_id=0, lr='0.02')
-# find_best_skill_parameters(line_search=True, hm=False, demo=False, ins=False, task_id=0, lr='0.02')
-# find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=0, lr='0.03')
-# find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=0, lr='0.005')
-# find_best_skill_parameters(line_search=True, hm=False, demo=False, ins=False, zero_init=True, task_id=0, lr='0.02')
-# find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=1, lr='0.02')
-# find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=2, lr='0.02')
-# find_best_skill_parameters(line_search=True, hm=False, demo=True, ins=False, task_id=3, lr='0.02')
+# plot_si_loss_curve()
 
 
 def plot_task_pcds():
@@ -479,3 +358,202 @@ def plot_task_pcds():
 
 
 # plot_task_pcds()
+
+
+def find_best_skill_parameters(hm=False, demo=False, line_search=False,
+                               lr='', seeds=None, task_id=0, mat='_sand'):
+    subfix = ''
+    if hm:
+        subfix += '-hm'
+    if line_search:
+        subfix += '-ls'
+    if demo:
+        subfix += '-demo'
+    if lr is not '':
+        subfix += f'-lr{lr}'
+    if seeds is None:
+        seeds = [0, 1, 2, 3, 4]
+    for d in ["5e6"]:
+        p_folder = os.path.join(script_path, '..', f'log-abs2{mat}',
+                                f'd{d}-task-{task_id}{subfix}')
+        best_loss = np.inf
+        best_loss_info = {}
+        for seed in seeds:
+            folder = os.path.join(p_folder, f'seed-{seed}')
+            data_dict = {
+                'Loss': {
+                    'emd_loss': [],
+                    'height_map_loss': [],
+                    'total_loss': [],
+                },
+                'Parameters': {
+                    'skill_params_0': [],
+                    'skill_params_1': [],
+                    'skill_params_2': [],
+                    'skill_params_3': [],
+                    'skill_params_4': [],
+                }
+            }
+            for filename in os.listdir(folder):
+                if filename[:5] == 'event':
+                    for event in summary_iterator(os.path.join(folder, filename)):
+                        for v in event.summary.value:
+                            if v.tag[:5] == 'loss/':
+                                if v.tag[5:] == 'EMD':
+                                    data_dict['Loss']['emd_loss'].append(v.simple_value)
+                                elif v.tag[5:] == 'Heightmap':
+                                    data_dict['Loss']['height_map_loss'].append(v.simple_value)
+                                else:
+                                    pass
+                            elif v.tag[:6] == 'param/':
+                                if v.tag[6] == '0':
+                                    data_dict['Parameters']['skill_params_0'].append([v.simple_value])
+                                elif v.tag[6] == '1':
+                                    data_dict['Parameters']['skill_params_1'].append([v.simple_value])
+                                elif v.tag[6] == '2':
+                                    data_dict['Parameters']['skill_params_2'].append([v.simple_value])
+                                elif v.tag[6] == '3':
+                                    data_dict['Parameters']['skill_params_3'].append([v.simple_value])
+                                elif v.tag[6] == '4':
+                                    data_dict['Parameters']['skill_params_4'].append([v.simple_value])
+                                else:
+                                    pass
+                            else:
+                                pass
+
+            data_dict['Loss']['total_loss'] = (
+                        np.asarray(data_dict['Loss']['height_map_loss']) / (40 * 40) +
+                        np.asarray(data_dict['Loss']['emd_loss']) / (40 * 40)).tolist()
+            json.dump(data_dict, open(os.path.join(folder, 'raw_data.json'), 'w'))
+            min_loss_id = np.argmin(data_dict['Loss']['total_loss'])
+            json.dump({
+                'Step': float(min_loss_id),
+                'Loss': {
+                    'emd_loss': data_dict['Loss']['emd_loss'][min_loss_id],
+                    'height_map_loss': data_dict['Loss']['height_map_loss'][min_loss_id],
+                    'total_loss': data_dict['Loss']['total_loss'][min_loss_id],
+                },
+                'Parameters': {
+                    'skill_params_0': data_dict['Parameters']['skill_params_0'][min_loss_id],
+                    'skill_params_1': data_dict['Parameters']['skill_params_1'][min_loss_id],
+                    'skill_params_2': data_dict['Parameters']['skill_params_2'][min_loss_id],
+                    'skill_params_3': data_dict['Parameters']['skill_params_3'][min_loss_id],
+                    'skill_params_4': data_dict['Parameters']['skill_params_4'][min_loss_id],
+                }},
+                open(os.path.join(folder, 'best_loss.json'), 'w'))
+
+            if data_dict['Loss']['total_loss'][min_loss_id] < best_loss:
+                best_loss_info = {
+                    'Step': float(min_loss_id),
+                    'Loss': {
+                        'emd_loss': data_dict['Loss']['emd_loss'][min_loss_id],
+                        'height_map_loss': data_dict['Loss']['height_map_loss'][min_loss_id],
+                        'total_loss': data_dict['Loss']['total_loss'][min_loss_id],
+                    },
+                    'Parameters': {
+                        'skill_params_0': data_dict['Parameters']['skill_params_0'][min_loss_id],
+                        'skill_params_1': data_dict['Parameters']['skill_params_1'][min_loss_id],
+                        'skill_params_2': data_dict['Parameters']['skill_params_2'][min_loss_id],
+                        'skill_params_3': data_dict['Parameters']['skill_params_3'][min_loss_id],
+                        'skill_params_4': data_dict['Parameters']['skill_params_4'][min_loss_id],
+                }}
+
+        open(os.path.join(p_folder, 'best_loss.json'), 'w').write(json.dumps(best_loss_info))
+
+
+# find_best_skill_parameters(line_search=False, hm=False, demo=False, task_id=0, lr='0.03')
+# find_best_skill_parameters(line_search=False, hm=False, demo=True, task_id=0, lr='0.03')
+# find_best_skill_parameters(line_search=True, hm=False, demo=False, task_id=0, lr='0.03')
+# find_best_skill_parameters(line_search=True, hm=True, demo=True, task_id=0, lr='0.03')
+# find_best_skill_parameters(line_search=True, hm=False, demo=True, task_id=0, lr='0.03')
+# find_best_skill_parameters(line_search=True, hm=False, demo=True, task_id=0, lr='0.02')
+# find_best_skill_parameters(line_search=True, hm=False, demo=True, task_id=0, lr='0.01')
+# find_best_skill_parameters(line_search=True, hm=False, demo=True, task_id=0, lr='0.005')
+
+# find_best_skill_parameters(line_search=True, hm=False, demo=True, task_id=1, lr='0.03')
+# find_best_skill_parameters(line_search=True, hm=False, demo=True, task_id=2, lr='0.03')
+# find_best_skill_parameters(line_search=True, hm=True, demo=True, task_id=1, lr='0.03')
+# find_best_skill_parameters(line_search=True, hm=True, demo=True, task_id=2, lr='0.03')
+
+
+def plot_so_loss_curve(mat='_sand'):
+    plt.rcParams.update({'font.size': 11})
+    fig, ax = plt.subplots(2, 5, figsize=(12, 4))
+    plt.subplots_adjust(wspace=0, hspace=0)
+    cases = ['gclip', 'hm-gclip',
+             'gclip-ls', 'hm-gclip-ls',
+             'gclip-ls-man-init', 'hm-gclip-ls-man-init',
+             'gnorm-ls-man-init', 'hm-gnorm-ls-man-init',
+             'gdys-ls-man-init', 'hm-gdys-ls-man-init']
+    casenames = ['ClipGrad', 'ClipGrad-HM',
+                 'ClipGrad-LS', 'ClipGrad-LS-HM',
+                 'ClipGrad-LS-ManInit', 'ClipGrad-LS-HM-ManInit',
+                 'NormGrad-LS-ManInit', 'NormGrad-LS-HM-ManInit',
+                 'DyScaleGrad-LS-ManInit', 'DyScaleGrad-LS-HM-ManInit']
+    window = 2
+    for case_id in range(len(cases)):
+        case = cases[case_id]
+        if 'hm' in case:
+            row = 1
+            column = int((case_id - 1) / 2)
+        else:
+            row = 0
+            column = int(case_id / 2)
+
+        for res in [40]:
+            case_folder = os.path.join(script_path, '..', f'log-sys_id{mat}', f'd5e6-{case}-res{res}')
+            losses = []
+            for seed in range(5):
+                folder = os.path.join(case_folder, f'seed-{seed}')
+                with open(os.path.join(folder, 'raw_data.json')) as f:
+                    data = json.load(f)
+                    losses.append(np.asarray(data['Validation Loss']['total_loss']))
+            mean_loss = np.mean(losses, axis=0)
+            running_avg = np.empty(mean_loss.shape[0])
+            for n in range(mean_loss.shape[0]):
+                running_avg[n] = np.mean(mean_loss[max(0, n - window):(n + 1)])
+            xs = np.arange(len(running_avg))
+            ax[row, column].plot(xs, running_avg, label=casenames[case_id], color=colour_pool[case_id], linewidth=2)
+            for l in losses:
+                running_avg_l = np.empty(l.shape[0])
+                for n in range(l.shape[0]):
+                    running_avg_l[n] = np.mean(l[max(0, n - window):(n + 1)])
+                ax[row, column].plot(xs, running_avg_l, color=colour_pool[case_id], linestyle='--', linewidth=1)
+
+            ax[row, column].set_ylim([0.0215, 0.0245])
+            ax[row, column].set_yticks([0.022, 0.023, 0.024])
+            ax[row, column].set_xlim([-2, 21])
+            ax[row, column].set_xticks([0, 4, 9, 14, 19])
+            ax[row, column].set_xticklabels(['1', '5', '10', '15', '20'])
+            ax[row, column].grid(True)
+            if column == 0:
+                ax[row, column].set_ylabel('Validation loss')
+                ax[row, column].spines[['right']].set_visible(False)
+            elif column == 4:
+                for tick in ax[row, column].yaxis.get_major_ticks():
+                    tick.tick1line.set_visible(False)
+                    tick.tick2line.set_visible(False)
+                    tick.label1.set_visible(False)
+                    tick.label2.set_visible(False)
+            else:
+                ax[row, column].spines[['right']].set_visible(False)
+                for tick in ax[row, column].yaxis.get_major_ticks():
+                    tick.tick1line.set_visible(False)
+                    tick.tick2line.set_visible(False)
+                    tick.label1.set_visible(False)
+                    tick.label2.set_visible(False)
+            if row == 0:
+                ax[row, column].spines[['bottom']].set_visible(False)
+                for tick in ax[row, column].xaxis.get_major_ticks():
+                    tick.tick1line.set_visible(False)
+                    tick.tick2line.set_visible(False)
+                    tick.label1.set_visible(False)
+                    tick.label2.set_visible(False)
+
+            ax[row, column].set_xlabel('Epoch')
+            handle = Line2D([0], [0], color=colour_pool[case_id], linewidth=5)
+            ax[row, column].legend([handle], [casenames[case_id]], loc='upper left', fontsize=9,
+                                   handlelength=0.1, frameon=True)
+
+    plt.savefig(os.path.join(script_path, '..', 'figs', f'sys_id_loss_curve{mat}.pdf'),
+                dpi=300, bbox_inches='tight', pad_inches=0.01)

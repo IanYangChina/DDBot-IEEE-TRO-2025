@@ -5,7 +5,7 @@ import logging
 import argparse
 import numpy as np
 import taichi as ti
-from drl_implementation.agent.continuous_action.sac_onestep_pointnet import OneStepSAC
+from drl_implementation.agent.continuous_action.sac_pointnet import PointnetSAC
 script_path = os.path.dirname(os.path.realpath(__file__))
 
 from doma.engine.configs.macros import DTYPE_NP, SAND
@@ -21,7 +21,7 @@ cam_cfg = {
                {'pos': (1.2, 0.0, 1.0), 'color': (0.8, 0.8, 0.8)}],
     'particle_radius': 0.001,
     'res': (800, 800),
-    'pcd_gen_res': 60
+    'pcd_gen_res': 40
 }
 
 LINEAR_VELOCITY = 0.2  # m/s
@@ -94,8 +94,12 @@ def main(arguments):
         suffix += '-her'
     if arguments['use_demo']:
         suffix += '-demo'
+    if arguments['sand']:
+        mat = '_sand'
+    else:
+        mat = ''
 
-    log_dir = os.path.join(script_path, '..', 'log-abs2-sac', f'd{ptcl_d}-task-{task_id}{suffix}', f'seed-{seed}')
+    log_dir = os.path.join(script_path, '..', f'log-abs2-sac{mat}', f'd{ptcl_d}-task-{task_id}{suffix}', f'seed-{seed}')
     os.makedirs(log_dir, exist_ok=True)
     log_file_name = os.path.join(log_dir, 'optimisation.log')
     if os.path.isfile(log_file_name):
@@ -127,11 +131,11 @@ def main(arguments):
         'best_params': None
     }
     loss_cfg = {
-        'use_height_map_loss': False,
-        'target_pcd_path': os.path.join(script_path, '..', 'data', 'task_target_pcds',
+        'use_height_map_loss': args['use_height_map_loss'],
+        'target_pcd_path': os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
                                         f'pcd_{task_id}_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
-        'down_sample_voxel_size': 0.007,
+        'height_grid_res': 40,
     }
     ti_cfg = {
         'arch': backend,
@@ -146,13 +150,15 @@ def main(arguments):
         'cam_cfg': cam_cfg
     }
 
-    with open(os.path.join(script_path, '..', 'log-sys_id', 'best_params.json')) as f:
-        best_params = json.load(f)[arguments['ptcl_density']]["Parameters"]
+    with open(os.path.join(script_path, '..', f'log-sys_id{mat}',
+                           f'd{ptcl_d}-hm-gclip-ls-man-init-res40', 'best_params.json')) as f:
+        best_params = json.load(f)["Parameters"]
     env_cfg['best_params'] = best_params
+
     gym_env_config = {
         'pcd_file_path': os.path.join(script_path, '..', 'data', 'task_target_pcds',
                                       f'pcd_{task_id}_cropped_norm_z_aligned.ply'),
-        'render_skill': arguments['env_test'],
+        'render_skill': False,
         'horizon': 1,
         'obs_mode': 'point_cloud',
         'reward_scale': -1.0,
@@ -167,7 +173,8 @@ def main(arguments):
         frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
         for n in range(5):
             gym_env.reset()
-            gym_env.render(mode='human')
+            # gym_env.render_skill = True
+            # gym_env.render(mode='human')
             done = False
             while not done:
                 # a1 = float(input('Enter the skill param 1: '))
@@ -190,13 +197,13 @@ def main(arguments):
                 print(obj_pcd, obj_pcd_2)
                 o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2], width=800, height=600)
 
-                gym_env.render(mode='human')
+                # gym_env.render(mode='human')
     else:
         with open(os.path.join(script_path, '..', 'data', 'rl_agent_config.json'), 'rb') as f_ac:
             rl_agent_config = json.load(f_ac)
         rl_agent_config['cuda_device_id'] = arguments['torch_cuda_device_id']
-        rl_agent_config['batch_size'] = 24
-        rl_agent_config['optimization_steps'] = 1
+        rl_agent_config['batch_size'] = 12
+        rl_agent_config['optimization_steps'] = 10
         rl_agent_config['hindsight'] = arguments['her']
         rl_agent_config['sampling_strategy'] = 'final'
         rl_agent_config['use_demonstrations'] = arguments['use_demo']
@@ -205,7 +212,7 @@ def main(arguments):
         with open(os.path.join(log_dir, 'rl_agent_config.json'), 'w') as f_ac:
             json.dump(rl_agent_config, f_ac)
 
-        agent = OneStepSAC(rl_agent_config, gym_env, logging=logging, path=log_dir, seed=seed)
+        agent = PointnetSAC(rl_agent_config, gym_env, logging=logging, path=log_dir, seed=seed)
         agent.run()
 
 
@@ -218,7 +225,9 @@ if __name__ == '__main__':
     parser.add_argument('--e-test', dest='env_test', action='store_true', default=False, help='testing gym env')
     parser.add_argument('--ptcl-d', dest='ptcl_density', type=str, default="5e6", help='particle density')
     parser.add_argument('--t-cuda-id', dest='torch_cuda_device_id', type=int, default=0, help='cuda device id')
-    parser.add_argument('--cuda_GB', dest='cuda_GB', default=4, type=int, help='preallocated GPU memory in GB')
+    parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
     parser.add_argument('--her', dest='her', action='store_true', default=False, help='use hindsight experience replay')
+    parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False, help='Use height map loss')
+    parser.add_argument('--sand', dest='sand', action='store_true', default=False, help='Use sand')
     args = vars(parser.parse_args())
     main(args)
