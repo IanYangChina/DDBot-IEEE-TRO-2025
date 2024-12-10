@@ -81,20 +81,26 @@ def main(args):
     sys_id_motion = 0
     task_id = args['task_id']
     dt_sim = 0.01
+
+    if args['sand']:
+        mat = '_sand'
+    else:
+        mat = ''
+
     if args['sys_id']:
         trajectory = np.load(os.path.join(script_path, '..', 'data',
                                           'moveit_trajectories',
                                           f'sys_id_sim_{sys_id_motion}_pos-dt_{dt_sim}.npy'))
-        target_pcd_path = os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
+        target_pcd_path = os.path.join(script_path, '..', 'data', f'sys_id_target_pcds{mat}',
                                        f'pcd_{sys_id_motion}_cropped_norm_z_aligned.ply')
     else:
         assert task_id >= 0, 'Task ID should be provided'
-        target_pcd_path = os.path.join(script_path, '..', 'data', 'task_target_pcds',
+        target_pcd_path = os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
                                        f'pcd_{task_id}_cropped_norm_z_aligned.ply')
         seed = 4
         if args['skill']:
-            with open(os.path.join(script_path, '..', 'log-abs2',
-                                   f'd5e6-task-{task_id}-hm-ls-demo-lr0.03',
+            with open(os.path.join(script_path, '..', f'log-abs2{mat}',
+                                   f'd5e6-task-{task_id}-ls-demo-lr0.03',
                                    'best_loss.json'), 'r') as f:
                 skill_params_json = json.load(f)['Parameters']
                 skill_params = np.array([
@@ -104,9 +110,15 @@ def main(args):
                     skill_params_json['skill_params_3'][0],
                     skill_params_json['skill_params_4'][0]
                 ])
+            print('Loaded skill parameters: \n\"{p1: ' +
+                  f'{skill_params[0]}, ' +
+                  f'p2: {skill_params[1]}, ' +
+                  f'p2: {skill_params[2]}, ' +
+                  f'p2: {skill_params[3]}, ' +
+                  f'p2: {skill_params[4]}' + '}\"')
             trajectory = abstraction_two_skill(skill_params, dt_sim)
         else:
-            trajectory = np.load(os.path.join(script_path, '..', 'log-abs0',
+            trajectory = np.load(os.path.join(script_path, '..', f'log-abs0{mat}',
                                               f'd5e6-task-{task_id}-ls-demo-lr0.001',
                                               f'seed-{seed}', 'final_trajectory.npy'))
 
@@ -145,7 +157,6 @@ def main(args):
     ti.init(arch=ti.cuda, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True, random_seed=1)
     env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg)
 
-    mat = ''
     with open(os.path.join(script_path, '..', f'log-sys_id{mat}',
                            'd5e6-hm-gclip-ls-man-init-res40',
                            'best_params.json'), 'r') as f:
@@ -204,7 +215,7 @@ def main(args):
         #                                   window_name='Simulated point cloud',
         #                                   width=800, height=600)
 
-        x = mpm_env.loss.target_pcd_original_points_np
+        x = mpm_env.loss.target_pcd_points_np
         target_particles = o3d.utility.Vector3dVector(x)
         target_particles = o3d.geometry.PointCloud(target_particles)
         o3d.visualization.draw_geometries([target_particles, sim_particles],
@@ -229,5 +240,6 @@ if __name__ == '__main__':
     parser.add_argument('--sysid', dest='sys_id', default=False, action='store_true', help='Run system identification')
     parser.add_argument('--skill', dest='skill', default=False, action='store_true', help='Run skill')
     parser.add_argument('--task-id', dest='task_id', type=int, default=-1, help='Run task')
+    parser.add_argument('--sand', dest='sand', default=False, action='store_true', help='Use sand material')
     arguments = vars(parser.parse_args())
     main(arguments)
