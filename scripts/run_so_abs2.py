@@ -56,8 +56,6 @@ def main(args):
     task_id = args['task_id']
     ptcl_d = arguments['ptcl_density']
     subfix = ''
-    if args['use_insertion_loss']:
-        subfix += '-ins'
     if args['use_height_map_loss']:
         subfix += '-hm'
     if args['line_search']:
