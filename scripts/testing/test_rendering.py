@@ -94,7 +94,7 @@ def main(args):
         seed = 4
         if args['skill']:
             with open(os.path.join(script_path, '..', 'log-abs2',
-                                   f'd5e6-task-{task_id}-ls-demo-lr0.02',
+                                   f'd5e6-task-{task_id}-hm-ls-demo-lr0.03',
                                    'best_loss.json'), 'r') as f:
                 skill_params_json = json.load(f)['Parameters']
                 skill_params = np.array([
@@ -184,15 +184,16 @@ def main(args):
         fig, ax = plt.subplots(2, 1, figsize=(3, 6))
         plt.subplots_adjust(wspace=0, hspace=0.2)
 
-        ax[0].imshow(np.rot90(mpm_env.loss.height_map.to_numpy()),
+        ax[0].imshow(mpm_env.loss.height_map.to_numpy(),
                      vmin=0.002, vmax=0.09)
         ax[0].axis('off')
         # ax[0].set_title('Height map')
-        ax[1].imshow(np.rot90(mpm_env.loss.height_map_pcd_target.to_numpy()),
+        ax[1].imshow(mpm_env.loss.height_map_pcd_target.to_numpy(),
                      vmin=0.002, vmax=0.09)
         ax[1].axis('off')
         # ax[1].set_title('Target height map')
-        plt.savefig(os.path.join(saving_folder, f'height_map{mat}.png'))
+        # plt.savefig(os.path.join(saving_folder, f'height_map{mat}.png'))
+        plt.show()
 
     if args['render_pcd']:
         x = mpm_env.loss.surface_particles.to_numpy()
