@@ -1,6 +1,7 @@
 import os
 import json
 import numpy as np
+from copy import deepcopy as dcp
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 from tensorflow.python.summary.summary_iterator import summary_iterator
@@ -360,25 +361,15 @@ def plot_task_pcds():
 # plot_task_pcds()
 
 
-def find_best_skill_parameters(hm=False, demo=False, line_search=False,
-                               lr='', seeds=None, task_id=0, mat='_sand'):
-    subfix = ''
-    if hm:
-        subfix += '-hm'
-    if line_search:
-        subfix += '-ls'
-    if demo:
-        subfix += '-demo'
-    if lr is not '':
-        subfix += f'-lr{lr}'
-    if seeds is None:
-        seeds = [0, 1, 2, 3, 4]
-    for d in ["5e6"]:
-        p_folder = os.path.join(script_path, '..', f'log-abs2{mat}',
-                                f'd{d}-task-{task_id}{subfix}')
+def find_best_skill_parameters(mat=''):
+    dirs = os.listdir(os.path.join(script_path, '..', f'log-abs2{mat}'))
+    for p_dir in dirs:
+        p_folder = os.path.join(script_path, '..', f'log-abs2{mat}', p_dir)
+        # if os.path.isfile(os.path.join(p_folder, 'best_loss.json')):
+        #     continue
         best_loss = np.inf
         best_loss_info = {}
-        for seed in seeds:
+        for seed in [0, 1, 2, 3, 4]:
             folder = os.path.join(p_folder, f'seed-{seed}')
             data_dict = {
                 'Loss': {
@@ -426,7 +417,7 @@ def find_best_skill_parameters(hm=False, demo=False, line_search=False,
                         np.asarray(data_dict['Loss']['emd_loss']) / (40 * 40)).tolist()
             json.dump(data_dict, open(os.path.join(folder, 'raw_data.json'), 'w'))
             min_loss_id = np.argmin(data_dict['Loss']['total_loss'])
-            json.dump({
+            best_loss_seed = {
                 'Step': float(min_loss_id),
                 'Loss': {
                     'emd_loss': data_dict['Loss']['emd_loss'][min_loss_id],
@@ -439,121 +430,96 @@ def find_best_skill_parameters(hm=False, demo=False, line_search=False,
                     'skill_params_2': data_dict['Parameters']['skill_params_2'][min_loss_id],
                     'skill_params_3': data_dict['Parameters']['skill_params_3'][min_loss_id],
                     'skill_params_4': data_dict['Parameters']['skill_params_4'][min_loss_id],
-                }},
-                open(os.path.join(folder, 'best_loss.json'), 'w'))
+                }}
+            json.dump(best_loss_seed, open(os.path.join(folder, 'best_loss.json'), 'w'))
 
             if data_dict['Loss']['total_loss'][min_loss_id] < best_loss:
-                best_loss_info = {
-                    'Step': float(min_loss_id),
-                    'Loss': {
-                        'emd_loss': data_dict['Loss']['emd_loss'][min_loss_id],
-                        'height_map_loss': data_dict['Loss']['height_map_loss'][min_loss_id],
-                        'total_loss': data_dict['Loss']['total_loss'][min_loss_id],
-                    },
-                    'Parameters': {
-                        'skill_params_0': data_dict['Parameters']['skill_params_0'][min_loss_id],
-                        'skill_params_1': data_dict['Parameters']['skill_params_1'][min_loss_id],
-                        'skill_params_2': data_dict['Parameters']['skill_params_2'][min_loss_id],
-                        'skill_params_3': data_dict['Parameters']['skill_params_3'][min_loss_id],
-                        'skill_params_4': data_dict['Parameters']['skill_params_4'][min_loss_id],
-                }}
+                best_loss = data_dict['Loss']['total_loss'][min_loss_id]
+                best_loss_info = dcp(best_loss_seed)
 
         open(os.path.join(p_folder, 'best_loss.json'), 'w').write(json.dumps(best_loss_info))
 
 
-# find_best_skill_parameters(line_search=False, hm=False, demo=False, task_id=0, lr='0.03')
-# find_best_skill_parameters(line_search=False, hm=False, demo=True, task_id=0, lr='0.03')
-# find_best_skill_parameters(line_search=True, hm=False, demo=False, task_id=0, lr='0.03')
-# find_best_skill_parameters(line_search=True, hm=True, demo=True, task_id=0, lr='0.03')
-# find_best_skill_parameters(line_search=True, hm=False, demo=True, task_id=0, lr='0.03')
-# find_best_skill_parameters(line_search=True, hm=False, demo=True, task_id=0, lr='0.02')
-# find_best_skill_parameters(line_search=True, hm=False, demo=True, task_id=0, lr='0.01')
-# find_best_skill_parameters(line_search=True, hm=False, demo=True, task_id=0, lr='0.005')
-
-# find_best_skill_parameters(line_search=True, hm=False, demo=True, task_id=1, lr='0.03')
-# find_best_skill_parameters(line_search=True, hm=False, demo=True, task_id=2, lr='0.03')
-# find_best_skill_parameters(line_search=True, hm=True, demo=True, task_id=1, lr='0.03')
-# find_best_skill_parameters(line_search=True, hm=True, demo=True, task_id=2, lr='0.03')
+find_best_skill_parameters(mat='')
 
 
-def plot_so_loss_curve(mat='_sand'):
+def plot_so_loss_curve(mat='', task='0'):
     plt.rcParams.update({'font.size': 11})
-    fig, ax = plt.subplots(2, 5, figsize=(12, 4))
+    cases = [
+        'ls-lr0.03', 'hm-ls-lr0.03',
+        'ls-demo-lr0.03', 'hm-ls-demo-lr0.03',
+        'ls-demo-search-init-lr0.03', #'hm-ls-demo-search-init-lr0.03'
+    ]
+    casenames = [
+        'EMD-LS', 'HMD-LS',
+        'EMD-LS-Demo', 'HMD-LS-Demo',
+        'EMD-LS-Demo\n-SearchInit', #'HMD-LS-Demo\n-SearchInit'
+    ]
+    fig, ax = plt.subplots(1, len(cases), figsize=(len(cases)*2, 2))
     plt.subplots_adjust(wspace=0, hspace=0)
-    cases = ['gclip', 'hm-gclip',
-             'gclip-ls', 'hm-gclip-ls',
-             'gclip-ls-man-init', 'hm-gclip-ls-man-init',
-             'gnorm-ls-man-init', 'hm-gnorm-ls-man-init',
-             'gdys-ls-man-init', 'hm-gdys-ls-man-init']
-    casenames = ['ClipGrad', 'ClipGrad-HM',
-                 'ClipGrad-LS', 'ClipGrad-LS-HM',
-                 'ClipGrad-LS-ManInit', 'ClipGrad-LS-HM-ManInit',
-                 'NormGrad-LS-ManInit', 'NormGrad-LS-HM-ManInit',
-                 'DyScaleGrad-LS-ManInit', 'DyScaleGrad-LS-HM-ManInit']
     window = 2
     for case_id in range(len(cases)):
         case = cases[case_id]
-        if 'hm' in case:
-            row = 1
-            column = int((case_id - 1) / 2)
+        row = 0
+        column = case_id
+
+        case_folder = os.path.join(script_path, '..', f'log-abs2{mat}',
+                                   f'd5e6-task-{task}-{case}')
+        losses = []
+        for seed in range(5):
+            folder = os.path.join(case_folder, f'seed-{seed}')
+            with open(os.path.join(folder, 'raw_data.json')) as f:
+                data = json.load(f)
+                losses.append(np.asarray(data['Loss']['total_loss']))
+        mean_loss = np.mean(losses, axis=0)
+        running_avg = np.empty(mean_loss.shape[0])
+        for n in range(mean_loss.shape[0]):
+            running_avg[n] = np.mean(mean_loss[max(0, n - window):(n + 1)])
+        xs = np.arange(len(running_avg))
+        ax[column].plot(xs, running_avg, label=casenames[case_id], color=colour_pool[case_id], linewidth=2)
+        for l in losses:
+            running_avg_l = np.empty(l.shape[0])
+            for n in range(l.shape[0]):
+                running_avg_l[n] = np.mean(l[max(0, n - window):(n + 1)])
+            ax[column].plot(xs, running_avg_l, color=colour_pool[case_id], linestyle='--', linewidth=1)
+
+        if task == '0':
+            ax[column].set_ylim([0.012, 0.021])
+            ax[column].set_yticks([0.013, 0.015, 0.018, 0.020])
+        elif task == '1':
+            ax[column].set_ylim([0.015, 0.023])
+            ax[column].set_yticks([0.016, 0.018, 0.020, 0.022])
         else:
-            row = 0
-            column = int(case_id / 2)
+            ax[column].set_ylim([0.018, 0.026])
+            ax[column].set_yticks([0.019, 0.022, 0.025])
+        ax[column].set_xlim([-2, 21])
+        ax[column].set_xticks([0, 4, 9, 14, 19])
+        ax[column].set_xticklabels(['1', '5', '10', '15', '20'])
+        ax[column].grid(True)
+        if column == 0:
+            ax[column].set_ylabel('Validation loss')
+            ax[column].spines[['right']].set_visible(False)
+        elif column == 4:
+            for tick in ax[column].yaxis.get_major_ticks():
+                tick.tick1line.set_visible(False)
+                tick.tick2line.set_visible(False)
+                tick.label1.set_visible(False)
+                tick.label2.set_visible(False)
+        else:
+            ax[column].spines[['right']].set_visible(False)
+            for tick in ax[column].yaxis.get_major_ticks():
+                tick.tick1line.set_visible(False)
+                tick.tick2line.set_visible(False)
+                tick.label1.set_visible(False)
+                tick.label2.set_visible(False)
 
-        for res in [40]:
-            case_folder = os.path.join(script_path, '..', f'log-sys_id{mat}', f'd5e6-{case}-res{res}')
-            losses = []
-            for seed in range(5):
-                folder = os.path.join(case_folder, f'seed-{seed}')
-                with open(os.path.join(folder, 'raw_data.json')) as f:
-                    data = json.load(f)
-                    losses.append(np.asarray(data['Validation Loss']['total_loss']))
-            mean_loss = np.mean(losses, axis=0)
-            running_avg = np.empty(mean_loss.shape[0])
-            for n in range(mean_loss.shape[0]):
-                running_avg[n] = np.mean(mean_loss[max(0, n - window):(n + 1)])
-            xs = np.arange(len(running_avg))
-            ax[row, column].plot(xs, running_avg, label=casenames[case_id], color=colour_pool[case_id], linewidth=2)
-            for l in losses:
-                running_avg_l = np.empty(l.shape[0])
-                for n in range(l.shape[0]):
-                    running_avg_l[n] = np.mean(l[max(0, n - window):(n + 1)])
-                ax[row, column].plot(xs, running_avg_l, color=colour_pool[case_id], linestyle='--', linewidth=1)
+        ax[column].set_xlabel('Epoch')
+        handle = Line2D([0], [0], color=colour_pool[case_id], linewidth=5)
+        ax[column].legend([handle], [casenames[case_id]], loc='upper left', fontsize=9,
+                               handlelength=0.1, frameon=True)
 
-            ax[row, column].set_ylim([0.0215, 0.0245])
-            ax[row, column].set_yticks([0.022, 0.023, 0.024])
-            ax[row, column].set_xlim([-2, 21])
-            ax[row, column].set_xticks([0, 4, 9, 14, 19])
-            ax[row, column].set_xticklabels(['1', '5', '10', '15', '20'])
-            ax[row, column].grid(True)
-            if column == 0:
-                ax[row, column].set_ylabel('Validation loss')
-                ax[row, column].spines[['right']].set_visible(False)
-            elif column == 4:
-                for tick in ax[row, column].yaxis.get_major_ticks():
-                    tick.tick1line.set_visible(False)
-                    tick.tick2line.set_visible(False)
-                    tick.label1.set_visible(False)
-                    tick.label2.set_visible(False)
-            else:
-                ax[row, column].spines[['right']].set_visible(False)
-                for tick in ax[row, column].yaxis.get_major_ticks():
-                    tick.tick1line.set_visible(False)
-                    tick.tick2line.set_visible(False)
-                    tick.label1.set_visible(False)
-                    tick.label2.set_visible(False)
-            if row == 0:
-                ax[row, column].spines[['bottom']].set_visible(False)
-                for tick in ax[row, column].xaxis.get_major_ticks():
-                    tick.tick1line.set_visible(False)
-                    tick.tick2line.set_visible(False)
-                    tick.label1.set_visible(False)
-                    tick.label2.set_visible(False)
-
-            ax[row, column].set_xlabel('Epoch')
-            handle = Line2D([0], [0], color=colour_pool[case_id], linewidth=5)
-            ax[row, column].legend([handle], [casenames[case_id]], loc='upper left', fontsize=9,
-                                   handlelength=0.1, frameon=True)
-
-    plt.savefig(os.path.join(script_path, '..', 'figs', f'sys_id_loss_curve{mat}.pdf'),
+    plt.savefig(os.path.join(script_path, '..', 'figs', f'so_task{task}_loss_curve{mat}.pdf'),
                 dpi=300, bbox_inches='tight', pad_inches=0.01)
+
+
+# plot_so_loss_curve(task='2')

@@ -374,17 +374,10 @@ def show_heightmaps(param='ER'):
                                gridspec_kw={'width_ratios': [3, 3, 3, 1.6, 3, 3, 3],
                                             'height_ratios': [0.1, 0.3, 1, 1, 1]})
         plt.subplots_adjust(wspace=0.01, hspace=0.01)
-        y_coords = [-0.28, 0.5]
-        y_linespacing = 1.3
+        y_coords = [-0.33, 0.5]
+        y_linespacing = 1
         for i in range(len(res)):
             loss_type = 'emd'
-            #     ax.set_xlabel('\n'+r'$\nu$', linespacing=-1.5)
-            #     ax.set_xticks([0.1, 0.2, 0.3, 0.4])
-            #     ax.set_xticklabels(['\n0.1', '\n0.2', '\n0.3', '\n0.4'], linespacing=-1.5)
-            #     ax.set_ylabel('\n'+r'$\phi_f$', linespacing=-1.5)
-            #     ax.set_yticks([10, 20, 30, 40])
-            #     ax.set_yticklabels(['\n10', '\n20', '\n30', '\n40'], linespacing=-1.5)
-            # ax.set_title(f'{res[i]}x{res[i]}')
             hm = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
                                       f'{loss_type}_losses-res{res[i]}-{param}.npy'))
             hm /= (res[i] ** 2)
@@ -394,10 +387,14 @@ def show_heightmaps(param='ER'):
             ax[2, i].set_xlabel(None)
             ax[2, i].set_xticks([])
             if i == 0:
-                ax[2, i].set_ylabel('EMD loss' + '\n' + r'$E$', linespacing=y_linespacing)
                 ax[2, i].yaxis.set_label_coords(y_coords[0], y_coords[1], transform=None)
                 ax[2, i].set_yticks([10, 25, 40])
-                ax[2, i].set_yticklabels(['1400', '1700', '2000'])
+                if param == 'ER':
+                    ax[2, i].set_ylabel('EMD loss' + '\n' + r'$\rho$ (kg/m$^2$)', linespacing=y_linespacing)
+                    ax[2, i].set_yticklabels(['1400', '1700', '2000'])
+                else:
+                    ax[2, i].set_ylabel('EMD loss' + '\n' + r'$\phi_f$ ($^o$)', linespacing=y_linespacing)
+                    ax[2, i].set_yticklabels(['16', '25', '34'])
             else:
                 ax[2, i].set_yticks([])
             hm = np.gradient(hm)
@@ -406,23 +403,41 @@ def show_heightmaps(param='ER'):
             ax[3, i].set_xlabel(None)
             ax[3, i].set_xticks([])
             if i == 0:
-                ax[3, i].set_ylabel(r'$\partial d_{EMD}/\partial\mathbf{E}$' + '\n' + r'$E$', linespacing=y_linespacing)
                 ax[3, i].yaxis.set_label_coords(y_coords[0], y_coords[1], transform=None)
                 ax[3, i].set_yticks([10, 25, 40])
-                ax[3, i].set_yticklabels(['1400', '1700', '2000'])
+                if param == 'ER':
+                    ax[3, i].set_ylabel(r'$\partial d_{EMD}/\partial E$' + '\n' + r'$\rho$ (kg/m$^2$)',
+                                        linespacing=y_linespacing)
+                    ax[3, i].set_yticklabels(['1400', '1700', '2000'])
+                else:
+                    ax[3, i].set_ylabel(r'$\partial d_{EMD}/\partial\nu$' + '\n' + r'$\phi_f$ ($^o$)',
+                                        linespacing=y_linespacing)
+                    ax[3, i].set_yticklabels(['16', '25', '34'])
             else:
                 ax[3, i].set_yticks([])
 
             ax[4, i].imshow(hm[1], cmap=cmap, vmin=-0.001, vmax=0.001)
-            ax[4, i].set_xlabel(r'$\rho$')
+            if param == 'ER':
+                ax[4, i].set_xlabel(r'$E$ (kPa)')
+            else:
+                ax[4, i].set_xlabel(r'$\nu$')
             ax[4, i].set_ylabel(None)
             ax[4, i].set_xticks([10, 25, 40])
-            ax[4, i].set_xticklabels(['8e5', '1.2e5', '1.7e5'])
+            if param == 'ER':
+                ax[4, i].set_xticklabels(['8e5', '1.2e5', '1.7e5'])
+            else:
+                ax[4, i].set_xticklabels(['0.16', '0.25', '0.34'])
             if i == 0:
-                ax[4, i].set_ylabel(r'$\partial d_{EMD}/\partial\mathbf{\rho}$' + '\n' + r'$E$', linespacing=y_linespacing)
                 ax[4, i].yaxis.set_label_coords(y_coords[0], y_coords[1], transform=None)
                 ax[4, i].set_yticks([10, 25, 40])
-                ax[4, i].set_yticklabels(['1400', '1700', '2000'])
+                if param == 'ER':
+                    ax[4, i].set_ylabel(r'$\partial d_{EMD}/\partial\rho$' + '\n' + r'$\rho$ (kg/m$^2$)',
+                                        linespacing=y_linespacing)
+                    ax[4, i].set_yticklabels(['1400', '1700', '2000'])
+                else:
+                    ax[4, i].set_ylabel(r'$\partial d_{EMD}/\partial\phi_f$' + '\n' + r'$\phi_f$ ($^o$)',
+                                        linespacing=y_linespacing)
+                    ax[4, i].set_yticklabels(['16', '25', '34'])
             else:
                 ax[4, i].set_yticks([])
 
@@ -438,10 +453,14 @@ def show_heightmaps(param='ER'):
             ax[2, i+len(res)+1].set_ylabel(None)
             ax[2, i+len(res)+1].set_xticks([])
             if i == 0:
-                ax[2, i+len(res)+1].set_ylabel('HMD loss' + '\n' + r'$E$', linespacing=y_linespacing)
                 ax[2, i+len(res)+1].yaxis.set_label_coords(y_coords[0], y_coords[1], transform=None)
                 ax[2, i+len(res)+1].set_yticks([10, 25, 40])
-                ax[2, i+len(res)+1].set_yticklabels(['1400', '1700', '2000'])
+                if param == 'ER':
+                    ax[2, i + len(res) + 1].set_ylabel('HMD loss' + '\n' + r'$\rho$ (kg/m$^2$)', linespacing=y_linespacing)
+                    ax[2, i+len(res)+1].set_yticklabels(['1400', '1700', '2000'])
+                else:
+                    ax[2, i + len(res) + 1].set_ylabel('HMD loss' + '\n' + r'$\phi_f$ ($^o$)', linespacing=y_linespacing)
+                    ax[2, i+len(res)+1].set_yticklabels(['16', '25', '34'])
             else:
                 ax[2, i+len(res)+1].set_yticks([])
 
@@ -451,23 +470,41 @@ def show_heightmaps(param='ER'):
             ax[3, i+len(res)+1].set_ylabel(None)
             ax[3, i+len(res)+1].set_xticks([])
             if i == 0:
-                ax[3, i+len(res)+1].set_ylabel(r'$\partial d_{HMD}/\partial\mathbf{E}$' + '\n' + r'$E$', linespacing=y_linespacing)
                 ax[3, i+len(res)+1].yaxis.set_label_coords(y_coords[0], y_coords[1], transform=None)
                 ax[3, i+len(res)+1].set_yticks([10, 25, 40])
-                ax[3, i+len(res)+1].set_yticklabels(['1400', '1700', '2000'])
+                if param == 'ER':
+                    ax[3, i + len(res) + 1].set_ylabel(r'$\partial d_{HMD}/\partial E$' + '\n' + r'$\rho$ (kg/m$^2$)',
+                                                       linespacing=y_linespacing)
+                    ax[3, i+len(res)+1].set_yticklabels(['1400', '1700', '2000'])
+                else:
+                    ax[3, i + len(res) + 1].set_ylabel(r'$\partial d_{HMD}/\partial\nu$' + '\n' + r'$\phi_f$ ($^o$)',
+                                                       linespacing=y_linespacing)
+                    ax[3, i+len(res)+1].set_yticklabels(['16', '25', '34'])
             else:
                 ax[3, i+len(res)+1].set_yticks([])
 
             ax[4, i+len(res)+1].imshow(hm[1], cmap=cmap, vmin=-0.001, vmax=0.001)
-            ax[4, i+len(res)+1].set_xlabel(r'$\rho$')
+            if param == 'ER':
+                ax[4, i+len(res)+1].set_xlabel(r'$E$ (kPa)')
+            else:
+                ax[4, i+len(res)+1].set_xlabel(r'$\nu$')
             ax[4, i+len(res)+1].set_ylabel(None)
             ax[4, i+len(res)+1].set_xticks([10, 25, 40])
-            ax[4, i+len(res)+1].set_xticklabels(['8e5', '1.2e5', '1.7e5'])
+            if param == 'ER':
+                ax[4, i+len(res)+1].set_xticklabels(['8e5', '1.2e5', '1.7e5'])
+            else:
+                ax[4, i+len(res)+1].set_xticklabels(['0.16', '0.25', '0.34'])
             if i == 0:
-                ax[4, i+len(res)+1].set_ylabel(r'$\partial d_{HMD}/\partial\mathbf{\rho}$' + '\n' + r'$E$', linespacing=y_linespacing)
                 ax[4, i+len(res)+1].yaxis.set_label_coords(y_coords[0], y_coords[1], transform=None)
                 ax[4, i+len(res)+1].set_yticks([10, 25, 40])
-                ax[4, i+len(res)+1].set_yticklabels(['1400', '1700', '2000'])
+                if param == 'ER':
+                    ax[4, i + len(res) + 1].set_ylabel(r'$\partial d_{HMD}/\partial\rho$' + '\n' + r'$\rho$ (kg/m$^2$)',
+                                                       linespacing=y_linespacing)
+                    ax[4, i+len(res)+1].set_yticklabels(['1400', '1700', '2000'])
+                else:
+                    ax[4, i + len(res) + 1].set_ylabel(r'$\partial d_{HMD}/\partial\phi_f$' + '\n' + r'$\phi_f$ ($^o$)',
+                                                       linespacing=y_linespacing)
+                    ax[4, i+len(res)+1].set_yticklabels(['16', '25', '34'])
             else:
                 ax[4, i+len(res)+1].set_yticks([])
 
@@ -592,4 +629,4 @@ def show_heightmaps(param='ER'):
                     format='pdf', bbox_inches='tight', pad_inches=0.01, dpi=300)
 
 
-show_heightmaps('skill')
+show_heightmaps('ER')

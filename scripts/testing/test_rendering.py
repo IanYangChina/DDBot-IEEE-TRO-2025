@@ -99,23 +99,27 @@ def main(args):
                                        f'pcd_{task_id}_cropped_norm_z_aligned.ply')
         seed = 4
         if args['skill']:
-            with open(os.path.join(script_path, '..', f'log-abs2{mat}',
-                                   f'd5e6-task-{task_id}-ls-demo-lr0.03',
-                                   'best_loss.json'), 'r') as f:
-                skill_params_json = json.load(f)['Parameters']
-                skill_params = np.array([
-                    skill_params_json['skill_params_0'][0],
-                    skill_params_json['skill_params_1'][0],
-                    skill_params_json['skill_params_2'][0],
-                    skill_params_json['skill_params_3'][0],
-                    skill_params_json['skill_params_4'][0]
-                ])
-            print('Loaded skill parameters: \n\"{p1: ' +
-                  f'{skill_params[0]}, ' +
-                  f'p2: {skill_params[1]}, ' +
-                  f'p2: {skill_params[2]}, ' +
-                  f'p2: {skill_params[3]}, ' +
-                  f'p2: {skill_params[4]}' + '}\"')
+            if args['view_demon']:
+                skill_params = np.asarray([1.0, 0.45, 0.8, 0.0, -0.1]).astype(DTYPE_NP)
+            else:
+                with open(os.path.join(script_path, '..', f'log-abs2{mat}',
+                                       f'd5e6-task-{task_id}-hm-ls-lr0.03',
+                                       'best_loss.json'), 'r') as f:
+                    skill_params_json = json.load(f)['Parameters']
+                    skill_params = np.array([
+                        skill_params_json['skill_params_0'][0],
+                        skill_params_json['skill_params_1'][0],
+                        skill_params_json['skill_params_2'][0],
+                        skill_params_json['skill_params_3'][0],
+                        skill_params_json['skill_params_4'][0]
+                    ])
+                print('Loaded skill parameters: \n\"{p1: ' +
+                      f'{skill_params[0]}, ' +
+                      f'p2: {skill_params[1]}, ' +
+                      f'p2: {skill_params[2]}, ' +
+                      f'p2: {skill_params[3]}, ' +
+                      f'p2: {skill_params[4]}' + '}\"')
+
             trajectory = abstraction_two_skill(skill_params, dt_sim)
         else:
             trajectory = np.load(os.path.join(script_path, '..', f'log-abs0{mat}',
@@ -241,5 +245,6 @@ if __name__ == '__main__':
     parser.add_argument('--skill', dest='skill', default=False, action='store_true', help='Run skill')
     parser.add_argument('--task-id', dest='task_id', type=int, default=-1, help='Run task')
     parser.add_argument('--sand', dest='sand', default=False, action='store_true', help='Use sand material')
+    parser.add_argument('--view-demon', dest='view_demon', action='store_true', default=False, help='View demonstration')
     arguments = vars(parser.parse_args())
     main(arguments)
