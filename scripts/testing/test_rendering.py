@@ -78,7 +78,7 @@ def main(args):
     os.makedirs(saving_folder, exist_ok=True)
     if args['save_img']:
         os.makedirs(os.path.join(saving_folder, 'imgs'), exist_ok=True)
-    sys_id_motion = 0
+    sys_id_motion = 1
     task_id = args['task_id']
     dt_sim = 0.01
 
@@ -103,7 +103,7 @@ def main(args):
                 skill_params = np.asarray([1.0, 0.45, 0.8, 0.0, -0.1]).astype(DTYPE_NP)
             else:
                 with open(os.path.join(script_path, '..', f'log-abs2{mat}',
-                                       f'd5e6-task-{task_id}-hm-ls-lr0.03',
+                                       f'd5e6-task-{task_id}-ls-demo-search-init-lr0.03',
                                        'best_loss.json'), 'r') as f:
                     skill_params_json = json.load(f)['Parameters']
                     skill_params = np.array([

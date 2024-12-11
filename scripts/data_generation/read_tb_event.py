@@ -365,8 +365,8 @@ def find_best_skill_parameters(mat=''):
     dirs = os.listdir(os.path.join(script_path, '..', f'log-abs2{mat}'))
     for p_dir in dirs:
         p_folder = os.path.join(script_path, '..', f'log-abs2{mat}', p_dir)
-        # if os.path.isfile(os.path.join(p_folder, 'best_loss.json')):
-        #     continue
+        if os.path.isfile(os.path.join(p_folder, 'best_loss.json')):
+            continue
         best_loss = np.inf
         best_loss_info = {}
         for seed in [0, 1, 2, 3, 4]:
@@ -440,7 +440,7 @@ def find_best_skill_parameters(mat=''):
         open(os.path.join(p_folder, 'best_loss.json'), 'w').write(json.dumps(best_loss_info))
 
 
-find_best_skill_parameters(mat='')
+# find_best_skill_parameters(mat='_sand')
 
 
 def plot_so_loss_curve(mat='', task='0'):
@@ -448,12 +448,12 @@ def plot_so_loss_curve(mat='', task='0'):
     cases = [
         'ls-lr0.03', 'hm-ls-lr0.03',
         'ls-demo-lr0.03', 'hm-ls-demo-lr0.03',
-        'ls-demo-search-init-lr0.03', #'hm-ls-demo-search-init-lr0.03'
+        'ls-demo-search-init-lr0.03', 'hm-ls-demo-search-init-lr0.03'
     ]
     casenames = [
         'EMD-LS', 'HMD-LS',
         'EMD-LS-Demo', 'HMD-LS-Demo',
-        'EMD-LS-Demo\n-SearchInit', #'HMD-LS-Demo\n-SearchInit'
+        'EMD-LS-Demo\n-SearchInit', 'HMD-LS-Demo\n-SearchInit'
     ]
     fig, ax = plt.subplots(1, len(cases), figsize=(len(cases)*2, 2))
     plt.subplots_adjust(wspace=0, hspace=0)
@@ -522,4 +522,62 @@ def plot_so_loss_curve(mat='', task='0'):
                 dpi=300, bbox_inches='tight', pad_inches=0.01)
 
 
-# plot_so_loss_curve(task='2')
+plot_so_loss_curve(mat='_sand', task='0')
+
+
+def plot_so_scatter(mat='', task='0'):
+    plt.figure(figsize=(2, 2))
+    plt.rcParams.update({'font.size': 11})
+    cases = [
+        'ls-lr0.03', 'hm-ls-lr0.03',
+        'ls-demo-lr0.03', 'hm-ls-demo-lr0.03',
+        'ls-demo-search-init-lr0.03', 'hm-ls-demo-search-init-lr0.03'
+    ]
+    casenames = [
+        'EMD-LS', 'HMD-LS',
+        'EMD-LS-Demo', 'HMD-LS-Demo',
+        'EMD-LS-Demo\n-SearchInit', 'HMD-LS-Demo\n-SearchInit'
+    ]
+    for case_id in range(len(cases)):
+        x = []
+        x_std = []
+        y = []
+        y_std = []
+        case = cases[case_id]
+
+        case_folder = os.path.join(script_path, '..', f'log-abs2{mat}', f'd5e6-task-{task}-{case}')
+        best_loss = []
+        earliest_epoch = []
+        for seed in range(5):
+            folder = os.path.join(case_folder, f'seed-{seed}')
+            with open(os.path.join(folder, 'best_loss.json')) as f:
+                data = json.load(f)
+                earliest_epoch.append(data['Step'])
+                best_loss.append(data['Loss']['total_loss'])
+        y.append(np.mean(best_loss))
+        y_std.append(np.std(best_loss))
+        x.append(np.mean(earliest_epoch))
+        x_std.append(np.std(earliest_epoch))
+
+        plt.errorbar(y, len(cases) - case_id - 1, label=casenames[case_id], color=colour_pool[case_id], xerr=y_std,
+                     fmt='h',
+                     capsize=4, markersize=6, elinewidth=1, capthick=1)
+
+    plt.grid(True, axis='x')
+    casenames.reverse()
+    if task == '0':
+        plt.xlim(0.0125, 0.0135)
+        plt.xticks([0.0128, 0.0132])
+    elif task == '1':
+        plt.xlim(0.0154, 0.0171)
+        plt.xticks([0.0159, 0.0166])
+    else:
+        plt.xlim(0.0184, 0.0228)
+        plt.xticks([0.0196, 0.0216])
+    plt.yticks([])
+    plt.xlabel('Best validation loss')
+    plt.savefig(os.path.join(script_path, '..', 'figs', f'so_task{task}_scatter{mat}.pdf'),
+                dpi=300, bbox_inches='tight', pad_inches=0.01)
+
+
+# plot_so_scatter(mat='', task='2')
