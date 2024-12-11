@@ -692,13 +692,13 @@ def main(args):
                         np.abs(skill_params_grad_np) > 1e10):
                     abort = True
 
-            if not abort:
-                num_zero_grad = 0
-                for h in range(5):
-                    if skill_params_grad_np[h] == 0.0:
-                        num_zero_grad += 1
-                if num_zero_grad > 4:
-                    abort = True
+            #if not abort:
+            #    num_zero_grad = 0
+            #    for h in range(5):
+            #        if skill_params_grad_np[h] == 0.0:
+            #            num_zero_grad += 1
+            #    if num_zero_grad > 4:
+            #        abort = True
 
             if abort:
                 print(f'===> [Warning] Aborting epoch: {n}')
