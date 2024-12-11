@@ -100,7 +100,12 @@ def main(args):
         seed = 4
         if args['skill']:
             if args['view_demon']:
-                skill_params = np.asarray([1.0, 0.45, 0.8, 0.0, -0.1]).astype(DTYPE_NP)
+                skill_params = np.asarray([1.0, 0.2, 0.8, 0.0, -0.5]).astype(DTYPE_NP)
+                target_pcd = o3d.io.read_point_cloud(target_pcd_path[:-4] + '_res40.ply')
+                target_pcd_points = np.asarray(target_pcd.points) + np.array([0.2, 0.2, 0])
+                z_min_idx = np.argmin(target_pcd_points[:, 2])
+                x_demo = target_pcd_points[z_min_idx, 0] + 0.02
+                skill_params[0] = np.clip((x_demo - 0.2) / 0.12, -1.0, 1.0)
             else:
                 with open(os.path.join(script_path, '..', f'log-abs2{mat}',
                                        f'd5e6-task-{task_id}-ls-demo-search-init-lr0.03',
