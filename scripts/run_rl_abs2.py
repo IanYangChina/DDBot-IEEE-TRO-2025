@@ -208,7 +208,14 @@ def main(arguments):
         rl_agent_config['sampling_strategy'] = 'final'
         rl_agent_config['use_demonstrations'] = arguments['use_demo']
         rl_agent_config['demonstrate_percentage'] = 0.50
-        rl_agent_config['demonstration_action'] = [1.0, 0.45, 0.8, 0.0, -0.1]
+        rl_agent_config['demonstration_action'] = [1.0, 0.2, 0.8, 0.0, -0.5]
+        target_pcd = o3d.io.read_point_cloud(os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
+                                                          f'pcd_{task_id}_cropped_norm_z_aligned.ply'))
+        target_pcd_points = np.asarray(target_pcd.points) + np.asarray([0.2, 0.2, 0])
+        z_min_idx = np.argmin(target_pcd_points[:, 2])
+        x_demo = target_pcd_points[z_min_idx, 0] + 0.02
+        rl_agent_config['demonstration_action'][0] = np.clip((x_demo - 0.2) / 0.12, -1.0, 1.0)
+
         with open(os.path.join(log_dir, 'rl_agent_config.json'), 'w') as f_ac:
             json.dump(rl_agent_config, f_ac)
 

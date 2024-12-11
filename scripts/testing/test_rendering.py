@@ -9,7 +9,7 @@ from PIL import Image
 import imageio
 from doma.envs.planting_env import make_env
 from doma.engine.utils.misc import set_parameters
-from doma.engine.configs.macros import DTYPE_NP, SAND
+from doma.engine.configs.macros import DTYPE_NP, SAND, COLOR
 script_path = os.path.dirname(os.path.realpath(__file__))
 script_path = os.path.join(script_path, '..')
 LINEAR_VELOCITY = 0.2  # m/s
@@ -74,18 +74,17 @@ def abstraction_two_skill(skill_params, dt):
 
 
 def main(args):
-    saving_folder = os.path.join(script_path, '..', 'render_test')
-    os.makedirs(saving_folder, exist_ok=True)
-    if args['save_img']:
-        os.makedirs(os.path.join(saving_folder, 'imgs'), exist_ok=True)
-    sys_id_motion = 1
-    task_id = args['task_id']
-    dt_sim = 0.01
-
     if args['sand']:
         mat = '_sand'
     else:
         mat = ''
+    saving_folder = os.path.join(script_path, '..', 'render_test')
+    os.makedirs(saving_folder, exist_ok=True)
+    if args['save_img']:
+        os.makedirs(os.path.join(saving_folder, f'imgs{mat}'), exist_ok=True)
+    sys_id_motion = 1
+    task_id = args['task_id']
+    dt_sim = 0.01
 
     if args['sys_id']:
         trajectory = np.load(os.path.join(script_path, '..', 'data',
@@ -108,7 +107,7 @@ def main(args):
                 skill_params[0] = np.clip((x_demo - 0.2) / 0.12, -1.0, 1.0)
             else:
                 with open(os.path.join(script_path, '..', f'log-abs2{mat}',
-                                       f'd5e6-task-{task_id}-ls-demo-search-init-lr0.03',
+                                       f'd5e6-task-{task_id}-ls-demo-lr0.03',
                                        'best_loss.json'), 'r') as f:
                     skill_params_json = json.load(f)['Parameters']
                     skill_params = np.array([
@@ -191,8 +190,9 @@ def main(args):
             mpm_env.render(mode='human')
         if args['save_img']:
             img = mpm_env.render(mode='rgb_array')
-            Image.fromarray(img).save(os.path.join(saving_folder, 'imgs',
-                                                   f'img{mat}_{i}.png'))
+            if i % 40 == 0:
+                Image.fromarray(img).save(os.path.join(saving_folder, f'imgs{mat}',
+                                                       f'img_{i}.png'))
         if args['save_video']:
             if i % 5 == 0:
                 img = mpm_env.render(mode='rgb_array')
@@ -200,20 +200,22 @@ def main(args):
     loss_info = mpm_env.get_final_loss()
     print('===> Validation loss:', loss_info['height_map_loss'] / (40 * 40) + loss_info['emd_loss'] / (40 * 40))
 
-    if args['render_hm']:
+    if args['render_hm'] or args['save_hm']:
         fig, ax = plt.subplots(2, 1, figsize=(3, 6))
         plt.subplots_adjust(wspace=0, hspace=0.2)
 
-        ax[0].imshow(mpm_env.loss.height_map.to_numpy(),
+        ax[0].imshow(np.rot90(mpm_env.loss.height_map.to_numpy()),
                      vmin=0.002, vmax=0.09)
         ax[0].axis('off')
         # ax[0].set_title('Height map')
-        ax[1].imshow(mpm_env.loss.height_map_pcd_target.to_numpy(),
+        ax[1].imshow(np.rot90(mpm_env.loss.height_map_pcd_target.to_numpy()),
                      vmin=0.002, vmax=0.09)
         ax[1].axis('off')
         # ax[1].set_title('Target height map')
-        # plt.savefig(os.path.join(saving_folder, f'height_map{mat}.png'))
-        plt.show()
+        if args['save_hm']:
+            plt.savefig(os.path.join(saving_folder, f'height_map{mat}.png'))
+        if args['render_hm']:
+            plt.show()
 
     if args['render_pcd']:
         x = mpm_env.loss.surface_particles.to_numpy()
@@ -244,6 +246,7 @@ if __name__ == '__main__':
     parser.add_argument('--r', dest='render', default=False, action='store_true', help='Render the simulation')
     parser.add_argument('--rp', dest='render_pcd', default=False, action='store_true', help='Render the point cloud')
     parser.add_argument('--rhm', dest='render_hm', default=False, action='store_true', help='Render the height map')
+    parser.add_argument('--shm', dest='save_hm', default=False, action='store_true', help='Render the height map')
     parser.add_argument('--simg', dest='save_img', default=False, action='store_true', help='Save video')
     parser.add_argument('--sv', dest='save_video', default=False, action='store_true', help='Save video')
     parser.add_argument('--sysid', dest='sys_id', default=False, action='store_true', help='Run system identification')
