@@ -202,7 +202,7 @@ def main(arguments):
         with open(os.path.join(script_path, '..', 'data', 'rl_agent_config.json'), 'rb') as f_ac:
             rl_agent_config = json.load(f_ac)
         rl_agent_config['cuda_device_id'] = arguments['torch_cuda_device_id']
-        rl_agent_config['batch_size'] = 12
+        rl_agent_config['batch_size'] = 5
         rl_agent_config['optimization_steps'] = 10
         rl_agent_config['hindsight'] = arguments['her']
         rl_agent_config['sampling_strategy'] = 'final'
