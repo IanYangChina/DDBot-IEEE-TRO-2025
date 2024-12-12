@@ -282,8 +282,8 @@ def plot_si_loss_curve(mat=''):
                 dpi=300, bbox_inches='tight', pad_inches=0.01)
 
 
-plot_si_loss_curve(mat='')
-plot_si_loss_curve(mat='_sand')
+# plot_si_loss_curve(mat='')
+# plot_si_loss_curve(mat='_sand')
 
 
 def plot_task_pcds():
@@ -439,18 +439,18 @@ def plot_so_loss_curve(mat='', task='0'):
     plt.rcParams.update({'font.size': 11})
     cases = [
         'ls-lr0.03', 'hm-ls-lr0.03',
-        'ls-demo-lr0.03', #'hm-ls-demo-lr0.03',
+        'ls-demo-lr0.03', 'hm-ls-demo-lr0.03',
     ]
     casenames = [
         'EMD-LS', 'HMD-LS',
-        'EMD-LS-Demo', #'HMD-LS-Demo',
+        'EMD-LS-Demo', 'HMD-LS-Demo',
     ]
-    fig, ax = plt.subplots(1, len(cases), figsize=(len(cases)*2, 2))
+    fig, ax = plt.subplots(1, len(cases)+2, figsize=(len(cases)*2+2.1, 1.5),
+                           gridspec_kw={'width_ratios': [1, 1, 1, 1, 0.1, 1]})
     plt.subplots_adjust(wspace=0, hspace=0)
     window = 2
     for case_id in range(len(cases)):
         case = cases[case_id]
-        row = 0
         column = case_id
 
         case_folder = os.path.join(script_path, '..', f'log-abs2{mat}',
@@ -478,14 +478,18 @@ def plot_so_loss_curve(mat='', task='0'):
             ax[column].set_yticks([0.013, 0.015, 0.018, 0.020])
         elif task == '1':
             if mat == '_sand':
-                ax[column].set_ylim([0.013, 0.017])
-                ax[column].set_yticks([0.014, 0.016])
+                ax[column].set_ylim([0.0125, 0.0165])
+                ax[column].set_yticks([0.013, 0.014, 0.015, 0.016])
             else:
                 ax[column].set_ylim([0.015, 0.023])
                 ax[column].set_yticks([0.016, 0.018, 0.020, 0.022])
         else:
-            ax[column].set_ylim([0.018, 0.026])
-            ax[column].set_yticks([0.019, 0.022, 0.025])
+            if mat == '_sand':
+                ax[column].set_ylim([0.012, 0.019])
+                ax[column].set_yticks([0.013, 0.015, 0.017])
+            else:
+                ax[column].set_ylim([0.018, 0.026])
+                ax[column].set_yticks([0.019, 0.022, 0.025])
         ax[column].set_xlim([-2, 21])
         ax[column].set_xticks([0, 4, 9, 14, 19])
         ax[column].set_xticklabels(['1', '5', '10', '15', '20'])
@@ -493,7 +497,7 @@ def plot_so_loss_curve(mat='', task='0'):
         if column == 0:
             ax[column].set_ylabel('Validation loss')
             ax[column].spines[['right']].set_visible(False)
-        elif column == 4:
+        elif column == 3:
             for tick in ax[column].yaxis.get_major_ticks():
                 tick.tick1line.set_visible(False)
                 tick.tick2line.set_visible(False)
@@ -512,26 +516,6 @@ def plot_so_loss_curve(mat='', task='0'):
         ax[column].legend([handle], [casenames[case_id]], loc='upper left', fontsize=9,
                                handlelength=0.1, frameon=True)
 
-    plt.savefig(os.path.join(script_path, '..', 'figs', f'so_task{task}_loss_curve{mat}.pdf'),
-                dpi=300, bbox_inches='tight', pad_inches=0.01)
-
-
-# plot_so_loss_curve(mat='_sand', task='1')
-
-
-def plot_so_scatter(mat='', task='0'):
-    plt.figure(figsize=(2, 2))
-    plt.rcParams.update({'font.size': 11})
-    cases = [
-        'ls-lr0.03', 'hm-ls-lr0.03',
-        'ls-demo-lr0.03', 'hm-ls-demo-lr0.03',
-        'ls-demo-search-init-lr0.03', 'hm-ls-demo-search-init-lr0.03'
-    ]
-    casenames = [
-        'EMD-LS', 'HMD-LS',
-        'EMD-LS-Demo', 'HMD-LS-Demo',
-        'EMD-LS-Demo\n-SearchInit', 'HMD-LS-Demo\n-SearchInit'
-    ]
     for case_id in range(len(cases)):
         x = []
         x_std = []
@@ -553,25 +537,41 @@ def plot_so_scatter(mat='', task='0'):
         x.append(np.mean(earliest_epoch))
         x_std.append(np.std(earliest_epoch))
 
-        plt.errorbar(y, len(cases) - case_id - 1, label=casenames[case_id], color=colour_pool[case_id], xerr=y_std,
+        ax[len(cases)+1].errorbar(y, len(cases) - case_id - 1, color=colour_pool[case_id], xerr=y_std,
                      fmt='h',
                      capsize=4, markersize=6, elinewidth=1, capthick=1)
 
-    plt.grid(True, axis='x')
-    casenames.reverse()
+    ax[len(cases)+1].grid(True, axis='x')
     if task == '0':
-        plt.xlim(0.0125, 0.0135)
-        plt.xticks([0.0128, 0.0132])
+        if mat == '_sand':
+            ax[len(cases)+1].set_xlim([0.0123, 0.0142])
+            ax[len(cases)+1].set_xticks([0.0127, 0.0138])
+        else:
+            ax[len(cases)+1].set_xlim([0.012, 0.015])
+            ax[len(cases)+1].set_xticks([0.0125, 0.0135, 0.0145])
     elif task == '1':
-        plt.xlim(0.0154, 0.0171)
-        plt.xticks([0.0159, 0.0166])
+        if mat == '_sand':
+            ax[len(cases)+1].set_xlim([0.0125, 0.0155])
+            ax[len(cases)+1].set_xticks([0.013, 0.014, 0.015])
+        else:
+            ax[len(cases)+1].set_xlim([0.0155, 0.0175])
+            ax[len(cases)+1].set_xticks([0.016, 0.017])
     else:
-        plt.xlim(0.0184, 0.0228)
-        plt.xticks([0.0196, 0.0216])
-    plt.yticks([])
-    plt.xlabel('Best validation loss')
-    plt.savefig(os.path.join(script_path, '..', 'figs', f'so_task{task}_scatter{mat}.pdf'),
+        if mat == '_sand':
+            ax[len(cases)+1].set_xlim([0.012, 0.018])
+            ax[len(cases)+1].set_xticks([0.013, 0.015, 0.017])
+        else:
+            ax[len(cases)+1].set_xlim([0.018, 0.023])
+            ax[len(cases)+1].set_xticks([0.019, 0.022])
+    ax[len(cases)+1].set_ylim([-0.5, len(cases)-0.5])
+    ax[len(cases)+1].set_yticks([])
+    ax[len(cases)+1].set_xlabel('Best validation loss')
+
+    ax[len(cases)].axis('off')
+    plt.savefig(os.path.join(script_path, '..', 'figs', f'so_task{task}.pdf'),
                 dpi=300, bbox_inches='tight', pad_inches=0.01)
 
 
-# plot_so_scatter(mat='', task='2')
+for mat in ['', '_sand']:
+    for task_id in range(3):
+        plot_so_loss_curve(mat=mat, task=str(task_id))
