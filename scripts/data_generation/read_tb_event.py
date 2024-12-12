@@ -568,7 +568,7 @@ def plot_so_loss_curve(mat='', task='0'):
     ax[len(cases)+1].set_xlabel('Best validation loss')
 
     ax[len(cases)].axis('off')
-    plt.savefig(os.path.join(script_path, '..', 'figs', f'so_task{task}.pdf'),
+    plt.savefig(os.path.join(script_path, '..', 'figs', f'so_task{task}{mat}.pdf'),
                 dpi=300, bbox_inches='tight', pad_inches=0.01)
 
 
