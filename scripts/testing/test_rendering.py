@@ -107,7 +107,7 @@ def main(args):
                 skill_params[0] = np.clip((x_demo - 0.2) / 0.12, -1.0, 1.0)
             else:
                 with open(os.path.join(script_path, '..', f'log-abs2{mat}',
-                                       f'd5e6-task-{task_id}-ls-demo-lr0.03',
+                                       f'd5e6-task-{task_id}-hm-ls-lr0.03',
                                        'best_loss.json'), 'r') as f:
                     skill_params_json = json.load(f)['Parameters']
                     skill_params = np.array([
@@ -117,13 +117,12 @@ def main(args):
                         skill_params_json['skill_params_3'][0],
                         skill_params_json['skill_params_4'][0]
                     ])
-                print('Loaded skill parameters: \n\"{p1: ' +
-                      f'{skill_params[0]}, ' +
-                      f'p2: {skill_params[1]}, ' +
-                      f'p2: {skill_params[2]}, ' +
-                      f'p2: {skill_params[3]}, ' +
-                      f'p2: {skill_params[4]}' + '}\"')
-
+            print('Loaded skill parameters: \nrosservice call /skill \"{p1: ' +
+                  f'{skill_params[0]}, ' +
+                  f'p2: {skill_params[1]}, ' +
+                  f'p3: {skill_params[2]}, ' +
+                  f'p4: {skill_params[3]}, ' +
+                  f'p5: {skill_params[4]}' + '}\"')
             trajectory = abstraction_two_skill(skill_params, dt_sim)
         else:
             trajectory = np.load(os.path.join(script_path, '..', f'log-abs0{mat}',
