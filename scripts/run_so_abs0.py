@@ -165,7 +165,7 @@ def main(args):
                 trajectory_np = json.load(f)[ptcl_d]["Trajectory"]
             if args['view_demon']:
                 skill_params_np = np.asarray([1.0, 0.2, 0.8, 0.0, -0.5]).astype(DTYPE_NP)
-                target_pcd = o3d.io.read_point_cloud(os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
+                target_pcd = o3d.io.read_point_cloud(os.path.join(script_path, '..', 'data', f'task_target_pcds',
                                                                   f'pcd_{task_id}_cropped_norm_z_aligned.ply'))
                 target_pcd_points = np.asarray(target_pcd.points) + np.asarray([0.2, 0.2, 0])
                 z_min_idx = np.argmin(target_pcd_points[:, 2])
@@ -182,7 +182,7 @@ def main(args):
         else:
             if args['demon']:
                 skill_params_np = np.asarray([1.0, 0.2, 0.8, 0.0, -0.5]).astype(DTYPE_NP)
-                target_pcd = o3d.io.read_point_cloud(os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
+                target_pcd = o3d.io.read_point_cloud(os.path.join(script_path, '..', 'data', f'task_target_pcds',
                                                                   f'pcd_{task_id}_cropped_norm_z_aligned.ply'))
                 target_pcd_points = np.asarray(target_pcd.points) + np.asarray([0.2, 0.2, 0])
                 z_min_idx = np.argmin(target_pcd_points[:, 2])
