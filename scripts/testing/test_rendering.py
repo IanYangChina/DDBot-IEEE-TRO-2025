@@ -205,6 +205,7 @@ def main(args):
                   f'p3: {skill_params[2]}, ' +
                   f'p4: {skill_params[3]}, ' +
                   f'p5: {skill_params[4]}' + '}\"')
+            exit()
             trajectory = abstraction_two_skill(skill_params, dt_sim)
             env_cfg['horizon'] = trajectory.shape[0]
             saving_folder = os.path.join(script_path, '..', 'render_test', f'abs2-sac{mat}',
