@@ -48,7 +48,11 @@ def plot_trajectory(dirs, mat=''):
         ax[task*2+1, 0].set_ylabel('Sim Trajectory')
 
         hm = iio.imread(os.path.join(fig_path, '..', f'height_map{mat}.png'))
-        ax[task*2+1, 9].imshow(np.rot90(np.rot90(np.rot90(hm))))
+        if task == 0:
+            ax[task*2+1, 9].imshow(np.rot90(np.rot90(hm)))
+        else:
+            ax[task*2+1, 9].imshow(np.rot90(np.rot90(np.rot90(hm))))
+
         ax[task*2+1, 9].set_ylabel('Height Map')
         pcd = iio.imread(os.path.join(fig_path, '..', 'pcd_sim.png'))
         ax[task*2+0, 9].imshow(pcd[110:-110, 150:-150, :])

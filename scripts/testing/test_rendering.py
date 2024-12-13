@@ -193,7 +193,7 @@ def main(args):
             x_demo = target_pcd_points[z_min_idx, 0] + 0.02
             rl_agent_config['demonstration_action'][0] = np.clip((x_demo - 0.2) / 0.12, -1.0, 1.0)
 
-            seed = 4
+            seed = args['seed']
             log_dir = os.path.join(script_path, '..', f'log-abs2-sac{mat}',
                                    f'd5e6-task-{task_id}-her-demo',
                                    f'seed-{seed}')
@@ -208,7 +208,7 @@ def main(args):
             trajectory = abstraction_two_skill(skill_params, dt_sim)
             env_cfg['horizon'] = trajectory.shape[0]
             saving_folder = os.path.join(script_path, '..', 'render_test', f'abs2-sac{mat}',
-                                         f'd5e6-task-{task_id}-her-demo')
+                                         f'd5e6-task-{task_id}-her-demo', f'seed-{seed}')
 
         elif args['skill']:
             # case = f'd5e6-task-{task_id}-ls-lr0.03'
@@ -251,7 +251,6 @@ def main(args):
     os.makedirs(saving_folder, exist_ok=True)
     if args['save_img']:
         os.makedirs(os.path.join(saving_folder, f'imgs{mat}'), exist_ok=True)
-
 
     ti.reset()
     ti.init(arch=ti.cuda, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True, random_seed=1)
@@ -334,6 +333,7 @@ if __name__ == '__main__':
     parser.add_argument('--sysid', dest='sys_id', default=False, action='store_true', help='Run system identification')
     parser.add_argument('--skill', dest='skill', default=False, action='store_true', help='Run skill')
     parser.add_argument('--sac', dest='sac', default=False, action='store_true', help='Run SAC')
+    parser.add_argument('--seed', dest='seed', type=int, default=0, help='Seed')
     parser.add_argument('--task-id', dest='task_id', type=int, default=-1, help='Run task')
     parser.add_argument('--sand', dest='sand', default=False, action='store_true', help='Use sand material')
     parser.add_argument('--view-demon', dest='view_demon', action='store_true', default=False, help='View demonstration')
