@@ -207,7 +207,7 @@ def main(arguments):
         rl_agent_config['hindsight'] = arguments['her']
         rl_agent_config['sampling_strategy'] = 'final'
         rl_agent_config['use_demonstrations'] = arguments['use_demo']
-        rl_agent_config['demonstrate_percentage'] = 0.50
+        rl_agent_config['demonstrate_percentage'] = 0.25
         rl_agent_config['demonstration_action'] = [1.0, 0.2, 0.8, 0.0, -0.5]
         target_pcd = o3d.io.read_point_cloud(os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
                                                           f'pcd_{task_id}_cropped_norm_z_aligned.ply'))
