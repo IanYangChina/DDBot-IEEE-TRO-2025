@@ -178,7 +178,7 @@ def main(args):
                 trajectory_length = trajectory_demon.shape[0]
                 trajectory_np[:trajectory_length] = trajectory_demon[:trajectory_length]
 
-        n_epoch = 50
+        n_epoch = 20
         n_aborted_data = 0
         tr_optim = RMSprop(parameters_shape=trajectory_np.shape,
                            cfg={'lr': learning_rate, 'beta': 0.9})

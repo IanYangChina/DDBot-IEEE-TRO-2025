@@ -78,10 +78,6 @@ def main(args):
         mat = '_sand'
     else:
         mat = ''
-    saving_folder = os.path.join(script_path, '..', 'render_test')
-    os.makedirs(saving_folder, exist_ok=True)
-    if args['save_img']:
-        os.makedirs(os.path.join(saving_folder, f'imgs{mat}'), exist_ok=True)
     sys_id_motion = 1
     task_id = args['task_id']
     dt_sim = 0.01
@@ -92,12 +88,17 @@ def main(args):
                                           f'sys_id_sim_{sys_id_motion}_pos-dt_{dt_sim}.npy'))
         target_pcd_path = os.path.join(script_path, '..', 'data', f'sys_id_target_pcds{mat}',
                                        f'pcd_{sys_id_motion}_cropped_norm_z_aligned.ply')
+        saving_folder = os.path.join(script_path, '..', 'render_test', 'sysid')
     else:
         assert task_id >= 0, 'Task ID should be provided'
         target_pcd_path = os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
                                        f'pcd_{task_id}_cropped_norm_z_aligned.ply')
         seed = 4
         if args['skill']:
+            # case = f'd5e6-task-{task_id}-ls-lr0.03'
+            # case = f'd5e6-task-{task_id}-hm-ls-lr0.03'
+            # case = f'd5e6-task-{task_id}-ls-demo-lr0.03'
+            case = f'd5e6-task-{task_id}-hm-ls-demo-lr0.03'
             if args['view_demon']:
                 skill_params = np.asarray([1.0, 0.2, 0.8, 0.0, -0.5]).astype(DTYPE_NP)
                 target_pcd = o3d.io.read_point_cloud(target_pcd_path[:-4] + '_res40.ply')
@@ -106,9 +107,7 @@ def main(args):
                 x_demo = target_pcd_points[z_min_idx, 0] + 0.02
                 skill_params[0] = np.clip((x_demo - 0.2) / 0.12, -1.0, 1.0)
             else:
-                with open(os.path.join(script_path, '..', f'log-abs2{mat}',
-                                       f'd5e6-task-{task_id}-hm-ls-lr0.03',
-                                       'best_loss.json'), 'r') as f:
+                with open(os.path.join(script_path, '..', f'log-abs2{mat}', case, 'best_loss.json'), 'r') as f:
                     skill_params_json = json.load(f)['Parameters']
                     skill_params = np.array([
                         skill_params_json['skill_params_0'][0],
@@ -124,10 +123,15 @@ def main(args):
                   f'p4: {skill_params[3]}, ' +
                   f'p5: {skill_params[4]}' + '}\"')
             trajectory = abstraction_two_skill(skill_params, dt_sim)
+            saving_folder = os.path.join(script_path, '..', 'render_test', f'abs2{mat}', case)
         else:
-            trajectory = np.load(os.path.join(script_path, '..', f'log-abs0{mat}',
-                                              f'd5e6-task-{task_id}-ls-demo-lr0.001',
+            case = f'd5e6-task-{task_id}-ls-demo-lr0.001'
+            trajectory = np.load(os.path.join(script_path, '..', f'log-abs0{mat}', case,
                                               f'seed-{seed}', 'final_trajectory.npy'))
+            saving_folder = os.path.join(script_path, '..', 'render_test', 'abs0', case)
+    os.makedirs(saving_folder, exist_ok=True)
+    if args['save_img']:
+        os.makedirs(os.path.join(saving_folder, f'imgs{mat}'), exist_ok=True)
 
     env_cfg = {
         'p_density': float(args['ptcl_density']),
@@ -187,32 +191,26 @@ def main(args):
         mpm_env.step(trajectory[i])
         if args['render']:
             mpm_env.render(mode='human')
-        if args['save_img']:
+        if args['save_img'] and i % 20 == 0:
             img = mpm_env.render(mode='rgb_array')
-            if i % 40 == 0:
-                Image.fromarray(img).save(os.path.join(saving_folder, f'imgs{mat}',
-                                                       f'img_{i}.png'))
-        if args['save_video']:
-            if i % 5 == 0:
-                img = mpm_env.render(mode='rgb_array')
-                frames_for_gifs.append(img)
+            Image.fromarray(img).save(os.path.join(saving_folder, f'imgs{mat}',
+                                                   f'img_{i}.png'))
+        if args['save_video'] and i % 5 == 0:
+            img = mpm_env.render(mode='rgb_array')
+            frames_for_gifs.append(img)
     loss_info = mpm_env.get_final_loss()
     print('===> Validation loss:', loss_info['height_map_loss'] / (40 * 40) + loss_info['emd_loss'] / (40 * 40))
 
     if args['render_hm'] or args['save_hm']:
-        fig, ax = plt.subplots(2, 1, figsize=(3, 6))
-        plt.subplots_adjust(wspace=0, hspace=0.2)
-
-        ax[0].imshow(np.rot90(mpm_env.loss.height_map.to_numpy()),
+        plt.imshow(mpm_env.loss.height_map.to_numpy(),
                      vmin=0.002, vmax=0.09)
-        ax[0].axis('off')
-        # ax[0].set_title('Height map')
-        ax[1].imshow(np.rot90(mpm_env.loss.height_map_pcd_target.to_numpy()),
-                     vmin=0.002, vmax=0.09)
-        ax[1].axis('off')
+        plt.axis('off')
+        # ax[1].imshow(np.rot90(mpm_env.loss.height_map_pcd_target.to_numpy()),
+        #              vmin=0.002, vmax=0.09)
+        # ax[1].axis('off')
         # ax[1].set_title('Target height map')
         if args['save_hm']:
-            plt.savefig(os.path.join(saving_folder, f'height_map{mat}.png'))
+            plt.savefig(os.path.join(saving_folder, f'height_map{mat}.png'), bbox_inches='tight', pad_inches=0.01)
         if args['render_hm']:
             plt.show()
 
@@ -228,9 +226,10 @@ def main(args):
         x = mpm_env.loss.target_pcd_points_np
         target_particles = o3d.utility.Vector3dVector(x)
         target_particles = o3d.geometry.PointCloud(target_particles)
-        o3d.visualization.draw_geometries([target_particles, sim_particles],
-                                            window_name='Target point cloud',
-                                            width=800, height=600)
+        o3d.visualization.draw_geometries([
+            # target_particles,
+            sim_particles
+        ], window_name='Target point cloud', width=800, height=600)
 
     if args['save_video']:
         with imageio.get_writer(os.path.join(saving_folder, f'video{mat}.gif'), mode='I') as writer:

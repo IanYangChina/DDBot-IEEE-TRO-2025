@@ -352,16 +352,24 @@ def plot_task_pcds():
 # plot_task_pcds()
 
 
-def find_best_skill_parameters(mat=''):
-    dirs = os.listdir(os.path.join(script_path, '..', f'log-abs2{mat}'))
+def find_best_skill_parameters(mat='', sac=False, abs0=False):
+    if sac:
+        log_folder = f'log-abs2-sac{mat}'
+    elif abs0:
+        log_folder = f'log-abs0{mat}'
+    else:
+        log_folder = f'log-abs2{mat}'
+    dirs = os.listdir(os.path.join(script_path, '..', log_folder))
     for p_dir in dirs:
-        p_folder = os.path.join(script_path, '..', f'log-abs2{mat}', p_dir)
+        p_folder = os.path.join(script_path, '..', log_folder, p_dir)
         if os.path.isfile(os.path.join(p_folder, 'best_loss.json')):
             continue
         best_loss = np.inf
         best_loss_info = {}
         for seed in [0, 1, 2, 3, 4]:
             folder = os.path.join(p_folder, f'seed-{seed}')
+            if sac:
+                folder = os.path.join(folder, 'data')
             data_dict = {
                 'Loss': {
                     'emd_loss': [],
@@ -374,34 +382,77 @@ def find_best_skill_parameters(mat=''):
                     'skill_params_2': [],
                     'skill_params_3': [],
                     'skill_params_4': [],
+                },
+                'SAC': {
+                    'actor_loss': [],
+                    'temperature': [],
+                    'policy_entropy': [],
+                    'critic_1_loss': [],
+                    'critic_2_loss': [],
+                    'emd_loss': [],
+                    'height_map_loss': [],
+                    'test_emd_loss': [],
+                    'test_height_map_loss': [],
                 }
             }
             for filename in os.listdir(folder):
                 if filename[:5] == 'event':
                     for event in summary_iterator(os.path.join(folder, filename)):
-                        for v in event.summary.value:
-                            if v.tag[:5] == 'loss/':
-                                if v.tag[5:] == 'EMD':
-                                    data_dict['Loss']['emd_loss'].append(v.simple_value)
-                                elif v.tag[5:] == 'Heightmap':
-                                    data_dict['Loss']['height_map_loss'].append(v.simple_value)
+                        if not sac:
+                            for v in event.summary.value:
+                                if v.tag[:5] == 'loss/':
+                                    if v.tag[5:] == 'EMD':
+                                        data_dict['Loss']['emd_loss'].append(v.simple_value)
+                                    elif v.tag[5:] == 'Heightmap':
+                                        data_dict['Loss']['height_map_loss'].append(v.simple_value)
+                                    else:
+                                        pass
+                                elif v.tag[:6] == 'param/':
+                                    if v.tag[6] == '0':
+                                        data_dict['Parameters']['skill_params_0'].append([v.simple_value])
+                                    elif v.tag[6] == '1':
+                                        data_dict['Parameters']['skill_params_1'].append([v.simple_value])
+                                    elif v.tag[6] == '2':
+                                        data_dict['Parameters']['skill_params_2'].append([v.simple_value])
+                                    elif v.tag[6] == '3':
+                                        data_dict['Parameters']['skill_params_3'].append([v.simple_value])
+                                    elif v.tag[6] == '4':
+                                        data_dict['Parameters']['skill_params_4'].append([v.simple_value])
+                                    else:
+                                        pass
                                 else:
                                     pass
-                            elif v.tag[:6] == 'param/':
-                                if v.tag[6] == '0':
-                                    data_dict['Parameters']['skill_params_0'].append([v.simple_value])
-                                elif v.tag[6] == '1':
-                                    data_dict['Parameters']['skill_params_1'].append([v.simple_value])
-                                elif v.tag[6] == '2':
-                                    data_dict['Parameters']['skill_params_2'].append([v.simple_value])
-                                elif v.tag[6] == '3':
-                                    data_dict['Parameters']['skill_params_3'].append([v.simple_value])
-                                elif v.tag[6] == '4':
-                                    data_dict['Parameters']['skill_params_4'].append([v.simple_value])
-                                else:
-                                    pass
-                            else:
-                                pass
+                        else:
+                            for v in event.summary.value:
+                                if v.tag[:6] == 'Actor/':
+                                    if v.tag[6:] == 'actor_loss':
+                                        data_dict['SAC']['actor_loss'].append(v.simple_value)
+                                    elif v.tag[6:] == 'alpha':
+                                        data_dict['SAC']['temperature'].append(v.simple_value)
+                                    elif v.tag[6:] == 'policy_entropy':
+                                        data_dict['SAC']['policy_entropy'].append(v.simple_value)
+                                    else:
+                                        pass
+                                elif v.tag[:7] == 'Critic/':
+                                    if v.tag[7:] == 'critic_1_loss':
+                                        data_dict['SAC']['critic_1_loss'].append(v.simple_value)
+                                    elif v.tag[7:] == 'critic_2_loss':
+                                        data_dict['SAC']['critic_2_loss'].append(v.simple_value)
+                                    else:
+                                        pass
+                                elif v.tag[:5] == 'Task/':
+                                    if v.tag[5:] == 'emd_loss':
+                                        data_dict['SAC']['emd_loss'].append(v.simple_value)
+                                    elif v.tag[5:] == 'heightmap_loss':
+                                        data_dict['SAC']['height_map_loss'].append(v.simple_value)
+                                    elif v.tag[5:] == 'test_emd_loss':
+                                        data_dict['Loss']['emd_loss'].append(v.simple_value)
+                                        data_dict['SAC']['test_emd_loss'].append(v.simple_value)
+                                    elif v.tag[5:] == 'test_heightmap_loss':
+                                        data_dict['Loss']['height_map_loss'].append(v.simple_value)
+                                        data_dict['SAC']['test_height_map_loss'].append(v.simple_value)
+                                    else:
+                                        pass
 
             data_dict['Loss']['total_loss'] = (
                         np.asarray(data_dict['Loss']['height_map_loss']) / (40 * 40) +
@@ -414,14 +465,16 @@ def find_best_skill_parameters(mat=''):
                     'emd_loss': data_dict['Loss']['emd_loss'][min_loss_id],
                     'height_map_loss': data_dict['Loss']['height_map_loss'][min_loss_id],
                     'total_loss': data_dict['Loss']['total_loss'][min_loss_id],
-                },
-                'Parameters': {
-                    'skill_params_0': data_dict['Parameters']['skill_params_0'][min_loss_id],
-                    'skill_params_1': data_dict['Parameters']['skill_params_1'][min_loss_id],
-                    'skill_params_2': data_dict['Parameters']['skill_params_2'][min_loss_id],
-                    'skill_params_3': data_dict['Parameters']['skill_params_3'][min_loss_id],
-                    'skill_params_4': data_dict['Parameters']['skill_params_4'][min_loss_id],
                 }}
+            if not sac and not abs0:
+                best_loss_seed.update({
+                    'Parameters': {
+                        'skill_params_0': data_dict['Parameters']['skill_params_0'][min_loss_id],
+                        'skill_params_1': data_dict['Parameters']['skill_params_1'][min_loss_id],
+                        'skill_params_2': data_dict['Parameters']['skill_params_2'][min_loss_id],
+                        'skill_params_3': data_dict['Parameters']['skill_params_3'][min_loss_id],
+                        'skill_params_4': data_dict['Parameters']['skill_params_4'][min_loss_id],
+                    }})
             json.dump(best_loss_seed, open(os.path.join(folder, 'best_loss.json'), 'w'))
 
             if data_dict['Loss']['total_loss'][min_loss_id] < best_loss:
@@ -433,6 +486,7 @@ def find_best_skill_parameters(mat=''):
 
 # find_best_skill_parameters(mat='')
 # find_best_skill_parameters(mat='_sand')
+# find_best_skill_parameters(mat='', sac=True)
 
 
 def plot_so_loss_curve(mat='', task='0'):
@@ -440,21 +494,29 @@ def plot_so_loss_curve(mat='', task='0'):
     cases = [
         'ls-lr0.03', 'hm-ls-lr0.03',
         'ls-demo-lr0.03', 'hm-ls-demo-lr0.03',
+        'ls-demo-lr0.004', 'her-demo'
     ]
     casenames = [
         'EMD-LS', 'HMD-LS',
         'EMD-LS-Demo', 'HMD-LS-Demo',
+        'TR-EMD-LS-Demo', 'SAC-HER-Demo'
     ]
     fig, ax = plt.subplots(1, len(cases)+2, figsize=(len(cases)*2+2.1, 1.5),
-                           gridspec_kw={'width_ratios': [1, 1, 1, 1, 0.1, 1]})
+                           gridspec_kw={'width_ratios': [1, 1, 1, 1, 1, 1, 0.1, 1]})
     plt.subplots_adjust(wspace=0, hspace=0)
     window = 2
     for case_id in range(len(cases)):
         case = cases[case_id]
         column = case_id
-
-        case_folder = os.path.join(script_path, '..', f'log-abs2{mat}',
-                                   f'd5e6-task-{task}-{case}')
+        if case_id < 4:
+            case_folder = os.path.join(script_path, '..', f'log-abs2{mat}',
+                                       f'd5e6-task-{task}-{case}')
+        elif case_id == 4:
+            case_folder = os.path.join(script_path, '..', 'log-abs0',
+                                       f'd5e6-task-{task}-{case}')
+        else:
+            case_folder = os.path.join(script_path, '..', 'log-abs2-sac',
+                                       f'd5e6-task-{task}-{case}')
         losses = []
         for seed in range(5):
             folder = os.path.join(case_folder, f'seed-{seed}')
@@ -465,39 +527,58 @@ def plot_so_loss_curve(mat='', task='0'):
         running_avg = np.empty(mean_loss.shape[0])
         for n in range(mean_loss.shape[0]):
             running_avg[n] = np.mean(mean_loss[max(0, n - window):(n + 1)])
-        xs = np.arange(len(running_avg))
+        xs = np.arange(20) if case_id < 5 else np.arange(39)
+        if case_id < 5:
+            running_avg = running_avg[:20]
         ax[column].plot(xs, running_avg, label=casenames[case_id], color=colour_pool[case_id], linewidth=2)
         for l in losses:
             running_avg_l = np.empty(l.shape[0])
             for n in range(l.shape[0]):
                 running_avg_l[n] = np.mean(l[max(0, n - window):(n + 1)])
+            if case_id < 5:
+                running_avg_l = running_avg_l[:20]
             ax[column].plot(xs, running_avg_l, color=colour_pool[case_id], linestyle='--', linewidth=1)
 
         if task == '0':
-            ax[column].set_ylim([0.012, 0.021])
-            ax[column].set_yticks([0.013, 0.015, 0.018, 0.020])
+            if mat == '_sand':
+                ax[column].set_ylim([0.012, 0.020])
+                ax[column].set_yticks([0.013, 0.015, 0.017, 0.019])
+            else:
+                ax[column].set_ylim([0.011, 0.021])
+                ax[column].set_yticks([0.012, 0.014, 0.016, 0.018])
         elif task == '1':
             if mat == '_sand':
                 ax[column].set_ylim([0.0125, 0.0165])
                 ax[column].set_yticks([0.013, 0.014, 0.015, 0.016])
             else:
-                ax[column].set_ylim([0.015, 0.023])
-                ax[column].set_yticks([0.016, 0.018, 0.020, 0.022])
+                ax[column].set_ylim([0.0155, 0.019])
+                ax[column].set_yticks([0.016, 0.017, 0.018])
         else:
             if mat == '_sand':
-                ax[column].set_ylim([0.012, 0.019])
+                ax[column].set_ylim([0.0125, 0.0185])
                 ax[column].set_yticks([0.013, 0.015, 0.017])
             else:
                 ax[column].set_ylim([0.018, 0.026])
                 ax[column].set_yticks([0.019, 0.022, 0.025])
-        ax[column].set_xlim([-2, 21])
-        ax[column].set_xticks([0, 4, 9, 14, 19])
-        ax[column].set_xticklabels(['1', '5', '10', '15', '20'])
+        if case_id < 5:
+            ax[column].set_xlim([-2, 21])
+            ax[column].set_xticks([0, 4, 9, 14, 19])
+            ax[column].set_xticklabels(['1', '5', '10', '15', '20'])
+        else:
+            ax[column].set_xlim([-2, 41])
+            ax[column].set_xticks([0, 9, 19, 29, 39])
+            ax[column].set_xticklabels(['1', '50', '100', '150', '200'])
         ax[column].grid(True)
         if column == 0:
             ax[column].set_ylabel('Validation loss')
             ax[column].spines[['right']].set_visible(False)
-        elif column == 3:
+        elif column == 5 and task == '0' and mat == '':
+            for tick in ax[column].yaxis.get_major_ticks():
+                tick.tick1line.set_visible(False)
+                tick.tick2line.set_visible(False)
+                tick.label1.set_visible(False)
+                tick.label2.set_visible(False)
+        elif column == 3 and task != '0' and mat != '':
             for tick in ax[column].yaxis.get_major_ticks():
                 tick.tick1line.set_visible(False)
                 tick.tick2line.set_visible(False)
@@ -522,8 +603,16 @@ def plot_so_loss_curve(mat='', task='0'):
         y = []
         y_std = []
         case = cases[case_id]
+        if case_id < 4:
+            case_folder = os.path.join(script_path, '..', f'log-abs2{mat}',
+                                       f'd5e6-task-{task}-{case}')
+        elif case_id == 4:
+            case_folder = os.path.join(script_path, '..', 'log-abs0',
+                                       f'd5e6-task-{task}-{case}')
+        else:
+            case_folder = os.path.join(script_path, '..', 'log-abs2-sac',
+                                       f'd5e6-task-{task}-{case}')
 
-        case_folder = os.path.join(script_path, '..', f'log-abs2{mat}', f'd5e6-task-{task}-{case}')
         best_loss = []
         earliest_epoch = []
         for seed in range(5):
@@ -572,6 +661,6 @@ def plot_so_loss_curve(mat='', task='0'):
                 dpi=300, bbox_inches='tight', pad_inches=0.01)
 
 
-for mat in ['', '_sand']:
-    for task_id in range(3):
+for mat in ['']:
+    for task_id in range(1):
         plot_so_loss_curve(mat=mat, task=str(task_id))
