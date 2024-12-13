@@ -486,181 +486,196 @@ def find_best_skill_parameters(mat='', sac=False, abs0=False):
 
 # find_best_skill_parameters(mat='')
 # find_best_skill_parameters(mat='_sand')
-# find_best_skill_parameters(mat='', sac=True)
+# find_best_skill_parameters(mat='', abs0=True)
 
 
-def plot_so_loss_curve(mat='', task='0'):
+def plot_so_loss_curve(mat=''):
     plt.rcParams.update({'font.size': 11})
     cases = [
         'ls-lr0.03', 'hm-ls-lr0.03',
-        'ls-demo-lr0.03', 'hm-ls-demo-lr0.03',
-        'ls-demo-lr0.004', 'her-demo'
-    ]
+        'ls-demo-lr0.03', 'hm-ls-demo-lr0.03']
+    width_ratios = [1, 1, 1, 1, 0.05, 1]
+    if mat == '':
+        cases += [
+            'ls-demo-lr0.004',
+            'her-demo'
+        ]
+        width_ratios = [1, 1, 1, 1, 1, 1, 0.05, 1]
+
     casenames = [
         'EMD-LS', 'HMD-LS',
-        'EMD-LS-Demo', 'HMD-LS-Demo',
-        'TR-EMD-LS-Demo', 'SAC-HER-Demo'
-    ]
-    fig, ax = plt.subplots(1, len(cases)+2, figsize=(len(cases)*2+2.1, 1.5),
-                           gridspec_kw={'width_ratios': [1, 1, 1, 1, 1, 1, 0.1, 1]})
-    plt.subplots_adjust(wspace=0, hspace=0)
+        'EMD-LS-Demo', 'HMD-LS-Demo']
+    if mat == '':
+        casenames = [
+            'SO-EMD-LS', 'SO-HMD-LS',
+            'SO-EMD-LS-Demo', 'SO-HMD-LS-Demo',
+            'TR-EMD-LS-Demo',
+            'SAC-EMD-HER-Demo']
+    fig, ax = plt.subplots(3, len(cases)+2, figsize=(len(cases)*2+2.05, 3*1.5),
+                           gridspec_kw={'width_ratios': width_ratios,
+                                        'height_ratios': [1, 1, 1]})
+    plt.subplots_adjust(wspace=0, hspace=0.01)
     window = 2
     for case_id in range(len(cases)):
         case = cases[case_id]
         column = case_id
-        if case_id < 4:
-            case_folder = os.path.join(script_path, '..', f'log-abs2{mat}',
-                                       f'd5e6-task-{task}-{case}')
-        elif case_id == 4:
-            case_folder = os.path.join(script_path, '..', 'log-abs0',
-                                       f'd5e6-task-{task}-{case}')
-        else:
-            case_folder = os.path.join(script_path, '..', 'log-abs2-sac',
-                                       f'd5e6-task-{task}-{case}')
-        losses = []
-        for seed in range(5):
-            folder = os.path.join(case_folder, f'seed-{seed}')
-            with open(os.path.join(folder, 'raw_data.json')) as f:
-                data = json.load(f)
-                losses.append(np.asarray(data['Loss']['total_loss']))
-        mean_loss = np.mean(losses, axis=0)
-        running_avg = np.empty(mean_loss.shape[0])
-        for n in range(mean_loss.shape[0]):
-            running_avg[n] = np.mean(mean_loss[max(0, n - window):(n + 1)])
-        xs = np.arange(20) if case_id < 5 else np.arange(39)
-        if case_id < 5:
-            running_avg = running_avg[:20]
-        ax[column].plot(xs, running_avg, label=casenames[case_id], color=colour_pool[case_id], linewidth=2)
-        for l in losses:
-            running_avg_l = np.empty(l.shape[0])
-            for n in range(l.shape[0]):
-                running_avg_l[n] = np.mean(l[max(0, n - window):(n + 1)])
+        for task in range(3):
+            if case_id < 4:
+                case_folder = os.path.join(script_path, '..', f'log-abs2{mat}',
+                                           f'd5e6-task-{task}-{case}')
+            elif case_id == 4:
+                case_folder = os.path.join(script_path, '..', 'log-abs0',
+                                           f'd5e6-task-{task}-{case}')
+            else:
+                case_folder = os.path.join(script_path, '..', 'log-abs2-sac',
+                                           f'd5e6-task-{task}-{case}')
+            losses = []
+            for seed in range(5):
+                folder = os.path.join(case_folder, f'seed-{seed}')
+                with open(os.path.join(folder, 'raw_data.json')) as f:
+                    data = json.load(f)
+                    losses.append(np.asarray(data['Loss']['total_loss']))
+            mean_loss = np.mean(losses, axis=0)
+            running_avg = np.empty(mean_loss.shape[0])
+            for n in range(mean_loss.shape[0]):
+                running_avg[n] = np.mean(mean_loss[max(0, n - window):(n + 1)])
+            xs = np.arange(20) if case_id < 5 else np.arange(39)
             if case_id < 5:
-                running_avg_l = running_avg_l[:20]
-            ax[column].plot(xs, running_avg_l, color=colour_pool[case_id], linestyle='--', linewidth=1)
+                running_avg = running_avg[:20]
+            ax[task, column].plot(xs, running_avg, label=casenames[case_id], color=colour_pool[case_id], linewidth=2)
+            for l in losses:
+                running_avg_l = np.empty(l.shape[0])
+                for n in range(l.shape[0]):
+                    running_avg_l[n] = np.mean(l[max(0, n - window):(n + 1)])
+                if case_id < 5:
+                    running_avg_l = running_avg_l[:20]
+                ax[task, column].plot(xs, running_avg_l, color=colour_pool[case_id], linestyle='--', linewidth=1)
 
-        if task == '0':
-            if mat == '_sand':
-                ax[column].set_ylim([0.012, 0.020])
-                ax[column].set_yticks([0.013, 0.015, 0.017, 0.019])
+            if task == 0:
+                if mat == '_sand':
+                    ax[task, column].set_ylim([0.012, 0.020])
+                    ax[task, column].set_yticks([0.013, 0.015, 0.017, 0.019])
+                else:
+                    ax[task, column].set_ylim([0.011, 0.026])
+                    ax[task, column].set_yticks([0.013, 0.016, 0.019, 0.022])
+            elif task == 1:
+                if mat == '_sand':
+                    ax[task, column].set_ylim([0.0125, 0.0165])
+                    ax[task, column].set_yticks([0.013, 0.014, 0.015, 0.016])
+                else:
+                    ax[task, column].set_ylim([0.0145, 0.0225])
+                    ax[task, column].set_yticks([0.015, 0.017, 0.019, 0.021])
             else:
-                ax[column].set_ylim([0.011, 0.021])
-                ax[column].set_yticks([0.012, 0.014, 0.016, 0.018])
-        elif task == '1':
-            if mat == '_sand':
-                ax[column].set_ylim([0.0125, 0.0165])
-                ax[column].set_yticks([0.013, 0.014, 0.015, 0.016])
+                if mat == '_sand':
+                    ax[task, column].set_ylim([0.0125, 0.0185])
+                    ax[task, column].set_yticks([0.013, 0.015, 0.017])
+                else:
+                    ax[task, column].set_ylim([0.0175, 0.0295])
+                    ax[task, column].set_yticks([0.019, 0.022, 0.025, 0.028])
+            if case_id < 5:
+                ax[task, column].set_xlim([-2, 21])
+                ax[task, column].set_xticks([0, 4, 9, 14, 19])
+                ax[task, column].set_xticklabels(['1', '5', '10', '15', '20'])
             else:
-                ax[column].set_ylim([0.0155, 0.019])
-                ax[column].set_yticks([0.016, 0.017, 0.018])
-        else:
-            if mat == '_sand':
-                ax[column].set_ylim([0.0125, 0.0185])
-                ax[column].set_yticks([0.013, 0.015, 0.017])
-            else:
-                ax[column].set_ylim([0.018, 0.026])
-                ax[column].set_yticks([0.019, 0.022, 0.025])
-        if case_id < 5:
-            ax[column].set_xlim([-2, 21])
-            ax[column].set_xticks([0, 4, 9, 14, 19])
-            ax[column].set_xticklabels(['1', '5', '10', '15', '20'])
-        else:
-            ax[column].set_xlim([-2, 41])
-            ax[column].set_xticks([0, 9, 19, 29, 39])
-            ax[column].set_xticklabels(['1', '50', '100', '150', '200'])
-        ax[column].grid(True)
-        if column == 0:
-            ax[column].set_ylabel('Validation loss')
-            ax[column].spines[['right']].set_visible(False)
-        elif column == 5 and task == '0' and mat == '':
-            for tick in ax[column].yaxis.get_major_ticks():
-                tick.tick1line.set_visible(False)
-                tick.tick2line.set_visible(False)
-                tick.label1.set_visible(False)
-                tick.label2.set_visible(False)
-        elif column == 3 and task != '0' and mat != '':
-            for tick in ax[column].yaxis.get_major_ticks():
-                tick.tick1line.set_visible(False)
-                tick.tick2line.set_visible(False)
-                tick.label1.set_visible(False)
-                tick.label2.set_visible(False)
-        else:
-            ax[column].spines[['right']].set_visible(False)
-            for tick in ax[column].yaxis.get_major_ticks():
-                tick.tick1line.set_visible(False)
-                tick.tick2line.set_visible(False)
-                tick.label1.set_visible(False)
-                tick.label2.set_visible(False)
+                ax[task, column].set_xlim([-2, 41])
+                ax[task, column].set_xticks([0, 9, 19, 29, 39])
+                ax[task, column].set_xticklabels(['1', '50', '100', '150', '200'])
 
-        ax[column].set_xlabel('Epoch')
-        handle = Line2D([0], [0], color=colour_pool[case_id], linewidth=5)
-        ax[column].legend([handle], [casenames[case_id]], loc='upper left', fontsize=9,
-                               handlelength=0.1, frameon=True)
+            if task != 2:
+                for tick in ax[task, column].xaxis.get_major_ticks():
+                    tick.tick1line.set_visible(False)
+                    tick.tick2line.set_visible(False)
+                    tick.label1.set_visible(False)
+                    tick.label2.set_visible(False)
+            ax[task, column].grid(True)
+            if column == 0:
+                ax[task, column].set_ylabel(f'Task {task+1}')
+                ax[task, column].spines[['right']].set_visible(False)
+            elif column == len(cases)-1:
+                for tick in ax[task, column].yaxis.get_major_ticks():
+                    tick.tick1line.set_visible(False)
+                    tick.tick2line.set_visible(False)
+                    tick.label1.set_visible(False)
+                    tick.label2.set_visible(False)
+            else:
+                ax[task, column].spines[['right']].set_visible(False)
+                for tick in ax[task, column].yaxis.get_major_ticks():
+                    tick.tick1line.set_visible(False)
+                    tick.tick2line.set_visible(False)
+                    tick.label1.set_visible(False)
+                    tick.label2.set_visible(False)
+
+            ax[task, column].set_xlabel('Epoch')
+            handle = Line2D([0], [0], color=colour_pool[case_id], linewidth=5)
+            ax[task, column].legend([handle], [casenames[case_id]], loc='upper left', fontsize=9,
+                                    handlelength=0.1, frameon=True)
 
     for case_id in range(len(cases)):
-        x = []
-        x_std = []
-        y = []
-        y_std = []
-        case = cases[case_id]
-        if case_id < 4:
-            case_folder = os.path.join(script_path, '..', f'log-abs2{mat}',
-                                       f'd5e6-task-{task}-{case}')
-        elif case_id == 4:
-            case_folder = os.path.join(script_path, '..', 'log-abs0',
-                                       f'd5e6-task-{task}-{case}')
-        else:
-            case_folder = os.path.join(script_path, '..', 'log-abs2-sac',
-                                       f'd5e6-task-{task}-{case}')
+        for task in range(3):
+            y = []
+            y_std = []
+            case = cases[case_id]
+            if case_id < 4:
+                case_folder = os.path.join(script_path, '..', f'log-abs2{mat}',
+                                           f'd5e6-task-{task}-{case}')
+            elif case_id == 4:
+                case_folder = os.path.join(script_path, '..', 'log-abs0',
+                                           f'd5e6-task-{task}-{case}')
+            else:
+                case_folder = os.path.join(script_path, '..', 'log-abs2-sac',
+                                           f'd5e6-task-{task}-{case}')
 
-        best_loss = []
-        earliest_epoch = []
-        for seed in range(5):
-            folder = os.path.join(case_folder, f'seed-{seed}')
-            with open(os.path.join(folder, 'best_loss.json')) as f:
-                data = json.load(f)
-                earliest_epoch.append(data['Step'])
-                best_loss.append(data['Loss']['total_loss'])
-        y.append(np.mean(best_loss))
-        y_std.append(np.std(best_loss))
-        x.append(np.mean(earliest_epoch))
-        x_std.append(np.std(earliest_epoch))
+            best_loss = []
+            for seed in range(5):
+                folder = os.path.join(case_folder, f'seed-{seed}')
+                with open(os.path.join(folder, 'best_loss.json')) as f:
+                    data = json.load(f)
+                    best_loss.append(data['Loss']['total_loss'])
+            y.append(np.mean(best_loss))
+            y_std.append(np.std(best_loss))
 
-        ax[len(cases)+1].errorbar(y, len(cases) - case_id - 1, color=colour_pool[case_id], xerr=y_std,
-                     fmt='h',
-                     capsize=4, markersize=6, elinewidth=1, capthick=1)
+            ax[task, len(cases)+1].errorbar(case_id, y, color=colour_pool[case_id], yerr=y_std,
+                                            fmt='h', capsize=4, markersize=6, elinewidth=1, capthick=1)
 
-    ax[len(cases)+1].grid(True, axis='x')
-    if task == '0':
-        if mat == '_sand':
-            ax[len(cases)+1].set_xlim([0.0123, 0.0142])
-            ax[len(cases)+1].set_xticks([0.0127, 0.0138])
+    for task in range(3):
+        ax[task, len(cases)+1].grid(True, axis='y')
+        if task == 0:
+            if mat == '_sand':
+                ax[task, len(cases)+1].set_ylim([0.012, 0.020])
+                ax[task, len(cases)+1].set_yticks([0.013, 0.015, 0.017, 0.019])
+            else:
+                ax[task, len(cases)+1].set_ylim([0.011, 0.026])
+                ax[task, len(cases)+1].set_yticks([0.013, 0.016, 0.019, 0.022])
+        elif task == 1:
+            if mat == '_sand':
+                ax[task, len(cases)+1].set_ylim([0.0125, 0.0165])
+                ax[task, len(cases)+1].set_yticks([0.013, 0.014, 0.015, 0.016])
+            else:
+                ax[task, len(cases)+1].set_ylim([0.0145, 0.0225])
+                ax[task, len(cases)+1].set_yticks([0.015, 0.017, 0.019, 0.021])
         else:
-            ax[len(cases)+1].set_xlim([0.012, 0.015])
-            ax[len(cases)+1].set_xticks([0.0125, 0.0135, 0.0145])
-    elif task == '1':
-        if mat == '_sand':
-            ax[len(cases)+1].set_xlim([0.0125, 0.0155])
-            ax[len(cases)+1].set_xticks([0.013, 0.014, 0.015])
-        else:
-            ax[len(cases)+1].set_xlim([0.0155, 0.0175])
-            ax[len(cases)+1].set_xticks([0.016, 0.017])
-    else:
-        if mat == '_sand':
-            ax[len(cases)+1].set_xlim([0.012, 0.018])
-            ax[len(cases)+1].set_xticks([0.013, 0.015, 0.017])
-        else:
-            ax[len(cases)+1].set_xlim([0.018, 0.023])
-            ax[len(cases)+1].set_xticks([0.019, 0.022])
-    ax[len(cases)+1].set_ylim([-0.5, len(cases)-0.5])
-    ax[len(cases)+1].set_yticks([])
-    ax[len(cases)+1].set_xlabel('Best validation loss')
+            if mat == '_sand':
+                ax[task, len(cases)+1].set_ylim([0.0125, 0.0185])
+                ax[task, len(cases)+1].set_yticks([0.013, 0.015, 0.017])
+            else:
+                ax[task, len(cases)+1].set_ylim([0.0175, 0.0295])
+                ax[task, len(cases)+1].set_yticks([0.019, 0.022, 0.025, 0.028])
 
-    ax[len(cases)].axis('off')
-    plt.savefig(os.path.join(script_path, '..', 'figs', f'so_task{task}{mat}.pdf'),
+        for tick in ax[task, len(cases)+1].yaxis.get_major_ticks():
+            tick.tick1line.set_visible(False)
+            tick.tick2line.set_visible(False)
+            tick.label1.set_visible(False)
+            tick.label2.set_visible(False)
+        ax[task, len(cases)+1].set_xlim([-0.5, len(cases)-0.5])
+        ax[task, len(cases)+1].set_xticks([])
+        if task == 2:
+            ax[task, len(cases)+1].set_xlabel('Best validation loss\nMean ± Std of 5 seeds')
+
+        ax[task, len(cases)].axis('off')
+    if mat == '':
+        mat = '_soil'
+    plt.savefig(os.path.join(script_path, '..', 'figs', f'task{mat}.pdf'),
                 dpi=300, bbox_inches='tight', pad_inches=0.01)
 
 
-for mat in ['']:
-    for task_id in range(1):
-        plot_so_loss_curve(mat=mat, task=str(task_id))
+plot_so_loss_curve(mat='')

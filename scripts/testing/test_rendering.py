@@ -81,24 +81,140 @@ def main(args):
     sys_id_motion = 1
     task_id = args['task_id']
     dt_sim = 0.01
+    env_cfg = {
+        'p_density': float(args['ptcl_density']),
+        'material_id': SAND,
+        'horizon': 600,
+        'dt_global': dt_sim,
+        'grid_scale': 1.0,
+        'n_substeps': 20,
+        'agent_init_pos': (0.2, 0.2, 0.205),
+        'agent_init_euler': (0, 180, 90),
+    }
+    loss_cfg = {
+        'use_height_map_loss': False,
+        'target_pcd_path': None,
+        'target_pcd_offset': [0.2, 0.2, 0],
+        'height_grid_res': 40,
+    }
+
+    cam_cfg = {
+        'pos': (0.2, 0.58, 0.51),
+        'lookat': (0.2, 0.18, 0.03),
+        'euler': (180 + np.rad2deg(np.arctan(1.0 / (0.9 - 0.03))), 0, 180),
+        'focal_length': 0.3,
+        'fov': 30,
+        'lights': [{'pos': (1.2, 0.2, 1.0), 'color': (0.95, 0.95, 0.95)},
+                   {'pos': (0.2, 0.5, 1.0), 'color': (0.95, 0.95, 0.95)},
+                   {'pos': (0.2, 0.2, 1.0), 'color': (0.95, 0.95, 0.95)}],
+        'particle_radius': 0.001,
+        'res': (800, 600),
+        'pcd_gen_res': 150
+    }
+
+    with open(os.path.join(script_path, '..', f'log-sys_id{mat}',
+                           'd5e6-hm-gclip-ls-man-init-res40',
+                           'best_params.json'), 'r') as f:
+        best_params = json.load(f)['Parameters']
 
     if args['sys_id']:
         trajectory = np.load(os.path.join(script_path, '..', 'data',
                                           'moveit_trajectories',
                                           f'sys_id_sim_{sys_id_motion}_pos-dt_{dt_sim}.npy'))
+        env_cfg['horizon'] = trajectory.shape[0]
         target_pcd_path = os.path.join(script_path, '..', 'data', f'sys_id_target_pcds{mat}',
                                        f'pcd_{sys_id_motion}_cropped_norm_z_aligned.ply')
+        loss_cfg['target_pcd_path'] = target_pcd_path
         saving_folder = os.path.join(script_path, '..', 'render_test', 'sysid')
     else:
         assert task_id >= 0, 'Task ID should be provided'
         target_pcd_path = os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
                                        f'pcd_{task_id}_cropped_norm_z_aligned.ply')
-        seed = 4
-        if args['skill']:
+        loss_cfg['target_pcd_path'] = target_pcd_path
+        if args['sac']:
+            cam_cfg = {
+                'pos': (0.2, 0.57, 0.6),
+                'lookat': (0.2, 0.2, 0.03),
+                'euler': (180 + np.rad2deg(np.arctan(1.0 / (0.9 - 0.03))), 0, 180),
+                'focal_length': 0.3,
+                'fov': 60,
+                'lights': [{'pos': (1.2, 0.25, 0.2), 'color': (0.6, 0.6, 0.6)},
+                           {'pos': (1.2, 0.5, 1.0), 'color': (0.6, 0.6, 0.6)},
+                           {'pos': (1.2, 0.0, 1.0), 'color': (0.8, 0.8, 0.8)}],
+                'particle_radius': 0.001,
+                'res': (800, 800),
+                'pcd_gen_res': 40
+            }
+
+            trajectory = np.zeros(shape=(600, 6))
+            from drl_implementation.agent.continuous_action.sac_pointnet import PointnetSAC
+            from doma.envs.wrappers import SingleSkillEnv, FakeEnv
+            ti_cfg = {
+                'arch': ti.cuda,
+                'device_memory_GB': arguments['cuda_GB'],
+                'fast_math': True,
+                'random_seed': 0
+            }
+            ti_env_cfg = {
+                'env_cfg': env_cfg,
+                'loss_cfg': loss_cfg,
+                'ti_cfg': ti_cfg,
+                'cam_cfg': cam_cfg
+            }
+            env_cfg['best_params'] = best_params
+
+            gym_env_config = {
+                'pcd_file_path': target_pcd_path,
+                'render_skill': False,
+                'horizon': 1,
+                'obs_mode': 'point_cloud',
+                'reward_scale': -1.0,
+                'action_dim': 5,
+                'action_max': 1.0,
+                'action_min': -1.0,
+                'skill_generation_func': abstraction_two_skill
+            }
+            gym_env = SingleSkillEnv(ti_env_cfg, gym_env_config, seed=0)
+
+            with open(os.path.join(script_path, '..', 'data', 'rl_agent_config.json'), 'rb') as f_ac:
+                rl_agent_config = json.load(f_ac)
+            rl_agent_config['cuda_device_id'] = 0
+            rl_agent_config['batch_size'] = 10
+            rl_agent_config['optimization_steps'] = 10
+            rl_agent_config['hindsight'] = True
+            rl_agent_config['sampling_strategy'] = 'final'
+            rl_agent_config['use_demonstrations'] = True
+            rl_agent_config['demonstrate_percentage'] = 0.25
+            rl_agent_config['demonstration_action'] = [1.0, 0.2, 0.8, 0.0, -0.5]
+            target_pcd = o3d.io.read_point_cloud(os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
+                                                              f'pcd_{task_id}_cropped_norm_z_aligned.ply'))
+            target_pcd_points = np.asarray(target_pcd.points) + np.asarray([0.2, 0.2, 0])
+            z_min_idx = np.argmin(target_pcd_points[:, 2])
+            x_demo = target_pcd_points[z_min_idx, 0] + 0.02
+            rl_agent_config['demonstration_action'][0] = np.clip((x_demo - 0.2) / 0.12, -1.0, 1.0)
+
+            seed = 4
+            log_dir = os.path.join(script_path, '..', f'log-abs2-sac{mat}',
+                                   f'd5e6-task-{task_id}-her-demo',
+                                   f'seed-{seed}')
+            agent = PointnetSAC(rl_agent_config, gym_env, logging=None, path=log_dir, seed=seed)
+            skill_params = agent.run(test=True, get_action=True, load_network_ep=175)
+            print('SAC-generated skill parameters: \nrosservice call /skill \"{p1: ' +
+                  f'{skill_params[0]}, ' +
+                  f'p2: {skill_params[1]}, ' +
+                  f'p3: {skill_params[2]}, ' +
+                  f'p4: {skill_params[3]}, ' +
+                  f'p5: {skill_params[4]}' + '}\"')
+            trajectory = abstraction_two_skill(skill_params, dt_sim)
+            env_cfg['horizon'] = trajectory.shape[0]
+            saving_folder = os.path.join(script_path, '..', 'render_test', f'abs2-sac{mat}',
+                                         f'd5e6-task-{task_id}-her-demo')
+
+        elif args['skill']:
             # case = f'd5e6-task-{task_id}-ls-lr0.03'
             # case = f'd5e6-task-{task_id}-hm-ls-lr0.03'
-            # case = f'd5e6-task-{task_id}-ls-demo-lr0.03'
-            case = f'd5e6-task-{task_id}-hm-ls-demo-lr0.03'
+            case = f'd5e6-task-{task_id}-ls-demo-lr0.03'
+            # case = f'd5e6-task-{task_id}-hm-ls-demo-lr0.03'
             if args['view_demon']:
                 skill_params = np.asarray([1.0, 0.2, 0.8, 0.0, -0.5]).astype(DTYPE_NP)
                 target_pcd = o3d.io.read_point_cloud(target_pcd_path[:-4] + '_res40.ply')
@@ -123,55 +239,23 @@ def main(args):
                   f'p4: {skill_params[3]}, ' +
                   f'p5: {skill_params[4]}' + '}\"')
             trajectory = abstraction_two_skill(skill_params, dt_sim)
+            env_cfg['horizon'] = trajectory.shape[0]
             saving_folder = os.path.join(script_path, '..', 'render_test', f'abs2{mat}', case)
         else:
-            case = f'd5e6-task-{task_id}-ls-demo-lr0.001'
+            case = f'd5e6-task-{task_id}-ls-demo-lr0.004'
             trajectory = np.load(os.path.join(script_path, '..', f'log-abs0{mat}', case,
-                                              f'seed-{seed}', 'final_trajectory.npy'))
+                                              'seed-2', 'ckpts', 'trajectory_12.npy'))
+            env_cfg['horizon'] = trajectory.shape[0]
             saving_folder = os.path.join(script_path, '..', 'render_test', 'abs0', case)
+
     os.makedirs(saving_folder, exist_ok=True)
     if args['save_img']:
         os.makedirs(os.path.join(saving_folder, f'imgs{mat}'), exist_ok=True)
 
-    env_cfg = {
-        'p_density': float(args['ptcl_density']),
-        'material_id': SAND,
-        'horizon': trajectory.shape[0],
-        'dt_global': dt_sim,
-        'grid_scale': 1.0,
-        'n_substeps': 20,
-        'agent_init_pos': (0.2, 0.2, 0.205),
-        'agent_init_euler': (0, 180, 90),
-    }
-    loss_cfg = {
-        'use_height_map_loss': False,
-        'target_pcd_path': target_pcd_path,
-        'target_pcd_offset': [0.2, 0.2, 0],
-        'height_grid_res': 40,
-    }
-
-    cam_cfg = {
-        'pos': (0.2, 0.58, 0.51),
-        'lookat': (0.2, 0.18, 0.03),
-        'euler': (180 + np.rad2deg(np.arctan(1.0 / (0.9 - 0.03))), 0, 180),
-        'focal_length': 0.3,
-        'fov': 30,
-        'lights': [{'pos': (1.2, 0.2, 1.0), 'color': (0.95, 0.95, 0.95)},
-                   {'pos': (0.2, 0.5, 1.0), 'color': (0.95, 0.95, 0.95)},
-                   {'pos': (0.2, 0.2, 1.0), 'color': (0.95, 0.95, 0.95)}],
-        'particle_radius': 0.001,
-        'res': (800, 600),
-        'pcd_gen_res': 150
-    }
 
     ti.reset()
     ti.init(arch=ti.cuda, device_memory_GB=args['cuda_GB'], default_fp=ti.f32, fast_math=True, random_seed=1)
     env, mpm_env, init_state = make_env(env_cfg, loss_cfg, cam_cfg=cam_cfg)
-
-    with open(os.path.join(script_path, '..', f'log-sys_id{mat}',
-                           'd5e6-hm-gclip-ls-man-init-res40',
-                           'best_params.json'), 'r') as f:
-        best_params = json.load(f)['Parameters']
 
     set_parameters(mpm_env, SAND,
                    e=best_params['E'],
@@ -191,7 +275,7 @@ def main(args):
         mpm_env.step(trajectory[i])
         if args['render']:
             mpm_env.render(mode='human')
-        if args['save_img'] and i % 20 == 0:
+        if args['save_img'] and i % 10 == 0:
             img = mpm_env.render(mode='rgb_array')
             Image.fromarray(img).save(os.path.join(saving_folder, f'imgs{mat}',
                                                    f'img_{i}.png'))
@@ -249,6 +333,7 @@ if __name__ == '__main__':
     parser.add_argument('--sv', dest='save_video', default=False, action='store_true', help='Save video')
     parser.add_argument('--sysid', dest='sys_id', default=False, action='store_true', help='Run system identification')
     parser.add_argument('--skill', dest='skill', default=False, action='store_true', help='Run skill')
+    parser.add_argument('--sac', dest='sac', default=False, action='store_true', help='Run SAC')
     parser.add_argument('--task-id', dest='task_id', type=int, default=-1, help='Run task')
     parser.add_argument('--sand', dest='sand', default=False, action='store_true', help='Use sand material')
     parser.add_argument('--view-demon', dest='view_demon', action='store_true', default=False, help='View demonstration')

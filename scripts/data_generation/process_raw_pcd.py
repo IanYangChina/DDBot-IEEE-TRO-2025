@@ -10,14 +10,14 @@ data_path = os.path.join(script_path, '..', 'data')
 
 # Create bounding box of the inner space of the real soil box
 workspace_bounding_box_array = np.array([
- [-0.1,  0.45, 0.01],
- [0.156,  0.45, 0.01],
- [0.156,  0.71, 0.01],
- [-0.1,  0.71, 0.01],
- [-0.1,  0.45, 0.15],
- [0.156,  0.45, 0.15],
- [0.156,  0.71, 0.15],
- [-0.1,  0.71, 0.15]])
+ [-0.117,  0.445, 0.01],
+ [0.152,  0.445, 0.01],
+ [0.152,  0.7, 0.01],
+ [-0.117,  0.7, 0.01],
+ [-0.117,  0.445, 0.15],
+ [0.152,  0.445, 0.15],
+ [0.152,  0.7, 0.15],
+ [-0.117,  0.7, 0.15]])
 workspace_bounding_box_array = o3d.utility.Vector3dVector(workspace_bounding_box_array)
 workspace_bounding_box = o3d.geometry.OrientedBoundingBox.create_from_points(points=workspace_bounding_box_array)
 workspace_bounding_box.color = (0, 1, 0)
@@ -33,19 +33,31 @@ transform_world_to_cam = np.load(os.path.join(data_path, 'cam_extrinsics_fine_tu
 transform_cam_to_world = np.linalg.inv(transform_world_to_cam)
 
 task = 'task'
-mat = '_sand'
-test = True
+mat = ''
+test = False
 pcd_folder_path = os.path.join(data_path, f'{task}_target_pcds{mat}')
-for pcd_id in [0]:
+folder = os.path.join(script_path, '..', f'log-abs2{mat}')
+saving_path = os.path.join(script_path, '..', 'render_test', f'abs2{mat}')
+dirs = os.listdir(folder)
+# for pcd_id in [0, 1, 2]:
+for data_path in dirs:
+    pcd_id = 0
+    pcd_folder_path = os.path.join(folder, data_path)
+    if 'task-1' not in pcd_folder_path:
+        continue
+    target_pcd_path = os.path.join(pcd_folder_path, f'pcd_{pcd_id}.ply')
+    if not os.path.isfile(target_pcd_path):
+        continue
+    print(f'Processing {target_pcd_path}')
     frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
-    pcd_path = os.path.join(pcd_folder_path, f'pcd_{pcd_id}_multi_skill.ply')
+    pcd_path = os.path.join(target_pcd_path)
     pcd_in_cam_frame = o3d.io.read_point_cloud(pcd_path)
     pcd_in_world_frame = pcd_in_cam_frame.transform(transform_world_to_cam)
-    # o3d.visualization.draw_geometries([
-    #     frame, table_surface, soil_box_frame_in_world,
-    #     workspace_bounding_box,
-    #     pcd_in_world_frame,
-    # ], width=800, height=600)
+    o3d.visualization.draw_geometries([
+        frame, table_surface, soil_box_frame_in_world,
+        workspace_bounding_box,
+        pcd_in_world_frame,
+    ], width=800, height=600)
     if not test:
         crop_pcd_in_world_frame = pcd_in_world_frame.crop(workspace_bounding_box)
         # o3d.visualization.draw_geometries([
@@ -60,7 +72,7 @@ for pcd_id in [0]:
         crop_pcd_norm_z_aligned.points = o3d.utility.Vector3dVector(points)
     else:
         crop_pcd_norm_z_aligned = o3d.io.read_point_cloud(
-            os.path.join(pcd_folder_path, f'pcd_{pcd_id}_multi_skill_cropped_norm_z_aligned.ply'))
+            os.path.join(pcd_folder_path, f'pcd_{pcd_id}_cropped_norm_z_aligned.ply'))
 
     print(crop_pcd_norm_z_aligned)
     o3d.visualization.draw_geometries([
@@ -70,9 +82,7 @@ for pcd_id in [0]:
 
     if not test:
         # Save the cropped point cloud
-        ans = input("Save the cropped point cloud? (y/n): ")
-        if ans == 'y':
-            crop_pcd_norm_z_aligned_path = os.path.join(
-                pcd_folder_path, f'pcd_{pcd_id}_multi_skill_cropped_norm_z_aligned.ply')
-            o3d.io.write_point_cloud(
-                crop_pcd_norm_z_aligned_path, crop_pcd_norm_z_aligned)
+        crop_pcd_norm_z_aligned_path = os.path.join(
+            saving_path, data_path, f'pcd_{pcd_id}_cropped_norm_z_aligned.ply')
+        o3d.io.write_point_cloud(
+            crop_pcd_norm_z_aligned_path, crop_pcd_norm_z_aligned)

@@ -18,7 +18,7 @@ def run(args):
 
     height_map_res = args['hmr']
     height_map_size = 0.24  # meter
-    height_map_xy_offset = (0.2, 0.2)
+    height_map_xy_offset = (0.18, 0.19)
     height_map_pixel_size = height_map_size / height_map_res
     height_map_pcd_target = ti.field(dtype=DTYPE_TI, shape=(height_map_res, height_map_res), needs_grad=False)
 
@@ -30,13 +30,22 @@ def run(args):
 
     script_path = os.path.dirname(os.path.realpath(__file__))
     script_path = os.path.join(script_path, '..')
-    for data_ind in [0]:
-        data_path = os.path.join(script_path, '..', 'data', 'task_target_pcds_sand')
-
-        target_pcd_path = os.path.join(data_path, f'pcd_{data_ind}_multi_skill_cropped_norm_z_aligned.ply')
+    mat = ''
+    folder = os.path.join(script_path, '..', 'render_test', f'abs2{mat}')
+    dirs = os.listdir(folder)
+    # for data_ind in [0, 1, 2]:
+    #     data_path = os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}')
+    #     target_pcd_path = os.path.join(data_path, f'pcd_{data_ind}_cropped_norm_z_aligned.ply')
+    for data_path in dirs:
+        data_ind = 0
+        target_pcd_path = os.path.join(folder, data_path, f'pcd_{data_ind}_cropped_norm_z_aligned.ply')
+        if 'task-1' not in target_pcd_path:
+            continue
+        if not os.path.isfile(target_pcd_path):
+            continue
         pcd_offset = (0.2, 0.2, 0.0)
 
-        target_pcd = o3d.io.read_point_cloud(target_pcd_path) #.voxel_down_sample(voxel_size=down_sample_voxel_size)
+        target_pcd = o3d.io.read_point_cloud(target_pcd_path)
         target_pcd_points_np = np.asarray(target_pcd.points, dtype=DTYPE_NP) + pcd_offset
         n_target_pcd_points = target_pcd_points_np.shape[0]
         print(f'===>  {n_target_pcd_points:7d} target points loaded.')
@@ -77,15 +86,19 @@ def run(args):
         frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
         o3d.visualization.draw_geometries([frame, target_pcd_downed],
                                           width=800, height=600)
-        # o3d.io.write_point_cloud(os.path.join(data_path, f'pcd_{data_ind}_multi_skill_cropped_norm_z_aligned_res{height_map_res}.ply'),
+        # o3d.io.write_point_cloud(os.path.join(data_path, f'pcd_{data_ind}_cropped_norm_z_aligned_res{height_map_res}.ply'),
         #                          target_pcd_downed)
 
         height_map_pcd_np = height_map_pcd_target.to_numpy()
-        plt.imshow(height_map_pcd_np, cmap='YlOrBr')
-        plt.show()
+        plt.imshow(height_map_pcd_np, vmin=0.002, vmax=0.09)
+        plt.axis('off')
+        # plt.show()
+        plt.savefig(os.path.join(folder, data_path,
+                                 f'pcd_{data_ind}_cropped_norm_z_aligned_height_map-res{str(height_map_res)}.png'),
+                    bbox_inches='tight', pad_inches=0.01)
 
         # np.save(
-        #     os.path.join(data_path, f'pcd_{data_ind}_multi_skill_cropped_norm_z_aligned_height_map-res{str(height_map_res)}.npy'), height_map_pcd_np)
+        #     os.path.join(data_path, f'pcd_{data_ind}_cropped_norm_z_aligned_height_map-res{str(height_map_res)}.npy'), height_map_pcd_np)
         # print(f'height map saved as:\n'
         #       f'{os.path.join(data_path, f"pcd_{data_ind}_cropped_norm_z_aligned_height_map-res{str(height_map_res)}.npy")}')
 
