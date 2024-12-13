@@ -164,7 +164,14 @@ def main(args):
             with open(os.path.join(result_path, f'best_tr-task-{task_id}{subfix}.json')) as f:
                 trajectory_np = json.load(f)[ptcl_d]["Trajectory"]
             if args['view_demon']:
-                trajectory_demon = abstraction_two_skill(np.asarray([1.0, 0.45, 0.8, 0.0, -0.1], dtype=DTYPE_NP), DT_GLOBAL)
+                skill_params_np = np.asarray([1.0, 0.2, 0.8, 0.0, -0.5]).astype(DTYPE_NP)
+                target_pcd = o3d.io.read_point_cloud(os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
+                                                                  f'pcd_{task_id}_cropped_norm_z_aligned.ply'))
+                target_pcd_points = np.asarray(target_pcd.points) + np.asarray([0.2, 0.2, 0])
+                z_min_idx = np.argmin(target_pcd_points[:, 2])
+                x_demo = target_pcd_points[z_min_idx, 0] + 0.02
+                skill_params_np[0] = np.clip((x_demo - 0.2) / 0.12, -1.0, 1.0)
+                trajectory_demon = abstraction_two_skill(skill_params_np, DT_GLOBAL)
                 trajectory_length = trajectory_demon.shape[0]
                 trajectory_np[:trajectory_length] = trajectory_demon[:trajectory_length]
             print("===> Loaded trajectory.")
@@ -174,7 +181,14 @@ def main(args):
             trajectory_np = np.load(os.path.join(result_path, case, f'seed-{seed}', 'ckpts', f'trajectory_{epoch}.npy'))
         else:
             if args['demon']:
-                trajectory_demon = abstraction_two_skill(np.asarray([1.0, 0.45, 0.8, 0.0, -0.1], dtype=DTYPE_NP), DT_GLOBAL)
+                skill_params_np = np.asarray([1.0, 0.2, 0.8, 0.0, -0.5]).astype(DTYPE_NP)
+                target_pcd = o3d.io.read_point_cloud(os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
+                                                                  f'pcd_{task_id}_cropped_norm_z_aligned.ply'))
+                target_pcd_points = np.asarray(target_pcd.points) + np.asarray([0.2, 0.2, 0])
+                z_min_idx = np.argmin(target_pcd_points[:, 2])
+                x_demo = target_pcd_points[z_min_idx, 0] + 0.02
+                skill_params_np[0] = np.clip((x_demo - 0.2) / 0.12, -1.0, 1.0)
+                trajectory_demon = abstraction_two_skill(skill_params_np, DT_GLOBAL)
                 trajectory_length = trajectory_demon.shape[0]
                 trajectory_np[:trajectory_length] = trajectory_demon[:trajectory_length]
 
