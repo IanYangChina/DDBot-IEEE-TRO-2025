@@ -678,4 +678,94 @@ def plot_so_loss_curve(mat=''):
                 dpi=300, bbox_inches='tight', pad_inches=0.01)
 
 
-plot_so_loss_curve(mat='')
+# plot_so_loss_curve(mat='')
+
+
+def plot_rl_loss_curve():
+    plt.rcParams.update({'font.size': 11})
+    data_name = ['actor_loss', 'critic_loss',
+                 'temperature', 'policy_entropy',
+                 'emd_loss', 'test_emd_loss',
+                 'height_map_loss', 'test_height_map_loss']
+    data_name_legend = ['Actor loss (Q value)', 'Critic loss',
+                        r'Temperature $\alpha$', 'Policy entropy',
+                        'EMD loss', 'Test EMD loss (every 5 training epochs)',
+                        'Height map loss', 'Test height map loss (every 5 training epochs)']
+    linestyles = ['-', '--', '-.', ':']
+    for task_id in range(3):
+        fig, ax = plt.subplots(len(data_name)//2, 2, figsize=(1*12, len(data_name)*1))
+        plt.subplots_adjust(wspace=0.12, hspace=0.03)
+        data_dict = {
+            'actor_loss': [],
+            'critic_loss': [],
+            'temperature': [],
+            'policy_entropy': [],
+            'emd_loss': [],
+            'height_map_loss': [],
+            'test_emd_loss': [],
+            'test_height_map_loss': [],
+        }
+        for seed in range(5):
+            d_folder = os.path.join(script_path, '..', 'log-abs2-sac',
+                                    f'd5e6-task-{task_id}-her-demo', f'seed-{seed}')
+            with open(os.path.join(d_folder, 'raw_data.json')) as f:
+                data = json.load(f)
+            data_dict['actor_loss'].append(data['SAC']['actor_loss'])
+            data_dict['critic_loss'].append(data['SAC']['critic_1_loss'])
+            data_dict['critic_loss'].append(data['SAC']['critic_2_loss'])
+            data_dict['temperature'].append(data['SAC']['temperature'])
+            data_dict['policy_entropy'].append(data['SAC']['policy_entropy'])
+            data_dict['emd_loss'].append(data['SAC']['emd_loss'])
+            data_dict['height_map_loss'].append(data['SAC']['height_map_loss'])
+            data_dict['test_emd_loss'].append(data['SAC']['test_emd_loss'])
+            data_dict['test_height_map_loss'].append(data['SAC']['test_height_map_loss'])
+        for n in range(len(data_name)):
+            row = n // 2
+            col = n % 2
+            key = data_name[n]
+            upper = np.max(data_dict[key], axis=0)
+            lower = np.min(data_dict[key], axis=0)
+            data_dict[key] = np.mean(data_dict[key], axis=0)
+            running_avg = np.empty(data_dict[key].shape[0])
+            running_avg_upper = np.empty(data_dict[key].shape[0])
+            running_avg_lower = np.empty(data_dict[key].shape[0])
+            for i in range(data_dict[key].shape[0]):
+                running_avg[i] = np.mean(data_dict[key][max(0, i - 2):(i + 1)])
+                running_avg_upper[i] = np.mean(upper[max(0, i - 2):(i + 1)])
+                running_avg_lower[i] = np.mean(lower[max(0, i - 2):(i + 1)])
+            if n > 3:
+                running_avg /= (40 * 40)
+                running_avg_upper /= (40 * 40)
+                running_avg_lower /= (40 * 40)
+            xs = np.arange(len(running_avg))
+            ax[row, col].plot(xs, running_avg, label=key, color=colour_pool[n], linewidth=2)
+            ax[row, col].fill_between(xs, running_avg_lower, running_avg_upper,
+                               color=colour_pool[n], alpha=0.2)
+            ax[row, col].grid(True)
+            handle = Line2D([0], [0], color=colour_pool[n], linewidth=5)
+            ax[row, col].legend([handle], [data_name_legend[n]], loc='upper left', fontsize=10,
+                                    handlelength=0.1, frameon=True)
+            if n in [5, 7]:
+                ax[row, col].set_xlim([-3, 39.2])
+                ax[row, col].set_xticks([-2, 7.85, 17.9, 28, 38])
+            elif n in [4, 6]:
+                ax[row, col].set_xlim([-5, 205])
+                ax[row, col].set_xticks([0, 49, 99, 149, 199])
+            else:
+                ax[row, col].set_xlim([-10, 200])
+                ax[row, col].set_xticks([-5, 44, 94, 144, 194])
+
+            if n != 6 and n != 7:
+                for tick in ax[row, col].xaxis.get_major_ticks():
+                    tick.tick1line.set_visible(False)
+                    tick.tick2line.set_visible(False)
+                    tick.label1.set_visible(False)
+                    tick.label2.set_visible(False)
+            else:
+                ax[row, col].set_xlabel('Epoch')
+                ax[row, col].set_xticklabels(['1', '50', '100', '150', '200'])
+        plt.savefig(os.path.join(script_path, '..', 'figs', f'rl_task{task_id}.pdf'),
+                    dpi=300, bbox_inches='tight', pad_inches=0.01)
+
+
+plot_rl_loss_curve()
