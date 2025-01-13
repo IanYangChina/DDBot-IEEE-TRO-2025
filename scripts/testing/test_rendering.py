@@ -205,11 +205,15 @@ def main(args):
                   f'p3: {skill_params[2]}, ' +
                   f'p4: {skill_params[3]}, ' +
                   f'p5: {skill_params[4]}' + '}\"')
-            exit()
+            # exit()
+            # skill_params = np.asarray([0.0066869319416582584,
+            #                            0.014922354370355606,
+            #                            0.005090897902846336,
+            #                            -0.004283170215785503,
+            #                            0.01813329942524433]).astype(DTYPE_NP)
             trajectory = abstraction_two_skill(skill_params, dt_sim)
             env_cfg['horizon'] = trajectory.shape[0]
-            saving_folder = os.path.join(script_path, '..', 'render_test', f'abs2-sac{mat}',
-                                         f'd5e6-task-{task_id}-her-demo', f'seed-{seed}')
+            saving_folder = os.path.join(script_path, '..', 'render_test', f'abs2-sac{mat}')
 
         elif args['skill']:
             # case = f'd5e6-task-{task_id}-ls-lr0.03'
@@ -243,11 +247,15 @@ def main(args):
             env_cfg['horizon'] = trajectory.shape[0]
             saving_folder = os.path.join(script_path, '..', 'render_test', f'abs2{mat}', case)
         else:
+            seed = args['seed']
             case = f'd5e6-task-{task_id}-ls-demo-lr0.004'
-            trajectory = np.load(os.path.join(script_path, '..', f'log-abs0{mat}', case,
-                                              'seed-2', 'ckpts', 'trajectory_12.npy'))
+            with open(os.path.join(script_path, '..', f'log-abs0{mat}', case, f'seed-{seed}', 'best_loss.json'), 'r') as f:
+                best_loss = json.load(f)
+                step = int(best_loss['Step']-1) if best_loss['Step'] > 0 else 0
+                trajectory = np.load(os.path.join(script_path, '..', f'log-abs0{mat}', case,
+                                                  f'seed-{seed}', 'ckpts', f'trajectory_{step}.npy'))
             env_cfg['horizon'] = trajectory.shape[0]
-            saving_folder = os.path.join(script_path, '..', 'render_test', 'abs0', case)
+            saving_folder = os.path.join(script_path, '..', 'render_test', 'abs0', case, f'seed-{seed}')
 
     os.makedirs(saving_folder, exist_ok=True)
     if args['save_img']:

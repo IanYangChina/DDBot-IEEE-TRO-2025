@@ -1,0 +1,34 @@
+Granular material is everywhere. Enabling robots to manipulate them has many applications, for example, construction, gardening, farming, soil sampling, etc. Challenges in automating such tasks include: Highly complex contact dynamics, Extremely large state space, Varying material properties, and large action space with long task horizons. 
+
+We present DDBot (Differentiable Digging Robot), a robot system that performs digging tasks efficiently for unknown granular materials via gradient descent and differentiable simulation.
+DDBot has five modules as shown below.
+First, a robot platform (light orange box) that performs real-world manipulation with a UR5e robot arm and collects surface point clouds of the materials with a Zivid One+ high-resolution camera.
+Second, a differentiable physics simulator (green box) that simulates the manipulation process and provides derivatives of the system dynamics.
+Third, a loss function (pink box) that computes the differences between the real and simulated manipulation results. 
+Fourth, a gradient-based optimisation algorithm (yellow box) that updates the physics or skill parameters.
+
+###
+Fifth, a ROS-based communication module (blue box) that plans velocity trajectory based on the optimised skill parameters to control the real robot.
+
+We design a digging skill trajectory with five parameters that determines how the shovel is moved, inserted, pushed and lifted. 
+The skill always starts with the shovel at the centre of the soil box.
+To accelerate optimisation or learning, we also generate skill demonstrations that always start digging at the XY centre of the target hole.
+An example is shown below.
+
+As the simulation runs in discrete timesteps, generating the trajectory from the skill parameters involves non-differentiable operations of discretising the movements with certain numbers of timesteps. To enable differentiation, we keep a float version of the number of timesteps in the skill-to-action mapping and differentiate through the float-type variable towards the skill parameters.
+
+We address the gradient instability of MPM-based granular material simulation in two aspects.
+First, we clip the gradients of the key variables in MPM simulation to prevent gradient explosion.
+
+###
+Second, we conduct line-search in gradient updates to prevent optimisation from diverging due to rugged loss functions.
+
+Our experiments start with system identification.
+We use the same motion in the real world and simulation to push the materials, record the real point clouds, and backpropagate the gradients of the loss to the physics parameters, including Young's modulus, Poisson's ratio, material density and friction angle.
+An unseen manipulation motion validates that the system identification result is successful.
+
+After system identification, we perform digging motion optimisation tasks.
+Two baselines with demonstrations are tested: goal-conditioned deep reinforcement learning and gradient-based direct trajectory optimisation.
+Our skill optimisation is tested with and without demonstrations, with EMD or with heightmap distance loss.
+
+The experiments show that, the SAC agent tends to be stuck in local minima in all task while the direct trajectory optimisation method generates drastic and meaningless motions. In contrast, our skill optimisation method can generate skills that successfully accomplish the task and transfer to the real world.
