@@ -30,7 +30,7 @@ def run(args):
 
     script_path = os.path.dirname(os.path.realpath(__file__))
     script_path = os.path.join(script_path, '..')
-    mat = ''
+    mat = '_sand'
     folder = os.path.join(script_path, '..', 'render_test', f'abs2{mat}')
     dirs = os.listdir(folder)
     # for data_ind in [0, 1, 2]:
@@ -38,9 +38,9 @@ def run(args):
     #     target_pcd_path = os.path.join(data_path, f'pcd_{data_ind}_cropped_norm_z_aligned.ply')
     for data_path in dirs:
         data_ind = 0
-        target_pcd_path = os.path.join(folder, data_path, f'pcd_{data_ind}_cropped_norm_z_aligned.ply')
-        if 'task-1' not in target_pcd_path:
+        if 'task-' not in data_path:
             continue
+        target_pcd_path = os.path.join(folder, data_path, f'pcd_{data_ind}_cropped_norm_z_aligned.ply')
         if not os.path.isfile(target_pcd_path):
             continue
         pcd_offset = (0.2, 0.2, 0.0)
@@ -83,9 +83,9 @@ def run(args):
         target_pcd_downed.points = o3d.utility.Vector3dVector(target_pcd_points_downed.to_numpy())
         target_pcd_downed.translate(-np.array(pcd_offset))
         print(target_pcd_downed)
-        frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
-        o3d.visualization.draw_geometries([frame, target_pcd_downed],
-                                          width=800, height=600)
+        # frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
+        # o3d.visualization.draw_geometries([frame, target_pcd_downed],
+        #                                   width=800, height=600)
         # o3d.io.write_point_cloud(os.path.join(data_path, f'pcd_{data_ind}_cropped_norm_z_aligned_res{height_map_res}.ply'),
         #                          target_pcd_downed)
 
@@ -97,8 +97,8 @@ def run(args):
                                  f'pcd_{data_ind}_cropped_norm_z_aligned_height_map-res{str(height_map_res)}.png'),
                     bbox_inches='tight', pad_inches=0.01)
 
-        # np.save(
-        #     os.path.join(data_path, f'pcd_{data_ind}_cropped_norm_z_aligned_height_map-res{str(height_map_res)}.npy'), height_map_pcd_np)
+        np.save(
+            os.path.join(folder, data_path, f'pcd_{data_ind}_cropped_norm_z_aligned_height_map-res{str(height_map_res)}.npy'), height_map_pcd_np)
         # print(f'height map saved as:\n'
         #       f'{os.path.join(data_path, f"pcd_{data_ind}_cropped_norm_z_aligned_height_map-res{str(height_map_res)}.npy")}')
 
