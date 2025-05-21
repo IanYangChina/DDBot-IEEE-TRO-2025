@@ -100,6 +100,7 @@ def main(arguments):
     else:
         mat = ''
 
+    suffix += f'-em{arguments["n_emitters"]}'
     suffix += f'-bs{arguments["batch_size"]}'
 
     log_dir = os.path.join(script_path, '..', f'log-abs2-cmamae{mat}', f'd{ptcl_d}-task-{task_id}{suffix}', f'seed-{seed}')
@@ -167,6 +168,7 @@ def main(arguments):
         cma_mae_config = json.load(f_ac)
     cma_mae_config['use_demonstrations'] = arguments['use_demo']
     cma_mae_config['total_iterations'] = arguments['total_iterations']
+    cma_mae_config['n_emitters'] = arguments['n_emitters']
     cma_mae_config['batch_size'] = arguments['batch_size']
 
     if arguments['use_demo']:
@@ -188,6 +190,7 @@ def main(arguments):
                                  dims=[200, 200],
                                  ranges=[(-2.5, 2.5), (-2.5, 2.5)])  # 5 / 2 * 1.0
 
+    batch_size = cma_mae_config['batch_size'] / arguments['n_emitters']
     emitters = [
         EvolutionStrategyEmitter(
             archive,
@@ -197,9 +200,9 @@ def main(arguments):
             ranker="imp",
             selection_rule="mu",
             restart_rule="basic",
-            batch_size=cma_mae_config['batch_size'],
+            batch_size=batch_size,
             seed=seed,
-        )
+        ) for _ in range(arguments['n_emitters'])  # n_emitters
     ]
 
     scheduler = Scheduler(archive, emitters, result_archive=result_archive)
@@ -236,8 +239,8 @@ def main(arguments):
         clip_mask = (clipped < -1.0) | (clipped > 1.0)
         clipped[clip_mask] = np.clip(clipped[clip_mask], -1.0, 1.0)
         measure_batch = np.concatenate((
-            np.sum(clipped[:, :cma_mae_config['batch_size'] // 2], axis=1, keepdims=True),
-            np.sum(clipped[:, cma_mae_config['batch_size'] // 2:], axis=1, keepdims=True),
+            np.sum(clipped[:, :batch_size // 2], axis=1, keepdims=True),
+            np.sum(clipped[:, batch_size // 2:], axis=1, keepdims=True),
         ), axis=1,)
         scheduler.tell(objective_batch, measure_batch)
 
@@ -260,5 +263,6 @@ if __name__ == '__main__':
     parser.add_argument('--sand', dest='sand', action='store_true', default=False, help='Use sand')
     parser.add_argument('--total_iterations', dest='total_iterations', type=int, default=200, help='number of iterations')
     parser.add_argument('--batch_size', dest='batch_size', type=int, default=10, help='batch size')
+    parser.add_argument('--n_emitters', dest='n_emitters', type=int, default=1, help='number of emitters')
     args = vars(parser.parse_args())
     main(args)
