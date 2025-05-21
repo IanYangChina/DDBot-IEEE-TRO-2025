@@ -5,16 +5,13 @@ import argparse
 import logging
 import numpy as np
 import taichi as ti
-import matplotlib.pyplot as plt
 import open3d as o3d
 from torch.utils.tensorboard import SummaryWriter
-from copy import deepcopy as dcp
 
 script_path = os.path.dirname(os.path.realpath(__file__))
 
-from doma.optimiser.adam import Adam, GD
 from doma.optimiser.rmsprop import RMSprop
-from doma.envs.planting_env import make_env
+from doma.envs.planting_env_v1 import make_env
 from doma.engine.configs.macros import DTYPE_NP, DTYPE_TI, SAND
 from doma.engine.utils.misc import set_parameters, reset_logging
 

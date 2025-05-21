@@ -5,11 +5,11 @@ import logging
 import argparse
 import numpy as np
 import taichi as ti
-from drl_implementation.agent.continuous_action.sac_pointnet import PointnetSAC
+from torch.utils.tensorboard import SummaryWriter
 script_path = os.path.dirname(os.path.realpath(__file__))
 
 from doma.engine.configs.macros import DTYPE_NP, SAND
-from doma.envs.gym_wrappers import SingleSkillEnv, FakeEnv
+from doma.envs.gym_wrappers import SingleSkillEnv
 cam_cfg = {
     'pos': (0.2, 0.57, 0.6),
     'lookat': (0.2, 0.2, 0.03),
@@ -28,6 +28,9 @@ LINEAR_VELOCITY = 0.2  # m/s
 ANGULAR_VELOCITY = np.pi / 4  # rad/s
 DT_GLOBAL = 0.01  # sec
 
+from ribs.archives import GridArchive
+from ribs.emitters import EvolutionStrategyEmitter
+from ribs.schedulers import Scheduler
 
 def abstraction_two_skill(skill_params, dt):
     assert np.all(skill_params >= -1.0) and np.all(skill_params <= 1.0), 'RL skill params should be in [-1, 1]'
@@ -84,14 +87,12 @@ def abstraction_two_skill(skill_params, dt):
 
     return trajectory[:n_step + n_step_insert + n_step_push + n_step_return, :]
 
-
 def main(arguments):
     seed = arguments['seed']
+    np_rng = np.random.default_rng(seed=seed)
     task_id = arguments['task_id']
     ptcl_d = arguments['ptcl_density']
     suffix = ''
-    if arguments['her']:
-        suffix += '-her'
     if arguments['use_demo']:
         suffix += '-demo'
     if arguments['sand']:
@@ -99,7 +100,9 @@ def main(arguments):
     else:
         mat = ''
 
-    log_dir = os.path.join(script_path, '..', f'log-abs2-sac{mat}', f'd{ptcl_d}-task-{task_id}{suffix}', f'seed-{seed}')
+    suffix += f'-bs{arguments["batch_size"]}'
+
+    log_dir = os.path.join(script_path, '..', f'log-abs2-cmamae{mat}', f'd{ptcl_d}-task-{task_id}{suffix}', f'seed-{seed}')
     os.makedirs(log_dir, exist_ok=True)
     log_file_name = os.path.join(log_dir, 'optimisation.log')
     if os.path.isfile(log_file_name):
@@ -109,16 +112,8 @@ def main(arguments):
     logging.basicConfig(level=logging.NOTSET, filemode=filemode,
                         filename=log_file_name,
                         format="%(asctime)s %(levelname)s %(message)s")
-
-    if arguments['backend'] == 'opengl':
-        backend = ti.opengl
-    elif arguments['backend'] == 'cuda':
-        backend = ti.cuda
-    elif arguments['backend'] == 'vulkan':
-        backend = ti.vulkan
-    else:
-        backend = ti.cpu
-
+    logger = SummaryWriter(log_dir=log_dir)
+    backend = ti.cuda
     env_cfg = {
         'material_id': SAND,
         'p_density': float(arguments['ptcl_density']),
@@ -149,7 +144,6 @@ def main(arguments):
         'ti_cfg': ti_cfg,
         'cam_cfg': cam_cfg
     }
-
     with open(os.path.join(script_path, '..', f'log-sys_id{mat}',
                            f'd{ptcl_d}-hm-gclip-ls-man-init-res40', 'best_params.json')) as f:
         best_params = json.load(f)["Parameters"]
@@ -168,73 +162,103 @@ def main(arguments):
         'skill_generation_func': abstraction_two_skill
     }
     gym_env = SingleSkillEnv(ti_env_cfg, gym_env_config, seed=arguments['seed'], logger=logging)
-    # gym_env = FakeEnv(gym_env_config, onestep=True, seed=seed, logger=logging)
-    if arguments['env_test']:
-        frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
-        for n in range(5):
-            gym_env.reset()
-            # gym_env.render_skill = True
-            # gym_env.render(mode='human')
-            done = False
-            while not done:
-                # a1 = float(input('Enter the skill param 1: '))
-                # a2 = float(input('Enter the skill param 2: '))
-                # a3 = float(input('Enter the skill param 3: '))
-                # a4 = float(input('Enter the skill param 4: '))
-                # a5 = float(input('Enter the skill param 5: '))
-                a = gym_env.action_space.sample()
-                a = np.asarray(a, dtype=DTYPE_NP)
-                obs, reward, done, info = gym_env.step(a)
 
-                print(reward)
-                cloud_array = obs['observation']
-                obj_vec = o3d.utility.Vector3dVector(cloud_array)
-                obj_pcd = o3d.geometry.PointCloud(obj_vec)
-                cloud_array_2 = obs['desired_goal']
-                cloud_array_2[:, 0] += 0.3
-                obj_vec_2 = o3d.utility.Vector3dVector(cloud_array_2)
-                obj_pcd_2 = o3d.geometry.PointCloud(obj_vec_2)
-                print(obj_pcd, obj_pcd_2)
-                o3d.visualization.draw_geometries([frame, obj_pcd, obj_pcd_2], width=800, height=600)
+    with open(os.path.join(script_path, '..', 'data', 'cma_mae_config.json'), 'rb') as f_ac:
+        cma_mae_config = json.load(f_ac)
+    cma_mae_config['use_demonstrations'] = arguments['use_demo']
+    cma_mae_config['total_iterations'] = arguments['total_iterations']
+    cma_mae_config['batch_size'] = arguments['batch_size']
 
-                # gym_env.render(mode='human')
-    else:
-        with open(os.path.join(script_path, '..', 'data', 'rl_agent_config.json'), 'rb') as f_ac:
-            rl_agent_config = json.load(f_ac)
-        rl_agent_config['cuda_device_id'] = arguments['torch_cuda_device_id']
-        rl_agent_config['batch_size'] = 10
-        rl_agent_config['optimization_steps'] = 10
-        rl_agent_config['hindsight'] = arguments['her']
-        rl_agent_config['her_sampling_strategy'] = 'final'
-        rl_agent_config['use_demonstrations'] = arguments['use_demo']
-        rl_agent_config['demonstrate_percentage'] = 0.25
-        rl_agent_config['demonstration_action'] = [1.0, 0.2, 0.8, 0.0, -0.5]
+    if arguments['use_demo']:
         target_pcd = o3d.io.read_point_cloud(os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
                                                           f'pcd_{task_id}_cropped_norm_z_aligned.ply'))
         target_pcd_points = np.asarray(target_pcd.points) + np.asarray([0.2, 0.2, 0])
         z_min_idx = np.argmin(target_pcd_points[:, 2])
         x_demo = target_pcd_points[z_min_idx, 0] + 0.02
-        rl_agent_config['demonstration_action'][0] = np.clip((x_demo - 0.2) / 0.12, -1.0, 1.0)
+        init_solution = np.clip((x_demo - 0.2) / 0.12, -1.0, 1.0)
+    else:
+        init_solution = np_rng.uniform(-1, 1, size=gym_env_config['action_dim']).astype(DTYPE_NP)
 
-        with open(os.path.join(log_dir, 'rl_agent_config.json'), 'w') as f_ac:
-            json.dump(rl_agent_config, f_ac)
+    archive = GridArchive(solution_dim=gym_env_config['action_dim'],
+                          dims=[200, 200],
+                          ranges=[(-2.5, 2.5), (-2.5, 2.5)],  # 5 / 2 * 1.0
+                          learning_rate=cma_mae_config['learning_rate'],
+                          threshold_min=0.0)
+    result_archive = GridArchive(solution_dim=gym_env_config['action_dim'],
+                                 dims=[200, 200],
+                                 ranges=[(-2.5, 2.5), (-2.5, 2.5)])  # 5 / 2 * 1.0
 
-        agent = PointnetSAC(rl_agent_config, gym_env, logging=logging, path=log_dir, seed=seed)
-        agent.run()
+    emitters = [
+        EvolutionStrategyEmitter(
+            archive,
+            x0=init_solution,
+            sigma0=cma_mae_config['sigma0'],
+            bounds=[(-1.0, 1.0)] * gym_env_config['action_dim'],
+            ranker="imp",
+            selection_rule="mu",
+            restart_rule="basic",
+            batch_size=cma_mae_config['batch_size'],
+            seed=seed,
+        )
+    ]
 
+    scheduler = Scheduler(archive, emitters, result_archive=result_archive)
+
+    print("Starting optimization...")
+    logging.info("Starting optimization...")
+    print("Configs:")
+    logging.info("Configs:")
+    for k, v in cma_mae_config.items():
+        print(f"{k}: {v}")
+        logging.info(f"{k}: {v}")
+
+    for itr in range(arguments['total_iterations']):
+        solution_batch = scheduler.ask()
+        print(f"Num of solutions: {solution_batch.shape[0]}")
+        objective_batch = np.zeros((solution_batch.shape[0],), dtype=DTYPE_NP)
+        for i in range(solution_batch.shape[0]):
+            skill = solution_batch[i]
+            gym_env.reset()
+            _, _, _, loss_info = gym_env.step(skill)
+            objective_batch[i] = loss_info['emd_loss']
+
+            if i < 5:
+                logger.add_scalar(tag=f'loss_{i}/EMD', scalar_value=loss_info['emd_loss'], global_step=itr)
+                logger.add_scalar(tag=f'loss_{i}/Heightmap', scalar_value=loss_info['height_map_loss'], global_step=itr)
+                logger.add_scalar(tag=f'param_{i}/0-move_distance', scalar_value=skill[0], global_step=itr)
+                logger.add_scalar(tag=f'param_{i}/1-rotate_x', scalar_value=skill[1], global_step=itr)
+                logger.add_scalar(tag=f'param_{i}/2-insert_distance', scalar_value=skill[2], global_step=itr)
+                logger.add_scalar(tag=f'param_{i}/3-push_angle', scalar_value=skill[3], global_step=itr)
+                logger.add_scalar(tag=f'param_{i}/4-push_distance', scalar_value=skill[4], global_step=itr)
+
+        # calculate measures
+        clipped = solution_batch.copy()
+        clip_mask = (clipped < -1.0) | (clipped > 1.0)
+        clipped[clip_mask] = np.clip(clipped[clip_mask], -1.0, 1.0)
+        measure_batch = np.concatenate((
+            np.sum(clipped[:, :cma_mae_config['batch_size'] // 2], axis=1, keepdims=True),
+            np.sum(clipped[:, cma_mae_config['batch_size'] // 2:], axis=1, keepdims=True),
+        ), axis=1,)
+        scheduler.tell(objective_batch, measure_batch)
+
+        print(f"Iteration {itr} | "
+              f"Archive Coverage: {result_archive.stats.coverage * 100:6.3f}% "
+              f"Normalized QD Score: {result_archive.stats.norm_qd_score:6.3f}")
+        logging.info(f"Iteration {itr} | "
+                     f"Archive Coverage: {result_archive.stats.coverage * 100:6.3f}% "
+                     f"Normalized QD Score: {result_archive.stats.norm_qd_score:6.3f}")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--seed', dest='seed', type=int, default=0, help='seed')
-    parser.add_argument('--backend', dest='backend', type=str, default='cuda', help='backend')
     parser.add_argument('--task-id', dest='task_id', type=int, default=0, help='task id')
     parser.add_argument('--demo', dest='use_demo', action='store_true', default=False, help='use demonstrations')
-    parser.add_argument('--e-test', dest='env_test', action='store_true', default=False, help='testing gym env')
     parser.add_argument('--ptcl-d', dest='ptcl_density', type=str, default="5e6", help='particle density')
     parser.add_argument('--t-cuda-id', dest='torch_cuda_device_id', type=int, default=0, help='cuda device id')
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
-    parser.add_argument('--her', dest='her', action='store_true', default=False, help='use hindsight experience replay')
     parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False, help='Use height map loss')
     parser.add_argument('--sand', dest='sand', action='store_true', default=False, help='Use sand')
+    parser.add_argument('--total_iterations', dest='total_iterations', type=int, default=200, help='number of iterations')
+    parser.add_argument('--batch_size', dest='batch_size', type=int, default=10, help='batch size')
     args = vars(parser.parse_args())
     main(args)
