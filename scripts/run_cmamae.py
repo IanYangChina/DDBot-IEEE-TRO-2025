@@ -190,7 +190,7 @@ def main(arguments):
                                  dims=[200, 200],
                                  ranges=[(-2.5, 2.5), (-2.5, 2.5)])  # 5 / 2 * 1.0
 
-    batch_size = cma_mae_config['batch_size'] / arguments['n_emitters']
+    batch_size = int(cma_mae_config['batch_size'] / arguments['n_emitters'])
     emitters = [
         EvolutionStrategyEmitter(
             archive,
@@ -250,6 +250,9 @@ def main(arguments):
         logging.info(f"Iteration {itr} | "
                      f"Archive Coverage: {result_archive.stats.coverage * 100:6.3f}% "
                      f"Normalized QD Score: {result_archive.stats.norm_qd_score:6.3f}")
+
+    logger.close()
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
