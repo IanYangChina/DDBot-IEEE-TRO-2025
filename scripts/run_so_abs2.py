@@ -69,8 +69,8 @@ def main(args):
         mat = ''
 
     case = f'd{ptcl_d}-task-{task_id}{subfix}'
-    if args['multi_skill']:
-        result_path = os.path.join(script_path, '..', f'log-abs2-ms{mat}')
+    if args['rectified_grad']:
+        result_path = os.path.join(script_path, '..', f'log-abs2-rg{mat}')
     else:
         result_path = os.path.join(script_path, '..', f'log-abs2{mat}')
 
@@ -209,8 +209,12 @@ def main(args):
                 if n_step_insert_int > 0:
                     insert_distance_x = insert_distance * ti.cos(insert_angle)
                     insert_distance_z = insert_distance * ti.sin(insert_angle)
-                    insert_delta_x[None] = insert_distance_x / n_step_insert[None]
-                    insert_delta_z[None] = insert_distance_z / n_step_insert[None]
+                    if args['rectified_grad']:
+                        insert_delta_x[None] = insert_distance_x / n_step_insert_int
+                        insert_delta_z[None] = insert_distance_z / n_step_insert_int
+                    else:
+                        insert_delta_x[None] = insert_distance_x / n_step_insert[None]
+                        insert_delta_z[None] = insert_distance_z / n_step_insert[None]
                 n_step_total[None] += n_step_insert_int
 
                 push_angle = (skill_params_ti[3] + 3) * np.pi / 3  # map [-1, 1] to [2*pi/3, 4*pi/3]
@@ -223,8 +227,12 @@ def main(args):
                     # print('push_distance_x:', push_distance_x)
                     push_distance_z = push_distance * ti.sin(push_angle)
                     # print('push_distance_z:', push_distance_z)
-                    push_delta_x[None] = push_distance_x / n_step_push[None]
-                    push_delta_z[None] = push_distance_z / n_step_push[None]
+                    if args['rectified_grad']:
+                        push_delta_x[None] = push_distance_x / n_step_push_int
+                        push_delta_z[None] = push_distance_z / n_step_push_int
+                    else:
+                        push_delta_x[None] = push_distance_x / n_step_push[None]
+                        push_delta_z[None] = push_distance_z / n_step_push[None]
                 n_step_total[None] += n_step_push_int
 
                 rotate_x_back = -rotate_x
@@ -871,5 +879,6 @@ if __name__ == '__main__':
     parser.add_argument('--lr', dest='lr', type=float, default=0.02, help='Learning rate')
     parser.add_argument('--sand', dest='sand', action='store_true', default=False, help='Use sand')
     parser.add_argument('--ms', dest='multi_skill', action='store_true', default=False, help='Use multi-skill')
+    parser.add_argument('--rgrad', dest='rectified_grad', action='store_true', default=False, help='Use rectified grad')
     arguments = vars(parser.parse_args())
     main(arguments)

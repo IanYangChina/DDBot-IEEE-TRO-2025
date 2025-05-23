@@ -352,9 +352,11 @@ def plot_task_pcds():
 # plot_task_pcds()
 
 
-def find_best_skill_parameters(mat='', sac=False, abs0=False):
+def find_best_skill_parameters(mat='', sac=False, abs0=False, cmamae=False):
     if sac:
         log_folder = f'log-abs2-sac{mat}'
+    elif cmamae:
+        log_folder = f'log-abs2-cmamae{mat}'
     elif abs0:
         log_folder = f'log-abs0{mat}'
     else:
@@ -398,9 +400,9 @@ def find_best_skill_parameters(mat='', sac=False, abs0=False):
             for filename in os.listdir(folder):
                 if filename[:5] == 'event':
                     for event in summary_iterator(os.path.join(folder, filename)):
-                        if not sac:
+                        if cmamae:
                             for v in event.summary.value:
-                                if v.tag[:5] == 'loss/':
+                                if v.tag[:5] == 'loss_0/':
                                     if v.tag[5:] == 'EMD':
                                         data_dict['Loss']['emd_loss'].append(v.simple_value)
                                     elif v.tag[5:] == 'Heightmap':
@@ -422,7 +424,7 @@ def find_best_skill_parameters(mat='', sac=False, abs0=False):
                                         pass
                                 else:
                                     pass
-                        else:
+                        elif sac:
                             for v in event.summary.value:
                                 if v.tag[:6] == 'Actor/':
                                     if v.tag[6:] == 'actor_loss':
@@ -453,6 +455,30 @@ def find_best_skill_parameters(mat='', sac=False, abs0=False):
                                         data_dict['SAC']['test_height_map_loss'].append(v.simple_value)
                                     else:
                                         pass
+                        else:
+                            for v in event.summary.value:
+                                if v.tag[:5] == 'loss/':
+                                    if v.tag[5:] == 'EMD':
+                                        data_dict['Loss']['emd_loss'].append(v.simple_value)
+                                    elif v.tag[5:] == 'Heightmap':
+                                        data_dict['Loss']['height_map_loss'].append(v.simple_value)
+                                    else:
+                                        pass
+                                elif v.tag[:6] == 'param/':
+                                    if v.tag[6] == '0':
+                                        data_dict['Parameters']['skill_params_0'].append([v.simple_value])
+                                    elif v.tag[6] == '1':
+                                        data_dict['Parameters']['skill_params_1'].append([v.simple_value])
+                                    elif v.tag[6] == '2':
+                                        data_dict['Parameters']['skill_params_2'].append([v.simple_value])
+                                    elif v.tag[6] == '3':
+                                        data_dict['Parameters']['skill_params_3'].append([v.simple_value])
+                                    elif v.tag[6] == '4':
+                                        data_dict['Parameters']['skill_params_4'].append([v.simple_value])
+                                    else:
+                                        pass
+                                else:
+                                    pass
 
             data_dict['Loss']['total_loss'] = (
                         np.asarray(data_dict['Loss']['height_map_loss']) / (40 * 40) +
