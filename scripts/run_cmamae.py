@@ -172,12 +172,13 @@ def main(arguments):
     cma_mae_config['batch_size'] = arguments['batch_size']
 
     if arguments['use_demo']:
+        init_solution = np.asarray([1.0, 0.2, 0.8, 0.0, -0.5]).astype(DTYPE_NP)
         target_pcd = o3d.io.read_point_cloud(os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
                                                           f'pcd_{task_id}_cropped_norm_z_aligned.ply'))
         target_pcd_points = np.asarray(target_pcd.points) + np.asarray([0.2, 0.2, 0])
         z_min_idx = np.argmin(target_pcd_points[:, 2])
         x_demo = target_pcd_points[z_min_idx, 0] + 0.02
-        init_solution = np.clip((x_demo - 0.2) / 0.12, -1.0, 1.0)
+        init_solution[0] = np.clip((x_demo - 0.2) / 0.12, -1.0, 1.0)
     else:
         init_solution = np_rng.uniform(-1, 1, size=gym_env_config['action_dim']).astype(DTYPE_NP)
 
@@ -264,7 +265,7 @@ if __name__ == '__main__':
     parser.add_argument('--cuda_GB', dest='cuda_GB', default=5, type=int, help='preallocated GPU memory in GB')
     parser.add_argument('--hm', dest='use_height_map_loss', action='store_true', default=False, help='Use height map loss')
     parser.add_argument('--sand', dest='sand', action='store_true', default=False, help='Use sand')
-    parser.add_argument('--total_iterations', dest='total_iterations', type=int, default=200, help='number of iterations')
+    parser.add_argument('--total_iterations', dest='total_iterations', type=int, default=50, help='number of iterations')
     parser.add_argument('--batch_size', dest='batch_size', type=int, default=10, help='batch size')
     parser.add_argument('--n_emitters', dest='n_emitters', type=int, default=1, help='number of emitters')
     args = vars(parser.parse_args())
