@@ -8,11 +8,12 @@ from tensorflow.python.summary.summary_iterator import summary_iterator
 
 script_path = os.path.dirname(os.path.realpath(__file__))
 script_path = os.path.join(script_path, '..')
-colour_pool = ['#a42423', '#e89da0',
-               '#a55d35', '#efbf6a',
-               '#566d40', '#abde70',
-               '#22326f', '#4296d2',
-               '#662d5e', '#ad3bad']
+colour_pool = ['#a42423',
+               '#566d40',
+               '#efbf6a',
+               '#22326f', #'#4296d2',
+               '#662d5e', #'#ad3bad',
+               ]
 plt.rcParams['pdf.fonttype'] = 42
 plt.rcParams['ps.fonttype'] = 42
 plt.rcParams['font.family'] = 'serif'
@@ -352,13 +353,15 @@ def plot_task_pcds():
 # plot_task_pcds()
 
 
-def find_best_skill_parameters(mat='', sac=False, abs0=False, cmamae=False):
+def find_best_skill_parameters(mat='', sac=False, abs0=False, cmamae=False, rg=False):
     if sac:
         log_folder = f'log-abs2-sac{mat}'
     elif cmamae:
         log_folder = f'log-abs2-cmamae{mat}'
     elif abs0:
         log_folder = f'log-abs0{mat}'
+    elif rg:
+        log_folder = f'log-abs2-rg{mat}'
     else:
         log_folder = f'log-abs2{mat}'
     dirs = os.listdir(os.path.join(script_path, '..', log_folder))
@@ -402,23 +405,23 @@ def find_best_skill_parameters(mat='', sac=False, abs0=False, cmamae=False):
                     for event in summary_iterator(os.path.join(folder, filename)):
                         if cmamae:
                             for v in event.summary.value:
-                                if v.tag[:5] == 'loss_0/':
-                                    if v.tag[5:] == 'EMD':
+                                if v.tag[:7] == 'loss_0/':
+                                    if v.tag[7:] == 'EMD':
                                         data_dict['Loss']['emd_loss'].append(v.simple_value)
-                                    elif v.tag[5:] == 'Heightmap':
+                                    elif v.tag[7:] == 'Heightmap':
                                         data_dict['Loss']['height_map_loss'].append(v.simple_value)
                                     else:
                                         pass
-                                elif v.tag[:6] == 'param/':
-                                    if v.tag[6] == '0':
+                                elif v.tag[:8] == 'param_0/':
+                                    if v.tag[8] == '0':
                                         data_dict['Parameters']['skill_params_0'].append([v.simple_value])
-                                    elif v.tag[6] == '1':
+                                    elif v.tag[8] == '1':
                                         data_dict['Parameters']['skill_params_1'].append([v.simple_value])
-                                    elif v.tag[6] == '2':
+                                    elif v.tag[8] == '2':
                                         data_dict['Parameters']['skill_params_2'].append([v.simple_value])
-                                    elif v.tag[6] == '3':
+                                    elif v.tag[8] == '3':
                                         data_dict['Parameters']['skill_params_3'].append([v.simple_value])
-                                    elif v.tag[6] == '4':
+                                    elif v.tag[8] == '4':
                                         data_dict['Parameters']['skill_params_4'].append([v.simple_value])
                                     else:
                                         pass
@@ -510,33 +513,72 @@ def find_best_skill_parameters(mat='', sac=False, abs0=False, cmamae=False):
         open(os.path.join(p_folder, 'best_loss.json'), 'w').write(json.dumps(best_loss_info))
 
 
-# find_best_skill_parameters(mat='')
+# find_best_skill_parameters(mat='', cmamae=True)
 # find_best_skill_parameters(mat='_sand')
 # find_best_skill_parameters(mat='', abs0=True)
 
 
-def plot_so_loss_curve(mat=''):
-    plt.rcParams.update({'font.size': 11})
+def plot_so_loss_curve(mat='', baseline=False, rg=False):
+    plt.rcParams.update({'font.size': 16})
+    handle_fontsize = 9.5
     cases = [
-        'ls-lr0.03', 'hm-ls-lr0.03',
-        'ls-demo-lr0.03', 'hm-ls-demo-lr0.03']
-    width_ratios = [1, 1, 1, 1, 0.05, 1]
-    if mat == '':
-        cases += [
+        'ls-lr0.03',
+        'hm-ls-lr0.03',
+        'ls-demo-lr0.03',
+        'hm-ls-demo-lr0.03'
+    ]
+    casenames = [
+        'EMD-LS',
+        'HMD-LS',
+        'EMD-LS-Demo',
+        'HMD-LS-Demo',
+    ]
+    case_p_folders = [
+        os.path.join(script_path, '..', f'log-abs2{mat}'),
+        os.path.join(script_path, '..', f'log-abs2{mat}'),
+        os.path.join(script_path, '..', f'log-abs2{mat}'),
+        os.path.join(script_path, '..', f'log-abs2{mat}'),
+    ]
+    width_ratios = [0.6, 0.6, 0.6, 0.6, 0.05, 0.5]
+    if rg:
+        cases = [
+            'ls-demo-lr0.03',
+            'ls-demo-lr0.03',
+            'hm-ls-demo-lr0.03',
+            'hm-ls-demo-lr0.03'
+        ]
+        casenames = [
+            'EMD-LS-Demo',
+            'EMD-LS-RG-Demo',
+            'HMD-LS-Demo',
+            'HMD-LS-RG-Demo'
+        ]
+        case_p_folders = [
+            os.path.join(script_path, '..', f'log-abs2{mat}'),
+            os.path.join(script_path, '..', f'log-abs2-rg{mat}'),
+            os.path.join(script_path, '..', f'log-abs2{mat}'),
+            os.path.join(script_path, '..', f'log-abs2-rg{mat}')
+        ]
+    if baseline:
+        cases = [
+            'ls-demo-lr0.03',
             'ls-demo-lr0.004',
+            'em2-bs10',
             'her-demo'
         ]
-        width_ratios = [1, 1, 1, 1, 1, 1, 0.05, 1]
-
-    casenames = [
-        'EMD-LS', 'HMD-LS',
-        'EMD-LS-Demo', 'HMD-LS-Demo']
-    if mat == '':
         casenames = [
-            'SO-EMD-LS', 'SO-HMD-LS',
-            'SO-EMD-LS-Demo', 'SO-HMD-LS-Demo',
+            'SO-EMD-LS-Demo',
             'TR-EMD-LS-Demo',
-            'SAC-EMD-HER-Demo']
+            'CMAMAE-EMD',
+            'SAC-EMD-HER-Demo'
+        ]
+        case_p_folders = [
+            os.path.join(script_path, '..', f'log-abs2{mat}'),
+            os.path.join(script_path, '..', f'log-abs0'),
+            os.path.join(script_path, '..', f'log-abs2-cmamae'),
+            os.path.join(script_path, '..', f'log-abs2-sac')
+        ]
+
     fig, ax = plt.subplots(3, len(cases)+2, figsize=(len(cases)*2+2.05, 3*1.5),
                            gridspec_kw={'width_ratios': width_ratios,
                                         'height_ratios': [1, 1, 1]})
@@ -546,15 +588,7 @@ def plot_so_loss_curve(mat=''):
         case = cases[case_id]
         column = case_id
         for task in range(3):
-            if case_id < 4:
-                case_folder = os.path.join(script_path, '..', f'log-abs2{mat}',
-                                           f'd5e6-task-{task}-{case}')
-            elif case_id == 4:
-                case_folder = os.path.join(script_path, '..', 'log-abs0',
-                                           f'd5e6-task-{task}-{case}')
-            else:
-                case_folder = os.path.join(script_path, '..', 'log-abs2-sac',
-                                           f'd5e6-task-{task}-{case}')
+            case_folder = os.path.join(case_p_folders[case_id], f'd5e6-task-{task}-{case}')
             losses = []
             for seed in range(5):
                 folder = os.path.join(case_folder, f'seed-{seed}')
@@ -565,15 +599,25 @@ def plot_so_loss_curve(mat=''):
             running_avg = np.empty(mean_loss.shape[0])
             for n in range(mean_loss.shape[0]):
                 running_avg[n] = np.mean(mean_loss[max(0, n - window):(n + 1)])
-            xs = np.arange(20) if case_id < 5 else np.arange(39)
-            if case_id < 5:
+            if not baseline:
+                xs = np.arange(20)
+                running_avg = running_avg[:20]
+            elif case_id > 1:
+                xs = np.arange(39)
+                running_avg = running_avg[:39]
+            else:
+                xs = np.arange(20)
                 running_avg = running_avg[:20]
             ax[task, column].plot(xs, running_avg, label=casenames[case_id], color=colour_pool[case_id], linewidth=2)
             for l in losses:
                 running_avg_l = np.empty(l.shape[0])
                 for n in range(l.shape[0]):
                     running_avg_l[n] = np.mean(l[max(0, n - window):(n + 1)])
-                if case_id < 5:
+                if not baseline:
+                    running_avg_l = running_avg_l[:20]
+                elif case_id > 1:
+                    running_avg_l = running_avg_l[:39]
+                else:
                     running_avg_l = running_avg_l[:20]
                 ax[task, column].plot(xs, running_avg_l, color=colour_pool[case_id], linestyle='--', linewidth=1)
 
@@ -581,31 +625,48 @@ def plot_so_loss_curve(mat=''):
                 if mat == '_sand':
                     ax[task, column].set_ylim([0.012, 0.020])
                     ax[task, column].set_yticks([0.013, 0.015, 0.017, 0.019])
-                else:
+                elif baseline:
                     ax[task, column].set_ylim([0.011, 0.026])
                     ax[task, column].set_yticks([0.013, 0.016, 0.019, 0.022])
+                else:
+                    ax[task, column].set_ylim([0.011, 0.021])
+                    ax[task, column].set_yticks([0.013, 0.015, 0.017, 0.019])
             elif task == 1:
                 if mat == '_sand':
                     ax[task, column].set_ylim([0.0125, 0.0165])
                     ax[task, column].set_yticks([0.013, 0.014, 0.015, 0.016])
-                else:
+                elif baseline:
                     ax[task, column].set_ylim([0.0145, 0.0225])
                     ax[task, column].set_yticks([0.015, 0.017, 0.019, 0.021])
+                else:
+                    ax[task, column].set_ylim([0.0155, 0.0185])
+                    ax[task, column].set_yticks([0.016, 0.017, 0.018])
             else:
                 if mat == '_sand':
                     ax[task, column].set_ylim([0.0125, 0.0185])
                     ax[task, column].set_yticks([0.013, 0.015, 0.017])
-                else:
+                elif baseline:
                     ax[task, column].set_ylim([0.0175, 0.0295])
                     ax[task, column].set_yticks([0.019, 0.022, 0.025, 0.028])
-            if case_id < 5:
+                else:
+                    ax[task, column].set_ylim([0.0175, 0.0245])
+                    ax[task, column].set_yticks([0.018, 0.020, 0.022, 0.024])
+            if not baseline:
                 ax[task, column].set_xlim([-2, 21])
                 ax[task, column].set_xticks([0, 4, 9, 14, 19])
                 ax[task, column].set_xticklabels(['1', '5', '10', '15', '20'])
-            else:
+            elif case_id == 2:
                 ax[task, column].set_xlim([-2, 41])
                 ax[task, column].set_xticks([0, 9, 19, 29, 39])
+                ax[task, column].set_xticklabels(['1', '10', '20', '30', '40'])
+            elif case_id == 3:
+                ax[task, column].set_xlim([-3, 42])
+                ax[task, column].set_xticks([0, 9, 19, 29, 39])
                 ax[task, column].set_xticklabels(['1', '50', '100', '150', '200'])
+            else:
+                ax[task, column].set_xlim([-2, 21])
+                ax[task, column].set_xticks([0, 4, 9, 14, 19])
+                ax[task, column].set_xticklabels(['1', '5', '10', '15', '20'])
 
             if task != 2:
                 for tick in ax[task, column].xaxis.get_major_ticks():
@@ -633,7 +694,7 @@ def plot_so_loss_curve(mat=''):
 
             ax[task, column].set_xlabel('Epoch')
             handle = Line2D([0], [0], color=colour_pool[case_id], linewidth=5)
-            ax[task, column].legend([handle], [casenames[case_id]], loc='upper left', fontsize=9,
+            ax[task, column].legend([handle], [casenames[case_id]], loc='upper left', fontsize=handle_fontsize,
                                     handlelength=0.1, frameon=True)
 
     for case_id in range(len(cases)):
@@ -641,15 +702,7 @@ def plot_so_loss_curve(mat=''):
             y = []
             y_std = []
             case = cases[case_id]
-            if case_id < 4:
-                case_folder = os.path.join(script_path, '..', f'log-abs2{mat}',
-                                           f'd5e6-task-{task}-{case}')
-            elif case_id == 4:
-                case_folder = os.path.join(script_path, '..', 'log-abs0',
-                                           f'd5e6-task-{task}-{case}')
-            else:
-                case_folder = os.path.join(script_path, '..', 'log-abs2-sac',
-                                           f'd5e6-task-{task}-{case}')
+            case_folder = os.path.join(case_p_folders[case_id], f'd5e6-task-{task}-{case}')
 
             best_loss = []
             for seed in range(5):
@@ -669,23 +722,32 @@ def plot_so_loss_curve(mat=''):
             if mat == '_sand':
                 ax[task, len(cases)+1].set_ylim([0.012, 0.020])
                 ax[task, len(cases)+1].set_yticks([0.013, 0.015, 0.017, 0.019])
-            else:
+            elif baseline:
                 ax[task, len(cases)+1].set_ylim([0.011, 0.026])
                 ax[task, len(cases)+1].set_yticks([0.013, 0.016, 0.019, 0.022])
+            else:
+                ax[task, len(cases) + 1].set_ylim([0.011, 0.021])
+                ax[task, len(cases) + 1].set_yticks([0.013, 0.015, 0.017, 0.019])
         elif task == 1:
             if mat == '_sand':
                 ax[task, len(cases)+1].set_ylim([0.0125, 0.0165])
                 ax[task, len(cases)+1].set_yticks([0.013, 0.014, 0.015, 0.016])
-            else:
+            elif baseline:
                 ax[task, len(cases)+1].set_ylim([0.0145, 0.0225])
                 ax[task, len(cases)+1].set_yticks([0.015, 0.017, 0.019, 0.021])
+            else:
+                ax[task, len(cases)+1].set_ylim([0.0155, 0.0185])
+                ax[task, len(cases)+1].set_yticks([0.016, 0.017, 0.018])
         else:
             if mat == '_sand':
                 ax[task, len(cases)+1].set_ylim([0.0125, 0.0185])
                 ax[task, len(cases)+1].set_yticks([0.013, 0.015, 0.017])
-            else:
+            elif baseline:
                 ax[task, len(cases)+1].set_ylim([0.0175, 0.0295])
                 ax[task, len(cases)+1].set_yticks([0.019, 0.022, 0.025, 0.028])
+            else:
+                ax[task, len(cases)+1].set_ylim([0.0175, 0.0245])
+                ax[task, len(cases)+1].set_yticks([0.018, 0.020, 0.022, 0.024])
 
         for tick in ax[task, len(cases)+1].yaxis.get_major_ticks():
             tick.tick1line.set_visible(False)
@@ -695,16 +757,23 @@ def plot_so_loss_curve(mat=''):
         ax[task, len(cases)+1].set_xlim([-0.5, len(cases)-0.5])
         ax[task, len(cases)+1].set_xticks([])
         if task == 2:
-            ax[task, len(cases)+1].set_xlabel('Best validation loss\nMean ± Std of 5 seeds')
+            ax[task, len(cases)+1].set_xlabel('Best validation \nloss (Mean ± Std)')
 
         ax[task, len(cases)].axis('off')
+    if baseline:
+        mat = '_baseline'
     if mat == '':
         mat = '_soil'
+    if rg:
+        mat += '_rg'
     plt.savefig(os.path.join(script_path, '..', 'figs', f'task{mat}.pdf'),
                 dpi=300, bbox_inches='tight', pad_inches=0.01)
 
 
-# plot_so_loss_curve(mat='')
+plot_so_loss_curve(mat='', baseline=True, rg=False)
+plot_so_loss_curve(mat='', baseline=False, rg=False)
+plot_so_loss_curve(mat='_sand', baseline=False, rg=False)
+plot_so_loss_curve(mat='', baseline=False, rg=True)
 
 
 def plot_rl_loss_curve():
@@ -794,4 +863,4 @@ def plot_rl_loss_curve():
                     dpi=300, bbox_inches='tight', pad_inches=0.01)
 
 
-plot_rl_loss_curve()
+# plot_rl_loss_curve()

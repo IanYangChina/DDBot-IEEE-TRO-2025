@@ -98,9 +98,6 @@ def main(args):
         'target_pcd_offset': [0.2, 0.2, 0],
         'height_grid_res': 40,
     }
-    if args['multi_skill']:
-        loss_cfg['target_pcd_path'] = os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
-                                                   f'pcd_0_multi_skill_cropped_norm_z_aligned.ply')
 
     for seed in seeds:
         reset_logging(logging)
@@ -198,8 +195,12 @@ def main(args):
                 ti.atomic_max(n_step_move[None], n_step_rotate)
                 n_step_move_int = ti.cast(n_step_move[None], ti.i32)
                 if n_step_move_int > 0:
-                    move_delta_x[None] = move_distance / n_step_move[None]
-                    rotate_delta_x[None] = rotate_x / n_step_move[None]
+                    if args['rectified_grad']:
+                        move_delta_x[None] = move_distance / n_step_move[None]
+                        rotate_delta_x[None] = rotate_x / n_step_move[None]
+                    else:
+                        move_delta_x[None] = move_distance / n_step_move_int
+                        rotate_delta_x[None] = rotate_x / n_step_move_int
                 n_step_total[None] += n_step_move_int
 
                 insert_angle = rotate_x + np.pi / 2
@@ -209,12 +210,8 @@ def main(args):
                 if n_step_insert_int > 0:
                     insert_distance_x = insert_distance * ti.cos(insert_angle)
                     insert_distance_z = insert_distance * ti.sin(insert_angle)
-                    if args['rectified_grad']:
-                        insert_delta_x[None] = insert_distance_x / n_step_insert_int
-                        insert_delta_z[None] = insert_distance_z / n_step_insert_int
-                    else:
-                        insert_delta_x[None] = insert_distance_x / n_step_insert[None]
-                        insert_delta_z[None] = insert_distance_z / n_step_insert[None]
+                    insert_delta_x[None] = insert_distance_x / n_step_insert_int
+                    insert_delta_z[None] = insert_distance_z / n_step_insert_int
                 n_step_total[None] += n_step_insert_int
 
                 push_angle = (skill_params_ti[3] + 3) * np.pi / 3  # map [-1, 1] to [2*pi/3, 4*pi/3]
@@ -227,12 +224,8 @@ def main(args):
                     # print('push_distance_x:', push_distance_x)
                     push_distance_z = push_distance * ti.sin(push_angle)
                     # print('push_distance_z:', push_distance_z)
-                    if args['rectified_grad']:
-                        push_delta_x[None] = push_distance_x / n_step_push_int
-                        push_delta_z[None] = push_distance_z / n_step_push_int
-                    else:
-                        push_delta_x[None] = push_distance_x / n_step_push[None]
-                        push_delta_z[None] = push_distance_z / n_step_push[None]
+                    push_delta_x[None] = push_distance_x / n_step_push_int
+                    push_delta_z[None] = push_distance_z / n_step_push_int
                 n_step_total[None] += n_step_push_int
 
                 rotate_x_back = -rotate_x
@@ -243,8 +236,12 @@ def main(args):
                 ti.atomic_max(n_step_return[None], n_step_move_up)
                 n_step_return_int = ti.cast(n_step_return[None], ti.i32)
                 if n_step_return_int > 0:
-                    rotate_delta_x_back[None] = rotate_x_back / n_step_return[None]
-                    move_up_delta_z[None] = move_up_distance / n_step_return[None]
+                    if args['rectified_grad']:
+                        rotate_delta_x_back[None] = rotate_x_back / n_step_return[None]
+                        move_up_delta_z[None] = move_up_distance / n_step_return[None]
+                    else:
+                        rotate_delta_x_back[None] = rotate_x_back / n_step_return_int
+                        move_up_delta_z[None] = move_up_distance / n_step_return_int
                 n_step_total[None] += n_step_return_int
 
             @ti.kernel
@@ -506,8 +503,8 @@ def main(args):
                             ti.atomic_max(n_step_move[None], n_step_rotate)
                             n_step_move_int = ti.cast(n_step_move[None], ti.i32)
                             if n_step_move_int > 0:
-                                move_delta_x[None] = move_distance / n_step_move[None]
-                                rotate_delta_x[None] = rotate_x / n_step_move[None]
+                                move_delta_x[None] = move_distance / n_step_move_int
+                                rotate_delta_x[None] = rotate_x / n_step_move_int
                             n_step_total[None] += n_step_move_int
 
                             insert_angle = rotate_x + np.pi / 2
@@ -517,8 +514,8 @@ def main(args):
                             if n_step_insert_int > 0:
                                 insert_distance_x = insert_distance * ti.cos(insert_angle)
                                 insert_distance_z = insert_distance * ti.sin(insert_angle)
-                                insert_delta_x[None] = insert_distance_x / n_step_insert[None]
-                                insert_delta_z[None] = insert_distance_z / n_step_insert[None]
+                                insert_delta_x[None] = insert_distance_x / n_step_insert_int
+                                insert_delta_z[None] = insert_distance_z / n_step_insert_int
                             n_step_total[None] += n_step_insert_int
 
                             push_angle = (skill_params_ti[3] + 3) * np.pi / 3  # map [-1, 1] to [2*pi/3, 4*pi/3]
@@ -531,8 +528,8 @@ def main(args):
                                 # print('push_distance_x:', push_distance_x)
                                 push_distance_z = push_distance * ti.sin(push_angle)
                                 # print('push_distance_z:', push_distance_z)
-                                push_delta_x[None] = push_distance_x / n_step_push[None]
-                                push_delta_z[None] = push_distance_z / n_step_push[None]
+                                push_delta_x[None] = push_distance_x / n_step_push_int
+                                push_delta_z[None] = push_distance_z / n_step_push_int
                             n_step_total[None] += n_step_push_int
 
                             rotate_x_back = -rotate_x
@@ -543,8 +540,8 @@ def main(args):
                             ti.atomic_max(n_step_return[None], n_step_move_up)
                             n_step_return_int = ti.cast(n_step_return[None], ti.i32)
                             if n_step_return_int > 0:
-                                rotate_delta_x_back[None] = rotate_x_back / n_step_return[None]
-                                move_up_delta_z[None] = move_up_distance / n_step_return[None]
+                                rotate_delta_x_back[None] = rotate_x_back / n_step_return_int
+                                move_up_delta_z[None] = move_up_distance / n_step_return_int
                             n_step_total[None] += n_step_return_int
 
                         @ti.kernel
@@ -709,8 +706,8 @@ def main(args):
             ti.atomic_max(n_step_move[None], n_step_rotate)
             n_step_move_int = ti.cast(n_step_move[None], ti.i32)
             if n_step_move_int > 0:
-                move_delta_x[None] = move_distance / n_step_move[None]
-                rotate_delta_x[None] = rotate_x / n_step_move[None]
+                move_delta_x[None] = move_distance / n_step_move_int
+                rotate_delta_x[None] = rotate_x / n_step_move_int
             n_step_total[None] += n_step_move_int
 
             insert_angle = rotate_x + np.pi / 2
@@ -720,8 +717,8 @@ def main(args):
             if n_step_insert_int > 0:
                 insert_distance_x = insert_distance * ti.cos(insert_angle)
                 insert_distance_z = insert_distance * ti.sin(insert_angle)
-                insert_delta_x[None] = insert_distance_x / n_step_insert[None]
-                insert_delta_z[None] = insert_distance_z / n_step_insert[None]
+                insert_delta_x[None] = insert_distance_x / n_step_insert_int
+                insert_delta_z[None] = insert_distance_z / n_step_insert_int
             n_step_total[None] += n_step_insert_int
 
             push_angle = (skill_params_ti[3] + 3) * np.pi / 3  # map [-1, 1] to [2*pi/3, 4*pi/3]
@@ -734,8 +731,8 @@ def main(args):
                 # print('push_distance_x:', push_distance_x)
                 push_distance_z = push_distance * ti.sin(push_angle)
                 # print('push_distance_z:', push_distance_z)
-                push_delta_x[None] = push_distance_x / n_step_push[None]
-                push_delta_z[None] = push_distance_z / n_step_push[None]
+                push_delta_x[None] = push_distance_x / n_step_push_int
+                push_delta_z[None] = push_distance_z / n_step_push_int
             n_step_total[None] += n_step_push_int
 
             rotate_x_back = -rotate_x
@@ -746,8 +743,8 @@ def main(args):
             ti.atomic_max(n_step_return[None], n_step_move_up)
             n_step_return_int = ti.cast(n_step_return[None], ti.i32)
             if n_step_return_int > 0:
-                rotate_delta_x_back[None] = rotate_x_back / n_step_return[None]
-                move_up_delta_z[None] = move_up_distance / n_step_return[None]
+                rotate_delta_x_back[None] = rotate_x_back / n_step_return_int
+                move_up_delta_z[None] = move_up_distance / n_step_return_int
             n_step_total[None] += n_step_return_int
 
         @ti.kernel
