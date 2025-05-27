@@ -223,7 +223,7 @@ def main(arguments):
             skill = solution_batch[i]
             gym_env.reset()
             _, _, _, loss_info = gym_env.step(skill)
-            objective_batch[i] = loss_info['emd_loss']
+            objective_batch[i] = -loss_info['emd_loss']
 
             if i < 5:
                 logger.add_scalar(tag=f'loss_{i}/EMD', scalar_value=loss_info['emd_loss'], global_step=itr)
