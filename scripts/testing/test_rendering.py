@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import taichi as ti
 from PIL import Image
 import imageio
-from doma.envs.planting_env import make_env
+from doma.envs.planting_env_v1 import make_env
 from doma.engine.utils.misc import set_parameters
 from doma.engine.configs.macros import DTYPE_NP, SAND, COLOR
 script_path = os.path.dirname(os.path.realpath(__file__))
@@ -227,6 +227,17 @@ def main(args):
                 z_min_idx = np.argmin(target_pcd_points[:, 2])
                 x_demo = target_pcd_points[z_min_idx, 0] + 0.02
                 skill_params[0] = np.clip((x_demo - 0.2) / 0.12, -1.0, 1.0)
+            elif args['cmamae']:
+                with open(os.path.join(script_path, '..', f'log-abs2-cmamae{mat}',
+                                       f'd5e6-task-{task_id}-em2-bs10', 'best_loss.json'), 'r') as f:
+                    skill_params_json = json.load(f)['Parameters']
+                    skill_params = np.array([
+                        skill_params_json['skill_params_0'][0],
+                        skill_params_json['skill_params_1'][0],
+                        skill_params_json['skill_params_2'][0],
+                        skill_params_json['skill_params_3'][0],
+                        skill_params_json['skill_params_4'][0]
+                    ])
             else:
                 with open(os.path.join(script_path, '..', f'log-abs2{mat}', case, 'best_loss.json'), 'r') as f:
                     skill_params_json = json.load(f)['Parameters']
@@ -341,6 +352,7 @@ if __name__ == '__main__':
     parser.add_argument('--sv', dest='save_video', default=False, action='store_true', help='Save video')
     parser.add_argument('--sysid', dest='sys_id', default=False, action='store_true', help='Run system identification')
     parser.add_argument('--skill', dest='skill', default=False, action='store_true', help='Run skill')
+    parser.add_argument('--cmamae', dest='cmamae', default=False, action='store_true', help='Run cmamae')
     parser.add_argument('--sac', dest='sac', default=False, action='store_true', help='Run SAC')
     parser.add_argument('--seed', dest='seed', type=int, default=0, help='Seed')
     parser.add_argument('--task-id', dest='task_id', type=int, default=-1, help='Run task')
