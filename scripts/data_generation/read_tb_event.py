@@ -522,7 +522,7 @@ def find_best_skill_parameters(mat='', sac=False, abs0=False, cmamae=False, rg=F
 # find_best_skill_parameters(mat='', cmamae=True)
 
 
-def plot_so_loss_curve(mat='', baseline=False, rg=False):
+def plot_so_loss_curve(mat='', baseline=False, rg=False, sompc=False):
     plt.rcParams.update({'font.size': 16})
     handle_fontsize = 9.5
     cases = [
@@ -577,10 +577,29 @@ def plot_so_loss_curve(mat='', baseline=False, rg=False):
             'SAC-EMD-HER'
         ]
         case_p_folders = [
-            os.path.join(script_path, '..', f'log-abs2{mat}'),
+            os.path.join(script_path, '..', f'log-abs2-rg{mat}'),
             os.path.join(script_path, '..', f'log-abs0'),
             os.path.join(script_path, '..', f'log-abs2-cmamae'),
             os.path.join(script_path, '..', f'log-abs2-sac')
+        ]
+    if sompc:
+        cases = [
+            'ls-lr0.03',
+            'ls-demo-lr0.03',
+            'em2-bs10',
+            'demo-em2-bs10'
+        ]
+        casenames = [
+            'SO-EMD-LS',
+            'SO-EMD-LS-Demo',
+            'CMAMAE-EMD',
+            'CMAMAE-EMD-Demo'
+        ]
+        case_p_folders = [
+            os.path.join(script_path, '..', f'log-abs2-rg{mat}'),
+            os.path.join(script_path, '..', f'log-abs2-rg{mat}'),
+            os.path.join(script_path, '..', f'log-abs2-cmamae'),
+            os.path.join(script_path, '..', f'log-abs2-cmamae')
         ]
 
     fig, ax = plt.subplots(3, len(cases)+2, figsize=(len(cases)*2+2.05, 3*1.5),
@@ -766,14 +785,17 @@ def plot_so_loss_curve(mat='', baseline=False, rg=False):
         mat = '_soil'
     if rg:
         mat += '_rg'
+    if sompc:
+        mat += '_sompc'
     plt.savefig(os.path.join(script_path, '..', 'figs', f'task{mat}.pdf'),
                 dpi=300, bbox_inches='tight', pad_inches=0.01)
 
 
-plot_so_loss_curve(mat='', baseline=True, rg=False)
+# plot_so_loss_curve(mat='', baseline=True, rg=False)
 # plot_so_loss_curve(mat='', baseline=False, rg=False)
 # plot_so_loss_curve(mat='_sand', baseline=False, rg=False)
 # plot_so_loss_curve(mat='', baseline=False, rg=True)
+plot_so_loss_curve(mat='', baseline=False, rg=False, sompc=True)
 
 
 def plot_rl_loss_curve():
