@@ -518,8 +518,8 @@ def find_best_skill_parameters(mat='', sac=False, abs0=False, cmamae=False, rg=F
 
 # find_best_skill_parameters(mat='')
 # find_best_skill_parameters(mat='_sand')
-# find_best_skill_parameters(mat='', rg=True)
-# find_best_skill_parameters(mat='', cmamae=True)
+# find_best_skill_parameters(mat='_sand', rg=True)
+# find_best_skill_parameters(mat='_sand', cmamae=True)
 
 
 def plot_so_loss_curve(mat='', baseline=False, rg=False, sompc=False):
@@ -596,10 +596,10 @@ def plot_so_loss_curve(mat='', baseline=False, rg=False, sompc=False):
             'CMAMAE-EMD-Demo'
         ]
         case_p_folders = [
-            os.path.join(script_path, '..', f'log-abs2-rg{mat}'),
-            os.path.join(script_path, '..', f'log-abs2-rg{mat}'),
-            os.path.join(script_path, '..', f'log-abs2-cmamae'),
-            os.path.join(script_path, '..', f'log-abs2-cmamae')
+            os.path.join(script_path, '..', f'log-abs2{mat}'),
+            os.path.join(script_path, '..', f'log-abs2{mat}'),
+            os.path.join(script_path, '..', f'log-abs2-cmamae{mat}'),
+            os.path.join(script_path, '..', f'log-abs2-cmamae{mat}')
         ]
 
     fig, ax = plt.subplots(3, len(cases)+2, figsize=(len(cases)*2+2.05, 3*1.5),
@@ -648,7 +648,7 @@ def plot_so_loss_curve(mat='', baseline=False, rg=False, sompc=False):
                 if mat == '_sand':
                     ax[task, column].set_ylim([0.0115, 0.0205])
                     ax[task, column].set_yticks([0.013, 0.015, 0.017, 0.019])
-                elif baseline:
+                elif baseline or sompc:
                     ax[task, column].set_ylim([0.011, 0.026])
                     ax[task, column].set_yticks([0.013, 0.016, 0.019, 0.022])
                 else:
@@ -658,7 +658,10 @@ def plot_so_loss_curve(mat='', baseline=False, rg=False, sompc=False):
                 if mat == '_sand':
                     ax[task, column].set_ylim([0.011, 0.017])
                     ax[task, column].set_yticks([0.012, 0.014, 0.016])
-                elif baseline:
+                    if sompc:
+                        ax[task, column].set_ylim([0.0115, 0.0225])
+                        ax[task, column].set_yticks([0.014, 0.017, 0.020])
+                elif baseline or sompc:
                     ax[task, column].set_ylim([0.0145, 0.0225])
                     ax[task, column].set_yticks([0.015, 0.017, 0.019, 0.021])
                 else:
@@ -668,7 +671,10 @@ def plot_so_loss_curve(mat='', baseline=False, rg=False, sompc=False):
                 if mat == '_sand':
                     ax[task, column].set_ylim([0.011, 0.018])
                     ax[task, column].set_yticks([0.012, 0.014, 0.016])
-                elif baseline:
+                    if sompc:
+                        ax[task, column].set_ylim([0.011, 0.0285])
+                        ax[task, column].set_yticks([0.014, 0.018, 0.022, 0.026])
+                elif baseline or sompc:
                     ax[task, column].set_ylim([0.0175, 0.0295])
                     ax[task, column].set_yticks([0.019, 0.022, 0.025, 0.028])
                 else:
@@ -741,7 +747,7 @@ def plot_so_loss_curve(mat='', baseline=False, rg=False, sompc=False):
             if mat == '_sand':
                 ax[task, len(cases) + 1].set_ylim([0.0115, 0.0205])
                 ax[task, len(cases)+1].set_yticks([0.013, 0.015, 0.017, 0.019])
-            elif baseline:
+            elif baseline or sompc:
                 ax[task, len(cases)+1].set_ylim([0.011, 0.026])
                 ax[task, len(cases)+1].set_yticks([0.013, 0.016, 0.019, 0.022])
             else:
@@ -751,7 +757,10 @@ def plot_so_loss_curve(mat='', baseline=False, rg=False, sompc=False):
             if mat == '_sand':
                 ax[task, len(cases) + 1].set_ylim([0.011, 0.017])
                 ax[task, len(cases) + 1].set_yticks([0.012, 0.014, 0.016])
-            elif baseline:
+                if sompc:
+                    ax[task, len(cases) + 1].set_ylim([0.0115, 0.0225])
+                    ax[task, len(cases) + 1].set_yticks([0.014, 0.017, 0.020])
+            elif baseline or sompc:
                 ax[task, len(cases)+1].set_ylim([0.0145, 0.0225])
                 ax[task, len(cases)+1].set_yticks([0.015, 0.017, 0.019, 0.021])
             else:
@@ -761,7 +770,10 @@ def plot_so_loss_curve(mat='', baseline=False, rg=False, sompc=False):
             if mat == '_sand':
                 ax[task, len(cases) + 1].set_ylim([0.011, 0.018])
                 ax[task, len(cases) + 1].set_yticks([0.012, 0.014, 0.016])
-            elif baseline:
+                if sompc:
+                    ax[task, len(cases) + 1].set_ylim([0.011, 0.0285])
+                    ax[task, len(cases) + 1].set_yticks([0.014, 0.018, 0.022, 0.026])
+            elif baseline or sompc:
                 ax[task, len(cases)+1].set_ylim([0.0175, 0.0295])
                 ax[task, len(cases)+1].set_yticks([0.019, 0.022, 0.025, 0.028])
             else:
@@ -795,7 +807,7 @@ def plot_so_loss_curve(mat='', baseline=False, rg=False, sompc=False):
 # plot_so_loss_curve(mat='', baseline=False, rg=False)
 # plot_so_loss_curve(mat='_sand', baseline=False, rg=False)
 # plot_so_loss_curve(mat='', baseline=False, rg=True)
-plot_so_loss_curve(mat='', baseline=False, rg=False, sompc=True)
+plot_so_loss_curve(mat='_sand', baseline=False, rg=False, sompc=True)
 
 
 def plot_rl_loss_curve():
