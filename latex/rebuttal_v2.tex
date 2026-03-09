@@ -1,0 +1,239 @@
+% LaTeX rebuttal letter example. 
+% 
+% Copyright 2019 Friedemann Zenke, fzenke.net
+%
+% Based on examples by Dirk Eddelbuettel, Fran and others from 
+% https://tex.stackexchange.com/questions/2317/latex-style-or-macro-for-detailed-response-to-referee-report
+% 
+% Licensed under cc by-sa 3.0 with attribution required.
+% See https://creativecommons.org/licenses/by-sa/3.0/
+% and https://stackoverflow.blog/2009/06/25/attribution-required/
+
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{xcolor}
+\usepackage{changepage}
+% import Eq and Section references from the main manuscript where needed
+% \usepackage{xr}
+% \externaldocument{manuscript}
+\usepackage{array}
+\usepackage{multirow}
+\newcolumntype{A}{>{\color{blue}\arraybackslash}m{3em}}
+\newcolumntype{B}{>{\color{blue}\centering\arraybackslash}m{1em}}
+\newcolumntype{C}{>{\color{blue}\centering\arraybackslash}m{2em}}
+\newcolumntype{D}{>{\color{blue}\centering\arraybackslash}m{5.5em}}
+\newcolumntype{E}{>{\color{blue}\arraybackslash}m{21em}}
+\newcolumntype{F}{>{\color{blue}\arraybackslash}m{0.95\columnwidth}}
+\renewcommand{\thetable}{\Roman{table}}
+\usepackage{subcaption}
+% package needed for optional arguments
+\usepackage{xifthen}
+% define counters for reviewers and their points
+\newcounter{reviewer}
+\setcounter{reviewer}{0}
+\newcounter{point}[reviewer]
+\setcounter{point}{0}
+\newcounter{suggestion}
+\setcounter{suggestion}{0}
+
+% This refines the format of how the reviewer/point reference will appear.
+\renewcommand{\thepoint}{P\,\thereviewer.\arabic{point}} 
+\renewcommand{\thesuggestion}{\arabic{suggestion}} 
+
+% command declarations for reviewer points and our responses
+\newcommand{\reviewersection}{\stepcounter{reviewer} \bigskip \hrule
+                  \section*{Reviewer \thereviewer}}
+
+\newenvironment{point}
+   {\refstepcounter{point} \bigskip \noindent {\textbf{Reviewer~Point~\thepoint} } ---\ }
+   {\par }
+
+\newcommand{\shortpoint}[1]{\refstepcounter{point}  \bigskip \noindent 
+	{\textbf{Reviewer~Point~\thepoint} } ---~#1\par }
+
+\newenvironment{reply}
+   {\medskip \noindent \begin{sf}\textbf{Reply}: \  }
+   {\medskip \end{sf}}
+
+\newcommand{\shortreply}[2][]{\medskip \noindent \begin{sf}\textbf{Reply}:\  #2
+	\ifthenelse{\equal{#1}{}}{}{ \hfill \footnotesize (#1)}%
+	\medskip \end{sf}}
+
+\newenvironment{suggestion}
+   {\refstepcounter{suggestion} \bigskip \noindent {\textbf{Suggestion~\thesuggestion} } ---\ }
+   {\par }
+
+\usepackage{tabularx,ragged2e,caption}
+\usepackage[colorinlistoftodos]{todonotes}
+\newcommand{\rv}[1]{\textcolor{red}{#1}}
+\newcommand{\rp}[1]{\textcolor{purple}{#1}}
+\newcommand{\xt}[1]{\textcolor{blue}{#1}}
+\newcommand{\zj}[1]{\textcolor{green}{#1}}
+\usepackage{booktabs}
+\usepackage[style=ieee,sorting=none,backend=bibtex]{biblatex}
+\addbibresource{./ref.bib}
+
+\begin{document}
+
+\section*{Summary of changes}
+% General intro text goes here
+We really appreciate the valuable and critical comments 
+
+% Let's start point-by-point with Reviewer 1
+% \reviewersection
+
+\subsection*{Editorial board}
+The authors have made substantial revisions that directly respond to the initial review concerns. Your final submission is due no later than 30 days from today.
+
+\begin{reply}
+\rp{Dear editorial board, we are very grateful for your acceptance of this article. Thank you for your time and constructive comments. Please see the following for the changes maded according to the reviewers' comments.}
+\end{reply}
+
+%=========================================%
+% Begin a new reviewer section
+\clearpage
+\reviewersection
+%-----------------------------------------%
+\textbf{General assessment:} This paper proposes a differentiable physics-based robotic framework
+(DDBot) for granular material excavation. The framework integrates
+MLS-MPM-based simulation, differentiable skill parameterization, and
+gradient-based optimization to achieve system identification and skill
+optimization. In the experimental section, the proposed method is
+validated using a UR5e robotic arm equipped with a 3D-printed shovel.
+However, the solutions in the method are common techniques in deep
+learning and numerical optimization, and lacks new theoretical analysis and verifications.
+
+\begin{reply}
+\rp{We greatly appreciate the reviewer for their careful reading and insightful comments regarding our submission. We are particularly grateful for the positive assessment of the proposed DDBot framework, including its integration of MLS-MPM-based simulation, differentiable skill parameterisation, and gradient-based optimisation.
+Following extensive revisions based on the feedback received in the first review round, we are pleased to confirm that the editors and all other reviewers have expressed their satisfaction, and the article has now been accepted for publication.}
+
+\rp{However, we have still carefully considered all suggestions from all reviewers. As the article is already substantial in scope and length, having already exceeded typical page limitations, we have prioritised implementing minimal revisions where possible. We provide detailed justifications below where certain large-scale requests (such as extensive new theoretical proofs or complex new experimental scenarios) fall outside the article's primary contribution or the current, finalised scope of this work.}
+
+\end{reply}
+
+\begin{point}
+Differentiable physical simulation (MLS-MPM + automatic
+differentiation) has been previously applied to soft bodies, fluids,
+and granular-like systems. The use of the SVK elastic model and the
+Drucker–Prager yield criterion essentially follows standard modeling
+approaches. The solutions to gradient explosion/oscillation—such as
+gradient clipping, scaling, and line search—are common techniques in
+deep learning and numerical optimization. However, no further
+theoretical analysis of these techniques is provided in the paper.
+\end{point}
+
+\begin{reply}
+\rp{We thank the reviewer for confirming that the underlying techniques employed are standard and well-established. We agree, and have emphasised in the last revision, that the establishments of MLS-MPM variants, the SVK elastic model, the Drucker-Prager (DP) yield criterion, and gradient stability treatments (clipping, line search) are not part of the core contributions of this work.}
+
+\rp{Instead, the key contribution of this paper is demonstrating the successful integration and feasibility of using gradient-based optimisation for granular materials with unknown properties, specifically leveraging the SVK/DP constitutive models. While our prior work showed Differential Physics-based System Identification (DPSI) for elastoplastic materials using the fixed-corotated elastic energy and von Mises plasticity model, the feasibility on granular materials modelled by SVK/DP remained unexplored~\cite{xy2024sysid}. Our work establishes this foundation and demonstrates its empirical success.}
+
+\rp{While detailed mathematical derivation (such as formal proofs for gradient stability techniques like clipping and scaling, convergence proofs for line searches, or proving guaranteed Lipschitz continuity) would be a valuable contribution, such theoretical analysis is typically reserved for dedicated publications on numerical methods or computational physics~\cite{nocedal2006numerical, mai2021stability}. Given that the main focus of this work is on the robotic manipulation framework (DDBot) and its empirical validation in real-world deployment, and considering that the current page limit has been exceeded, providing extensive new theoretical mathematical proofs is not aligned with the scope or space constraints of the current submission.}
+
+\rp{We believe our extensive empirical validation and ablation studies in Sections V and VI, which specifically investigate gradient behaviours and the stability provided by line search, sufficiently justify the effectiveness of these techniques for robust gradient-based optimisation.}
+
+\end{reply}
+
+\begin{point}
+While the authors claim the method can be applied to scenarios such as agriculture, rescue, and planetary exploration, such complex
+environments often involve mixtures of various soils and even the presence of grass and debris. These challenges have not been
+sufficiently discussed. It is necessary to evaluate whether skill
+optimization in DDBot can still converge under slight external
+vibrations (to simulate real-world disturbances) and in the presence of
+surface contaminants (such as small stones), and whether the excavation
+accuracy remains satisfactory.
+\end{point}
+
+\begin{reply}
+\rp{We sincerely thank the reviewer for this constructive suggestion regarding the potential applicability of DDBot to complex, unstructured environments (agriculture, rescue, planetary exploration). We agree that real-world scenarios involve challenges like external disturbances and contaminants.}
+
+\rp{However, the current work focuses on the initial, critical challenge: developing a high-precision and efficient framework for small-scale granular material manipulation with unknown material properties. Evaluating DDBot under external vibrations or with contaminants (small stones) represents a substantial expansion of the experimental scope. Incorporating these elements would require significant modifications to the fundamental simulation model (e.g., dynamic rigid-body interaction models for contaminants and external force inputs for vibrations), which are notoriously difficult to simulate accurately in conjunction with MLS-MPM. This level of complexity is unfortunately out of the scope of the current work. Introducing these features would necessitate dedicated sections to define and validate these new physical simulation phenomena, which is also not feasible given the current page limit and the established focus on validating the core DDBot framework's feasibility.}
+
+\rp{We appreciate the importance of considering the above-mentioned challenges. We have therefore added a clarifying sentence in the conclusion (Section IX) to acknowledge that addressing external disturbances and contaminants is a crucial and challenging direction for future research.}
+
+\end{reply}
+
+\begin{point}
+The core innovation of the paper lies in addressing the problem of
+gradient explosion; however, this aspect lacks theoretical validation.
+Further analysis is needed to establish the theoretical conditions
+under which gradient clipping and dynamic scaling are effective. For
+example, when the singular values of the particle deformation gradient
+fall within certain ranges, whether Lipschitz continuity of gradient
+propagation can be guaranteed and divergence during optimization can be
+avoided should be clarified.
+\end{point}
+
+\begin{reply}
+\rp{We are grateful for the reviewer’s insistence on further theoretical validation for the gradient stability mechanisms. We acknowledge that resolving gradient explosion is essential for enabling efficient first-order gradient descent.}
+
+\rp{As established in our response to Comment 1, the primary novelty lies in the empirical feasibility and engineering application (DDBot) for granular manipulation, rather than in developing new numerical mathematics theory. We provide extensive empirical validation in Section V and Appendix C (Figure 11) showing that clipping and dynamic scaling successfully confine gradient scales and prevent NaNs/Infinities, thereby avoiding divergence in practice. Furthermore, Section VI shows that line search effectively counters fluctuating gradients caused by the rugged loss landscape.}
+
+\rp{Proving theoretical guarantees like Lipschitz continuity for the complex MLS-MPM system is extremely complex. Such rigorous theoretical analysis, when combined with complex models—such as elastoplastic constitutive models (SVK/DP) and rigid-body collisions—is an active and highly challenging area of research, particularly in computer graphics and computational mechanics. A single paper that formally proves properties like Lipschitz continuity and convergence rates for the entire coupled system (MLS-MPM + Elastoplasticity + Rigid Contact) is unlikely to exist due to the high complexity and non-smoothness introduced by the plasticity and contact models. Instead, theoretical guarantees are typically established for sub-components of the system, which is already very complex. Therefore, we would like to respectfully argue that this is not in line with the main contribution of this robotics-focused article. In addition, due to the existing length constraints and the paper's focus, we must respectfully reiterate that providing this extensive new theoretical analysis falls outside the scope of this particular submission.}
+\end{reply}
+
+\begin{point}
+Benchmarking in the domain of differentiable physics should be
+supplemented. Comparisons against DEM-based differentiable simulators
+and other MPM variants (e.g., APIC-MPM) should be conducted to
+quantitatively evaluate the advantages of the DDBot simulator in terms
+of simulation accuracy, computational efficiency, and gradient
+stability, rather than only comparing with traditional optimization or
+reinforcement learning methods.
+\end{point}
+
+\begin{reply}
+\rp{We appreciate the suggestion to compare our DDBot simulator against other differentiable physics simulators, such as DEM-based models or MPM variants.}
+
+\rp{However, we must emphasise that benchmarking different simulation algorithms is not the focus of this work. Our article investigates and benchmarks robotic planning and control methodologies (gradient-based skill optimisation, DRL, MPC), enabled by a differentiable simulator. We already provide a comprehensive benchmark showing that gradient-based skill optimisation significantly outperforms DRL and trajectory optimisation for this long-horizon task.}
+
+\rp{Furthermore, comparisons between Discrete Element Method (DEM) and Material Point Method (MPM), or between different MPM variants, have been conducted by others previously in the computational graphics and physics literature~\cite{hu2018moving, tran2020convected, jiang2020hybrid}. Replicating such an exhaustive simulation-centric benchmark would require significant resources and space, offering marginal novelty to the key robotic control contribution.}
+
+\rp{Given the constraints of the already exceeded page limit and the established focus on validating the manipulation framework, we must limit the benchmarking to comparison of manipulation planning methods. We appreciate the reviewer’s insightful comments, which we will carefully consider in our future work.}
+\end{reply}
+
+\begin{point}
+The abstract should more clearly highlight the core scientific
+problem being addressed.
+\end{point}
+\begin{reply}
+\rp{We fully agree that clarity in highlighting the core scientific problem is essential. We have already revised the abstract to enhance its clarity. The abstract now also highlights that "a key scientific problem addressed is the feasibility of applying first-order gradient-based optimisation to complex differentiable granular material simulation and overcoming associated numerical instability."}
+\end{reply}
+
+\begin{point}
+The deployment configurations of the algorithm should be explicitly
+described to ensure all experimental comparisons are conducted under
+consistent conditions. Moreover, while GPU acceleration is extensively
+discussed, the limitations of GPU parallelization in other methods
+should also be clarified.
+\end{point}
+\begin{reply}
+\rp{We thank the reviewer for pointing out the need for complete transparency regarding experimental conditions. Regarding deployment configurations, we have detailed the real-world platform setup in Section IV-A and specified the parameters and stepsizes for gradient descent, DRL, and CMA-MAE in Sections IV-B, IV-C, and Appendix D. We have also ensured the specific hardware configuration used for the benchmarking runs is explicitly stated to guarantee consistent comparisons (e.g., the GPU-accelerated parallel computing supporting the simulator). To emphasise comparison fairness, we added a sentence in section VIII to stress that all baseline experiments were run under exactly the same initial conditions and system parameters.}
+
+\rp{Regarding the request to clarify the limitations of GPU parallelisation in other methods, providing a detailed analysis of alternative simulation architectures is beyond the scope of this paper and would significantly increase the already exceeded page limit. We confirm that all comparison methods (DRL, trajectory optimisation, CMA-MAE) were run using the same hardware and the same GPU-accelerated DDBot simulator for a fair comparison of planning methodology.}
+\end{reply}
+
+%=========================================%
+% Begin a new reviewer section
+\clearpage
+\reviewersection
+%-----------------------------------------%
+\textbf{General assessment:} All my questions have been addressed. I suggest to accept this paper. 
+
+\begin{reply}
+The authors would like to express our deep gratitude towards the reviewer's time and constructive comments. 
+\end{reply}
+
+\reviewersection
+%-----------------------------------------%
+\textbf{General assessment:} Initial concerns have been clarified. The current version of the paper has been improved considerably in all aspects.
+
+\begin{reply}
+The authors would like to express our deep gratitude towards the reviewer's time and constructive comments. 
+\end{reply}
+
+\printbibliography
+\end{document}
