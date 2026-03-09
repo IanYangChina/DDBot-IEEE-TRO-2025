@@ -1,7 +1,9 @@
-import os
+import os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..'))
 import open3d as o3d
 import numpy as np
 import taichi as ti
+from paths import system_identification_target_dir
 script_path = os.path.dirname(os.path.realpath(__file__))
 script_path = os.path.join(script_path, '..')
 data_path = os.path.join(script_path, '..', 'data')
@@ -36,7 +38,7 @@ sim_particles = o3d.utility.Vector3dVector(x)
 sim_particles = o3d.geometry.PointCloud(sim_particles).paint_uniform_color([1.0, 0.0, 0.0])
 
 pcd_id = 1
-pcd_path = os.path.join(data_path, 'sys_id_target_pcds_sand', f'pcd_{pcd_id}_cropped_norm_z_aligned_res40.ply')
+pcd_path = os.path.join(system_identification_target_dir('_sand'), f'pcd_{pcd_id}_cropped_norm_z_aligned_res40.ply')
 pcd_in_cam_frame = o3d.io.read_point_cloud(pcd_path)
 pcd_in_cam_frame.translate([0.2, 0.2, 0.0])
 pcd_in_cam_frame.paint_uniform_color([0.0, 0.0, 1.0])

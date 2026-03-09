@@ -1,4 +1,5 @@
-import os
+import os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..'))
 import argparse
 import json
 import numpy as np
@@ -10,6 +11,14 @@ import imageio
 from doma.envs.planting_env_v1 import make_env
 from doma.engine.utils.misc import set_parameters
 from doma.engine.configs.macros import DTYPE_NP, SAND, COLOR
+from paths import (
+    data_config_path,
+    render_output_dir,
+    result_dir_from_legacy_log,
+    system_identification_target_dir,
+    task_target_dir,
+    trajectories_dir,
+)
 script_path = os.path.dirname(os.path.realpath(__file__))
 script_path = os.path.join(script_path, '..')
 LINEAR_VELOCITY = 0.2  # m/s
@@ -112,23 +121,21 @@ def main(args):
         'pcd_gen_res': 150
     }
 
-    with open(os.path.join(script_path, '..', f'log-sys_id{mat}',
+    with open(os.path.join(result_dir_from_legacy_log(f'log-sys_id{mat}'),
                            'd5e6-hm-gclip-ls-man-init-res40',
                            'best_params.json'), 'r') as f:
         best_params = json.load(f)['Parameters']
 
     if args['sys_id']:
-        trajectory = np.load(os.path.join(script_path, '..', 'data',
-                                          'moveit_trajectories',
-                                          f'sys_id_sim_{sys_id_motion}_pos-dt_{dt_sim}.npy'))
+        trajectory = np.load(os.path.join(trajectories_dir(), f'sys_id_sim_{sys_id_motion}_pos-dt_{dt_sim}.npy'))
         env_cfg['horizon'] = trajectory.shape[0]
-        target_pcd_path = os.path.join(script_path, '..', 'data', f'sys_id_target_pcds{mat}',
+        target_pcd_path = os.path.join(system_identification_target_dir(mat),
                                        f'pcd_{sys_id_motion}_cropped_norm_z_aligned.ply')
         loss_cfg['target_pcd_path'] = target_pcd_path
-        saving_folder = os.path.join(script_path, '..', 'render_test', 'sysid')
+        saving_folder = render_output_dir('sysid')
     else:
         assert task_id >= 0, 'Task ID should be provided'
-        target_pcd_path = os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
+        target_pcd_path = os.path.join(task_target_dir(mat),
                                        f'pcd_{task_id}_cropped_norm_z_aligned.ply')
         loss_cfg['target_pcd_path'] = target_pcd_path
         if args['sac']:
@@ -151,7 +158,7 @@ def main(args):
             from doma.envs.wrappers import SingleSkillEnv, FakeEnv
             ti_cfg = {
                 'arch': ti.cuda,
-                'device_memory_GB': arguments['cuda_GB'],
+                'device_memory_GB': args['cuda_GB'],
                 'fast_math': True,
                 'random_seed': 0
             }
@@ -176,7 +183,7 @@ def main(args):
             }
             gym_env = SingleSkillEnv(ti_env_cfg, gym_env_config, seed=0)
 
-            with open(os.path.join(script_path, '..', 'data', 'rl_agent_config.json'), 'rb') as f_ac:
+            with open(data_config_path('rl_agent_config.json'), 'rb') as f_ac:
                 rl_agent_config = json.load(f_ac)
             rl_agent_config['cuda_device_id'] = 0
             rl_agent_config['batch_size'] = 10
@@ -186,7 +193,7 @@ def main(args):
             rl_agent_config['use_demonstrations'] = True
             rl_agent_config['demonstrate_percentage'] = 0.25
             rl_agent_config['demonstration_action'] = [1.0, 0.2, 0.8, 0.0, -0.5]
-            target_pcd = o3d.io.read_point_cloud(os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
+            target_pcd = o3d.io.read_point_cloud(os.path.join(task_target_dir(mat),
                                                               f'pcd_{task_id}_cropped_norm_z_aligned.ply'))
             target_pcd_points = np.asarray(target_pcd.points) + np.asarray([0.2, 0.2, 0])
             z_min_idx = np.argmin(target_pcd_points[:, 2])
@@ -194,7 +201,7 @@ def main(args):
             rl_agent_config['demonstration_action'][0] = np.clip((x_demo - 0.2) / 0.12, -1.0, 1.0)
 
             seed = args['seed']
-            log_dir = os.path.join(script_path, '..', f'log-abs2-sac{mat}',
+            log_dir = os.path.join(result_dir_from_legacy_log(f'log-abs2-sac{mat}'),
                                    f'd5e6-task-{task_id}-her-demo',
                                    f'seed-{seed}')
             agent = PointnetSAC(rl_agent_config, gym_env, logging=None, path=log_dir, seed=seed)
@@ -213,7 +220,7 @@ def main(args):
             #                            0.01813329942524433]).astype(DTYPE_NP)
             trajectory = abstraction_two_skill(skill_params, dt_sim)
             env_cfg['horizon'] = trajectory.shape[0]
-            saving_folder = os.path.join(script_path, '..', 'render_test', f'abs2-sac{mat}')
+            saving_folder = render_output_dir(f'abs2-sac{mat}')
 
         elif args['skill']:
             # case = f'd5e6-task-{task_id}-ls-lr0.03'
@@ -228,7 +235,7 @@ def main(args):
                 x_demo = target_pcd_points[z_min_idx, 0] + 0.02
                 skill_params[0] = np.clip((x_demo - 0.2) / 0.12, -1.0, 1.0)
             elif args['cmamae']:
-                with open(os.path.join(script_path, '..', f'log-abs2-cmamae{mat}',
+                with open(os.path.join(result_dir_from_legacy_log(f'log-abs2-cmamae{mat}'),
                                        f'd5e6-task-{task_id}-em2-bs10', 'best_loss.json'), 'r') as f:
                     skill_params_json = json.load(f)['Parameters']
                     skill_params = np.array([
@@ -239,7 +246,7 @@ def main(args):
                         skill_params_json['skill_params_4'][0]
                     ])
             else:
-                with open(os.path.join(script_path, '..', f'log-abs2{mat}', case, 'best_loss.json'), 'r') as f:
+                with open(os.path.join(result_dir_from_legacy_log(f'log-abs2{mat}'), case, 'best_loss.json'), 'r') as f:
                     skill_params_json = json.load(f)['Parameters']
                     skill_params = np.array([
                         skill_params_json['skill_params_0'][0],
@@ -256,17 +263,17 @@ def main(args):
                   f'p5: {skill_params[4]}' + '}\"')
             trajectory = abstraction_two_skill(skill_params, dt_sim)
             env_cfg['horizon'] = trajectory.shape[0]
-            saving_folder = os.path.join(script_path, '..', 'render_test', f'abs2{mat}', case)
+            saving_folder = render_output_dir(f'abs2{mat}', case)
         else:
             seed = args['seed']
             case = f'd5e6-task-{task_id}-ls-demo-lr0.004'
-            with open(os.path.join(script_path, '..', f'log-abs0{mat}', case, f'seed-{seed}', 'best_loss.json'), 'r') as f:
+            with open(os.path.join(result_dir_from_legacy_log(f'log-abs0{mat}'), case, f'seed-{seed}', 'best_loss.json'), 'r') as f:
                 best_loss = json.load(f)
                 step = int(best_loss['Step']-1) if best_loss['Step'] > 0 else 0
-                trajectory = np.load(os.path.join(script_path, '..', f'log-abs0{mat}', case,
+                trajectory = np.load(os.path.join(result_dir_from_legacy_log(f'log-abs0{mat}'), case,
                                                   f'seed-{seed}', 'ckpts', f'trajectory_{step}.npy'))
             env_cfg['horizon'] = trajectory.shape[0]
-            saving_folder = os.path.join(script_path, '..', 'render_test', 'abs0', case, f'seed-{seed}')
+            saving_folder = render_output_dir('abs0', case, f'seed-{seed}')
 
     os.makedirs(saving_folder, exist_ok=True)
     if args['save_img']:

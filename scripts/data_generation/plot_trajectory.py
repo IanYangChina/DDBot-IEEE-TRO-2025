@@ -1,8 +1,10 @@
-import os
+import os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..'))
 import numpy as np
 import imageio.v3 as iio
 import matplotlib.pyplot as plt
 from PIL import Image
+from paths import render_output_dir
 
 script_path = os.path.dirname(os.path.realpath(__file__))
 script_path = os.path.join(script_path, '..')
@@ -21,7 +23,7 @@ plt.rcParams.update({'font.size': 14})
 
 
 def plot_trajectory(dirs, mat=''):
-    folder = os.path.join(script_path, '..', 'render_test', f'abs2{mat}')
+    folder = render_output_dir(f'abs2{mat}')
     fig, ax = plt.subplots(2*3, 12, figsize=(11*2+0.3, 4*3),
                            gridspec_kw={'width_ratios': [1, 1, 1, 1, 1, 1, 1, 1, 0.3, 1, 1, 1]})
     plt.subplots_adjust(wspace=0.02, hspace=0)

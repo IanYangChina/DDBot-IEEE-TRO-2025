@@ -1,10 +1,12 @@
-import os
+import os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..'))
 import numpy as np
 import open3d as o3d
 import matplotlib.pyplot as plt
 import taichi as ti
 from doma.engine.utils.misc import get_gpu_memory
 import argparse
+from paths import render_output_dir
 
 DTYPE_NP = np.float32
 DTYPE_TI = ti.f32
@@ -31,7 +33,7 @@ def run(args):
     script_path = os.path.dirname(os.path.realpath(__file__))
     script_path = os.path.join(script_path, '..')
     mat = '_sand'
-    folder = os.path.join(script_path, '..', 'render_test', f'abs2{mat}')
+    folder = render_output_dir(f'abs2{mat}')
     dirs = os.listdir(folder)
     # for data_ind in [0, 1, 2]:
     #     data_path = os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}')

@@ -1,10 +1,12 @@
-import os
+import os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..'))
 import open3d as o3d
 import matplotlib.pyplot as plt
 import logging
 import argparse
 import numpy as np
 import taichi as ti
+from paths import result_dir_from_legacy_log, system_identification_target_dir, trajectories_dir
 
 script_path = os.path.dirname(os.path.realpath(__file__))
 script_path = os.path.join(script_path, '..')
@@ -26,7 +28,7 @@ def main(args):
         d_str = args['ptcl_density']
         case = f'd{d_str}'
 
-        result_path = os.path.join(script_path, '..', 'log-loss-analysis', case)
+        result_path = os.path.join(result_dir_from_legacy_log('log-loss-analysis'), case)
         if not args['test']:
             os.makedirs(result_path, exist_ok=True)
 
@@ -41,8 +43,7 @@ def main(args):
 
         motion_id = 0
         dt_global = 0.01
-        trajectory = np.load(os.path.join(script_path, '..', 'data',
-                                          'moveit_trajectories', f'sys_id_sim_{motion_id}_pos-dt_{dt_global}.npy'))
+        trajectory = np.load(os.path.join(trajectories_dir(), f'sys_id_sim_{motion_id}_pos-dt_{dt_global}.npy'))
         cam_cfg = {
             'pos': (0.2, 0.8, 0.7),
             'lookat': (0.2, 0.2, 0.03),
@@ -70,7 +71,7 @@ def main(args):
 
         loss_cfg = {
             'use_height_map_loss': True,
-            'target_pcd_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
+            'target_pcd_path': os.path.join(system_identification_target_dir(),
                                             f'pcd_{motion_id}_cropped_norm_z_aligned.ply'),
             'target_pcd_offset': [0.2, 0.2, 0],
             'height_grid_res': 40,
@@ -138,10 +139,10 @@ def main(args):
 
                 ll = 0
                 for res in [10, 20, 30, 40, 50, 60]:
-                    target_pcd = o3d.io.read_point_cloud(os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
+                    target_pcd = o3d.io.read_point_cloud(os.path.join(system_identification_target_dir(),
                                                                       f'pcd_{motion_id}_cropped_norm_z_aligned_res{res}.ply'))
                     pcd = np.asarray(target_pcd.points, dtype=np.float32) + (0.2, 0.2, 0.0)
-                    target_pcd_heightmap = np.load(os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
+                    target_pcd_heightmap = np.load(os.path.join(system_identification_target_dir(),
                                                                 f'pcd_{motion_id}_cropped_norm_z_aligned_height_map-res{res}.npy'))
 
                     n_particles = int(particles.shape[0])

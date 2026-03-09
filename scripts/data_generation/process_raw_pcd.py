@@ -1,8 +1,10 @@
-import os
+import os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..'))
 import yaml
 import time
 import open3d as o3d
 import numpy as np
+from paths import data_calibration_path, render_output_dir, result_dir_from_legacy_log
 
 script_path = os.path.dirname(os.path.realpath(__file__))
 script_path = os.path.join(script_path, '..')
@@ -29,15 +31,15 @@ soil_box_frame_in_world = o3d.geometry.TriangleMesh.create_coordinate_frame(size
                                                                             origin=[0.03006989, 0.49788191, -0.11920619])
 
 # Load the camera extrinsics
-transform_world_to_cam = np.load(os.path.join(data_path, 'cam_extrinsics_fine_tuned.npy'))
+transform_world_to_cam = np.load(data_calibration_path('cam_extrinsics_fine_tuned.npy'))
 transform_cam_to_world = np.linalg.inv(transform_world_to_cam)
 
 task = 'task'
 mat = ''
 test = False
 pcd_folder_path = os.path.join(data_path, f'{task}_target_pcds{mat}')
-folder = os.path.join(script_path, '..', f'log-abs2{mat}')
-saving_path = os.path.join(script_path, '..', 'render_test', f'abs2{mat}')
+folder = result_dir_from_legacy_log(f'log-abs2{mat}')
+saving_path = render_output_dir(f'abs2{mat}')
 dirs = os.listdir(folder)
 # for pcd_id in [0, 1, 2]:
 for data_path in dirs:

@@ -1,10 +1,12 @@
-import os
+import os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..'))
 import json
 import numpy as np
 from copy import deepcopy as dcp
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 from tensorflow.python.summary.summary_iterator import summary_iterator
+from paths import result_dir_from_legacy_log, task_target_dir
 
 script_path = os.path.dirname(os.path.realpath(__file__))
 script_path = os.path.join(script_path, '..')
@@ -46,7 +48,7 @@ def find_best_parameters(hm=False, grad_norm=False, grad_dy_scale=False, grad_cl
         case += '-man-init'
 
     for res in resolutions:
-        case_folder = os.path.join(script_path, '..', f'log-sys_id{mat}', case + f'-res{res}')
+        case_folder = os.path.join(result_dir_from_legacy_log(f'log-sys_id{mat}'), case + f'-res{res}')
         best_loss = np.inf
         best_loss_info = {}
         for seed in range(5):
@@ -164,7 +166,7 @@ def plot_si_scatter(mat='_sand'):
         y_std = []
         case = cases[case_id]
         for res in [40]:
-            case_folder = os.path.join(script_path, '..', f'log-sys_id{mat}', f'd5e6-{case}-res{res}')
+            case_folder = os.path.join(result_dir_from_legacy_log(f'log-sys_id{mat}'), f'd5e6-{case}-res{res}')
             best_loss = []
             earliest_epoch = []
             for seed in range(5):
@@ -221,7 +223,7 @@ def plot_si_loss_curve(mat=''):
             column = int(case_id / 2)
 
         for res in [40]:
-            case_folder = os.path.join(script_path, '..', f'log-sys_id{mat}', f'd5e6-{case}-res{res}')
+            case_folder = os.path.join(result_dir_from_legacy_log(f'log-sys_id{mat}'), f'd5e6-{case}-res{res}')
             losses = []
             for seed in range(5):
                 folder = os.path.join(case_folder, f'seed-{seed}')
@@ -288,7 +290,6 @@ def plot_si_loss_curve(mat=''):
 
 
 def plot_task_pcds():
-    data_path = os.path.join(script_path, '..', 'data')
     plt.rcParams.update({'font.size': 11})
     fig, ax = plt.subplots(4, 3, figsize=(2*3, 2*4))
     plt.subplots_adjust(wspace=0, hspace=-0.6)
@@ -302,9 +303,9 @@ def plot_task_pcds():
             pcd_row = 2
             real_row = 3
         for task_id in range(3):
-            pcd_img_path = os.path.join(data_path, f'task_target_pcds{path_subfix}',
+            pcd_img_path = os.path.join(task_target_dir(path_subfix),
                                         f't{task_id}-{mat}.png')
-            real_img_path = os.path.join(data_path, f'task_target_pcds{path_subfix}',
+            real_img_path = os.path.join(task_target_dir(path_subfix),
                                          f't{task_id}-{mat}.JPG')
             pcd_img = plt.imread(pcd_img_path)
             real_img = plt.imread(real_img_path)
@@ -364,9 +365,10 @@ def find_best_skill_parameters(mat='', sac=False, abs0=False, cmamae=False, rg=F
         log_folder = f'log-abs2-rg{mat}'
     else:
         log_folder = f'log-abs2{mat}'
-    dirs = os.listdir(os.path.join(script_path, '..', log_folder))
+    result_path = result_dir_from_legacy_log(log_folder)
+    dirs = os.listdir(result_path)
     for p_dir in dirs:
-        p_folder = os.path.join(script_path, '..', log_folder, p_dir)
+        p_folder = os.path.join(result_path, p_dir)
         if os.path.isfile(os.path.join(p_folder, 'best_loss.json')):
             continue
         best_loss = np.inf
@@ -538,10 +540,10 @@ def plot_so_loss_curve(mat='', baseline=False, rg=False, sompc=False):
         'HMD-LS-Demo',
     ]
     case_p_folders = [
-        os.path.join(script_path, '..', f'log-abs2{mat}'),
-        os.path.join(script_path, '..', f'log-abs2{mat}'),
-        os.path.join(script_path, '..', f'log-abs2{mat}'),
-        os.path.join(script_path, '..', f'log-abs2{mat}'),
+        result_dir_from_legacy_log(f'log-abs2{mat}'),
+        result_dir_from_legacy_log(f'log-abs2{mat}'),
+        result_dir_from_legacy_log(f'log-abs2{mat}'),
+        result_dir_from_legacy_log(f'log-abs2{mat}'),
     ]
     width_ratios = [0.6, 0.6, 0.6, 0.6, 0.05, 0.5]
     if rg:
@@ -558,10 +560,10 @@ def plot_so_loss_curve(mat='', baseline=False, rg=False, sompc=False):
             'HMD-Unrounded'
         ]
         case_p_folders = [
-            os.path.join(script_path, '..', f'log-abs2{mat}'),
-            os.path.join(script_path, '..', f'log-abs2-rg{mat}'),
-            os.path.join(script_path, '..', f'log-abs2{mat}'),
-            os.path.join(script_path, '..', f'log-abs2-rg{mat}')
+            result_dir_from_legacy_log(f'log-abs2{mat}'),
+            result_dir_from_legacy_log(f'log-abs2-rg{mat}'),
+            result_dir_from_legacy_log(f'log-abs2{mat}'),
+            result_dir_from_legacy_log(f'log-abs2-rg{mat}')
         ]
     if baseline:
         cases = [
@@ -577,10 +579,10 @@ def plot_so_loss_curve(mat='', baseline=False, rg=False, sompc=False):
             'SAC-EMD-HER'
         ]
         case_p_folders = [
-            os.path.join(script_path, '..', f'log-abs2-rg{mat}'),
-            os.path.join(script_path, '..', f'log-abs0'),
-            os.path.join(script_path, '..', f'log-abs2-cmamae'),
-            os.path.join(script_path, '..', f'log-abs2-sac')
+            result_dir_from_legacy_log(f'log-abs2-rg{mat}'),
+            result_dir_from_legacy_log('log-abs0'),
+            result_dir_from_legacy_log('log-abs2-cmamae'),
+            result_dir_from_legacy_log('log-abs2-sac')
         ]
     if sompc:
         cases = [
@@ -596,10 +598,10 @@ def plot_so_loss_curve(mat='', baseline=False, rg=False, sompc=False):
             'CMAMAE-EMD-Demo'
         ]
         case_p_folders = [
-            os.path.join(script_path, '..', f'log-abs2{mat}'),
-            os.path.join(script_path, '..', f'log-abs2{mat}'),
-            os.path.join(script_path, '..', f'log-abs2-cmamae{mat}'),
-            os.path.join(script_path, '..', f'log-abs2-cmamae{mat}')
+            result_dir_from_legacy_log(f'log-abs2{mat}'),
+            result_dir_from_legacy_log(f'log-abs2{mat}'),
+            result_dir_from_legacy_log(f'log-abs2-cmamae{mat}'),
+            result_dir_from_legacy_log(f'log-abs2-cmamae{mat}')
         ]
 
     fig, ax = plt.subplots(3, len(cases)+2, figsize=(len(cases)*2+2.05, 3*1.5),
@@ -835,7 +837,7 @@ def plot_rl_loss_curve():
             'test_height_map_loss': [],
         }
         for seed in range(5):
-            d_folder = os.path.join(script_path, '..', 'log-abs2-sac',
+            d_folder = os.path.join(result_dir_from_legacy_log('log-abs2-sac'),
                                     f'd5e6-task-{task_id}-her-demo', f'seed-{seed}')
             with open(os.path.join(d_folder, 'raw_data.json')) as f:
                 data = json.load(f)

@@ -1,4 +1,5 @@
-import os
+import os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..'))
 import json
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,6 +8,7 @@ from matplotlib.lines import Line2D
 from matplotlib.ticker import LinearLocator
 from tensorflow.python.summary.summary_iterator import summary_iterator
 from drl_implementation.agent.utils import plot as plot
+from paths import result_dir_from_legacy_log
 script_path = os.path.dirname(os.path.realpath(__file__))
 script_path = os.path.join(script_path, '..')
 fig_path = os.path.join(script_path, '..', 'figs')
@@ -27,9 +29,11 @@ def read_and_save_data(substep=False):
     for res in ['10', '20', '30', '40', '50', '60']:
         for grad_op in ['gnone', 'gclip', 'gdys', 'gnorm']:
             if substep:
-                case_folder = os.path.join(script_path, '..', 'log-substep-grad-analysis', f'd{d}-{grad_op}-res{res}')
+                case_folder = os.path.join(result_dir_from_legacy_log('log-substep-grad-analysis'),
+                                           f'd{d}-{grad_op}-res{res}')
             else:
-                case_folder = os.path.join(script_path, '..', 'log-grad-analysis', f'd{d}-{grad_op}-res{res}')
+                case_folder = os.path.join(result_dir_from_legacy_log('log-grad-analysis'),
+                                           f'd{d}-{grad_op}-res{res}')
             for seed in range(5):
                 seed_folder = os.path.join(case_folder, f'seed-{seed}')
                 data_dict = {
@@ -217,7 +221,8 @@ def plot_grads():
         for i in range(len(vars_to_plot)):
             for j in range(len(grad_ops)):
                 grad_op = grad_ops[j]
-                case_folder = os.path.join(script_path, '..', 'log-grad-analysis', f'd{d}-{grad_op}-res{res}')
+                case_folder = os.path.join(result_dir_from_legacy_log('log-grad-analysis'),
+                                           f'd{d}-{grad_op}-res{res}')
                 grad_data = []
                 grad_data_ = []
                 for seed in range(5):
@@ -285,7 +290,8 @@ def plot_grads():
         for i in range(len(vars_to_plot)):
             for j in range(len(grad_ops)):
                 grad_op = grad_ops[j]
-                case_folder = os.path.join(script_path, '..', 'log-substep-grad-analysis', f'd{d}-{grad_op}-res{res}')
+                case_folder = os.path.join(result_dir_from_legacy_log('log-substep-grad-analysis'),
+                                           f'd{d}-{grad_op}-res{res}')
                 grad_data = []
                 grad_data_ = []
                 for seed in range(5):

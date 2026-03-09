@@ -1,4 +1,5 @@
-import os
+import os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
 import open3d as o3d
 import json
 import logging
@@ -10,6 +11,7 @@ script_path = os.path.dirname(os.path.realpath(__file__))
 
 from doma.engine.configs.macros import DTYPE_NP, SAND
 from doma.envs.gym_wrappers import SingleSkillEnv, FakeEnv
+from paths import data_config_path, result_dir_from_legacy_log, task_target_dir
 cam_cfg = {
     'pos': (0.2, 0.57, 0.6),
     'lookat': (0.2, 0.2, 0.03),
@@ -99,7 +101,7 @@ def main(arguments):
     else:
         mat = ''
 
-    log_dir = os.path.join(script_path, '..', f'log-abs2-sac{mat}', f'd{ptcl_d}-task-{task_id}{suffix}', f'seed-{seed}')
+    log_dir = os.path.join(result_dir_from_legacy_log(f'log-abs2-sac{mat}'), f'd{ptcl_d}-task-{task_id}{suffix}', f'seed-{seed}')
     os.makedirs(log_dir, exist_ok=True)
     log_file_name = os.path.join(log_dir, 'optimisation.log')
     if os.path.isfile(log_file_name):
@@ -132,7 +134,7 @@ def main(arguments):
     }
     loss_cfg = {
         'use_height_map_loss': arguments['use_height_map_loss'],
-        'target_pcd_path': os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
+        'target_pcd_path': os.path.join(task_target_dir(mat),
                                         f'pcd_{task_id}_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
         'height_grid_res': 40,
@@ -150,13 +152,13 @@ def main(arguments):
         'cam_cfg': cam_cfg
     }
 
-    with open(os.path.join(script_path, '..', f'log-sys_id{mat}',
+    with open(os.path.join(result_dir_from_legacy_log(f'log-sys_id{mat}'),
                            f'd{ptcl_d}-hm-gclip-ls-man-init-res40', 'best_params.json')) as f:
         best_params = json.load(f)["Parameters"]
     env_cfg['best_params'] = best_params
 
     gym_env_config = {
-        'pcd_file_path': os.path.join(script_path, '..', 'data', 'task_target_pcds',
+        'pcd_file_path': os.path.join(task_target_dir(mat),
                                       f'pcd_{task_id}_cropped_norm_z_aligned.ply'),
         'render_skill': False,
         'horizon': 1,
@@ -199,7 +201,7 @@ def main(arguments):
 
                 # gym_env.render(mode='human')
     else:
-        with open(os.path.join(script_path, '..', 'data', 'rl_agent_config.json'), 'rb') as f_ac:
+        with open(data_config_path('rl_agent_config.json'), 'rb') as f_ac:
             rl_agent_config = json.load(f_ac)
         rl_agent_config['cuda_device_id'] = arguments['torch_cuda_device_id']
         rl_agent_config['batch_size'] = 10
@@ -209,7 +211,7 @@ def main(arguments):
         rl_agent_config['use_demonstrations'] = arguments['use_demo']
         rl_agent_config['demonstrate_percentage'] = 0.25
         rl_agent_config['demonstration_action'] = [1.0, 0.2, 0.8, 0.0, -0.5]
-        target_pcd = o3d.io.read_point_cloud(os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
+        target_pcd = o3d.io.read_point_cloud(os.path.join(task_target_dir(mat),
                                                           f'pcd_{task_id}_cropped_norm_z_aligned.ply'))
         target_pcd_points = np.asarray(target_pcd.points) + np.asarray([0.2, 0.2, 0])
         z_min_idx = np.argmin(target_pcd_points[:, 2])

@@ -1,12 +1,14 @@
-import os
+import os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..'))
 import numpy as np
 import matplotlib.pyplot as plt
 import open3d as o3d
+from paths import render_output_dir, task_target_dir
 
 mat = ''
 script_path = os.path.dirname(os.path.realpath(__file__))
-data_path = os.path.join(script_path, '..', '..', 'data', 'task_target_pcds'+mat)
-result_path = os.path.join(script_path, '..', '..', 'render_test', 'abs2'+mat)
+data_path = task_target_dir(mat)
+result_path = render_output_dir('abs2' + mat)
 pcd_offset = (0.2, 0.2, 0.0)
 height_map_size = 0.24  # meter
 height_map_res = 40

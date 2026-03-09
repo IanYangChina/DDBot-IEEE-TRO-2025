@@ -1,4 +1,5 @@
-import os
+import os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..'))
 import json
 import logging
 import argparse
@@ -7,6 +8,7 @@ import taichi as ti
 import matplotlib.pyplot as plt
 import open3d as o3d
 from torch.utils.tensorboard import SummaryWriter
+from paths import result_dir_from_legacy_log, system_identification_target_dir
 script_path = os.path.dirname(os.path.realpath(__file__))
 script_path = os.path.join(script_path, '..')
 
@@ -53,9 +55,9 @@ def main(args):
         case += '-gnone'
 
     case += f'-res{args["res"]}'
-    result_path = os.path.join(script_path, '..', 'log-grad-analysis', case)
+    result_path = os.path.join(result_dir_from_legacy_log('log-grad-analysis'), case)
     if args['substep']:
-        result_path = os.path.join(script_path, '..', 'log-substep-grad-analysis', case)
+        result_path = os.path.join(result_dir_from_legacy_log('log-substep-grad-analysis'), case)
 
     if args['backend'] == 'opengl':
         backend = ti.opengl
@@ -95,7 +97,7 @@ def main(args):
 
     loss_cfg = {
         'use_height_map_loss': args['use_height_map_loss'],
-        'target_pcd_path': os.path.join(script_path, '..', 'data', 'sys_id_target_pcds',
+        'target_pcd_path': os.path.join(system_identification_target_dir(),
                                         f'pcd_{motion_id}_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
         'height_grid_res': args['res'],

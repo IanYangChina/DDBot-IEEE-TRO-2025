@@ -1,4 +1,5 @@
-import os
+import os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
 import yaml
 import json
 import argparse
@@ -14,6 +15,7 @@ from doma.optimiser.rmsprop import RMSprop
 from doma.envs.planting_env_v1 import make_env
 from doma.engine.configs.macros import DTYPE_NP, DTYPE_TI, SAND
 from doma.engine.utils.misc import set_parameters, reset_logging
+from paths import result_dir_from_legacy_log, system_identification_target_dir, task_target_dir
 
 cam_cfg = {
     'pos': (0.2, 1.2, 0.9),
@@ -51,7 +53,7 @@ def main(args):
         backend = ti.cpu
 
     task_id = args['task_id']
-    ptcl_d = arguments['ptcl_density']
+    ptcl_d = args['ptcl_density']
     subfix = ''
     if args['use_height_map_loss']:
         subfix += '-hm'
@@ -70,11 +72,11 @@ def main(args):
 
     case = f'd{ptcl_d}-task-{task_id}{subfix}'
     if args['rectified_grad']:
-        result_path = os.path.join(script_path, '..', f'log-abs2-rg{mat}')
+        result_path = result_dir_from_legacy_log(f'log-abs2-rg{mat}')
     else:
-        result_path = os.path.join(script_path, '..', f'log-abs2{mat}')
+        result_path = result_dir_from_legacy_log(f'log-abs2{mat}')
 
-    with open(os.path.join(script_path, '..', f'log-sys_id{mat}',
+    with open(os.path.join(result_dir_from_legacy_log(f'log-sys_id{mat}'),
                            f'd{ptcl_d}-hm-gclip-ls-man-init-res40', 'best_params.json')) as f:
         best_params = json.load(f)["Parameters"]
 
@@ -93,7 +95,7 @@ def main(args):
 
     loss_cfg = {
         'use_height_map_loss': args['use_height_map_loss'],
-        'target_pcd_path': os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
+        'target_pcd_path': os.path.join(task_target_dir(mat),
                                         f'pcd_{task_id}_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
         'height_grid_res': 40,
@@ -117,7 +119,7 @@ def main(args):
 
         if args['demon']:
             skill_params_np = np.asarray([1.0, 0.2, 0.8, 0.0, -0.5]).astype(DTYPE_NP)
-            target_pcd = o3d.io.read_point_cloud(os.path.join(script_path, '..', 'data', f'task_target_pcds{mat}',
+            target_pcd = o3d.io.read_point_cloud(os.path.join(task_target_dir(mat),
                                                               f'pcd_{task_id}_cropped_norm_z_aligned.ply'))
             target_pcd_points = np.asarray(target_pcd.points) + np.asarray([0.2, 0.2, 0])
             z_min_idx = np.argmin(target_pcd_points[:, 2])

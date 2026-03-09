@@ -1,4 +1,5 @@
-import os
+import os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
 import json
 # import logging
 import argparse
@@ -16,6 +17,7 @@ from doma.optimiser.rmsprop import RMSprop
 from doma.envs.planting_env import make_env
 from doma.engine.utils.misc import set_parameters  #, reset_logging
 from doma.engine.configs.macros import DTYPE_NP, DTYPE_TI, SAND
+from paths import result_dir_from_legacy_log, system_identification_target_dir, trajectories_dir
 cam_cfg = {
     'pos': (0.2, 0.8, 0.7),
     'lookat': (0.2, 0.2, 0.03),
@@ -59,7 +61,7 @@ def main(args):
     else:
         mat = ''
 
-    result_path = os.path.join(script_path, '..', f'log-sys_id{mat}', case)
+    result_path = os.path.join(result_dir_from_legacy_log(f'log-sys_id{mat}'), case)
 
     if args['backend'] == 'opengl':
         backend = ti.opengl
@@ -71,10 +73,8 @@ def main(args):
         backend = ti.cpu
 
     dt_global = 0.01
-    trajectory = np.load(os.path.join(script_path, '..', 'data',
-                                      'moveit_trajectories', f'sys_id_sim_0_pos-dt_{dt_global}.npy'))
-    trajectory_valid = np.load(os.path.join(script_path, '..', 'data',
-                                            'moveit_trajectories', f'sys_id_sim_1_pos-dt_{dt_global}.npy'))
+    trajectory = np.load(os.path.join(trajectories_dir(), f'sys_id_sim_0_pos-dt_{dt_global}.npy'))
+    trajectory_valid = np.load(os.path.join(trajectories_dir(), f'sys_id_sim_1_pos-dt_{dt_global}.npy'))
     env_cfg = {
         'p_density': float(args['ptcl_density']),
         'material_id': SAND,
@@ -97,14 +97,14 @@ def main(args):
 
     loss_cfg = {
         'use_height_map_loss': args['use_height_map_loss'],
-        'target_pcd_path': os.path.join(script_path, '..', 'data', f'sys_id_target_pcds{mat}',
-                                        f'pcd_0_cropped_norm_z_aligned.ply'),
+        'target_pcd_path': os.path.join(system_identification_target_dir(mat),
+                                        'pcd_0_cropped_norm_z_aligned.ply'),
         'target_pcd_offset': [0.2, 0.2, 0],
         'height_grid_res': args["res"],
     }
     loss_cfg_valid = dcp(loss_cfg)
-    loss_cfg_valid['target_pcd_path'] = os.path.join(script_path, '..', 'data', f'sys_id_target_pcds{mat}',
-                                                        f'pcd_1_cropped_norm_z_aligned.ply')
+    loss_cfg_valid['target_pcd_path'] = os.path.join(system_identification_target_dir(mat),
+                                                        'pcd_1_cropped_norm_z_aligned.ply')
 
     E_range = (5e4, 2e5)
     rho_range = (1200, 2200)

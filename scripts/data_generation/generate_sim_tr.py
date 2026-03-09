@@ -1,10 +1,12 @@
-import os
+import os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..'))
 import numpy as np
 import matplotlib.pyplot as plt
+from paths import trajectories_dir
 
 script_path = os.path.dirname(os.path.realpath(__file__))
 script_path = os.path.join(script_path, '..')
-data_path = os.path.join(script_path, '..', 'data', 'moveit_trajectories')
+data_path = trajectories_dir()
 
 n = 0
 for n in range(2):

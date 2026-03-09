@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "doma"
+version = "0.1.0"
+description = "Differentiable granular-material manipulation simulator and experiment code for DDBot."
+readme = "README.md"
+requires-python = ">=3.7,<3.11"
+authors = [
+  { name = "Xintong Yang" }
+]
+urls = { Homepage = "https://github.com/IanYangChina/DDBot", Repository = "https://github.com/IanYangChina/DDBot" }
+dependencies = [
+  "addict==2.4.0",
+  "configargparse==1.7",
+  "gym==0.20.0",
+  "imageio==2.37.0",
+  "matplotlib==3.9.4",
+  "mesh-to-sdf==0.0.15",
+  "numpy==1.24.0",
+  "open3d==0.16.0",
+  "pandas==2.2.3",
+  "plotly==6.0.1",
+  "pyyaml==6.0.2",
+  "pyrender==0.1.45",
+  "pyvista==0.44.2",
+  "ribs>=0.7.0",
+  "scikit-image==0.24.0",
+  "scikit-learn==1.6.1",
+  "scipy==1.13.1",
+  "taichi==1.6.0",
+  "tensorboard==2.19.0",
+  "torch",
+  "tqdm==4.67.1",
+  "trimesh==4.6.5",
+  "vtk==9.3.1",
+  "yacs==0.1.8"
+]
+
+[project.optional-dependencies]
+dev = [
+  "black>=24.0",
+  "isort>=5.13",
+  "pytest>=8.0"
+]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-dir]
+"" = "simulator"
+
+[tool.setuptools.packages.find]
+where = ["simulator"]
+include = ["doma*"]
+
+[tool.setuptools.package-data]
+doma = [
+  "assets/meshes/processed/*.obj",
+  "assets/meshes/processed/*.sdf",
+  "assets/meshes/raw/*.obj",
+  "assets/meshes/voxelized/*.vox",
+  "engine/configs/manipulator_cfgs/*.yaml",
+]

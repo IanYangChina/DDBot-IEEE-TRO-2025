@@ -1,2 +1,32 @@
-/.idea
+/.idea/
+.vscode/
+.github/agents/
+
+# Temporary planning and coordination artefacts
+/paper_mapping/
+/paper_notes/
+/paper_summary/
+/plan/
+
+# Python caches and local build artefacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Notebook and editor state
+.ipynb_checkpoints/
+*.swp
+*.swo
+*~
+.DS_Store
 imgui.ini
