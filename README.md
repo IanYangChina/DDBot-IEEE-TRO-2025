@@ -1,185 +1,154 @@
 # DDBot
 
-Differentiable Physics-based Digging Robot for unknown granular materials.
+**Differentiable Physics-based Digging Robot for Unknown Granular Materials**
 
-This repository contains the simulator, experiment scripts, datasets, figures, and result artefacts used for the DDBot project on high-precision soil and sand manipulation. The codebase supports differentiable system identification, skill-parameter optimization, trajectory-level optimization, and baseline methods for the experiments reported in the paper.
+[![Paper](https://img.shields.io/badge/IEEE-Paper-blue)](https://ieeexplore.ieee.org/document/11270989)
+[![Video](https://img.shields.io/badge/YouTube-Video-red)](https://www.youtube.com/watch?v=eoNx5V688H0)
 
-The repository is currently being reorganized into clearer public-release directories. Public result families are being grouped under `results/`, while old `log-*` paths may remain temporarily as compatibility links during the transition.
+> Xintong Yang, Minglun Wei, Yu-Kun Lai, Ze Ji  
+> *IEEE Robotics and Automation Letters*, 2025
 
-## What is in this repository
+---
 
-- **`simulator/`**: the current Python package source for `doma`, the differentiable granular manipulation simulator.
-- **`scripts/`**: experiment runners, plotting scripts, analysis utilities, and manual validation scripts.
-- **`data/`**: target point clouds, calibration files, trajectories, and experiment configuration files.
-- **`figs/`**: the canonical figure directory for paper and project figures.
-- **`results/`**: clearer public result layout for system identification, optimization, baselines, and analysis artefacts.
-- **`log-*`**: legacy compatibility paths during the transition to the clearer `results/` layout.
-- **`archive/render_outputs/`**: archived generated render outputs.
+<!-- System diagram placeholder — replace the line below with your diagram image -->
+![System Diagram](docs/system_diagram.png)
 
-## Naming conventions used in the results
+---
 
-The existing result directories use short experiment names. For clarity:
+DDBot is a differentiable physics-based framework for high-precision manipulation of unknown granular materials (soil and sand). It combines a differentiable granular simulator (DOMA) with gradient-based system identification and skill/trajectory optimisation to enable a robot to precisely dig and place granular material without prior knowledge of its physical properties.
 
-- **`abs0`** = trajectory-level optimization
-- **`abs2`** = skill-parameter optimization
-- **`log-abs2`** = soil results by default
-- **`*_sand`** = sand variants of the corresponding experiment family
-- **`log-sys_id*`** = system-identification experiments
-- **`log-grad-analysis*` / `log-loss-analysis*`** = gradient and loss-analysis artefacts
+This repository contains the simulator, experiment scripts, datasets, figures, and result artefacts for the experiments reported in the paper.
 
-These names will be made clearer during the repository restructure, but the current scripts and results still use them.
+## Repository layout
 
-## Status
-
-This repository is currently being cleaned for open-source release. The main code and result artefacts are public, but some cleanup is still in progress:
-
-- large binary assets are being prepared for Git LFS
-- result directories are being renamed for clarity
-- root-level packaging is being added
-- temporary planning/reference material will be removed before the final public release shape
+```
+.
+├── simulator/          # doma Python package — differentiable granular simulator
+│   └── doma/
+├── scripts/            # experiment runners, plotting, analysis utilities
+├── data/
+│   ├── calibration/        # camera extrinsics
+│   ├── configs/            # CMA-MAE and RL agent config files, skill definitions
+│   ├── system-identification-targets/   # target point clouds for sys-id (soil & sand)
+│   ├── task-targets/       # target point clouds for manipulation tasks (soil & sand)
+│   └── trajectories/       # MoveIt trajectory files
+├── results/            # all experiment outputs
+│   ├── system-identification/
+│   ├── skill-parameter-optimization/
+│   ├── skill-parameter-optimization-rectified-gradient/
+│   ├── trajectory-optimization/
+│   ├── baselines/          # cma-mae, sac
+│   └── analysis/           # gradient, substep-gradient, loss-landscape
+├── figs/               # canonical figures (paper and supplementary)
+├── archive/            # render outputs and legacy artefacts
+├── paths.py            # centralised path helpers for all scripts
+├── pyproject.toml
+├── requirements.txt
+└── environment.yml
+```
 
 ## Quickstart
 
 ### 1. Install Git LFS
 
-This repository contains large public assets. Install Git LFS before cloning or before pulling large files:
+This repository tracks large binary assets (point clouds, model weights, videos) with Git LFS. Install it before cloning:
 
 ```bash
 git lfs install
+git clone https://github.com/IanYangChina/DDBot
 ```
 
-### 2. Create the environment
-
-The current repository validation uses the existing `DPS` Conda environment with Python 3.7:
+### 2. Create the Conda environment
 
 ```bash
 conda env create -f environment.yml
 conda activate DPS
 ```
 
-### 3. Install the package from the repository root
+### 3. Install the package
 
 ```bash
 pip install -e .
 ```
 
-### 4. Install the companion DRL repository for RL workflows
+### 4. (RL baselines only) Install DRL_Implementation
 
-Some RL and plotting workflows depend on the companion repository:
+The SAC/RL workflows depend on a companion repository:
 
-- `https://github.com/IanYangChina/DRL_Implementation`
+```bash
+git clone https://github.com/IanYangChina/DRL_Implementation
+# Add to PYTHONPATH or install into the same environment
+export PYTHONPATH="$PYTHONPATH:/path/to/DRL_Implementation"
+```
 
-Until that dependency is integrated more cleanly, clone it separately and make it importable in your environment, for example by placing it alongside this repository and exporting `PYTHONPATH`, or by installing it into the same environment if supported by that repository.
-
-## Core workflows
+## Reproducing experiments
 
 ### System identification
-
-Main script:
 
 ```bash
 python scripts/run_si.py
 ```
 
-Typical reported settings use:
+Key settings used in the paper: particle density `5e6`, height-map loss, gradient clipping, line search, manual initialisation, resolution `40`.
 
-- particle density `5e6`
-- height-map loss
-- gradient clipping
-- line search
-- manual initialization
-- resolution `40`
+Outputs → `results/system-identification/{soil,sand}/`
 
-Outputs are organized under:
-
-- `results/system-identification/soil/`
-- `results/system-identification/sand/`
-
-### Skill-parameter optimization
-
-Main script:
+### Skill-parameter optimisation
 
 ```bash
 python scripts/run_so_abs2.py
 ```
 
-Outputs are organized under:
+Outputs → `results/skill-parameter-optimization/{soil,sand}/`  
+Rectified-gradient variant → `results/skill-parameter-optimization-rectified-gradient/{soil,sand}/`
 
-- `results/skill-parameter-optimization/soil/`
-- `results/skill-parameter-optimization/sand/`
-- `results/skill-parameter-optimization-rectified-gradient/soil/`
-- `results/skill-parameter-optimization-rectified-gradient/sand/`
-
-### Trajectory-level optimization
-
-Main script:
+### Trajectory-level optimisation
 
 ```bash
 python scripts/run_so_abs0.py
 ```
 
-Outputs are organized under:
-
-- `results/trajectory-optimization/soil/`
+Outputs → `results/trajectory-optimization/soil/`
 
 ### Baselines
 
-#### CMA-MAE
-
 ```bash
-python scripts/run_cmamae.py
+# CMA-MAE
+python scripts/run_cmamae.py        # → results/baselines/cma-mae/{soil,sand}/
+
+# SAC (requires DRL_Implementation)
+python scripts/run_rl_abs2.py       # → results/baselines/sac/soil/
 ```
-
-Outputs are organized under:
-
-- `results/baselines/cma-mae/soil/`
-- `results/baselines/cma-mae/sand/`
-
-#### SAC / RL
-
-```bash
-python scripts/run_rl_abs2.py
-```
-
-Outputs are organized under:
-
-- `results/baselines/sac/soil/`
-
-This workflow requires the external `DRL_Implementation` repository described above.
 
 ### Gradient and loss analysis
 
-Scripts are under:
+```bash
+# Gradient assessment scripts
+python scripts/gradient_loss_assessment/...
 
-- `scripts/gradient_loss_assessment/`
-- `scripts/data_generation/read_tb_event.py`
+# Read TensorBoard events / aggregate logs
+python scripts/data_generation/read_tb_event.py
+```
 
-Analysis outputs are organized under:
+Outputs → `results/analysis/{gradient,substep-gradient,loss-landscape}/`
 
-- `results/analysis/gradient/`
-- `results/analysis/substep-gradient/`
-- `results/analysis/loss-landscape/`
+## Figures
 
-## Figures and reproducibility
-
-- **`figs/` is the canonical figure directory.**
-- Quantitative figures can mostly be traced back to existing logs plus post-processing scripts.
-- Some paper-ready montage assets appear to have manual assembly steps and are being documented as part of the release cleanup.
-
-## Packaging notes
-
-The repository currently exposes the `doma` Python package from `simulator/doma/`. A root `pyproject.toml` is provided so the package can be installed from the repository root during the cleanup process, and the current validation target is the `DPS` environment. The package layout will be normalized further in the next restructure phase.
-
-## Known gaps
-
-The current repository still contains a few issues that affect full from-scratch reproduction:
-
-- some scripts import `doma.envs.planting_env`, while the repository currently provides `planting_env_v1.py`
-- `simulator/doma/envs/__init__.py` still references stale modules
-- RL workflows require the external `DRL_Implementation` repository
-
-These are being addressed during the public-release cleanup.
+`figs/` is the canonical figure directory. Quantitative figures can be traced back to the logs in `results/` plus the post-processing scripts in `scripts/gradient_loss_assessment/` and `scripts/data_generation/`.
 
 ## Citation
 
-If you use this repository, please cite the DDBot paper. A machine-readable citation file is provided in `CITATION.cff`.
+If you use this work, please cite:
+
+```bibtex
+@article{yang2025ddbot,
+  title   = {DDBot: Differentiable Physics-based Digging Robot for Unknown Granular Materials},
+  author  = {Yang, Xintong and Wei, Minglun and Lai, Yu-Kun and Ji, Ze},
+  journal = {IEEE Robotics and Automation Letters},
+  year    = {2025},
+  doi     = {10.1109/LRA.2025.XXXXXXX},
+  url     = {https://ieeexplore.ieee.org/document/11270989}
+}
+```
+
+A machine-readable citation is also provided in [`CITATION.cff`](CITATION.cff).
