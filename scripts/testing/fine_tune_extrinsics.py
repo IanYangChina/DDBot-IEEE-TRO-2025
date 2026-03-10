@@ -1,9 +1,11 @@
-import os
+import os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..'))
 import yaml
 import open3d as o3d
 import numpy as np
 np.printoptions(suppress=True, precision=4)
 from copy import deepcopy as dcp
+from paths import system_identification_target_dir, data_calibration_path
 
 # matrix = [
 #     [-9.98126040e-01, 1.01789242e-03, -6.11830817e-02, 4.19549581e-02],
@@ -36,10 +38,8 @@ def construct_homogeneous_transform_matrix(translation, orientation):
 
 
 script_path = os.path.dirname(os.path.realpath(__file__))
-script_path = os.path.join(script_path, '..')
-data_path = os.path.join(script_path, '..', 'data')
 # Load the camera extrinsics
-with open(os.path.join(data_path, 'zivid_cam_extrinsics.yml'), 'r') as f:
+with open(data_calibration_path('zivid_cam_extrinsics.yml'), 'r') as f:
     cam_extrinsics = yaml.load(f, Loader=yaml.FullLoader)
 transform_world_to_cam = cam_extrinsics['matrix']
 transform_cam_to_world = np.linalg.inv(transform_world_to_cam)
@@ -53,8 +53,8 @@ world_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin
 cam_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1, origin=[0, 0, 0])
 cam_frame.transform(transform_world_to_cam)
 
-# Load PCD
-pcd = o3d.io.read_point_cloud(os.path.join(data_path, 'target_pcds', 'pcd_0.ply'))
+# Load PCD (use system-identification target as reference point cloud)
+pcd = o3d.io.read_point_cloud(os.path.join(system_identification_target_dir(''), 'pcd_0.ply'))
 pcd_in_world_frame = pcd.transform(transform_world_to_cam)
 
 # Visualize
@@ -93,4 +93,4 @@ print(f"  - {new_transform_world_to_cam[0]}")
 print(f"  - {new_transform_world_to_cam[1]}")
 print(f"  - {new_transform_world_to_cam[2]}")
 print(f"  - {new_transform_world_to_cam[3]}")
-np.save(os.path.join(data_path, 'cam_extrinsics_fine_tuned.npy'), new_transform_world_to_cam)
+np.save(data_calibration_path('cam_extrinsics_fine_tuned.npy'), new_transform_world_to_cam)

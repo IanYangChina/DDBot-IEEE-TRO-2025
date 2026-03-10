@@ -4,9 +4,6 @@ import open3d as o3d
 import numpy as np
 import taichi as ti
 from paths import system_identification_target_dir
-script_path = os.path.dirname(os.path.realpath(__file__))
-script_path = os.path.join(script_path, '..')
-data_path = os.path.join(script_path, '..', 'data')
 
 ti.init(arch=ti.cuda, device_memory_GB=5, default_fp=ti.f32, fast_math=False)
 from doma.envs import PlantingEnv

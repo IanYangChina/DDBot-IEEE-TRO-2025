@@ -384,7 +384,7 @@ def show_heightmaps(param='ER'):
         y_linespacing = 1
         for i in range(len(res)):
             loss_type = 'emd'
-            hm = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
+            hm = np.load(os.path.join(result_dir_from_legacy_log('log-loss-analysis'), 'd5e6',
                                       f'{loss_type}_losses-res{res[i]}-{param}.npy'))
             hm /= (res[i] ** 2)
             hm -= np.mean(hm)
@@ -448,7 +448,7 @@ def show_heightmaps(param='ER'):
                 ax[4, i].set_yticks([])
 
             loss_type = 'hm'
-            hm = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
+            hm = np.load(os.path.join(result_dir_from_legacy_log('log-loss-analysis'), 'd5e6',
                                       f'{loss_type}_losses-res{res[i]}-{param}.npy'))
             hm /= (res[i] ** 2)
             hm = np.nan_to_num(hm, nan=0.06)
@@ -552,7 +552,7 @@ def show_heightmaps(param='ER'):
             emd_grad_min = 100
             emd_grad_max = -100
             for i in range(len(res)):
-                loss = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
+                loss = np.load(os.path.join(result_dir_from_legacy_log('log-loss-analysis'), 'd5e6',
                                             f'{loss_type}_losses-res{res[i]}-skill-{n+n_skill_offset}.npy'))
                 loss /= (res[i] ** 2)
                 loss -= np.mean(loss)
@@ -584,7 +584,7 @@ def show_heightmaps(param='ER'):
             hm_grad_min = 100
             hm_grad_max = -100
             for i in range(len(res)):
-                loss = np.load(os.path.join(script_path, '..', 'log-loss-analysis', 'd5e6',
+                loss = np.load(os.path.join(result_dir_from_legacy_log('log-loss-analysis'), 'd5e6',
                                             f'{loss_type}_losses-res{res[i]}-skill-{n+n_skill_offset}.npy'))
                 loss /= (res[i] ** 2)
                 loss -= np.mean(loss)
