@@ -144,9 +144,9 @@ If you use this work, please cite:
 @article{yang2025ddbot,
   title   = {DDBot: Differentiable Physics-based Digging Robot for Unknown Granular Materials},
   author  = {Yang, Xintong and Wei, Minglun and Lai, Yu-Kun and Ji, Ze},
-  journal = {IEEE Robotics and Automation Letters},
+  journal = {IEEE Transactions on Robotics},
   year    = {2025},
-  doi     = {10.1109/LRA.2025.XXXXXXX},
+  doi     = {10.1109/TRO.2025.3636815},
   url     = {https://ieeexplore.ieee.org/document/11270989}
 }
 ```
