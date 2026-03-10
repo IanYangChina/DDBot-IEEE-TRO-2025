@@ -11,7 +11,7 @@
 ---
 
 <!-- System diagram placeholder — replace the line below with your diagram image -->
-![System Diagram](docs/system_diagram.png)
+![System Diagram](framework.jpg)
 
 ---
 
