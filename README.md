@@ -6,7 +6,7 @@
 [![Video](https://img.shields.io/badge/YouTube-Video-red)](https://www.youtube.com/watch?v=eoNx5V688H0)
 
 > Xintong Yang, Minglun Wei, Yu-Kun Lai, Ze Ji  
-> *IEEE Robotics and Automation Letters*, 2025
+> *IEEE Transactions on Robotics*, 2025
 
 ---
 
